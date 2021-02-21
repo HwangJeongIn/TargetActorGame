@@ -1,0 +1,57 @@
+<터미널 명령어 모음>
+
+$ github와 git
+	- github와 git사이 각각 별개로 공간이 존재 서로 상호작용가능(pull push 등)
+	- github와 git사이에 branch가 서로다름 // 헷갈리지 않게 같은 브랜치이름으로 사용 하자
+
+$ github에서 저장소 클론
+	- git clone (주소)
+
+$ 클론하지 않았을 경우, 이미 파일이 있을때 깃허브와 연동할 때 사용
+
+	- 원격주소 추가
+      : git remote add 'origin' (주소)
+	  * 클론할때 기본적으로 origin을 초기화시켜준다.
+	  
+	- 히스토리 관련성 없을 때 사용 
+	  : git pull origin master --allow-unrelated-histories
+	  * 이미 파일이 있는 경우에 서로 알아보고 정상적으로 동작할것같지만 히스토리가 관련성이없어서 실패한다.
+	    이때 --allow-unrelated-histories 키워드를 붙여준다.
+	
+$ branch
+	- 깃 브랜치 확인
+	  : git branch
+	  
+	- 깃 브랜치 추가
+	  : git branch 'name'
+	  
+	- 깃 브랜치 변경
+	  : git checkout 'name'
+	  
+	- 깃 브랜치 추가, 변경 동시에
+	  : git checkout -b 'name'
+	  
+	- git's branch => github's branch
+      : git push 'origin'(github's branch) 'master'(git's local branch)
+	  * 만약 해당 브랜치명으로 깃허브에 존재하면 그 브랜치에 푸시하게 되고, 없으면 새로 만들어준다.
+	  
+	- github's branch => git's branch 
+	  : git pull 'origin'(github's branch) 'master'(git's local branch)
+	  
+	- 깃 브랜치 삭제
+  	  : git branch -d (git's local branch)
+	
+$ git => github 단계
+	- 커밋할 대상을 추가
+	  : git add -A
+	  
+	- 깃 로컬저장소에 커밋
+	  : git commit -m "my first commit"
+	  
+	- 최종적으로 깃허브에 올라감
+	  : git push 'origin'(github's branch) 'master'(git's local branch)
+	  
+& conflict 처리
+	- 빠르게 처리하기 위해서 diff / merge 툴을 사용하기 쉬운 P4merge를 사용
+	  
+	

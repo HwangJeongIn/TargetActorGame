@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<Root>
+	<AiGameData Key="1" AttackRange="5" AiClassType="Npc"/>
+	<AiGameData Key="2" AttackRange="10" AiClassType="Monster"/>
+	<AiGameData Key="3" AttackRange="15" AiClassType="Monster"/>
+</Root>

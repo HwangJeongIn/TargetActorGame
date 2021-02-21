@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<Root>
+	<ItemGameData Key="1" Name="test1"/>
+	<ItemGameData Key="2" Name="test2"/>
+	<ItemGameData Key="3" Name="test3"/>
+</Root>

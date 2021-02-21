@@ -1,0 +1,59 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30204.135
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TAGameServer", "TAGameServer\TAGameServer.vcxproj", "{5CF80E1C-8D61-4316-9DF7-1A32EEAC66F5}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "IdlCompiler", "IdlCompiler\IdlCompiler.vcxproj", "{C59128A8-F22F-4E76-9A68-DF579F94ACA1}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TAGameClient", "TAGameClient\TAGameClient.vcxproj", "{298237DB-6220-4B92-81C2-033F26B08D40}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Debug|x64 = Debug|x64
+		Debug|x86 = Debug|x86
+		Release|Any CPU = Release|Any CPU
+		Release|x64 = Release|x64
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{5CF80E1C-8D61-4316-9DF7-1A32EEAC66F5}.Debug|Any CPU.ActiveCfg = Debug|Win32
+		{5CF80E1C-8D61-4316-9DF7-1A32EEAC66F5}.Debug|x64.ActiveCfg = Debug|x64
+		{5CF80E1C-8D61-4316-9DF7-1A32EEAC66F5}.Debug|x64.Build.0 = Debug|x64
+		{5CF80E1C-8D61-4316-9DF7-1A32EEAC66F5}.Debug|x86.ActiveCfg = Debug|Win32
+		{5CF80E1C-8D61-4316-9DF7-1A32EEAC66F5}.Debug|x86.Build.0 = Debug|Win32
+		{5CF80E1C-8D61-4316-9DF7-1A32EEAC66F5}.Release|Any CPU.ActiveCfg = Release|Win32
+		{5CF80E1C-8D61-4316-9DF7-1A32EEAC66F5}.Release|x64.ActiveCfg = Release|x64
+		{5CF80E1C-8D61-4316-9DF7-1A32EEAC66F5}.Release|x64.Build.0 = Release|x64
+		{5CF80E1C-8D61-4316-9DF7-1A32EEAC66F5}.Release|x86.ActiveCfg = Release|Win32
+		{5CF80E1C-8D61-4316-9DF7-1A32EEAC66F5}.Release|x86.Build.0 = Release|Win32
+		{C59128A8-F22F-4E76-9A68-DF579F94ACA1}.Debug|Any CPU.ActiveCfg = Debug|Win32
+		{C59128A8-F22F-4E76-9A68-DF579F94ACA1}.Debug|x64.ActiveCfg = Debug|x64
+		{C59128A8-F22F-4E76-9A68-DF579F94ACA1}.Debug|x64.Build.0 = Debug|x64
+		{C59128A8-F22F-4E76-9A68-DF579F94ACA1}.Debug|x86.ActiveCfg = Debug|Win32
+		{C59128A8-F22F-4E76-9A68-DF579F94ACA1}.Debug|x86.Build.0 = Debug|Win32
+		{C59128A8-F22F-4E76-9A68-DF579F94ACA1}.Release|Any CPU.ActiveCfg = Release|Win32
+		{C59128A8-F22F-4E76-9A68-DF579F94ACA1}.Release|x64.ActiveCfg = Release|x64
+		{C59128A8-F22F-4E76-9A68-DF579F94ACA1}.Release|x64.Build.0 = Release|x64
+		{C59128A8-F22F-4E76-9A68-DF579F94ACA1}.Release|x86.ActiveCfg = Release|Win32
+		{C59128A8-F22F-4E76-9A68-DF579F94ACA1}.Release|x86.Build.0 = Release|Win32
+		{298237DB-6220-4B92-81C2-033F26B08D40}.Debug|Any CPU.ActiveCfg = Debug|Win32
+		{298237DB-6220-4B92-81C2-033F26B08D40}.Debug|x64.ActiveCfg = Debug|x64
+		{298237DB-6220-4B92-81C2-033F26B08D40}.Debug|x64.Build.0 = Debug|x64
+		{298237DB-6220-4B92-81C2-033F26B08D40}.Debug|x86.ActiveCfg = Debug|Win32
+		{298237DB-6220-4B92-81C2-033F26B08D40}.Debug|x86.Build.0 = Debug|Win32
+		{298237DB-6220-4B92-81C2-033F26B08D40}.Release|Any CPU.ActiveCfg = Release|Win32
+		{298237DB-6220-4B92-81C2-033F26B08D40}.Release|x64.ActiveCfg = Release|x64
+		{298237DB-6220-4B92-81C2-033F26B08D40}.Release|x64.Build.0 = Release|x64
+		{298237DB-6220-4B92-81C2-033F26B08D40}.Release|x86.ActiveCfg = Release|Win32
+		{298237DB-6220-4B92-81C2-033F26B08D40}.Release|x86.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {8910BD7E-AB29-4E9A-A71D-A8BA886A5D0A}
+	EndGlobalSection
+EndGlobal

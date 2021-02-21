@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<Root>
+	<GroupGameData Key="1" Description="Player0_1" CharacterGameDataKey="0" MoveGameDataKey="1"/>
+	<GroupGameData Key="2" Description="Monster0_1" CharacterGameDataKey="100" MoveGameDataKey="1" AiGameDataKey="1"/>
+	<GroupGameData Key="3" Description="Monster1_1" CharacterGameDataKey="101" MoveGameDataKey="1" AiGameDataKey="1"/>
+	<GroupGameData Key="4" Description="Npc1" CharacterGameDataKey="1000" MoveGameDataKey="1" AiGameDataKey="1"/>
+	<GroupGameData Key="5" Description="Npc2" CharacterGameDataKey="1001" MoveGameDataKey="1" AiGameDataKey="1"/>
+</Root>

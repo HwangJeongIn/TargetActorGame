@@ -1,0 +1,25 @@
+[CTS]
+{
+	Login(const StringPack& id, const StringPack& password);
+	MoveActor(const ActorKey& targetActorKey, const Vector& position);
+	AttackTarget(const ActorKey& myActorKey, const ActorKey& targetActorKey);
+	DetectTarget(const ActorKey& myActorKey, const uint32& targetActorType);
+	MoveToTarget(const ActorKey& myActorKey, const ActorKey& targetActorKey);
+	MoveToRandomPoint(const ActorKey& myActorKey);
+}
+
+[STC]
+{
+	CreateMainActor(const ActorKey& actorKeyToCreate);
+	CreateActor(const uint32& actorType, const ActorKey& actorKeyToCreate);
+	DestroyActor(const ActorKey& actorToDestroy);
+	MoveComponentData(const ActorKey& targetActorKey, const CommonMoveComponentData& componentData);
+	ActionComponentData(const ActorKey& targetActorKey, const CommonActionComponentData& componentData);
+	AiComponentData(const ActorKey& targetActorKey, const CommonAiComponentData& componentData);
+	CharacterComponentData(const ActorKey& targetActorKey, const CommonCharacterComponentData& componentData);
+	InventoryComponentData(const ActorKey& targetActorKey, const CommonInventoryComponentData& componentData);
+	MoveActor(const ActorKey& targetActorKey, const Vector& position);
+	ChangeHp(const ActorKey& attacker, const ActorKey& targetActorKey, const uint32& hpValue);
+	KillActor(const ActorKey& targetActorKey);
+	SetTargetActor(const ActorKey& myActorKey, const ActorKey& targetActorKey);
+}
