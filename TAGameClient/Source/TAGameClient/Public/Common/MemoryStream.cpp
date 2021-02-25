@@ -47,7 +47,7 @@ namespace ta
 		const uint64 resultHead = _head + size;
 		if (_capacity < resultHead)
 		{
-			if (false == reallocateBuffer(std::max(resultHead, _capacity * 2)))
+			//if (false == reallocateBuffer(std::max(resultHead, _capacity * 2)))
 			{
 				TA_ASSERT_DEV(false, "비정상입니다.");
 				return;

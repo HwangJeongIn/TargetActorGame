@@ -50,10 +50,10 @@ namespace ta
 		std::unordered_set<NavigationNodeData*> openSet;
 		std::unordered_set<NavigationNodeData*> closeSet;
 
-		closeSet.insert
-
-
-		const std::vector<NavigationNodeData*>& startAdjacentNodeData = startNode->getAdjacentNodeData();
+		//closeSet.insert
+		//
+		//
+		//const std::vector<NavigationNodeData*>& startAdjacentNodeData = startNode->getAdjacentNodeData();
 
 
 		return false;

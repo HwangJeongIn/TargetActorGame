@@ -110,6 +110,8 @@ void ATAPlayer::Tick(float DeltaTime)
 	//}
 
 	AController* controller = GetController();
+	/*
+
 	static float time = 0.0f;
 	time += DeltaTime;
 	
@@ -133,6 +135,7 @@ void ATAPlayer::Tick(float DeltaTime)
 			SetActorLocation(GetActorLocation() + FVector(200, 0, 10));
 		}
 	}
+	*/
 
 	// 보간작업
 	if (true == _cameraDirtyFlag)
