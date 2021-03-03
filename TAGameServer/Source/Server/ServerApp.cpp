@@ -179,10 +179,18 @@ namespace ta
 				return;
 		}
 
+		CommonActor* actorToSend = GetActorManager()->getActor(actorKeyToSend);
+		if (nullptr == actorToSend)
+		{
+			TA_ASSERT_DEV(false, "비정상입니다.")
+				return;
+		}
+
+
 		ComponentData* componentData = nullptr;
 		ActorComponent* actorComponent = nullptr;
 		ActorComponentType currentType = ActorComponentType::Count;
-		const std::vector<ActorComponentType>& componentTypeList = ActorComponentGroups.at(targetActorType);
+		const std::vector<ActorComponentType>& componentTypeList = ActorComponentGroups.at(actorToSend->getActorType());
 		const uint32 count = componentTypeList.size();
 		for (uint32 index = 0; index < count; ++index)
 		{

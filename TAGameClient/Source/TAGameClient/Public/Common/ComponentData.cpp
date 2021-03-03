@@ -114,7 +114,6 @@ namespace ta
 		_baseKey.clear();
 		_detail.clear_();
 		_stackCount = 0;
-		_itemType = ItemType::Count;
 	}
 
 
@@ -132,6 +131,6 @@ namespace ta
 	{
 		_itemSetType = ItemSetType::Count;
 		_capacity = 0;
-		_itemElementDataSet.clear();
+		//_itemElementDataSet.clear();
 	}
 }

@@ -278,16 +278,56 @@ namespace ta
 
 	bool ItemGameData::loadXml(XmlNode* xmlNode) noexcept
 	{
-		//{
-		//	const std::string* value = xmlNode->getAttribute("ActorType");
-		//	if (nullptr == value)
-		//	{
-		//		TA_ASSERT_DEV(false, "ActorType 로드 실패");
-		//		return false;
-		//	}
-		//
-		//	_actorType = ConvertStringToEnum<ActorType>(*value);
-		//}
+		// itemType
+		{
+			const std::string* value = xmlNode->getAttribute("ItemType");
+			if (nullptr == value)
+			{
+				TA_ASSERT_DEV(false, "ItemType 로드 실패");
+				return false;
+			}
+		
+			_itemType = ConvertStringToEnum<ItemType>(*value);
+		}
+
+		// name
+		{
+			const std::string* value = xmlNode->getAttribute("Name");
+			if (nullptr == value)
+			{
+				TA_LOG_DEV("Name 존재 X");
+			}
+			else
+			{
+				_name = *value;
+			}
+		}
+
+		// iconPath
+		{
+			const std::string* value = xmlNode->getAttribute("IconPath");
+			if (nullptr == value)
+			{
+				TA_LOG_DEV("IconPath 존재 X");
+			}
+			else
+			{
+				_iconPath = *value;
+			}
+		}
+
+		// meshPath
+		{
+			const std::string* value = xmlNode->getAttribute("MeshPath");
+			if (nullptr == value)
+			{
+				TA_LOG_DEV("MeshPath 존재 X");
+			}
+			else
+			{
+				_meshPath = *value;
+			}
+		}
 
 		return true;
 	}

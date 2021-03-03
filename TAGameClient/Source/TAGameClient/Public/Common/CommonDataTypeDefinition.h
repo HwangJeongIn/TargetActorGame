@@ -14,9 +14,7 @@ namespace ta
 
 	///////////////////////////////////////////////////
 
-	typedef unsigned int		ItemSlotNo;
-
-
+	typedef int		ItemSlotNo;
 }
 
 
@@ -225,10 +223,12 @@ namespace ta
 
 	enum class ItemType : uint8
 	{
-		All
-		, Consumable = 0
+		All = 0 
+		, Consumable
 		, RHand
 		, LHand
 		, Count
 	};
+
+	constexpr uint8 TempMaxInventoryCapacity = 30;
 }

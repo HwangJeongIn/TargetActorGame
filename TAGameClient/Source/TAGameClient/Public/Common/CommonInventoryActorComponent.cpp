@@ -15,8 +15,8 @@ namespace ta
 	{
 		const CommonInventoryComponentData* component = static_cast<const CommonInventoryComponentData*>(componentData);
 
-		_inventory = new ItemSet(component->_capacity, component->_itemSetType);
-		if (false == _inventory->initializeItemSet(component->_itemElementDataSet))
+		_inventory = new ItemSet;
+		if (false == _inventory->initializeItemSet(component->_capacity, component->_itemSetType, component->_itemElementDataSet))
 		{
 			TA_ASSERT_DEV(false, "ItemSet 초기화에 실패했습니다.");
 			return false;
@@ -29,24 +29,22 @@ namespace ta
 	{
 		CommonInventoryComponentData* data = new CommonInventoryComponentData;
 
-		data->_itemSetType = _inventory->getItemSetType_();
-		data->_capacity = _inventory->getCapacity_();
-		const std::vector<ItemElement>& items = _inventory->getItems_();
+		const int32 inventoryCapacity = _inventory->getCapacity_();
+		data->_capacity = inventoryCapacity;
+		data->_itemSetType = ItemSetType::ContainerType;
+		//data->_itemElementDataSet.resize(inventoryCapacity);
 
-		const uint32 itemCount = items.size();
-		data->_itemElementDataSet.resize(itemCount);
-		for (uint32 index = 0; index < itemCount; ++index)
+		const std::vector<Item*>& items = _inventory->getItems_();
+		for (uint32 index = 0; index < inventoryCapacity; ++index)
 		{
-			data->_itemElementDataSet[index]._itemType = items[index]._itemType;
-
-			if (false == items[index]._item->checkValid_())
+			if (false == items[index]->checkValid_())
 			{
 				continue;
 			}
 
-			data->_itemElementDataSet[index]._baseKey = items[index]._item->getBase_()->_key;
-			data->_itemElementDataSet[index]._detail = items[index]._item->getDetail_();
-			data->_itemElementDataSet[index]._stackCount = items[index]._item->getStackCount_();
+			data->_itemElementDataSet[index]._baseKey = items[index]->getBase_()->_key;
+			data->_itemElementDataSet[index]._detail = items[index]->getDetail_();
+			data->_itemElementDataSet[index]._stackCount = items[index]->getStackCount_();
 		}
 
 		return data;
@@ -55,6 +53,11 @@ namespace ta
 	const ActorComponentType CommonInventoryActorComponent::getActorComponentType(void) noexcept
 	{
 		return ActorComponentType::Inventory;
+	}
+
+	ItemSet* CommonInventoryActorComponent::getInventory_(void) noexcept
+	{
+		return _inventory;
 	}
 
 	CommonInventoryActorComponent::CommonInventoryActorComponent(void) noexcept

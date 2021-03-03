@@ -16,18 +16,18 @@ namespace ta
 	{
 	public:
 
-		static Item* createItems(const ItemGameData* data, const int32 stackCount) noexcept;
-		static Item* createItems(const ItemGameData* data, const ItemDetail& detail, const int32 stackCount) noexcept;
+		static Item* createItem(const ItemGameData* data, const int32 stackCount) noexcept;
+		static Item* createItem(const ItemGameData* data, const ItemDetail& detail, const int32 stackCount) noexcept;
 
 		static Item* copyItems_(const Item* targetItem, const int32 stackCount) noexcept;
 		// count에 2를 넣으면 총 5개가 있을때 2개 3개로 나뉜다.
 		static Item* divideItemStackCount_(Item*& targetItem, const int32 count) noexcept;
 
-		static Item invalidItem;
+		static Item InvalidItem;
 		
 		virtual ~Item(void) noexcept; 		
 
-		bool initializeItems(const ItemGameData* data, const ItemDetail& detail, const int32 stackCount) noexcept;
+		bool initializeItem_(const ItemGameData* data, const ItemDetail& detail, const int32 stackCount) noexcept;
 
 		bool checkValid_(void) const noexcept;
 

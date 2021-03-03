@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <Root>
-	<ItemGameData Key="1" Name="test1"/>
-	<ItemGameData Key="2" Name="test2"/>
-	<ItemGameData Key="3" Name="test3"/>
+	<ItemGameData Key="1" Name="test1" ItemType="Consumable" IconPath="test1" MeshPath="test1"/>
+	<ItemGameData Key="2" Name="test2" ItemType="Consumable" IconPath="test2" MeshPath="test2"/>
+	<ItemGameData Key="3" Name="test3" ItemType="Consumable" IconPath="test3" MeshPath="test3"/>
 </Root>

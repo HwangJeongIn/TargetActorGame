@@ -40,6 +40,16 @@ namespace ta
 		, {"TempWorld", GameWorldType::TempWorld}
 	};
 	TA_COMPILE_DEV(2 == static_cast<uint8>(GameWorldType::Count), "여기도 확인해주세요");
+	
+
+	const std::unordered_map<std::string, ItemType> ItemTypeConverter
+	{
+		{ "All", ItemType::All }
+		,{ "Consumable", ItemType::Consumable }
+		,{ "RHand", ItemType::RHand }
+		,{ "LHand", ItemType::LHand }
+	};
+	TA_COMPILE_DEV(4 == static_cast<uint8>(ItemType::Count), "여기도 확인해주세요");
 
 
 
@@ -79,6 +89,7 @@ namespace ta
 	CONVERT_FUNCTION_DEFINITION(GameDataType)
 	CONVERT_FUNCTION_DEFINITION(AiClassType)
 	CONVERT_FUNCTION_DEFINITION(GameWorldType)
+	CONVERT_FUNCTION_DEFINITION(ItemType)
 
 
 #undef CONVERT_FUNCTION_DEFINITION

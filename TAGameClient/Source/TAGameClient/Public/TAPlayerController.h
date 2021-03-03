@@ -8,7 +8,8 @@
 
 
 class UTAHUDUserWidget;
-//class UTAInventoryUserWidget;
+class UTAInventoryUserWidget;
+class UTAInteractionMenuUserWidget;
 
 /**
  * 
@@ -25,7 +26,10 @@ public:
 	virtual void OnPossess(APawn* aPawn) override final;
 
 	UTAHUDUserWidget* getHUDUserWidget(void) const;
-	//UTAInventoryUserWidget* getInventoryUserWidget(void) const;
+	UTAInventoryUserWidget* getInventoryUserWidget(void) const;
+
+	void openInventory(void) const noexcept;
+	void closeInventory(void) const noexcept;
 	
 protected:
 	virtual void BeginPlay() override final;
@@ -35,13 +39,19 @@ protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = UI)
 	TSubclassOf<UTAHUDUserWidget> _HUDUserWidgetClass;
 
-	//UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = UI)
-	//TSubclassOf<UTAInventoryUserWidget> _inventoryUserWidgetClass;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = UI)
+	TSubclassOf<UTAInventoryUserWidget> _inventoryUserWidgetClass;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = UI)
+	TSubclassOf<UTAInteractionMenuUserWidget> _interactionMenuUserWidgetClass;
 
 private:
 	UPROPERTY()
 	UTAHUDUserWidget* _HUDUserWidget;
 
-	//UPROPERTY()
-	//UTAInventoryUserWidget* _inventoryUserWidget;
+	UPROPERTY()
+	UTAInventoryUserWidget* _inventoryUserWidget;
+
+	UPROPERTY()
+	UTAInteractionMenuUserWidget* _interactionMenuUserWidget;
 };	

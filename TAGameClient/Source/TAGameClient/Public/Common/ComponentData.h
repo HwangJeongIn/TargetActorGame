@@ -114,8 +114,6 @@ namespace ta
 		ItemGameDataKey _baseKey;
 		ItemDetail _detail;
 		int32 _stackCount;
-
-		ItemType _itemType;
 	};
 
 	//#pragma pack(push, 1)
@@ -126,10 +124,11 @@ namespace ta
 		virtual ~CommonInventoryComponentData(void) noexcept;
 
 		void clear(void) noexcept;
+
 	public:
 		ItemSetType _itemSetType;
 		int32 _capacity;
-		std::vector<ItemElementData> _itemElementDataSet; // 벡터 그대로 넘기면 안된다 구조 바뀌면 벡터에서 하나씩 빼서 serialize할 예정
+		ItemElementData _itemElementDataSet[TempMaxInventoryCapacity]; // 벡터 그대로 넘기면 안된다 구조 바뀌면 벡터에서 하나씩 빼서 serialize할 예정
 
 
 	};

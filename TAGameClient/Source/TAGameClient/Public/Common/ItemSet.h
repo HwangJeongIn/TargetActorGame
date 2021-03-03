@@ -14,29 +14,13 @@ namespace ta
 
 namespace ta
 {
-	class ItemElement
-	{
-	public:
-		ItemElement(void) noexcept;
-		virtual ~ItemElement(void) noexcept;
-
-		void clear_(void) noexcept;
-
-		Item* _item;
-		ItemType _itemType;
-	};
-}
-
-
-namespace ta
-{
 	class ItemSet
 	{
 	public:
-		explicit ItemSet(const uint32 capacity, const ItemSetType itemSetType) noexcept;
+		ItemSet(void) noexcept;
 		virtual ~ItemSet(void) noexcept;
 
-		bool initializeItemSet(const std::vector<ItemElementData> ItemElementDataSet) noexcept;
+		bool initializeItemSet(const uint32 capacity, const ItemSetType itemSetType, const ItemElementData* itemElementDataSet) noexcept;
 		void clear_(void) noexcept;
 
 		bool checkCanPop_(const ItemSlotNo slotNo, const int32 stackCount) const noexcept;
@@ -49,14 +33,14 @@ namespace ta
 
 		const uint32 getCapacity_(void) const noexcept;
 		const ItemSetType getItemSetType_(void) const noexcept;
-		const std::vector<ItemElement>& getItems_(void) const noexcept;
+		const std::vector<Item*>& getItems_(void) const noexcept;
 	private:
 
 
 	private:
-		const uint32 _capacity;
-		const ItemSetType _itemSetType;
+		uint32 _capacity;
+		ItemSetType _itemSetType;
 
-		std::vector<ItemElement> _items;
+		std::vector<Item*> _items;
 	};
 }

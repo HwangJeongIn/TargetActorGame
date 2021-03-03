@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <Root>
-    <ItemGameData Key=""  Name="" />
-    <ItemGameData Key=""  Name="" />
+    <ItemGameData Key=""  Name=""  ItemType=""  IconPath=""  MeshPath="" />
+    <ItemGameData Key=""  Name=""  ItemType=""  IconPath=""  MeshPath="" />
 </Root>

@@ -11,7 +11,7 @@ namespace ta
 		, ActorComponentType::Action, ActorComponentType::Character };
 
 	const std::vector<ActorComponentType> PlayerActor{ ActorComponentType::Move
-		, ActorComponentType::Action, ActorComponentType::Character };
+		, ActorComponentType::Action, ActorComponentType::Character, ActorComponentType::Inventory };
 
 	const std::vector<ActorComponentType> MonsterActor{ ActorComponentType::Move
 		, ActorComponentType::Action, ActorComponentType::Character, ActorComponentType::Ai };

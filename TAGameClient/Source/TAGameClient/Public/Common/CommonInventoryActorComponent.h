@@ -20,6 +20,9 @@ namespace ta
 		virtual ComponentData* packData_(void) noexcept override;
 
 		static const ActorComponentType getActorComponentType(void) noexcept;
+
+		ItemSet* getInventory_(void) noexcept;
+
 	protected:
 		CommonInventoryActorComponent(void) noexcept;
 

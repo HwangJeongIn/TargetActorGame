@@ -9,8 +9,6 @@
 
 class UProgressBar;
 class UTextBlock;
-class UUniformGridPanel;
-class UTAInventorySlotUserWidget;
 
 /**
  * 
@@ -20,18 +18,11 @@ class TAGAMECLIENT_API UTAHUDUserWidget : public UUserWidget
 {
 	GENERATED_BODY()
 	
-public:
-	UTAHUDUserWidget(const FObjectInitializer& ObjectInitializer);
-	bool setInventorySlotCount(const uint32 count) noexcept;
 
 protected:
 
 	virtual void NativeConstruct() override final;
 
-
-protected:
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = UI)
-	TSubclassOf<UTAInventorySlotUserWidget> _inventorySlotClass;
 
 private:
 
@@ -44,12 +35,4 @@ private:
 	UPROPERTY()
 	UProgressBar* _MPBar;
 	
-/////////////////////////////////////////////
-
-	UPROPERTY()
-	UUniformGridPanel* _inventory;
-
-	//UPROPERTY()
-	//UTAInventorySlotUserWidget* _inventorySlot;
-
 };

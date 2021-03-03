@@ -6,27 +6,27 @@
 
 namespace ta
 {
-    Item Item::invalidItem;
+    Item Item::InvalidItem;
 
-    Item* Item::createItems(const ItemGameData* data, const int32 stackCount) noexcept
+    Item* Item::createItem(const ItemGameData* data, const int32 stackCount) noexcept
     {
         if (stackCount <= 0)
         {
             TA_ASSERT_DEV(false, "비정상입니다.");
-            return &Item::invalidItem;
+            return &Item::InvalidItem;
         }
 
         if (nullptr == data)
         {
             TA_ASSERT_DEV(false, "비정상입니다.");
-            return &Item::invalidItem;
+            return &Item::InvalidItem;
         }
 
         ItemDetail temp;
         if (false == Item::generateRandomItemDetail(data, temp))
         {
             TA_ASSERT_DEV(false, "비정상입니다.");
-            return &Item::invalidItem;
+            return &Item::InvalidItem;
         }
 
         Item* rv = new Item(data, temp, stackCount);
@@ -34,18 +34,18 @@ namespace ta
         return rv;
     }
 
-    Item* Item::createItems(const ItemGameData* data, const ItemDetail& detail, const int32 stackCount) noexcept
+    Item* Item::createItem(const ItemGameData* data, const ItemDetail& detail, const int32 stackCount) noexcept
     {
         if (stackCount <= 0)
         {
             TA_ASSERT_DEV(false, "비정상입니다.");
-            return &Item::invalidItem;
+            return &Item::InvalidItem;
         }
 
         if (nullptr == data)
         {
             TA_ASSERT_DEV(false, "비정상입니다.");
-            return &Item::invalidItem;
+            return &Item::InvalidItem;
         }
 
         Item* rv = new Item(data, detail, stackCount);
@@ -58,13 +58,13 @@ namespace ta
         if (stackCount <= 0)
         {
             TA_ASSERT_DEV(false, "비정상입니다.");
-            return &Item::invalidItem;
+            return &Item::InvalidItem;
         }
 
         if (false == targetItem->checkValid_())
         {
             TA_ASSERT_DEV(false, "비정상입니다.");
-            return &Item::invalidItem;
+            return &Item::InvalidItem;
         }
 
         Item* rv = new Item(*targetItem);
@@ -78,13 +78,13 @@ namespace ta
         if (count <= 0)
         {
             TA_ASSERT_DEV(false, "비정상입니다.");
-            return &(Item::invalidItem);
+            return &(Item::InvalidItem);
         }
 
         if (false == targetItem->checkValid_())
         {
             TA_ASSERT_DEV(false, "비정상입니다.");
-            return &(Item::invalidItem);
+            return &(Item::InvalidItem);
         }
 
         const int32 currentStackCount = targetItem->getStackCount_();
@@ -93,7 +93,7 @@ namespace ta
         targetItem->setStackCount_(currentStackCount - finalCount);
         if (currentStackCount == finalCount) // 다썼으면 비워줘야한다.
         {
-            targetItem = &Item::invalidItem;
+            targetItem = &Item::InvalidItem;
         }
 
         Item* rv = new Item(*targetItem);
@@ -106,18 +106,18 @@ namespace ta
     {
     }
 
-    bool Item::initializeItems(const ItemGameData* data, const ItemDetail& detail, const int32 stackCount) noexcept
+    bool Item::initializeItem_(const ItemGameData* data, const ItemDetail& detail, const int32 stackCount) noexcept
     {
         if (stackCount <= 0)
         {
             TA_ASSERT_DEV(false, "비정상입니다.");
-            return &Item::invalidItem;
+            return &Item::InvalidItem;
         }
 
         if (nullptr == data)
         {
             TA_ASSERT_DEV(false, "비정상입니다.");
-            return &Item::invalidItem;
+            return &Item::InvalidItem;
         }
 
         _base = data;

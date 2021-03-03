@@ -156,5 +156,9 @@ namespace ta
 	public:
 		ItemGameDataKey _key;
 		ItemType _itemType;
+		std::string _name;
+		std::string _iconPath;
+		std::string _meshPath;
+
 	};
 }

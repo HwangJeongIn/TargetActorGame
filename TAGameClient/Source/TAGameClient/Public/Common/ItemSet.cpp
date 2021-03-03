@@ -6,51 +6,47 @@
 
 namespace ta
 {
-	ItemSet::ItemSet(const uint32 capacity, const ItemSetType itemSetType) noexcept
-		: _capacity(capacity)
-		, _itemSetType(itemSetType)
+	ItemSet::ItemSet(void) noexcept
 	{
-		_items.resize(_capacity);
 	}
 
 	ItemSet::~ItemSet(void) noexcept
 	{
 	}
 
-	bool ItemSet::initializeItemSet(const std::vector<ItemElementData> ItemElementDataSet) noexcept
+	bool ItemSet::initializeItemSet(const uint32 capacity, const ItemSetType itemSetType, const ItemElementData* itemElementDataSet) noexcept
 	{
-		const uint32 ItemElementDataSetCount = ItemElementDataSet.size();
-		if (_capacity != ItemElementDataSetCount)
-		{
-			TA_ASSERT_DEV(false, "타입갯수와 슬롯갯수가 다릅니다.");
-			return false;
-		}
-		
-		for (uint32 index = 0; index < ItemElementDataSetCount; ++index)
-		{
-			// 슬롯에 어떤 아이템이 들어갈 수 있는지
-			_items[index]._itemType = ItemElementDataSet[index]._itemType;
+		_capacity = capacity;
+		_items.resize(_capacity);
+		_itemSetType = itemSetType;
 
+		for (uint32 index = 0; index < _capacity; ++index)
+		{
 			// 비어있는경우
-			if (false == ItemElementDataSet[index]._baseKey.isValid())
+			if (false == itemElementDataSet[index]._baseKey.isValid())
 			{
+				_items[index] = &Item::InvalidItem;
 				continue;
 			}
 
-			const ItemGameData* base = GetGameData<ItemGameData>(ItemElementDataSet[index]._baseKey);
+			const ItemGameData* base = GetGameData<ItemGameData>(itemElementDataSet[index]._baseKey);
 			if (nullptr == base)
 			{
 				TA_ASSERT_DEV(false, "비정상입니다.");
 				return false;
 			}
 
-			if (false == _items[index]._item->initializeItems(base
-				, ItemElementDataSet[index]._detail
-				, ItemElementDataSet[index]._stackCount))
+			Item* newItem = Item::createItem(base
+											 , itemElementDataSet[index]._detail
+											 , itemElementDataSet[index]._stackCount);
+
+			if (nullptr == newItem)
 			{
 				TA_ASSERT_DEV(false, "비정상입니다.");
 				return false;
 			}
+
+			_items[index] = newItem;
 		}
 
 		return true;
@@ -61,7 +57,12 @@ namespace ta
 		const uint32 count = _items.size();
 		for (uint32 index = 0; index < count; ++index)
 		{
-			_items[index].clear_();
+			if (true == _items[index]->checkValid_())
+			{
+				delete _items[index];
+			}
+
+			_items[index] = &Item::InvalidItem;
 		}
 	}
 
@@ -79,7 +80,7 @@ namespace ta
 			return false;
 		}
 
-		const int32 currentStackCount = _items[slotNo]._item->getStackCount_();
+		const int32 currentStackCount = _items[slotNo]->getStackCount_();
 		if (currentStackCount < stackCount)
 		{
 			TA_ASSERT_DEV(false, "비정상입니다.");
@@ -94,10 +95,10 @@ namespace ta
 		if (false == checkCanPop_(slotNo, stackCount))
 		{
 			TA_ASSERT_DEV(false, "비정상입니다.");
-			return &Item::invalidItem;
+			return &Item::InvalidItem;
 		}
 
-		Item* rv = Item::divideItemStackCount_(_items[slotNo]._item, stackCount);
+		Item* rv = Item::divideItemStackCount_(_items[slotNo], stackCount);
 		if (false == rv->checkValid_())
 		{
 			TA_ASSERT_DEV(false, "비정상입니다.");
@@ -122,7 +123,7 @@ namespace ta
 
 		if (ItemSetType::ContainerType != _itemSetType)
 		{ // 모든것을 담을 수 있는 컨테이너 타입이 아닐때 해당 슬롯에 들어가는게 맞는지 확인
-			if (_items[slotNo]._itemType != data->getItemType())
+			if (_items[slotNo]->getBase_()->getItemType() != data->getItemType())
 			{
 				TA_ASSERT_DEV(false, "슬롯에 들어갈 아이템 타입이 맞지 않습니다.");
 				return false;
@@ -140,14 +141,14 @@ namespace ta
 			return false;
 		}
 
-		Item* newItems = Item::createItems(data, stackCount);
+		Item* newItems = Item::createItem(data, stackCount);
 		if (false == newItems->checkValid_())
 		{
 			TA_ASSERT_DEV(false, "비정상입니다.");
 			return false;
 		}
 
-		_items[slotNo]._item = newItems;
+		_items[slotNo] = newItems;
 		return true;
 	}
 
@@ -159,7 +160,7 @@ namespace ta
 			return false;
 		}
 
-		return _items[slotNo]._item->checkValid_();
+		return _items[slotNo]->checkValid_();
 	}
 
 	const uint32 ItemSet::getCapacity_(void) const noexcept
@@ -172,31 +173,8 @@ namespace ta
 		return _itemSetType;
 	}
 
-	const std::vector<ItemElement>& ItemSet::getItems_(void) const noexcept
+	const std::vector<Item*>& ItemSet::getItems_(void) const noexcept
 	{
 		return _items;
-	}
-}
-
-
-namespace ta
-{
-	ItemElement::ItemElement(void) noexcept
-		: _item(&Item::invalidItem)
-		, _itemType(ItemType::Count)
-	{
-	}
-
-	ItemElement::~ItemElement(void) noexcept
-	{
-	}
-	
-	void ItemElement::clear_(void) noexcept
-	{
-		if (true == _item->checkValid_())
-		{
-			delete _item;
-			_item = &(Item::invalidItem);
-		}
 	}
 }

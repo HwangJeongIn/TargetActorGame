@@ -293,8 +293,25 @@ namespace ta
 				}																															 
 				break;																																 
 			case ActorComponentType::Inventory:
-				{				
+				{			
                     CommonInventoryComponentData data;
+
+                    // 임시
+                    {
+                        data._itemSetType = ItemSetType::ContainerType;
+                        data._capacity = 10;
+
+                        ItemElementData itemData;
+                        itemData._baseKey = ItemGameDataKey(1);
+                        itemData._stackCount = 2;
+                        data._itemElementDataSet[1] = itemData;
+
+
+                        itemData._baseKey = ItemGameDataKey(2);
+                        itemData._stackCount = 3;
+                        data._itemElementDataSet[3] = itemData;
+                    }
+
                     if (false == initializeActorComponent(targetActorKey, &data, false))
                     {
                         TA_ASSERT_DEV(false, "비정상입니다.");

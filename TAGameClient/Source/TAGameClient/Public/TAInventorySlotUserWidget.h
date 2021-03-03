@@ -4,14 +4,20 @@
 
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
+#include "Common/CommonBase.h"
 #include "TAInventorySlotUserWidget.generated.h"
 
 
-
-class UProgressBar;
 class UTextBlock;
 class UButton;
+class UImage;
 
+
+namespace ta
+{
+	class ClientInventoryActorComponent;
+	typedef ItemSlotNo;
+}
 /**
  *
  */
@@ -20,21 +26,32 @@ class TAGAMECLIENT_API UTAInventorySlotUserWidget : public UUserWidget
 {
 	GENERATED_BODY()
 
+public:
+	void setSlotNo(const ta::ItemSlotNo slotNo) noexcept;
+
+	//void refresh(ta::ClientInventoryActorComponent* inventoryComponent) noexcept;
+	void refresh_(ta::ClientInventoryActorComponent* inventoryComponent) noexcept;
+
+	
 protected:
 
 	virtual void NativeConstruct() override final;
 
 private:
-	//UPROPERTY()
-//UProgressBar* _HPBar;
 
-	//UPROPERTY()
-//UProgressBar* _HPBar;
+	UFUNCTION()
+	void onSlotClicked() noexcept;
 
-	//UPROPERTY()
-//UProgressBar* _EPBar;
+private:
+	UPROPERTY()
+	int32 _slotNo; // ta::ItemSlotNo _slotNo로 해야하는데 UPROPERTY()를 붙이면 지원되지 않는 것 같다
 
-	//UPROPERTY()
-//UProgressBar* _MPBar;
+	UPROPERTY()
+	UButton* _slotButton;
 
+	UPROPERTY()
+	UImage* _slotImage;
+
+	UPROPERTY()
+	UTextBlock* _slotStackCount;
 };
