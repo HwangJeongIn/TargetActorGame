@@ -10,6 +10,7 @@ namespace ta
 {
 	class ClientActorManager;
 	class ClientActorSystemManager;
+	class ClientActor;
 	class ActorKey;
 	class Iocp;
 }
@@ -21,6 +22,7 @@ namespace ta
 	extern CommonApp* g_app;
 	extern ClientActorManager* GetActorManager(void) noexcept;
 	extern ClientActorSystemManager* GetActorSystemManager(void) noexcept;
+	extern ClientActor* GetMainPlayerActor(void) noexcept;
 	extern void WorkerThread(Iocp* iocp) noexcept;
 }
 

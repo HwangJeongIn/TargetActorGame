@@ -21,8 +21,9 @@ namespace ta
 		CommonActor* createActorForClient(const ActorType& actorType, const ActorKey& actorKeyReceived) noexcept;
 
 		const ActorKey getMainActorKeyWithCompletionKey(const ActorKey& completionKey) noexcept;
-		bool bindActorAsMainActor(const ActorKey& targetActorKey) noexcept;
-
+		bool bindActorAsMainPlayerActor(const ActorKey& targetActorKey) noexcept;
+		
+		CommonActor* getMainPlayerActor(void) noexcept;
 	private:
 		ClientActorManager(void) noexcept;
 		virtual ~ClientActorManager(void) noexcept;
@@ -36,7 +37,7 @@ namespace ta
 
 	private:
 		// Client Owner(액터키 0번)에 연결된 메인액터키
-		ActorKey _mainActorKey;
+		ActorKey _mainPlayerActorKey;
 	};
 
 }

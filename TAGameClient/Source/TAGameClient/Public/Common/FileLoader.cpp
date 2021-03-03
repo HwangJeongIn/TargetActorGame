@@ -11,7 +11,8 @@ namespace ta
 	{
 		if (false == fs::exists(directoryPath))
 		{
-			TA_ASSERT_DEV(false, "해당 경로에 없습니다.");
+			
+			TA_ASSERT_DEV(false, "해당 경로에 없습니다. %s", directoryPath.c_str());
 			return false;
 		}
 

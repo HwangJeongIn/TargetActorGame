@@ -14,6 +14,8 @@
 #include "NavigationSystem.h"
 #include "NavMesh/RecastNavMesh.h"
 #include "Runtime/Engine/Public/EngineUtils.h"
+#include "Common/GameDataManager.h"
+#include "Common/CommonSpawnDataManager.h"
 
 
 
@@ -91,9 +93,23 @@ ATAPlayer* GetFirstTAPlayer(void) noexcept
 
 UTAGameInstance::UTAGameInstance()
 {
-	//static_cast<ta::ClientApp*>(ta::g_app)->run();
 	_navMeshExported = false;
+	{
+		//TA_LOG_DEV("%s", *FPaths::GetProjectFilePath());
+		//TA_LOG_DEV("test log");
+		//TA_LOG_DEV("%s", fs::current_path().c_str());
+
+		ta::GameDataXmlPath = *FPaths::GetProjectFilePath();
+		ta::GameDataXmlPath /= "../GameData/Xml";
+		TA_LOG_DEV("%s", ta::GameDataXmlPath.c_str());
+
+
+		ta::SpawnDataPath = *FPaths::GetProjectFilePath();
+		ta::SpawnDataPath /= "../SpawnData";
+		TA_LOG_DEV("%s", ta::SpawnDataPath.c_str());
+	}
 }
+
 
 //UTAGameInstance::~UTAGameInstance()
 //{
@@ -104,7 +120,10 @@ UTAGameInstance::UTAGameInstance()
 void UTAGameInstance::StartGameInstance()
 {
 	Super::StartGameInstance();
-	TA_LOG_DEV("StartGameInstance")
+	TA_LOG_DEV("StartGameInstance");
+
+	//TA_LOG_DEV("%s", *FPaths::GetProjectFilePath());
+	//TA_LOG_DEV("test log");
 }
 
 void UTAGameInstance::OnStart()
@@ -117,8 +136,9 @@ void UTAGameInstance::OnStart()
 	//	TA_ASSERT_DEV(false, "비정상입니다.");
 	//}
 
-
 	GetTimerManager().SetTimerForNextTick(this, &UTAGameInstance::processGameEventQueue);
+	
+	static_cast<ta::ClientApp*>(ta::g_app)->run();
 }
 
 void UTAGameInstance::Shutdown()
@@ -128,7 +148,7 @@ void UTAGameInstance::Shutdown()
 	clearGameEvents();
 
 
-	delete ta::g_app;
+	//delete ta::g_app;
 }
 
 bool UTAGameInstance::exportNavMesh(void) noexcept

@@ -10,6 +10,12 @@
 
 namespace fs = std::filesystem;
 
+#ifndef TA_SERVER
+namespace ta
+{
+	extern fs::path GameDataXmlPath;
+}
+#endif
 
 namespace ta
 {

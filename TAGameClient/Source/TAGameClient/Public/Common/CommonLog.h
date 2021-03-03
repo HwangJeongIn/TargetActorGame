@@ -81,7 +81,7 @@ namespace ta
 {\
 	if (false == Expr)\
 	{\
-		TA_LOG_BASE("[ASSERT] expr : "#Expr"", Format, ##__VA_ARGS__);\
+		TA_LOG_BASE("[ASSERT] expr : \"#Expr\"", Format, ##__VA_ARGS__);\
 		DebugBreak();\
 	}\
 }

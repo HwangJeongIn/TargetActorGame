@@ -12,7 +12,7 @@ namespace ta
 #ifdef TA_SERVER
 	const fs::path GameDataXmlPath = fs::absolute(L"./../../TAGameClient/GameData/Xml");
 #else
-	const fs::path GameDataXmlPath = fs::absolute(L"./../../GameData/Xml");
+	fs::path GameDataXmlPath = fs::absolute(L"./../../GameData/Xml");
 #endif
 }
 
@@ -31,7 +31,12 @@ namespace ta
 	bool GameDataManager::initialize(void) noexcept
 	{
 		std::vector<fs::path> xmlFiles;
+
+//#ifdef TA_SERVER
 		if (false == FileLoader::getFilePathsFromDirectory(GameDataXmlPath, xmlFiles))
+//#else
+//		if (false == FileLoader::getFilePathsFromDirectory(*FPaths::GetProjectFilePath(), xmlFiles))
+//#endif
 		{
 			TA_ASSERT_DEV(false, "비정상입니다.");
 			return false;

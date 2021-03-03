@@ -40,7 +40,8 @@ namespace ta
 			targetAi->setCurrentAiState_(AiState::None);
 		}
 
-		TA_LOG_DEV("< Ai Tick > Target : %d", actor->getActorKey().getKeyValue());
+		// TA_LOG_DEV("< Ai Tick > Target : %d", actor->getActorKey().getKeyValue());
+
 		// 락 안 걸고 사용해도된다. 접근하는 ai는 static변수로 세팅되어있는데, 
 		// 액터가 스폰될때 이 static변수로 세팅된후, Component Valid가 true가 된다. 
 		// Componet Valid가 true이면 항상 세팅되어있고, Componet Valid가 중간에 true => false로 변한다고해도 ai를 초기화하지않고 놔두기 때문에 
@@ -123,6 +124,8 @@ namespace ta
 		aiEvent->_aiCommandType = AiCommandType::TickAi;
 		aiEvent->_myActorKey = targetAi->getOwnerActorKey();
 
+		TA_LOG_DEV("Activate Ai , OwnerActorKey : %d", aiEvent->_myActorKey.getKeyValue());
+
 		if (false == RegisterActorEvent(aiEvent, AiTickInterval))
 		{
 			TA_ASSERT_DEV(false, "이벤트 등록에 실패했습니다.");
@@ -145,6 +148,9 @@ namespace ta
 
 			targetAi->setCurrentAiState_(AiState::Disabled);
 		}
+
+
+		TA_LOG_DEV("Deactivate Ai , OwnerActorKey : %d", targetAi->getOwnerActorKey().getKeyValue());
 
 		return true;
 	}

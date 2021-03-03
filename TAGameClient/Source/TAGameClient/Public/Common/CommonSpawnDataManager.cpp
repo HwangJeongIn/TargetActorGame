@@ -14,7 +14,7 @@ namespace ta
 	const fs::path SpawnDataPath = fs::absolute(L"./../SpawnData");
 	//const fs::path SpawnDataPathForClientInServer = fs::absolute(L"./../SpawnData");
 #else
-	const fs::path SpawnDataPath = fs::absolute(L"./../../SpawnData");
+	fs::path SpawnDataPath = fs::absolute(L"./../../SpawnData");
 #endif
 }
 

@@ -29,7 +29,7 @@ namespace ta
 	{
 		CommonInventoryComponentData* data = new CommonInventoryComponentData;
 
-		const int32 inventoryCapacity = _inventory->getCapacity_();
+		const uint32 inventoryCapacity = static_cast<uint32>(_inventory->getCapacity_());
 		data->_capacity = inventoryCapacity;
 		data->_itemSetType = ItemSetType::ContainerType;
 		//data->_itemElementDataSet.resize(inventoryCapacity);

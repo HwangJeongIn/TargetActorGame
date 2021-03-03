@@ -51,6 +51,13 @@ namespace ta
 														   const ActorKey& targetActorKey,
 														   const CommonMoveComponentData& componentData) noexcept
 	{
+		TA_LOG_DEV("actor<%d> move to (%.1f, %.1f, %.1f) by component data / observer : actor<%d>"
+				   , targetActorKey.getKeyValue()
+				   , componentData._position._x
+				   , componentData._position._y
+				   , componentData._position._z
+				   , networkActorKey.getKeyValue());
+
 		GetActorManager()->initializeActorComponent(targetActorKey, &componentData, false);
 	}
 

@@ -8,6 +8,12 @@
 
 namespace fs = std::filesystem;
 
+#ifndef TA_SERVER
+namespace ta
+{
+	extern fs::path SpawnDataPath;
+}
+#endif
 
 namespace ta
 {

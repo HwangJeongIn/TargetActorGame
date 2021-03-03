@@ -428,6 +428,13 @@ namespace ta
 			position = clientActorMoveCom->getCurrentPosition_();
 		}
 
+		TA_LOG_DEV("actor<%d> move to (%.1f, %.1f, %.1f) / observer : actor<%d>"
+				   , targetActorKey.getKeyValue()
+				   , position._x
+				   , position._y
+				   , position._z
+				   , clientActorKey.getKeyValue());
+
 		SendMoveActorSTC(clientActorKey, targetActorKey, position);
 	}
 
@@ -453,6 +460,8 @@ namespace ta
 			clientActorMoveCom->addToViewList_(targetActorKey);
 		}
 
+		TA_LOG_DEV("create actor<%d> to actor<%d>", targetActorKey.getKeyValue(), clientActorKey.getKeyValue());
+
 		// createActorInClient은 항상 moveActorInClient를 타고 들어오도록 설계 // 앞에서 ViewList체크 끝났다.
 		SendCreateActorSTC(clientActorKey, static_cast<uint32>(actorType), targetActorKey);
 
@@ -470,6 +479,7 @@ namespace ta
 			clientActorMoveCom->removeFromViewList_(actorKeyToDestroy);
 		}
 
+		TA_LOG_DEV("destroy actor<%d> from actor<%d>", actorKeyToDestroy.getKeyValue(), clientActorKey.getKeyValue());
 		SendDestroyActorSTC(clientActorKey, actorKeyToDestroy);
 	}
 

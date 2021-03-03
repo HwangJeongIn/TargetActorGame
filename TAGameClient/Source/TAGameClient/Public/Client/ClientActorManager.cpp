@@ -161,19 +161,27 @@ namespace ta
         const ActorKey ownerActorKey = getOwnerActorKey();
         TA_ASSERT_DEV((completionKey == ownerActorKey), "앱 초기화가 비정상입니다.")
 
-        return (true == _mainActorKey.isValid()) ? _mainActorKey : ownerActorKey;
+        return (true == _mainPlayerActorKey.isValid()) ? _mainPlayerActorKey : ownerActorKey;
     }
     
-    bool ClientActorManager::bindActorAsMainActor(const ActorKey& targetActorKey) noexcept
+    bool ClientActorManager::bindActorAsMainPlayerActor(const ActorKey& targetActorKey) noexcept
     {
-        if (true == _mainActorKey.isValid())
+        if (true == _mainPlayerActorKey.isValid())
         {
-            TA_ASSERT_DEV(false, "두번 초기화하려합니다.")
+            TA_ASSERT_DEV(false, "두번 초기화하려합니다.");
             return false;
         }
 
-        _mainActorKey = targetActorKey;
+        _mainPlayerActorKey = targetActorKey;
         return true;
+    }
+    
+    CommonActor* ClientActorManager::getMainPlayerActor(void) noexcept
+    {
+        CommonActor* rv = getActor(_mainPlayerActorKey);
+        TA_ASSERT_DEV((nullptr != rv), "제대로 초기화 안됐습니다.");
+        
+        return rv;
     }
 }
 

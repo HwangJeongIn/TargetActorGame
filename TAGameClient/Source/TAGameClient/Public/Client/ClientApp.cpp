@@ -3,6 +3,7 @@
 #include "Client/ClientActorSystemManager.h"
 #include "Client/AllPacketClient.h"
 #include "Client/ClientSpawnDataManager.h"
+#include "Client/ClientActor.h"
 #include "Common/Iocp.h"
 #include "Common/Socket.h"
 #include "Common/CommonActor.h"
@@ -28,6 +29,11 @@ namespace ta
 	ClientActorSystemManager* GetActorSystemManager(void) noexcept
 	{
 		return static_cast<ClientActorSystemManager*>(g_app->getActorSystemManager());
+	}
+
+	ClientActor* GetMainPlayerActor(void) noexcept
+	{
+		return static_cast<ClientActor*>(GetActorManager()->getMainPlayerActor());
 	}
 
 	void WorkerThread(Iocp* iocp) noexcept
@@ -185,7 +191,7 @@ namespace ta
 		// 해당 키에 대해서 액터 생성
 		ClientActorManager* clinetActorManager = static_cast<ClientActorManager*>(_actorManager);
 		clinetActorManager->createActorForClient(ActorType::Player, createdActorFromServer);
-		clinetActorManager->bindActorAsMainActor(createdActorFromServer);
+		clinetActorManager->bindActorAsMainPlayerActor(createdActorFromServer);
 	}
 
 	bool ClientApp::initialize(void) noexcept

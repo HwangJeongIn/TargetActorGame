@@ -95,20 +95,23 @@ bool TAGameEventSpawnActor::processEvent(TAGameEventProcessParameter& parameter)
 	FVector position;
 	{
 		ta::ScopedLock componentLock(actorMove, true);
-		TAVectorToFVector(actorMove->getCurrentPosition_(), position);
+		ta::Vector currentPosition = actorMove->getCurrentPosition_();
+		TA_LOG_DEV("actorkey : %d, current position (%d, %d, %d)", _actorKey.getKeyValue(), currentPosition._x, currentPosition._y, currentPosition._z);
+		TAVectorToFVector(currentPosition, position);
 	}
 	
 	{
 		ta::ScopedLock actorLock(actor);
-		if (false == actor->isActive_())
-		{
-			TA_ASSERT_DEV(false, "액터가 활성화 되어있지 않습니다. ActorKey : %d", _actorKey.getKeyValue());
-			return false;
-		}
+		//if (false == actor->isActive_())
+		//{
+		//	TA_ASSERT_DEV(false, "액터가 활성화 되어있지 않습니다. ActorKey : %d", _actorKey.getKeyValue());
+		//	return false;
+		//}
 
 		//actor->getActorType_();
-
-		ATACharacter* character = parameter._world->SpawnActor<ATACharacter>(ATACharacter::StaticClass(), position, FRotator::ZeroRotator);
+		FActorSpawnParameters actorSpawnParameters;
+		actorSpawnParameters.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
+		ATACharacter* character = parameter._world->SpawnActor<ATACharacter>(ATACharacter::StaticClass(), position, FRotator::ZeroRotator, SpawnCollisionHandlingOverride);
 		if (nullptr == character)
 		{
 			TA_ASSERT_DEV(false, "비정상입니다.");
