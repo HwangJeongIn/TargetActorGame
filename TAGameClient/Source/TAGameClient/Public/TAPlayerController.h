@@ -28,8 +28,8 @@ public:
 	UTAHUDUserWidget* getHUDUserWidget(void) const;
 	UTAInventoryUserWidget* getInventoryUserWidget(void) const;
 
-	void openInventory(void) const noexcept;
-	void closeInventory(void) const noexcept;
+	bool getInventoryVisibility(void) const noexcept;
+	void setInventoryVisibility(bool isVisible) const noexcept;
 	
 protected:
 	virtual void BeginPlay() override final;

@@ -128,7 +128,7 @@ namespace ta
 	public:
 		ItemSetType _itemSetType;
 		int32 _capacity;
-		ItemElementData _itemElementDataSet[TempMaxInventoryCapacity]; // 벡터 그대로 넘기면 안된다 구조 바뀌면 벡터에서 하나씩 빼서 serialize할 예정
+		ItemElementData _itemElementDataSet[MaxInventoryCapacity]; // 벡터 그대로 넘기면 안된다 구조 바뀌면 벡터에서 하나씩 빼서 serialize할 예정
 
 
 	};

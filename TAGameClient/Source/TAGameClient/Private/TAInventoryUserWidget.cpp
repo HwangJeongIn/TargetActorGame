@@ -36,7 +36,7 @@ bool UTAInventoryUserWidget::checkValid(void) const noexcept
 	return  _isValid;
 }
 
-bool UTAInventoryUserWidget::refreshSlot(const ta::ItemSlotNo slotNo) noexcept
+bool UTAInventoryUserWidget::refreshSlot(const ta::ActorKey& target, const ta::ItemSlotNo slotNo) noexcept
 {
 	if (false == checkValid())
 	{
@@ -50,17 +50,20 @@ bool UTAInventoryUserWidget::refreshSlot(const ta::ItemSlotNo slotNo) noexcept
 		TA_ASSERT_DEV(false, "비정상");
 		return false;
 	}
-
-	// 클라 플레이어 액터 받아온다.
-	ta::ClientInventoryActorComponent* inventory = nullptr;
+	
+	ta::ClientInventoryActorComponent* inventory = ta::GetActorComponent<ta::ClientInventoryActorComponent>(target);
+	if (nullptr == inventory)
+	{
+		TA_ASSERT_DEV(false, "비정상");
+		return false;
+	}
 	ta::ScopedLock inventoryLock(inventory);
-
 	_inventorySlots[slotNo]->refresh_(inventory);
 
 	return true;
 }
 
-bool UTAInventoryUserWidget::refreshSlots(void) noexcept
+bool UTAInventoryUserWidget::refreshSlots(const ta::ActorKey& target) noexcept
 {
 	if (false == checkValid())
 	{
@@ -68,8 +71,13 @@ bool UTAInventoryUserWidget::refreshSlots(void) noexcept
 		return false;
 	}
 
-	// 클라 플레이어 액터 받아온다.
-	ta::ClientInventoryActorComponent* inventory = nullptr;
+	ta::ClientInventoryActorComponent* inventory = ta::GetActorComponent<ta::ClientInventoryActorComponent>(target);
+	if (nullptr == inventory)
+	{
+		TA_ASSERT_DEV(false, "비정상");
+		return false;
+	}
+
 	ta::ScopedLock inventoryLock(inventory);
 
 	const uint32 count = _inventorySlots.Num();
@@ -87,7 +95,7 @@ bool UTAInventoryUserWidget::refreshSlots(void) noexcept
 }
 
 
-bool UTAInventoryUserWidget::setInventorySlotCount(const uint32 count) noexcept
+bool UTAInventoryUserWidget::setInventorySlotCount(const int32 count) noexcept
 {
 	if (true == checkValid())
 	{
@@ -110,7 +118,7 @@ bool UTAInventoryUserWidget::setInventorySlotCount(const uint32 count) noexcept
 	FString slotString;
 	//UPanelWidget* RootWidget = Cast<UPanelWidget>(GetRootWidget());
 
-	for (uint32 index = 0; index < count; ++index)
+	for (int32 index = 0; index < count; ++index)
 	{
 		currentColumn = index % maxColumnSize;
 		currentRow = index / maxColumnSize;

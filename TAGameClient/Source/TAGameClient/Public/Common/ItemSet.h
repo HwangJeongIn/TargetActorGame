@@ -20,7 +20,7 @@ namespace ta
 		ItemSet(void) noexcept;
 		virtual ~ItemSet(void) noexcept;
 
-		bool initializeItemSet(const uint32 capacity, const ItemSetType itemSetType, const ItemElementData* itemElementDataSet) noexcept;
+		bool initializeItemSet(const int32 capacity, const ItemSetType itemSetType, const ItemElementData* itemElementDataSet) noexcept;
 		void clear_(void) noexcept;
 
 		bool checkCanPop_(const ItemSlotNo slotNo, const int32 stackCount) const noexcept;
@@ -31,14 +31,16 @@ namespace ta
 
 		bool checkSlotFull_(const ItemSlotNo slotNo) const noexcept;
 
-		const uint32 getCapacity_(void) const noexcept;
+		const Item* getItem_(const ItemSlotNo slotNo) const noexcept;
+
+		const int32 getCapacity_(void) const noexcept;
 		const ItemSetType getItemSetType_(void) const noexcept;
 		const std::vector<Item*>& getItems_(void) const noexcept;
 	private:
 
 
 	private:
-		uint32 _capacity;
+		int32 _capacity;
 		ItemSetType _itemSetType;
 
 		std::vector<Item*> _items;

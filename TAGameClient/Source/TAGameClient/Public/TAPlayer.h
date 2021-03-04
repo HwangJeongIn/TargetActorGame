@@ -63,7 +63,8 @@ private:
 		, Gather
 		, Count
 	};
-
+	
+	// move
 	void moveAndRotateCharacterByInput(const CharacterBehaviorByInput& characterBehaviorByInput, const DirectionType& directionType, const float axisValue) noexcept;
 	void moveCharacterByInput(const DirectionType& directionType, const float axisValue) noexcept;
 	void rotateCharacterByInput(const DirectionType& directionType, const float axisValue) noexcept;
@@ -72,14 +73,13 @@ private:
 	void lookUp(const float axisValue) noexcept;
 	void turn(const float axisValue) noexcept;
 
+	// battle
 	void attack(void) noexcept;
 	UFUNCTION()
 	void onAttackMontageEnded(UAnimMontage* montage, bool interrupted) noexcept;
 	void attackStartComboSate(void) noexcept;
 	void attackEndComboSate(void) noexcept;
 	void attackCheck(void) noexcept;
-
-
 
 	// interaction
 	void interact(const InteractType& interactType, float range, float radius) noexcept;
@@ -88,6 +88,9 @@ private:
 
 	void setControlMode(const ControlMode controlMode) noexcept;
 	void viewChange(void) noexcept;
+
+	// ui
+	void toggleInventory(void) noexcept;
 
 public:
 	UPROPERTY(VisibleAnyWhere, Category = Camera)

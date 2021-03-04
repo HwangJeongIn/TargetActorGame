@@ -21,6 +21,8 @@ void ATANonPlayer::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+	return;
+
 	AController* controller = GetController();
 
 	static float time = 0.0f;

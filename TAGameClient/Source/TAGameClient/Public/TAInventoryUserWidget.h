@@ -12,6 +12,11 @@
 class UUniformGridPanel;
 class UTAInventorySlotUserWidget;
 
+namespace ta
+{
+	class ActorKey;
+}
+
 /**
  * 
  */
@@ -24,10 +29,10 @@ public:
 	UTAInventoryUserWidget(const FObjectInitializer& ObjectInitializer);
 
 	bool checkValid(void) const noexcept;	
-	bool refreshSlot(const ta::ItemSlotNo slotIndex) noexcept;
-	bool refreshSlots(void) noexcept;
+	bool refreshSlot(const ta::ActorKey& target, const ta::ItemSlotNo slotIndex) noexcept;
+	bool refreshSlots(const ta::ActorKey& target) noexcept;
 
-	bool setInventorySlotCount(const uint32 count) noexcept;
+	bool setInventorySlotCount(const int32 capacity) noexcept;
 
 
 protected:

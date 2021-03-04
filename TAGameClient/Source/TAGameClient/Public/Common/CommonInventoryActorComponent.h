@@ -1,11 +1,13 @@
 #pragma once
 
 #include "Common/ActorComponent.h"
+#include "Common/CommonBase.h"
 #include <vector>
 
 namespace ta
 {
 	class ItemSet;
+	class Item;
 }
 
 
@@ -22,6 +24,8 @@ namespace ta
 		static const ActorComponentType getActorComponentType(void) noexcept;
 
 		ItemSet* getInventory_(void) noexcept;
+
+		const Item* getItem_(const ItemSlotNo slotNo) const noexcept;
 
 	protected:
 		CommonInventoryActorComponent(void) noexcept;

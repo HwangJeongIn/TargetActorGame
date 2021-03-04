@@ -91,6 +91,7 @@ namespace ta
 	constexpr uint32 MaxActorDataPoolCapacity = 100; //16384;//65536;
 	constexpr uint32 MaxPacketBufferLength = 8192;
 	constexpr uint32 MaxStringPackBufferLength = 256;
+	constexpr uint32 MaxStringPathBufferLength = 512;
 	constexpr uint32 MaxAsyncBufferCount = 64;
 }
 
@@ -230,5 +231,5 @@ namespace ta
 		, Count
 	};
 
-	constexpr uint8 TempMaxInventoryCapacity = 30;
+	constexpr uint8 MaxInventoryCapacity = 30;
 }

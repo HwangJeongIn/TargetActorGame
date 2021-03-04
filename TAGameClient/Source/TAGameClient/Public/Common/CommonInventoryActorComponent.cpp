@@ -60,6 +60,11 @@ namespace ta
 		return _inventory;
 	}
 
+	const Item* CommonInventoryActorComponent::getItem_(const ItemSlotNo slotNo) const noexcept
+	{
+		return _inventory->getItem_(slotNo);
+	}
+
 	CommonInventoryActorComponent::CommonInventoryActorComponent(void) noexcept
 		: ActorComponent(ActorComponentType::Inventory)
 	{

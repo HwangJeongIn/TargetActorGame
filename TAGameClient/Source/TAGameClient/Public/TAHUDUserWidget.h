@@ -8,7 +8,9 @@
 
 
 class UProgressBar;
-class UTextBlock;
+class UCanvasPanelSlot;
+//class UTextBlock;
+//class UTAInventoryUserWidget;
 
 /**
  * 
@@ -18,6 +20,9 @@ class TAGAMECLIENT_API UTAHUDUserWidget : public UUserWidget
 {
 	GENERATED_BODY()
 	
+
+public:
+	UCanvasPanelSlot* addChildWidgetToPanel(UWidget* target, FName panelName = FName()) noexcept;
 
 protected:
 
@@ -34,5 +39,8 @@ private:
 	
 	UPROPERTY()
 	UProgressBar* _MPBar;
+	
+	//UPROPERTY()
+	//UTAInventoryUserWidget* _inventoryTest;
 	
 };

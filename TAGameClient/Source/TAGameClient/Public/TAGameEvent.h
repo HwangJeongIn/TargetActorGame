@@ -32,20 +32,21 @@ public:
 		None = 0
 		, SpawnActor
 		, DestroyActor
+		, InitializeInventory
 	};
 
-	TAGameEvent(const GameEventType gameEventType) noexcept;
+	explicit TAGameEvent(const GameEventType gameEventType) noexcept;
 	virtual ~TAGameEvent(void) noexcept;
 
 	virtual bool processEvent(TAGameEventProcessParameter& parameter) noexcept = 0;
 
 	GameEventType getGameEventType(void) const noexcept;
-
-public:
-	ta::ActorKey _actorKey;
+	const ta::ActorKey getActorKey(void) const noexcept;
+	bool setActorKey(const ta::ActorKey& actorKey) noexcept;
 
 private:
 	GameEventType _gameEventType;
+	ta::ActorKey _actorKey;
 };
 
 
@@ -54,8 +55,6 @@ class TAGameEventSpawnActor : public TAGameEvent
 public:
 	TAGameEventSpawnActor(void) noexcept;
 	virtual ~TAGameEventSpawnActor(void) noexcept;
-
-public:
 
 	virtual bool processEvent(TAGameEventProcessParameter& parameter) noexcept override final;
 };
@@ -67,8 +66,21 @@ public:
 	TAGameEventDestroyActor(void) noexcept;
 	virtual ~TAGameEventDestroyActor(void) noexcept;
 
+	virtual bool processEvent(TAGameEventProcessParameter& parameter) noexcept override final;
+};
+
+
+class TAGameEventInitializeInventory : public TAGameEvent
+{
 public:
+	TAGameEventInitializeInventory(void) noexcept;
+	virtual ~TAGameEventInitializeInventory(void) noexcept;
 
 	virtual bool processEvent(TAGameEventProcessParameter& parameter) noexcept override final;
+
+	bool setCapacity(const ta::int32 capacity) noexcept;
+
+private:
+	ta::int32 _capacity;
 };
 

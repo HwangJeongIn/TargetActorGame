@@ -14,13 +14,13 @@ namespace ta
 	{
 	}
 
-	bool ItemSet::initializeItemSet(const uint32 capacity, const ItemSetType itemSetType, const ItemElementData* itemElementDataSet) noexcept
+	bool ItemSet::initializeItemSet(const int32 capacity, const ItemSetType itemSetType, const ItemElementData* itemElementDataSet) noexcept
 	{
 		_capacity = capacity;
 		_items.resize(_capacity);
 		_itemSetType = itemSetType;
 
-		for (uint32 index = 0; index < _capacity; ++index)
+		for (int32 index = 0; index < _capacity; ++index)
 		{
 			// 비어있는경우
 			if (false == itemElementDataSet[index]._baseKey.isValid())
@@ -154,7 +154,7 @@ namespace ta
 
 	bool ItemSet::checkSlotFull_(const ItemSlotNo slotNo) const noexcept
 	{
-		if (_items.size() < slotNo)
+		if (_capacity <= slotNo)
 		{
 			TA_ASSERT_DEV(false, "슬롯넘버가 비정상입니다.");
 			return false;
@@ -163,7 +163,18 @@ namespace ta
 		return _items[slotNo]->checkValid_();
 	}
 
-	const uint32 ItemSet::getCapacity_(void) const noexcept
+	const Item* ItemSet::getItem_(const ItemSlotNo slotNo) const noexcept
+	{
+		if (_capacity <= slotNo)
+		{
+			TA_ASSERT_DEV(false, "슬롯넘버가 비정상입니다.");
+			return &Item::InvalidItem;
+		}
+
+		return _items[slotNo];
+	}
+
+	const int32 ItemSet::getCapacity_(void) const noexcept
 	{
 		return _capacity;
 	}

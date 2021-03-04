@@ -85,6 +85,7 @@ namespace ta
 
 					// 원래라면 UI를 통해서 해줘야하지만 일단 바로 로그인 시킨다.
 					// ID / Password 같이 넘겨주자
+					TA_LOG_DEV("client is connected / send login packet");
 					SendLoginCTS(targetActorKey, StringPack("MyId"), StringPack("MyPassword"));
 				}
 				break;

@@ -5,7 +5,10 @@
 #include "Components/Button.h"
 #include "Components/TextBlock.h"
 #include "Components/Image.h"
+#include "Styling/SlateBrush.h"
 #include "Common/CommonBase.h"
+#include "Common/Item.h"
+#include "Common/GameData.h"
 #include "Client/ClientInventoryActorComponent.h"
 
 
@@ -27,9 +30,28 @@ void UTAInventorySlotUserWidget::setSlotNo(const ta::ItemSlotNo slotNo) noexcept
 
 void UTAInventorySlotUserWidget::refresh_(ta::ClientInventoryActorComponent* inventoryComponent) noexcept
 {
-	//Item* a = InventoryComponent->getItem(slotNo);
-	//a->getImage();
-	//a->getStackCount();
+	const ta::Item* item = inventoryComponent->getItem_(_slotNo);
+	if (false == item->checkValid_()) // 비어있는 경우
+	{
+		_slotStackCount->SetVisibility(ESlateVisibility::Hidden);
+		_slotImage->SetBrush(FSlateBrush());
+	}
+	else
+	{
+		if (ESlateVisibility::Hidden == _slotStackCount->GetVisibility())
+		{
+			_slotStackCount->SetVisibility(ESlateVisibility::Visible);
+		}
+
+		_slotStackCount->SetText(FText::FromString(FString::FromInt(item->getStackCount_())));
+
+		TCHAR data[ta::MaxStringPathBufferLength]{ NULL, };
+		ta::CharToTChar(item->getBase_()->_iconPath.c_str(), data);
+
+		//FString Path = FString("/Game/UI/Texture/TestItem1");
+		UTexture2D* texture = Cast<UTexture2D>(StaticLoadObject(UTexture2D::StaticClass(), NULL, data));
+		_slotImage->SetBrushFromTexture(texture);
+	}
 }
 
 void UTAInventorySlotUserWidget::NativeConstruct()

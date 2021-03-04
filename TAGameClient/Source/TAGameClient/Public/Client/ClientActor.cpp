@@ -64,7 +64,7 @@ namespace ta
 		}
 
 		TAGameEventSpawnActor* event = new TAGameEventSpawnActor;
-		event->_actorKey = getActorKey();
+		event->setActorKey(getActorKey());
 		if (false == RegisterTAGameEvent(event))
 		{
 			TA_ASSERT_DEV(false, "이벤트 등록에 실패했습니다.");

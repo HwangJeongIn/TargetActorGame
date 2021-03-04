@@ -267,7 +267,7 @@ void UTAGameInstance::processGameEventQueue(void) noexcept
 		TAGameEvent* output = nullptr;
 		if (true == _gameEventQueue.Dequeue(output))
 		{
-			TA_LOG_DEV("GameEventType : %d, ActorKey : %d", output->getGameEventType(), output->_actorKey.getKeyValue());
+			TA_LOG_DEV("GameEventType : %d, ActorKey : %d", output->getGameEventType(), output->getActorKey().getKeyValue());
 			if (false == output->processEvent(parameter))
 			{
 				TA_ASSERT_DEV(false, "비정상입니다");

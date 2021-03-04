@@ -5,6 +5,7 @@
 #include "TAAnimInstance.h"
 #include "TAGameInstance.h"
 #include "TAAIController.h"
+#include "TAPlayerController.h"
 #include "DrawDebugHelpers.h"
 
 
@@ -212,6 +213,7 @@ void ATAPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 	PlayerInputComponent->BindAction(TEXT("ViewChange"), EInputEvent::IE_Pressed, this, &ATAPlayer::viewChange);
 	PlayerInputComponent->BindAction(TEXT("Jump"), EInputEvent::IE_Pressed, this, &ACharacter::Jump);
 	PlayerInputComponent->BindAction(TEXT("Attack"), EInputEvent::IE_Pressed, this, &ATAPlayer::attack);
+	PlayerInputComponent->BindAction(TEXT("ToggleInventory"), EInputEvent::IE_Pressed, this, &ATAPlayer::toggleInventory);
 }
 
 void ATAPlayer::PostInitializeComponents()
@@ -471,6 +473,14 @@ void ATAPlayer::attack(void) noexcept
 		}
 		_isAttacking = true;
 	}
+}
+
+void ATAPlayer::toggleInventory(void) noexcept
+{
+	ATAPlayerController* controller = static_cast<ATAPlayerController*>(GetController());
+	const bool toggleFlag = !(controller->getInventoryVisibility());
+	TA_LOG_DEV("Toggle inventory : %d", toggleFlag)
+	controller->setInventoryVisibility(toggleFlag);
 }
 
 void ATAPlayer::onAttackMontageEnded(UAnimMontage* montage, bool interrupted) noexcept
@@ -741,4 +751,3 @@ void ATAPlayer::viewChange(void) noexcept
 		break;
 	}
 }
-
