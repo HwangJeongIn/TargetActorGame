@@ -41,7 +41,7 @@ namespace ta
 		}
 
 		std::vector<std::string> splitedStrings;
-		Split(fileString, "</>", splitedStrings);
+		Split(fileString, "<>", splitedStrings);
 		const uint32 splitedStringCount = splitedStrings.size();
 
 		uint32 index = 0;
@@ -54,12 +54,13 @@ namespace ta
 			if (0 == splitedStrings[index].compare("Root"))
 			{
 				elementStack.push_back(rootOutput);
-				++index;
+				index += 2;
 				break;
 			}
 			
 			++index;
 		}
+		// 일단 루트 바깥으로 나왔다. <Root> 이후
 
 		if (index == stringCount)
 		{
@@ -72,8 +73,8 @@ namespace ta
 			if (0 == splitedStrings[index].compare("<"))
 			{
 				++index;
-				// 닫는것일수도 있다.
-				if (0 == splitedStrings[index].compare("/"))
+				// 닫는것일수도 있다. // </Root>
+				if ('/' == splitedStrings[index][0])
 				{
 					elementStack.pop_back();
 				}
@@ -91,7 +92,7 @@ namespace ta
 					elementStack.push_back(childElement);
 				}
 			}
-			else if (0 == splitedStrings[index].compare("/"))
+			else if (0 == splitedStrings[index].compare(">"))
 			{
 				elementStack.pop_back();
 			}
