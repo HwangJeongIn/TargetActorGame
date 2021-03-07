@@ -44,6 +44,10 @@ ATACharacter::ATACharacter()
 
 	AIControllerClass = ATAAIController::StaticClass();
 	AutoPossessAI = EAutoPossessAI::PlacedInWorldOrSpawned;
+
+	///////////////////////////////////////////////
+
+	_actorKey.clear();
 }
 
 void ATACharacter::BeginPlay()
@@ -67,6 +71,30 @@ void ATACharacter::PostInitializeComponents()
 {
 	Super::PostInitializeComponents();
 }
+
+bool ATACharacter::setActorKey(const ta::ActorKey& actorKey) noexcept
+{
+	if (false == actorKey.isValid())
+	{
+		TA_ASSERT_DEV(false, "비정상");
+		return false;
+	}
+
+	if (true == _actorKey.isValid())
+	{
+		TA_ASSERT_DEV(false, "비정상");
+		return false;
+	}
+
+	_actorKey = actorKey;
+	return true;
+}
+
+const ta::ActorKey& ATACharacter::getActorKey(void) const noexcept
+{
+	return _actorKey;
+}
+
 
 void ATACharacter::setDeadAnimation(void) noexcept
 {

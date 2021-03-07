@@ -138,6 +138,8 @@ bool TAGameEventSpawnActor::processEvent(TAGameEventProcessParameter& parameter)
 			return false;
 		}
 
+		character->setActorKey(actorKey);
+
 		actor->setUnrealCharacter_(character);
 	}
 

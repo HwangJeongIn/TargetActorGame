@@ -91,6 +91,7 @@ private:
 
 	// ui
 	void toggleInventory(void) noexcept;
+	void toggleMousePoint(void) noexcept;
 
 public:
 	UPROPERTY(VisibleAnyWhere, Category = Camera)

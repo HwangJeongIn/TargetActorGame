@@ -214,6 +214,7 @@ void ATAPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 	PlayerInputComponent->BindAction(TEXT("Jump"), EInputEvent::IE_Pressed, this, &ACharacter::Jump);
 	PlayerInputComponent->BindAction(TEXT("Attack"), EInputEvent::IE_Pressed, this, &ATAPlayer::attack);
 	PlayerInputComponent->BindAction(TEXT("ToggleInventory"), EInputEvent::IE_Pressed, this, &ATAPlayer::toggleInventory);
+	PlayerInputComponent->BindAction(TEXT("ToggleMousePoint"), EInputEvent::IE_Pressed, this, &ATAPlayer::toggleMousePoint);
 }
 
 void ATAPlayer::PostInitializeComponents()
@@ -364,7 +365,7 @@ void ATAPlayer::moveCharacterByInput(const DirectionType& directionType, const f
 				}
 				break;
 			}
-			TA_LOG_DEV("direction to move(%f,%f,%f)", _toMoveDirectionByInput.X, _toMoveDirectionByInput.Y, _toMoveDirectionByInput.Z);
+			//TA_LOG_DEV("direction to move(%f,%f,%f)", _toMoveDirectionByInput.X, _toMoveDirectionByInput.Y, _toMoveDirectionByInput.Z);
 			AddMovementInput(_toMoveDirectionByInput);
 		}
 		break;
@@ -479,8 +480,16 @@ void ATAPlayer::toggleInventory(void) noexcept
 {
 	ATAPlayerController* controller = static_cast<ATAPlayerController*>(GetController());
 	const bool toggleFlag = !(controller->getInventoryVisibility());
-	TA_LOG_DEV("Toggle inventory : %d", toggleFlag)
+	controller->bShowMouseCursor = toggleFlag;
 	controller->setInventoryVisibility(toggleFlag);
+	TA_LOG_DEV("Toggle inventory : %d", toggleFlag);
+}
+
+void ATAPlayer::toggleMousePoint(void) noexcept
+{
+	ATAPlayerController* controller = static_cast<ATAPlayerController*>(GetController());
+	controller->bShowMouseCursor = !(controller->bShowMouseCursor);
+	TA_LOG_DEV("Toggle mouse point : %d", controller->bShowMouseCursor);
 }
 
 void ATAPlayer::onAttackMontageEnded(UAnimMontage* montage, bool interrupted) noexcept

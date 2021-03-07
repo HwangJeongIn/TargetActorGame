@@ -3,7 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Blueprint/UserWidget.h"
+#include "TAChunkUserWidget.h"
 #include "Common/CommonBase.h"
 #include "TAInventoryUserWidget.generated.h"
 
@@ -21,7 +21,7 @@ namespace ta
  * 
  */
 UCLASS()
-class TAGAMECLIENT_API UTAInventoryUserWidget : public UUserWidget
+class TAGAMECLIENT_API UTAInventoryUserWidget : public UTAChunkUserWidget
 {
 	GENERATED_BODY()
 	
@@ -33,7 +33,6 @@ public:
 	bool refreshSlots(const ta::ActorKey& target) noexcept;
 
 	bool setInventorySlotCount(const int32 capacity) noexcept;
-
 
 protected:
 	virtual void NativeConstruct() override final;

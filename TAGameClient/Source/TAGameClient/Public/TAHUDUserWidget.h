@@ -3,8 +3,8 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Blueprint/UserWidget.h"
-#include "TAHUDUserWidget.generated.h"
+#include "TAChunkUserWidget.h"
+#include "TAHudUserWidget.generated.h"
 
 
 class UProgressBar;
@@ -16,7 +16,7 @@ class UCanvasPanelSlot;
  * 
  */
 UCLASS()
-class TAGAMECLIENT_API UTAHUDUserWidget : public UUserWidget
+class TAGAMECLIENT_API UTAHudUserWidget : public UTAChunkUserWidget
 {
 	GENERATED_BODY()
 	
@@ -31,14 +31,15 @@ protected:
 
 private:
 
+
 	UPROPERTY()
-	UProgressBar* _HPBar;
+	UProgressBar* _hpBar;
 	
 	UPROPERTY()
-	UProgressBar* _EPBar;
+	UProgressBar* _epBar;
 	
 	UPROPERTY()
-	UProgressBar* _MPBar;
+	UProgressBar* _mpBar;
 	
 	//UPROPERTY()
 	//UTAInventoryUserWidget* _inventoryTest;

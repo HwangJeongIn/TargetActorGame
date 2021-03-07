@@ -2,6 +2,7 @@
 
 
 #include "TAInventorySlotUserWidget.h"
+#include "TAInventoryUserWidget.h"
 #include "Components/Button.h"
 #include "Components/TextBlock.h"
 #include "Components/Image.h"
@@ -12,11 +13,16 @@
 #include "Client/ClientInventoryActorComponent.h"
 
 
-
-void UTAInventorySlotUserWidget::setSlotNo(const ta::ItemSlotNo slotNo) noexcept
+void UTAInventorySlotUserWidget::setInfo(UTAInventoryUserWidget* ownerInventory, const ta::ItemSlotNo slotNo) noexcept
 {
+	_ownerInventory = ownerInventory;
 	_slotNo = slotNo;
 }
+
+//void UTAInventorySlotUserWidget::setSlotNo(const ta::ItemSlotNo slotNo) noexcept
+//{
+//	_slotNo = slotNo;
+//}
 
 //void refresh(ta::ClientInventoryActorComponent* inventoryComponent) noexcept
 //{
@@ -58,10 +64,13 @@ void UTAInventorySlotUserWidget::NativeConstruct()
 {
 	Super::NativeConstruct();
 
+	_ownerInventory = nullptr;
 
 	_slotButton = Cast<UButton>(GetWidgetFromName(TEXT("inventorySlotButton")));
 	TA_ASSERT_DEV(nullptr != _slotButton, "비정상");
 	_slotButton->OnClicked.AddDynamic(this, &UTAInventorySlotUserWidget::onSlotClicked);
+	_slotButton->OnPressed.AddDynamic(this, &UTAInventorySlotUserWidget::onSlotPressed);
+	_slotButton->OnReleased.AddDynamic(this, &UTAInventorySlotUserWidget::onSlotReleased);
 
 	_slotImage = Cast<UImage>(GetWidgetFromName(TEXT("inventorySlotImage")));
 	TA_ASSERT_DEV(nullptr != _slotImage, "비정상")
@@ -72,5 +81,15 @@ void UTAInventorySlotUserWidget::NativeConstruct()
 
 void UTAInventorySlotUserWidget::onSlotClicked() noexcept
 {
-	// 인벤토리 슬롯하나 클릭했을때
+	TA_LOG_DEV("onSlotClicked");
+}
+
+void UTAInventorySlotUserWidget::onSlotPressed() noexcept
+{
+	TA_LOG_DEV("onSlotPressed");
+}
+
+void UTAInventorySlotUserWidget::onSlotReleased() noexcept
+{
+	TA_LOG_DEV("onSlotReleased");
 }

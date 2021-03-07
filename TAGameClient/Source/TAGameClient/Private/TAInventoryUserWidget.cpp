@@ -129,7 +129,7 @@ bool UTAInventoryUserWidget::setInventorySlotCount(const int32 count) noexcept
 
 		currentSlot = WidgetTree->ConstructWidget<UTAInventorySlotUserWidget>(_inventorySlotClass, *slotString);
 		currentSlot->Padding = FMargin(3.0f);
-		currentSlot->setSlotNo(index);
+		currentSlot->setInfo(this, index);
 		_inventoryGrid->AddChildToUniformGrid(currentSlot, currentRow, currentColumn);
 		_inventorySlots.Add(currentSlot);
 

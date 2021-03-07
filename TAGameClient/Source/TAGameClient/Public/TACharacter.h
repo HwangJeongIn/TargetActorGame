@@ -3,6 +3,7 @@
 #pragma once
 
 #include "Common/CommonBase.h"
+#include "Common/KeyDefinition.h"
 #include "GameFramework/Character.h"
 #include "TAPawn.h"
 #include "TACharacter.generated.h"
@@ -32,6 +33,10 @@ public:
 
 	//virtual bool movePosition(const FVector& newPosition, bool teleport = false) noexcept;
 	//bool teleportToPosition(const FVector& newPosition) noexcept;
+
+	bool setActorKey(const ta::ActorKey& actorKey) noexcept;
+	const ta::ActorKey& getActorKey(void) const noexcept;
+
 private:
 
 	void setDeadAnimation(void) noexcept;
@@ -48,5 +53,9 @@ public:
 
 	UPROPERTY(VisibleInstanceOnly)
 	UTAAnimInstance* _animInstance;
+
+private:
+
+	ta::ActorKey _actorKey;
 
 };

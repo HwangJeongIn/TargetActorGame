@@ -1,7 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "TAHUDUserWidget.h"
+#include "TAHudUserWidget.h"
 //#include "TAInventoryUserWidget.h"
 #include "Components/ProgressBar.h"
 #include "Components/TextBlock.h"
@@ -11,24 +11,24 @@
 
 
 
-void UTAHUDUserWidget::NativeConstruct()
+void UTAHudUserWidget::NativeConstruct()
 {
 	Super::NativeConstruct();
 
-	_HPBar = Cast<UProgressBar>(GetWidgetFromName(TEXT("HPBar")));
-	TA_ASSERT_DEV(nullptr != _HPBar, "비정상")
+	_hpBar = Cast<UProgressBar>(GetWidgetFromName(TEXT("hpBar")));
+	TA_ASSERT_DEV(nullptr != _hpBar, "비정상")
 
-	_EPBar = Cast<UProgressBar>(GetWidgetFromName(TEXT("EPBar")));
-	TA_ASSERT_DEV(nullptr != _EPBar, "비정상")
+	_epBar = Cast<UProgressBar>(GetWidgetFromName(TEXT("epBar")));
+	TA_ASSERT_DEV(nullptr != _epBar, "비정상")
 
-	_MPBar = Cast<UProgressBar>(GetWidgetFromName(TEXT("MPBar")));
-	TA_ASSERT_DEV(nullptr != _MPBar, "비정상")
+	_mpBar = Cast<UProgressBar>(GetWidgetFromName(TEXT("mpBar")));
+	TA_ASSERT_DEV(nullptr != _mpBar, "비정상")
 
 	//_inventoryTest = Cast<UTAInventoryUserWidget>(GetWidgetFromName(TEXT("inventoryTest")));
 	//TA_ASSERT_DEV(nullptr != _inventoryTest, "비정상")
 }
 
-UCanvasPanelSlot* UTAHUDUserWidget::addChildWidgetToPanel(UWidget* target, FName panelName /*= FName()*/) noexcept
+UCanvasPanelSlot* UTAHudUserWidget::addChildWidgetToPanel(UWidget* target, FName panelName /*= FName()*/) noexcept
 {
 	// 어느 패널의 자식 객체로 들어간경우 SetXXXInViewport함수를 사용하면 안된다. 해당 패널의 슬롯을 가지고와서 패널에 맞게 캐스팅후 상대적인 좌표를 지정한다.
 	//{

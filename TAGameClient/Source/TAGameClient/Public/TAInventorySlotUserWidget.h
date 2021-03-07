@@ -11,7 +11,7 @@
 class UTextBlock;
 class UButton;
 class UImage;
-
+class UTAInventoryUserWidget;
 
 namespace ta
 {
@@ -27,7 +27,8 @@ class TAGAMECLIENT_API UTAInventorySlotUserWidget : public UUserWidget
 	GENERATED_BODY()
 
 public:
-	void setSlotNo(const ta::ItemSlotNo slotNo) noexcept;
+	void setInfo(UTAInventoryUserWidget* ownerInventory, const ta::ItemSlotNo slotNo) noexcept;
+	//void setSlotNo(const ta::ItemSlotNo slotNo) noexcept;
 
 	//void refresh(ta::ClientInventoryActorComponent* inventoryComponent) noexcept;
 	void refresh_(ta::ClientInventoryActorComponent* inventoryComponent) noexcept;
@@ -42,7 +43,16 @@ private:
 	UFUNCTION()
 	void onSlotClicked() noexcept;
 
+	UFUNCTION()
+	void onSlotPressed() noexcept;
+
+	UFUNCTION()
+	void onSlotReleased() noexcept;
+
 private:
+	UPROPERTY()
+	UTAInventoryUserWidget* _ownerInventory;
+ 
 	UPROPERTY()
 	int32 _slotNo; // ta::ItemSlotNo _slotNo로 해야하는데 UPROPERTY()를 붙이면 지원되지 않는 것 같다
 

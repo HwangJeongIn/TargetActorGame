@@ -2,7 +2,7 @@
 
 
 #include "TAPlayerController.h"
-#include "TAHUDUserWidget.h"
+#include "TAHudUserWidget.h"
 #include "TAInventoryUserWidget.h"
 #include "TAInteractionMenuUserWidget.h"
 #include "Components/CanvasPanelSlot.h"
@@ -12,11 +12,11 @@
 
 ATAPlayerController::ATAPlayerController()
 {
-	static ConstructorHelpers::FClassFinder<UTAHUDUserWidget> GameHUD_C(TEXT("/Game/UI/GameHUD.GameHUD_C"));
-	TA_ASSERT_DEV(true == GameHUD_C.Succeeded(), "비정상");
-	if (true == GameHUD_C.Succeeded())
+	static ConstructorHelpers::FClassFinder<UTAHudUserWidget> GameHud_C(TEXT("/Game/UI/GameHud.GameHud_C"));
+	TA_ASSERT_DEV(true == GameHud_C.Succeeded(), "비정상");
+	if (true == GameHud_C.Succeeded())
 	{
-		_HUDUserWidgetClass = GameHUD_C.Class;
+		_hudUserWidgetClass = GameHud_C.Class;
 	}
 
 	static ConstructorHelpers::FClassFinder<UTAInventoryUserWidget> Inventory_C(TEXT("/Game/UI/Inventory.Inventory_C"));
@@ -26,12 +26,15 @@ ATAPlayerController::ATAPlayerController()
 		_inventoryUserWidgetClass = Inventory_C.Class;
 	}
 
+
 	static ConstructorHelpers::FClassFinder<UTAInteractionMenuUserWidget> InteractionMenu_C(TEXT("/Game/UI/InteractionMenu.InteractionMenu_C"));
 	TA_ASSERT_DEV(true == InteractionMenu_C.Succeeded(), "비정상");
 	if (true == InteractionMenu_C.Succeeded())
 	{
 		_interactionMenuUserWidgetClass = InteractionMenu_C.Class;
 	}
+
+	_hoveredUi = UiBoundaryType::None;
 }
 
 void ATAPlayerController::PostInitializeComponents(void)
@@ -41,12 +44,13 @@ void ATAPlayerController::PostInitializeComponents(void)
 
 void ATAPlayerController::OnPossess(APawn* aPawn)
 {
+	TA_LOG_DEV("player controller OnPossess");
 	Super::OnPossess(aPawn);
 }
 
-UTAHUDUserWidget* ATAPlayerController::getHUDUserWidget(void) const
+UTAHudUserWidget* ATAPlayerController::getHudUserWidget(void) const
 {
-	return _HUDUserWidget;
+	return _hudUserWidget;
 }
 
 UTAInventoryUserWidget* ATAPlayerController::getInventoryUserWidget(void) const
@@ -65,8 +69,36 @@ void ATAPlayerController::setInventoryVisibility(bool isVisible) const noexcept
 	_inventoryUserWidget->SetVisibility(visibility);
 }
 
+void ATAPlayerController::onHoveredUi(UTAChunkUserWidget* input) noexcept
+{
+	const UiBoundaryType boundaryType = input->getBoundaryType();
+	if (boundaryType <= UiBoundaryType::Hud)
+	{
+		return;
+	}
+
+	_hoveredUi = boundaryType;
+	TA_LOG_DEV("hovedUi = %d", static_cast<uint8>(boundaryType));
+}
+
+void ATAPlayerController::onUnhoveredUi(UTAChunkUserWidget* input) noexcept
+{
+	const UiBoundaryType boundaryType = input->getBoundaryType();
+	if (boundaryType <= UiBoundaryType::Hud)
+	{
+		return;
+	}
+
+	if (_hoveredUi == boundaryType)
+	{
+		_hoveredUi = UiBoundaryType::None;
+		TA_LOG_DEV("unhovedUi = %d", static_cast<uint8>(boundaryType));
+	}
+}
+
 void ATAPlayerController::BeginPlay()
 {
+	TA_LOG_DEV("player controller BeginPlay");
 	Super::BeginPlay();
 	FInputModeGameOnly InputMode;
 	SetInputMode(InputMode);
@@ -75,18 +107,23 @@ void ATAPlayerController::BeginPlay()
 	GetWorld()->GetGameViewport()->GetViewportSize(viewportSize);
 	TA_LOG_DEV("viewport 1 : %.1f, %.1f", viewportSize.X, viewportSize.Y);
 
+	ATACharacter* targetCharacter = Cast<ATACharacter>(GetPawn());
+	TA_ASSERT_DEV(nullptr != targetCharacter, "비정상");
+
 	// 값똑같이 나온다.
 	//FVector2D viewportSize2(GEngine->GameViewport->Viewport->GetSizeXY());
 	//TA_LOG_DEV("viewport 2 : %.1f, %.1f", viewportSize2.X, viewportSize2.Y);
 
 	{
-		_HUDUserWidget = CreateWidget<UTAHUDUserWidget>(this, _HUDUserWidgetClass);
-		_HUDUserWidget->AddToViewport();
+		_hudUserWidget = CreateWidget<UTAHudUserWidget>(this, _hudUserWidgetClass);
+		_hudUserWidget->initializeBase(targetCharacter, UiBoundaryType::None);
+		_hudUserWidget->AddToViewport();
 	}
 
 	{
 		_inventoryUserWidget = CreateWidget<UTAInventoryUserWidget>(this, _inventoryUserWidgetClass);
-		UCanvasPanelSlot* inventoryCanvasPanelSlot = _HUDUserWidget->addChildWidgetToPanel(_inventoryUserWidget);
+		_inventoryUserWidget->initializeBase(targetCharacter, UiBoundaryType::Inventory);
+		UCanvasPanelSlot* inventoryCanvasPanelSlot = _hudUserWidget->addChildWidgetToPanel(_inventoryUserWidget);
 		if (nullptr == inventoryCanvasPanelSlot)
 		{
 			TA_ASSERT_DEV(false, "비정상");
@@ -117,9 +154,11 @@ void ATAPlayerController::BeginPlay()
 		_interactionMenuUserWidget->SetVisibility(ESlateVisibility::Hidden);
 	}
 
+
 }
 
 void ATAPlayerController::SetupInputComponent()
 {
+	TA_LOG_DEV("player controller SetupInputComponent");
 	Super::SetupInputComponent();
 }

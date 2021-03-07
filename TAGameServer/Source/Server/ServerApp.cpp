@@ -1,4 +1,4 @@
-#include "Server/ServerApp.h"
+﻿#include "Server/ServerApp.h"
 #include "Server/ServerActorManager.h"
 #include "Server/ServerActorSystemManager.h"
 #include "Server/AllPacketServer.h"
@@ -97,7 +97,7 @@ namespace ta
 					// 클라레벨에서 어디서 들어왔는지?
 					Endpoint peerAddr;
 					newClientNetwork->getPeerAddr(peerAddr);
-					TA_LOG_DEV("접속완료 클라레벨 : %s", peerAddr.toTstring().data());
+					TA_LOG_DEV("accept client : %s", peerAddr.toTstring().data());
 
 					// IOCP등록후 Receive대기
 					iocp->bindSocket(*newClientNetwork, newClient->getActorKey());
