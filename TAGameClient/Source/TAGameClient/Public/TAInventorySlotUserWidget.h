@@ -27,6 +27,8 @@ class TAGAMECLIENT_API UTAInventorySlotUserWidget : public UUserWidget
 	GENERATED_BODY()
 
 public:
+	UTAInventorySlotUserWidget(const FObjectInitializer& ObjectInitializer);
+
 	void setInfo(UTAInventoryUserWidget* ownerInventory, const ta::ItemSlotNo slotNo) noexcept;
 	//void setSlotNo(const ta::ItemSlotNo slotNo) noexcept;
 

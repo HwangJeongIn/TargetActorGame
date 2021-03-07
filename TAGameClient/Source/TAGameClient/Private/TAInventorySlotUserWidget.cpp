@@ -13,6 +13,12 @@
 #include "Client/ClientInventoryActorComponent.h"
 
 
+UTAInventorySlotUserWidget::UTAInventorySlotUserWidget(const FObjectInitializer& ObjectInitializer)
+	: Super(ObjectInitializer)
+{
+	_ownerInventory = nullptr;
+}
+
 void UTAInventorySlotUserWidget::setInfo(UTAInventoryUserWidget* ownerInventory, const ta::ItemSlotNo slotNo) noexcept
 {
 	_ownerInventory = ownerInventory;
@@ -64,8 +70,6 @@ void UTAInventorySlotUserWidget::NativeConstruct()
 {
 	Super::NativeConstruct();
 
-	_ownerInventory = nullptr;
-
 	_slotButton = Cast<UButton>(GetWidgetFromName(TEXT("inventorySlotButton")));
 	TA_ASSERT_DEV(nullptr != _slotButton, "비정상");
 	_slotButton->OnClicked.AddDynamic(this, &UTAInventorySlotUserWidget::onSlotClicked);
@@ -86,10 +90,24 @@ void UTAInventorySlotUserWidget::onSlotClicked() noexcept
 
 void UTAInventorySlotUserWidget::onSlotPressed() noexcept
 {
-	TA_LOG_DEV("onSlotPressed");
+	TA_LOG_DEV("onSlotPressed slotNo : %d", _slotNo);
+	if (nullptr == _ownerInventory)
+	{
+		TA_ASSERT_DEV(false, "_ownerInventory == nullptr");
+		return;
+	}
+
+	_ownerInventory->setPressedSlot(_slotNo);
 }
 
 void UTAInventorySlotUserWidget::onSlotReleased() noexcept
 {
-	TA_LOG_DEV("onSlotReleased");
+	TA_LOG_DEV("onSlotReleased slotNo : %d", _slotNo);	
+	if (nullptr == _ownerInventory)
+	{
+		TA_ASSERT_DEV(false, "_ownerInventory == nullptr");
+		return;
+	}
+
+	_ownerInventory->releaseSlot();
 }

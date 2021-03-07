@@ -1,5 +1,6 @@
 #include "TAGameEvent.h"
 #include "TAGameInstance.h"
+#include "TAPlayer.h"
 #include "TACharacter.h"
 #include "TAConvertFunctions.h"
 #include "TAGameInstance.h"
@@ -80,6 +81,7 @@ bool TAGameEvent::setActorKey(const ta::ActorKey& actorKey) noexcept
 
 TAGameEventSpawnActor::TAGameEventSpawnActor(void) noexcept
 	: TAGameEvent(TAGameEvent::GameEventType::SpawnActor)
+	, _isMainPlayer(false)
 {
 
 }
@@ -87,6 +89,11 @@ TAGameEventSpawnActor::TAGameEventSpawnActor(void) noexcept
 TAGameEventSpawnActor::~TAGameEventSpawnActor(void) noexcept
 {
 
+}
+
+void TAGameEventSpawnActor::setMainPlayer(const bool flag) noexcept
+{
+	_isMainPlayer = flag;
 }
 
 bool TAGameEventSpawnActor::processEvent(TAGameEventProcessParameter& parameter) noexcept
@@ -112,36 +119,49 @@ bool TAGameEventSpawnActor::processEvent(TAGameEventProcessParameter& parameter)
 		return false;
 	}
 
-	FVector position;
+	ATACharacter* character = nullptr;
+	if (false == _isMainPlayer)
 	{
-		ta::ScopedLock componentLock(actorMove, true);
-		ta::Vector currentPosition = actorMove->getCurrentPosition_();
-		TA_LOG_DEV("<SpawnActor> => actorkey : %d, current position (%.1f, %.1f, %.1f)", actorKey.getKeyValue(), currentPosition._x, currentPosition._y, currentPosition._z);
-		TAVectorToFVector(currentPosition, position);
-	}
-	
-	{
-		ta::ScopedLock actorLock(actor);
-		//if (false == actor->isActive_())
-		//{
-		//	TA_ASSERT_DEV(false, "액터가 활성화 되어있지 않습니다. ActorKey : %d", _actorKey.getKeyValue());
-		//	return false;
-		//}
+		FVector position;
+		{
+			ta::ScopedLock componentLock(actorMove, true);
+			ta::Vector currentPosition = actorMove->getCurrentPosition_();
+			TA_LOG_DEV("<SpawnActor> => actorkey : %d, current position (%.1f, %.1f, %.1f)", actorKey.getKeyValue(), currentPosition._x, currentPosition._y, currentPosition._z);
+			TAVectorToFVector(currentPosition, position);
+		}
 
-		//actor->getActorType_();
-		FActorSpawnParameters actorSpawnParameters;
-		actorSpawnParameters.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
-		ATACharacter* character = parameter._world->SpawnActor<ATACharacter>(ATACharacter::StaticClass(), position, FRotator::ZeroRotator, actorSpawnParameters);
+		{
+			ta::ScopedLock actorLock(actor);
+			//if (false == actor->isActive_())
+			//{
+			//	TA_ASSERT_DEV(false, "액터가 활성화 되어있지 않습니다. ActorKey : %d", _actorKey.getKeyValue());
+			//	return false;
+			//}
+
+			//actor->getActorType_();
+			FActorSpawnParameters actorSpawnParameters;
+			actorSpawnParameters.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
+			character = parameter._world->SpawnActor<ATACharacter>(ATACharacter::StaticClass(), position, FRotator::ZeroRotator, actorSpawnParameters);
+			if (nullptr == character)
+			{
+				TA_ASSERT_DEV(false, "비정상입니다.");
+				return false;
+			}
+
+		}
+	}
+	else
+	{
+		character = Cast<ATACharacter>(GetFirstTAPlayer());
 		if (nullptr == character)
 		{
 			TA_ASSERT_DEV(false, "비정상입니다.");
 			return false;
 		}
-
-		character->setActorKey(actorKey);
-
-		actor->setUnrealCharacter_(character);
 	}
+
+	character->setActorKey(actorKey);
+	actor->setUnrealCharacter_(character);
 
 	return true;
 }
@@ -195,6 +215,7 @@ bool TAGameEventDestroyActor::processEvent(TAGameEventProcessParameter& paramete
 
 TAGameEventInitializeInventory::TAGameEventInitializeInventory(void) noexcept
 	: TAGameEvent(TAGameEvent::GameEventType::InitializeInventory)
+	, _capacity(0)
 {
 
 }
@@ -245,5 +266,62 @@ bool TAGameEventInitializeInventory::setCapacity(const ta::int32 capacity) noexc
 	}
 
 	_capacity = capacity;
+	return true;
+}
+
+
+TAGameEventRefreshInventory::TAGameEventRefreshInventory(void) noexcept
+	: TAGameEvent(TAGameEvent::GameEventType::RefreshInventory)
+	, _slotNo(-1)
+{
+
+}
+
+TAGameEventRefreshInventory::~TAGameEventRefreshInventory(void) noexcept
+{
+
+}
+
+bool TAGameEventRefreshInventory::processEvent(TAGameEventProcessParameter& parameter) noexcept
+{
+	if (nullptr == parameter._world)
+	{
+		TA_ASSERT_DEV(false, "게임월드가 존재하지 않습니다.");
+		return false;
+	}
+
+	const ta::ActorKey actorKey = getActorKey();
+	ta::ClientActor* actor = static_cast<ta::ClientActor*>(ta::GetActorManager()->getActor(actorKey));
+	if (nullptr == actor)
+	{
+		TA_ASSERT_DEV(false, "비정상입니다.");
+		return false;
+	}
+
+	ATAPlayerController* playerController = GetFirstTAPlayerController();
+	if (nullptr == playerController)
+	{
+		TA_ASSERT_DEV(false, "비정상입니다.");
+		return false;
+	}
+
+	UTAInventoryUserWidget* inventoryWidget = playerController->getInventoryUserWidget();
+	if (false == inventoryWidget->refreshSlot(actorKey, _slotNo))
+	{
+		TA_ASSERT_DEV(false, "비정상입니다.");
+		return false;
+	}
+
+	return true;
+}
+
+bool TAGameEventRefreshInventory::setSlotNo(const ta::ItemSlotNo slotNo) noexcept
+{
+	if (slotNo < 0)
+	{
+		return false;
+	}
+
+	_slotNo = slotNo;
 	return true;
 }

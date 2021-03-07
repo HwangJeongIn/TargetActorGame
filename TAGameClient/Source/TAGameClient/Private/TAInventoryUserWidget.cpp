@@ -3,6 +3,7 @@
 
 #include "TAInventoryUserWidget.h"
 #include "TAInventorySlotUserWidget.h"
+#include "TAPlayerController.h"
 #include "Components/UniformGridPanel.h"
 #include "Blueprint/WidgetTree.h"
 #include "Common/CommonBase.h"
@@ -23,6 +24,7 @@ UTAInventoryUserWidget::UTAInventoryUserWidget(const FObjectInitializer& ObjectI
 	}
 
 	_isValid = false;
+	_pressedSlot = -1;
 }
 
 void UTAInventoryUserWidget::NativeConstruct()
@@ -36,7 +38,7 @@ bool UTAInventoryUserWidget::checkValid(void) const noexcept
 	return  _isValid;
 }
 
-bool UTAInventoryUserWidget::refreshSlot(const ta::ActorKey& target, const ta::ItemSlotNo slotNo) noexcept
+bool UTAInventoryUserWidget::refreshSlot(const ta::ActorKey& target, const ta::ItemSlotNo& slotNo) noexcept
 {
 	if (false == checkValid())
 	{
@@ -146,6 +148,31 @@ bool UTAInventoryUserWidget::setInventorySlotCount(const int32 count) noexcept
 	//testSlot->AddToViewport();
 	//_inventory->AddChild(testSlot);
 
+}
 
-	return false;
+bool UTAInventoryUserWidget::setPressedSlot(const ta::ItemSlotNo& slotNo) noexcept
+{
+	if (_inventorySlots.Num() <= slotNo
+		|| slotNo < 0)
+	{
+		TA_ASSERT_DEV(false, "비정상");
+		return false;
+	}
+
+	_pressedSlot = slotNo;
+	return true;
+}
+
+void UTAInventoryUserWidget::releaseSlot(void) noexcept
+{
+	ATAPlayerController* playerController = Cast<ATAPlayerController>(getOwnerActor()->GetController());
+	if (nullptr == playerController)
+	{
+		TA_ASSERT_DEV(false, "비정상");
+		return;
+	}
+
+	TA_ASSERT_DEV(-1 != _pressedSlot, "비정상");
+	playerController->onSlotReleased(this, _pressedSlot);
+	_pressedSlot = -1;
 }

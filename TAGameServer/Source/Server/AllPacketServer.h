@@ -325,3 +325,57 @@ namespace ta
 }
 
 
+namespace ta
+{
+	static void SendDropItemSTC
+( const ActorKey& networkActorKey,
+ const ItemSlotNo& slotNo,
+ const int32& stackCount)
+	{
+		DropItemSTC message
+( slotNo,
+ stackCount);
+		message._length = sizeof(DropItemSTC);
+		message._networkActorKey = networkActorKey;
+		CommonActor* target = GetActorManager()->getActor(networkActorKey);
+		if(nullptr == target)			
+		{
+			return;
+		}
+		Socket* network = target->getNetwork_();
+		if(nullptr == network)			
+		{
+			return;
+		}
+		network->sendOverlapped(&message);
+	}
+}
+
+
+namespace ta
+{
+	static void SendUseItemSTC
+( const ActorKey& networkActorKey,
+ const ItemSlotNo& slotNo,
+ const int32& stackCount)
+	{
+		UseItemSTC message
+( slotNo,
+ stackCount);
+		message._length = sizeof(UseItemSTC);
+		message._networkActorKey = networkActorKey;
+		CommonActor* target = GetActorManager()->getActor(networkActorKey);
+		if(nullptr == target)			
+		{
+			return;
+		}
+		Socket* network = target->getNetwork_();
+		if(nullptr == network)			
+		{
+			return;
+		}
+		network->sendOverlapped(&message);
+	}
+}
+
+

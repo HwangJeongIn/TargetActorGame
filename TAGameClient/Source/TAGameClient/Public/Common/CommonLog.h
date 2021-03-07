@@ -60,6 +60,9 @@ namespace ta
 	}
 }
 
+// 주석치고 구현해야하는 것들 확인
+#define TA_TEMP_DEV(Message);
+
 #ifdef TA_SERVER
 
 // 가변인자 매크로 ... <=> __VA_ARGS__와 대응 // __VA_ARGS__앞에 ##를 붙이면 불필요한 쉼표가 자동으로 삭제 

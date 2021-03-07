@@ -2,11 +2,17 @@
 
 
 #include "TAPlayerController.h"
+#include "TACharacter.h"
 #include "TAHudUserWidget.h"
 #include "TAInventoryUserWidget.h"
 #include "TAInteractionMenuUserWidget.h"
 #include "Components/CanvasPanelSlot.h"
 #include "Common/CommonBase.h"
+#include "Common/ScopedLock.h"
+#include "Common/GetComponentAndSystem.h"
+#include "Client/ClientActor.h"
+#include "Client/ClientInventoryActorComponent.h"
+#include "Client/ClientInventoryActorSystem.h"
 #include "Engine.h"
 
 
@@ -93,6 +99,50 @@ void ATAPlayerController::onUnhoveredUi(UTAChunkUserWidget* input) noexcept
 	{
 		_hoveredUi = UiBoundaryType::None;
 		TA_LOG_DEV("unhovedUi = %d", static_cast<uint8>(boundaryType));
+	}
+}
+
+// 각 메인위젯이 아닌 컨트롤러에서 수행하는 이유는 UI마다 다른 UI와 상호작용이 필요할 수 있기 때문에 모든 UI를 가지고 있는 PlayerController에서 수행한다.
+void ATAPlayerController::onSlotReleased(UTAChunkUserWidget* slotParent, const ta::ItemSlotNo& slotNo) noexcept
+{
+	ATACharacter* targetCharacter = Cast<ATACharacter>(GetPawn());
+	TA_ASSERT_DEV(nullptr != targetCharacter, "비정상");
+	const ta::ActorKey targetActorKey = targetCharacter->getActorKey();
+
+	// 검증
+	ta::ClientActor* clientActor = targetCharacter->getActorFromActorManager();
+	if (nullptr == clientActor)
+	{
+		TA_LOG_DEV("onSlotReleased => clientActor isn't exist");
+		return;
+	}
+
+	const UiBoundaryType boundaryType = slotParent->getBoundaryType();
+
+	switch (boundaryType)
+	{
+	case UiBoundaryType::Inventory:
+		{
+			if (_hoveredUi <= UiBoundaryType::Hud)
+			{
+				TA_LOG_DEV("onSlotReleased => Inventory to empty space // drop item");
+				ta::ClientInventoryActorComponent* inventory = ta::GetActorComponent<ta::ClientInventoryActorComponent>(targetActorKey);
+				if (nullptr == inventory)
+				{
+					TA_ASSERT_DEV(false, "Inventory가 없습니다. ActorKey : %d", targetActorKey.getKeyValue());
+					return;
+				}
+
+				ta::ClientInventoryActorSystem* clientInventorySystem = ta::GetActorSystem<ta::ClientInventoryActorSystem>();
+				if (false == clientInventorySystem->requestDropItem(inventory, slotNo, 1))
+				{
+					TA_ASSERT_DEV(false, "requestDropItem 실패");
+				}
+			}
+		}
+		break;
+	default:
+		break;
 	}
 }
 

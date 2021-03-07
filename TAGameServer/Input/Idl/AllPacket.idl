@@ -6,6 +6,8 @@
 	DetectTarget(const ActorKey& myActorKey, const uint32& targetActorType);
 	MoveToTarget(const ActorKey& myActorKey, const ActorKey& targetActorKey);
 	MoveToRandomPoint(const ActorKey& myActorKey);
+	DropItem(const ItemSlotNo& slotNo, const int32& stackCount);
+	UseItem(const ItemSlotNo& slotNo, const int32& stackCount);
 }
 
 [STC]
@@ -22,4 +24,6 @@
 	ChangeHp(const ActorKey& attacker, const ActorKey& targetActorKey, const uint32& hpValue);
 	KillActor(const ActorKey& targetActorKey);
 	SetTargetActor(const ActorKey& myActorKey, const ActorKey& targetActorKey);
+	DropItem(const ItemSlotNo& slotNo, const int32& stackCount);
+	UseItem(const ItemSlotNo& slotNo, const int32& stackCount);
 }

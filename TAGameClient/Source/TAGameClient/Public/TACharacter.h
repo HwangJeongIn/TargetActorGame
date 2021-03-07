@@ -11,6 +11,11 @@
 
 class UTAAnimInstance;
 
+namespace ta
+{
+	class ClientActor;
+}
+
 
 UCLASS()
 class TAGAMECLIENT_API ATACharacter : public ACharacter
@@ -36,6 +41,7 @@ public:
 
 	bool setActorKey(const ta::ActorKey& actorKey) noexcept;
 	const ta::ActorKey& getActorKey(void) const noexcept;
+	ta::ClientActor* getActorFromActorManager(void) const noexcept;
 
 private:
 

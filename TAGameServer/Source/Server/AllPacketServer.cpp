@@ -4,9 +4,11 @@
 #include "Server/ServerMoveActorSystem.h"
 #include "Server/ServerActionActorSystem.h"
 #include "Server/ServerAiActorSystem.h"
+#include "Server/ServerInventoryActorSystem.h"
 #include "Server/ServerActor.h"
 #include "Common/CommonAiActorComponent.h"
 #include "Common/CommonMoveActorComponent.h"
+#include "Common/CommonInventoryActorComponent.h"
 #include "Common/ScopedLock.h"
 
 
@@ -203,6 +205,58 @@ namespace ta
 	void SetTargetActorSTC::processSetTargetActorSTC(const ActorKey& networkActorKey,
 													 const ActorKey& myActorKey,
 													 const ActorKey& targetActorKey) noexcept
+	{
+		__noop;
+	}
+
+	void DropItemCTS::processDropItemCTS(const ActorKey& networkActorKey,
+										 const ItemSlotNo& slotNo,
+										 const int32& stackCount) noexcept
+	{
+		ServerInventoryActorSystem* serverInventorySystem = GetActorSystem<ServerInventoryActorSystem>();
+		CommonInventoryActorComponent* inventoryCom = GetActorComponent<CommonInventoryActorComponent>(networkActorKey);
+		if (nullptr == inventoryCom)
+		{
+			TA_ASSERT_DEV(false, "비정상입니다.");
+			return;
+		}
+
+		if (false == serverInventorySystem->respondDropItem(inventoryCom, slotNo, stackCount))
+		{
+			TA_ASSERT_DEV(false, "비정상입니다.");
+			return;
+		}
+	}
+
+	void UseItemCTS::processUseItemCTS(const ActorKey& networkActorKey,
+									   const ItemSlotNo& slotNo,
+									   const int32& stackCount) noexcept
+	{
+		ServerInventoryActorSystem* serverInventorySystem = GetActorSystem<ServerInventoryActorSystem>();
+		CommonInventoryActorComponent* inventoryCom = GetActorComponent<CommonInventoryActorComponent>(networkActorKey);
+		if (nullptr == inventoryCom)
+		{
+			TA_ASSERT_DEV(false, "비정상입니다.");
+			return;
+		}
+
+		if (false == serverInventorySystem->respondUseItem(inventoryCom, slotNo, stackCount))
+		{
+			TA_ASSERT_DEV(false, "비정상입니다.");
+			return;
+		}
+	}
+
+	void DropItemSTC::processDropItemSTC(const ActorKey& networkActorKey,
+										 const ItemSlotNo& slotNo,
+										 const int32& stackCount) noexcept
+	{
+		__noop;
+	}
+
+	void UseItemSTC::processUseItemSTC(const ActorKey& networkActorKey,
+									   const ItemSlotNo& slotNo,
+									   const int32& stackCount) noexcept
 	{
 		__noop;
 	}

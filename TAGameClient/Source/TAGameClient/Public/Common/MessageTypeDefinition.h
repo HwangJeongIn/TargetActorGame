@@ -16,12 +16,16 @@ enum class MessageType : uint32
  ChangeHpSTC,
  KillActorSTC,
  SetTargetActorSTC,
+ DropItemSTC,
+ UseItemSTC,
  LoginCTS,
  MoveActorCTS,
  AttackTargetCTS,
  DetectTargetCTS,
  MoveToTargetCTS,
- MoveToRandomPointCTS};
+ MoveToRandomPointCTS,
+ DropItemCTS,
+ UseItemCTS};
 }
 
 

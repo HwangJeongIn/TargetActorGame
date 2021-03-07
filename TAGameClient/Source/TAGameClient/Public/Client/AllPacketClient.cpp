@@ -4,11 +4,13 @@
 #include "Client/ClientMoveActorSystem.h"
 #include "Client/ClientActionActorSystem.h"
 #include "Client/ClientAiActorSystem.h"
+#include "Client/ClientInventoryActorSystem.h"
+#include "Client/ClientAiActorComponent.h"
 #include "Common/AllPacketCommon.h"
 #include "Common/CommonActor.h"
 #include "Common/GetComponentAndSystem.h"
 #include "Common/CommonMoveActorComponent.h"
-#include "Client/ClientAiActorComponent.h"
+#include "Common/CommonInventoryActorComponent.h"
 
 
 
@@ -194,6 +196,58 @@ namespace ta
 
 		ClientAiActorSystem* aiSystem = GetActorSystem<ClientAiActorSystem>();
 		if (false == aiSystem->setTargetActor(myAi, targetActorKey))
+		{
+			TA_ASSERT_DEV(false, "비정상입니다.");
+			return;
+		}
+	}
+
+	void DropItemCTS::processDropItemCTS(const ActorKey& networkActorKey,
+										 const ItemSlotNo& slotNo,
+										 const int32& stackCount) noexcept
+	{
+		__noop;
+	}
+
+	void UseItemCTS::processUseItemCTS(const ActorKey& networkActorKey,
+									   const ItemSlotNo& slotNo,
+									   const int32& stackCount) noexcept
+	{
+		__noop;
+	}
+
+	void DropItemSTC::processDropItemSTC(const ActorKey& networkActorKey,
+										 const ItemSlotNo& slotNo,
+										 const int32& stackCount) noexcept
+	{
+		ClientInventoryActorSystem* clientInventorySystem = GetActorSystem<ClientInventoryActorSystem>();
+		CommonInventoryActorComponent* inventoryCom = GetActorComponent<CommonInventoryActorComponent>(networkActorKey);
+		if (nullptr == inventoryCom)
+		{
+			TA_ASSERT_DEV(false, "비정상입니다.");
+			return;
+		}
+
+		if (false == clientInventorySystem->respondDropItem(inventoryCom, slotNo, stackCount))
+		{
+			TA_ASSERT_DEV(false, "비정상입니다.");
+			return;
+		}
+	}
+	
+	void UseItemSTC::processUseItemSTC(const ActorKey& networkActorKey,
+									   const ItemSlotNo& slotNo,
+									   const int32& stackCount) noexcept
+	{
+		ClientInventoryActorSystem* clientInventorySystem = GetActorSystem<ClientInventoryActorSystem>();
+		CommonInventoryActorComponent* inventoryCom = GetActorComponent<CommonInventoryActorComponent>(networkActorKey);
+		if (nullptr == inventoryCom)
+		{
+			TA_ASSERT_DEV(false, "비정상입니다.");
+			return;
+		}
+
+		if (false == clientInventorySystem->respondUseItem(inventoryCom, slotNo, stackCount))
 		{
 			TA_ASSERT_DEV(false, "비정상입니다.");
 			return;

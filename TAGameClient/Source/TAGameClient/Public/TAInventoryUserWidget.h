@@ -29,10 +29,12 @@ public:
 	UTAInventoryUserWidget(const FObjectInitializer& ObjectInitializer);
 
 	bool checkValid(void) const noexcept;	
-	bool refreshSlot(const ta::ActorKey& target, const ta::ItemSlotNo slotIndex) noexcept;
+	bool refreshSlot(const ta::ActorKey& target, const ta::ItemSlotNo& slotNo) noexcept;
 	bool refreshSlots(const ta::ActorKey& target) noexcept;
 
 	bool setInventorySlotCount(const int32 capacity) noexcept;
+	bool setPressedSlot(const ta::ItemSlotNo& slotNo) noexcept;
+	void releaseSlot(void) noexcept;
 
 protected:
 	virtual void NativeConstruct() override final;
@@ -43,6 +45,9 @@ protected:
 	TSubclassOf<UTAInventorySlotUserWidget> _inventorySlotClass;
 
 private:
+
+	UPROPERTY()
+	int32 _pressedSlot;
 
 	UPROPERTY()
 	bool _isValid;

@@ -14,6 +14,10 @@ class UTAInteractionMenuUserWidget;
 class UTAChunkUserWidget;
 
 
+namespace ta
+{
+	typedef int32 ItemSlotNo;
+}
 /**
  * 
  */
@@ -47,6 +51,7 @@ public:
 	void onHoveredUi(UTAChunkUserWidget* input) noexcept;
 	void onUnhoveredUi(UTAChunkUserWidget* input) noexcept;
 	
+	void onSlotReleased(UTAChunkUserWidget* slotParent, const ta::ItemSlotNo& slotNo) noexcept;
 
 protected:
 	virtual void BeginPlay() override final;

@@ -90,15 +90,20 @@ namespace ta
         const int32 currentStackCount = targetItem->getStackCount_();
         const int32 finalCount = currentStackCount < count ? currentStackCount : count;
 
-        targetItem->setStackCount_(currentStackCount - finalCount);
+        
+        Item* rv = nullptr;
         if (currentStackCount == finalCount) // 다썼으면 비워줘야한다.
         {
+            rv = targetItem;
             targetItem = &Item::InvalidItem;
         }
+        else
+        {
+            targetItem->setStackCount_(currentStackCount - finalCount);
+            rv = new Item(*targetItem);
+            rv->setStackCount_(finalCount);
+        }
 
-        Item* rv = new Item(*targetItem);
-        rv->setStackCount_(finalCount);
-        
         return rv;
     }
 

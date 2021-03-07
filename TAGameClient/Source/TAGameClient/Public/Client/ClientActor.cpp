@@ -54,6 +54,7 @@ namespace ta
 	void ClientActor::onActive(void) noexcept
 	{
 #ifndef TA_SERVER
+		ActorType actorType = ActorType::Count;
 		{
 			ScopedLock actorLock(this);
 			if (nullptr != _unrealCharacter)
@@ -61,10 +62,18 @@ namespace ta
 				TA_ASSERT_DEV(false, "이미 액터가 존재합니다. 비정상입니다.");
 				return;
 			}
+
+			actorType = getActorType_();
 		}
 
+		
 		TAGameEventSpawnActor* event = new TAGameEventSpawnActor;
 		event->setActorKey(getActorKey());
+		if (ActorType::Player == actorType)
+		{
+			event->setMainPlayer(true);
+		}
+
 		if (false == RegisterTAGameEvent(event))
 		{
 			TA_ASSERT_DEV(false, "이벤트 등록에 실패했습니다.");

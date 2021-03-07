@@ -365,6 +365,68 @@ SetTargetActorSTC::processSetTargetActorSTC
 
 namespace ta
 {
+	class DropItemSTC : public MessagePack
+	{
+	public:
+		 explicit DropItemSTC
+( const ItemSlotNo& slotNo,
+ const int32& stackCount) noexcept
+			: MessagePack(MessageType::DropItemSTC),
+ 		 slotNo(slotNo),
+		 stackCount(stackCount)  {}
+		virtual ~DropItemSTC(void) noexcept {}
+		static void processMessage(const DropItemSTC* message) noexcept 
+{ 
+DropItemSTC::processDropItemSTC
+( message->_networkActorKey,
+ message->slotNo,
+ message->stackCount);
+}
+		static void processDropItemSTC
+( const ActorKey& networkActorKey,
+ const ItemSlotNo& slotNo,
+ const int32& stackCount) noexcept;
+
+	public:
+ 	 ItemSlotNo slotNo;
+	 int32 stackCount; 
+	};
+}
+
+
+namespace ta
+{
+	class UseItemSTC : public MessagePack
+	{
+	public:
+		 explicit UseItemSTC
+( const ItemSlotNo& slotNo,
+ const int32& stackCount) noexcept
+			: MessagePack(MessageType::UseItemSTC),
+ 		 slotNo(slotNo),
+		 stackCount(stackCount)  {}
+		virtual ~UseItemSTC(void) noexcept {}
+		static void processMessage(const UseItemSTC* message) noexcept 
+{ 
+UseItemSTC::processUseItemSTC
+( message->_networkActorKey,
+ message->slotNo,
+ message->stackCount);
+}
+		static void processUseItemSTC
+( const ActorKey& networkActorKey,
+ const ItemSlotNo& slotNo,
+ const int32& stackCount) noexcept;
+
+	public:
+ 	 ItemSlotNo slotNo;
+	 int32 stackCount; 
+	};
+}
+
+
+namespace ta
+{
 	class LoginCTS : public MessagePack
 	{
 	public:
@@ -540,6 +602,68 @@ MoveToRandomPointCTS::processMoveToRandomPointCTS
 
 	public:
  	 ActorKey myActorKey; 
+	};
+}
+
+
+namespace ta
+{
+	class DropItemCTS : public MessagePack
+	{
+	public:
+		 explicit DropItemCTS
+( const ItemSlotNo& slotNo,
+ const int32& stackCount) noexcept
+			: MessagePack(MessageType::DropItemCTS),
+ 		 slotNo(slotNo),
+		 stackCount(stackCount)  {}
+		virtual ~DropItemCTS(void) noexcept {}
+		static void processMessage(const DropItemCTS* message) noexcept 
+{ 
+DropItemCTS::processDropItemCTS
+( message->_networkActorKey,
+ message->slotNo,
+ message->stackCount);
+}
+		static void processDropItemCTS
+( const ActorKey& networkActorKey,
+ const ItemSlotNo& slotNo,
+ const int32& stackCount) noexcept;
+
+	public:
+ 	 ItemSlotNo slotNo;
+	 int32 stackCount; 
+	};
+}
+
+
+namespace ta
+{
+	class UseItemCTS : public MessagePack
+	{
+	public:
+		 explicit UseItemCTS
+( const ItemSlotNo& slotNo,
+ const int32& stackCount) noexcept
+			: MessagePack(MessageType::UseItemCTS),
+ 		 slotNo(slotNo),
+		 stackCount(stackCount)  {}
+		virtual ~UseItemCTS(void) noexcept {}
+		static void processMessage(const UseItemCTS* message) noexcept 
+{ 
+UseItemCTS::processUseItemCTS
+( message->_networkActorKey,
+ message->slotNo,
+ message->stackCount);
+}
+		static void processUseItemCTS
+( const ActorKey& networkActorKey,
+ const ItemSlotNo& slotNo,
+ const int32& stackCount) noexcept;
+
+	public:
+ 	 ItemSlotNo slotNo;
+	 int32 stackCount; 
 	};
 }
 

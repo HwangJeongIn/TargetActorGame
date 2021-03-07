@@ -6,6 +6,9 @@
 #include "TAPawn.h"
 #include "TAGameInstance.h"
 #include "TAAIController.h"
+#include "Client/ClientApp.h"						  
+#include "Client/ClientActor.h"			  
+#include "Client/ClientActorManager.h"
 #include "DrawDebugHelpers.h"
 
 
@@ -95,6 +98,10 @@ const ta::ActorKey& ATACharacter::getActorKey(void) const noexcept
 	return _actorKey;
 }
 
+ta::ClientActor* ATACharacter::getActorFromActorManager(void) const noexcept
+{
+	return static_cast<ta::ClientActor*>(ta::GetActorManager()->getActor(_actorKey));
+}
 
 void ATACharacter::setDeadAnimation(void) noexcept
 {
