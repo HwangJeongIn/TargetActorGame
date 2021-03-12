@@ -22,6 +22,7 @@
 #include "DetourTileCache/DetourTileCacheBuilder.h"
 #include "Detour/DetourCommon.h"
 #include "Detour/DetourAssert.h"
+#include "RecastNavigationSystemInclude.h"
 
 static const int MAX_VERTS_PER_POLY = 6;	// TODO: use the DT_VERTS_PER_POLYGON
 static const int MAX_REM_EDGES = 48;		// TODO: make this an expression.
@@ -2703,7 +2704,9 @@ void dtTileCacheLogContext::dtLog(const char* format, ...)
 	char msg[MSG_SIZE];
 	va_list ap;
 	va_start(ap, format);
-	int len = FCStringAnsi::GetVarArgs(msg, MSG_SIZE, format, ap);
+
+	//int len = FCStringAnsi::GetVarArgs(msg, MSG_SIZE, format, ap);
+	int len = vsnprintf(msg, MSG_SIZE, format, ap);
 	if (len >= MSG_SIZE)
 	{
 		len = MSG_SIZE - 1;

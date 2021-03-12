@@ -19,11 +19,12 @@
 // 3. This notice may not be removed or altered from any source distribution.
 //
 
-#include "CoreMinimal.h"
+
 #include "Detour/DetourCommon.h"
 #include "Detour/DetourAssert.h"
 #include "Detour/DetourAlloc.h"
 #include "DetourTileCache/DetourTileCacheBuilder.h"
+#include "RecastNavigationSystemInclude.h"
 #define _USE_MATH_DEFINES
 
 inline bool isConnected(const dtTileCacheLayer& layer, const int idx, const int dir)

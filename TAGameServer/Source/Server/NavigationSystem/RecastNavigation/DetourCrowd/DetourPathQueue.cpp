@@ -20,6 +20,7 @@
 //
 
 #include "DetourCrowd/DetourPathQueue.h"
+#include "RecastNavigationSystemInclude.h"
 
 
 dtPathQueue::dtPathQueue() :
@@ -106,7 +107,7 @@ void dtPathQueue::update(const int maxIters)
 			continue;
 		}
 
-		m_navquery->updateLinkFilter(q.linkFilter.Get());
+		m_navquery->updateLinkFilter(q.linkFilter.get());
 
 		// Handle query start.
 		if (q.status == 0)
@@ -134,7 +135,7 @@ void dtPathQueue::update(const int maxIters)
 
 dtPathQueueRef dtPathQueue::request(dtPolyRef startRef, dtPolyRef endRef,
 									const float* startPos, const float* endPos, const float costLimit, //@UE4
-									const dtQueryFilter* filter, TSharedPtr<dtQuerySpecialLinkFilter> linkFilter)
+									const dtQueryFilter* filter, std::shared_ptr<dtQuerySpecialLinkFilter> linkFilter)
 {
 	// Find empty slot
 	int slot = -1;

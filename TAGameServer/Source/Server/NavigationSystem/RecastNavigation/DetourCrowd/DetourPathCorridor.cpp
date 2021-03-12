@@ -22,6 +22,7 @@
 #include "DetourCrowd/DetourPathCorridor.h"
 #include "Detour/DetourNavMeshQuery.h"
 #include "Detour/DetourAssert.h"
+#include "RecastNavigationSystemInclude.h"
 
 
 int dtMergeCorridorStartMoved(dtPolyRef* path, const int npath, const int maxPath,
@@ -201,7 +202,12 @@ dtPathCorridor::dtPathCorridor() :
 	m_moveSegAngle(0.0f),
 	m_path(0),
 	m_npath(0),
-	m_maxPath(0)
+	m_maxPath(0),
+
+	m_hasNextExpectedCorner(1),
+	m_hasNextExpectedCorner2(1),
+	m_isInSkipRange(1),
+	m_enableEarlyReach(1)
 {
 }
 
@@ -350,7 +356,7 @@ int dtPathCorridor::findCorners(float* cornerVerts, unsigned char* cornerFlags,
 	for (int i = 0; i < ncorners - 1; i++)
 	{
 		int fromIdx = 0;
-		CA_SUPPRESS(6385);
+		//CA_SUPPRESS(6385);
 		while (m_path[fromIdx] != cornerPolys[i] && fromIdx < m_npath)
 		{
 			fromIdx++;

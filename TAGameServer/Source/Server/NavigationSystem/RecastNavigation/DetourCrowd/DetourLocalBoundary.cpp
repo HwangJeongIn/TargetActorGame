@@ -22,6 +22,7 @@
 #include "DetourCrowd/DetourLocalBoundary.h"
 #include "DetourCrowd/DetourCrowd.h"
 #include "Detour/DetourAssert.h"
+#include "RecastNavigationSystemInclude.h"
 
 
 dtLocalBoundary::dtLocalBoundary() :
@@ -182,9 +183,13 @@ void dtLocalBoundary::update(const dtSharedBoundary* sharedData, const int share
 	}
 
 	const dtSharedBoundaryData& Data = sharedData->Data[sharedIdx];
-	m_npolys = FMath::Min(Data.Polys.Num(), MAX_LOCAL_POLYS);
+
+	const int DataPolysNum = Data.Polys.size();
+	//(A <= B) ? A : B
+	m_npolys = (DataPolysNum <= MAX_LOCAL_POLYS) ? DataPolysNum : MAX_LOCAL_POLYS;
 	int32 PolyIdx = 0;
-	for (auto It = Data.Polys.CreateConstIterator(); It; ++It)
+	const std::unordered_set<dtPolyRef>::const_iterator End = Data.Polys.end();
+	for (auto It = Data.Polys.begin(); It != End; ++It)
 	{
 		m_polys[PolyIdx] = *It;
 		
@@ -199,14 +204,16 @@ void dtLocalBoundary::update(const dtSharedBoundary* sharedData, const int share
 	float dirToSeg[3] = { 0.0f };
 	float s[6];
 
-	TSet<dtPolyRef> PathLookup;
+	std::unordered_set<dtPolyRef> PathLookup;
+	PathLookup.reserve(npath);
 	for (int32 Idx = 0; Idx < npath; Idx++)
 	{
-		PathLookup.Add(path[Idx]);
+		PathLookup.insert(path[Idx]);
 	}
 
 	m_nsegs = 0;
-	for (int32 Idx = 0; Idx < Data.Edges.Num(); Idx++)
+	const int32 DataEdgesNum = Data.Edges.size();
+	for (int32 Idx = 0; Idx < DataEdgesNum; Idx++)
 	{
 		float tseg = 0.0f;
 		const float distSqr = dtDistancePtSegSqr2D(pos, Data.Edges[Idx].v0, Data.Edges[Idx].v1, tseg);
@@ -224,7 +231,8 @@ void dtLocalBoundary::update(const dtSharedBoundary* sharedData, const int share
 		const int segFlags = bIgnoreAtEnd ? LocalBoundaryHelpers::GetSegmentFlags(endPos, Data.Edges[Idx].v0, Data.Edges[Idx].v1, collisionQueryRange) : 0;
 
 		// remove segments when both sides are on path (single area trace)
-		if (PathLookup.Contains(Data.Edges[Idx].p0) && PathLookup.Contains(Data.Edges[Idx].p1))
+		if ((0 < PathLookup.count(Data.Edges[Idx].p0)) 
+			&& (0 < PathLookup.count(Data.Edges[Idx].p1)))
 		{
 			continue;
 		}

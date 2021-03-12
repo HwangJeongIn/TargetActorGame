@@ -22,7 +22,7 @@
 #ifndef DEBUGDRAW_H
 #define DEBUGDRAW_H
 
-#include "CoreMinimal.h"
+
 
 // Some math headers don't have PI defined.
 static const float DU_PI = 3.14159265f;
@@ -38,7 +38,7 @@ enum duDebugDrawPrimitives
 /// Abstract debug draw interface.
 struct duDebugDraw
 {
-	NAVMESH_API virtual ~duDebugDraw() = 0;
+	virtual ~duDebugDraw() = 0;
 	
 	virtual void depthMask(bool state) = 0;
 

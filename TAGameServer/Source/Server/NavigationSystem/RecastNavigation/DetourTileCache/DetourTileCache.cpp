@@ -25,6 +25,7 @@
 #include "Detour/DetourNavMesh.h"
 #include "Detour/DetourCommon.h"
 #include "Detour/DetourAssert.h"
+#include "RecastNavigationSystemInclude.h"
 
 /// Region partitioning methods
 /// @see rcConfig

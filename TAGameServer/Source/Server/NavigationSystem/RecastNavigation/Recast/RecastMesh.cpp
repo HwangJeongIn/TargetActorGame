@@ -23,6 +23,7 @@
 #include "Recast/Recast.h"
 #include "Recast/RecastAlloc.h"
 #include "Recast/RecastAssert.h"
+#include "RecastNavigationSystemInclude.h"
 
 struct rcEdge
 {

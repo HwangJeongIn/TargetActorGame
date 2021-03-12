@@ -22,8 +22,9 @@
 #include "Detour/DetourNavMeshQuery.h"
 #include "Detour/DetourNode.h"
 #include "Detour/DetourAssert.h"
+#include "RecastNavigationSystemInclude.h"
 
-DEFINE_LOG_CATEGORY_STATIC(LogDebugRaycastCrash, All, All);
+//DEFINE_LOG_CATEGORY_STATIC(LogDebugRaycastCrash, All, All);
 
 /// @class dtQueryFilter
 ///
@@ -747,7 +748,7 @@ void dtNavMeshQuery::closestPointOnPolyInTile(const dtMeshTile* tile, const dtPo
 		}
 		const float* va = &verts[imin*3];
 		const float* vb = &verts[((imin+1)%nv)*3];
-		CA_SUPPRESS(6385);
+		//CA_SUPPRESS(6385);
 		dtVlerp(closest, va, vb, edget[imin]);
 	}
 
@@ -764,7 +765,7 @@ void dtNavMeshQuery::closestPointOnPolyInTile(const dtMeshTile* tile, const dtPo
 			{
 				if (t[k] < poly->vertCount)
 				{
-					CA_SUPPRESS(6385);
+					//CA_SUPPRESS(6385);
 					v[k] = &tile->verts[poly->verts[t[k]]*3];
 				}
 				else
@@ -846,7 +847,7 @@ dtStatus dtNavMeshQuery::closestPointOnPolyBoundary(dtPolyRef ref, const float* 
 		}
 		const float* va = &verts[imin*3];
 		const float* vb = &verts[((imin+1)%nv)*3];
-		CA_SUPPRESS(6385);
+		//CA_SUPPRESS(6385);
 		dtVlerp(closest, va, vb, edget[imin]);
 	}
 	
@@ -1653,7 +1654,7 @@ dtStatus dtNavMeshQuery::findPath(dtPolyRef startRef, dtPolyRef endRef,
 	// Store path
 	float prevCost = 0.0f;
 	node = prev;
-	check(node);
+	//check(node);
 	do
 	{
 		result.addItem(node->id, node->cost - prevCost, 0, 0);
@@ -2131,7 +2132,7 @@ dtStatus dtNavMeshQuery::finalizeSlicedFindPath(dtPolyRef* path, int* pathCount,
 		
 		// Store path
 		node = prev;
-		check(node);
+		//check(node);
 		do
 		{
 			path[n++] = node->id;
@@ -2210,7 +2211,7 @@ dtStatus dtNavMeshQuery::finalizeSlicedFindPathPartial(const dtPolyRef* existing
 		
 		// Store path
 		node = prev;
-		check(node);
+		//check(node);
 		do
 		{
 			path[n++] = node->id;
@@ -2791,7 +2792,7 @@ dtStatus dtNavMeshQuery::moveAlongSurface(dtPolyRef startRef, const float* start
 		
 		// Store result
 		node = prev;
-		check(node);
+		//check(node);
 		do
 		{
 			visited[n++] = node->id;
@@ -3028,7 +3029,7 @@ dtStatus dtNavMeshQuery::raycast(dtPolyRef startRef, const float* startPos, cons
 								 float* t, float* hitNormal, dtPolyRef* path, int* pathCount, const int maxPath) const
 {
 	dtAssert(m_nav);
-	UE_CLOG(m_nav == nullptr, LogDebugRaycastCrash, Fatal, TEXT("dtNavMeshQuery::raycast doesn't have valid navmesh!"));
+	//UE_CLOG(m_nav == nullptr, LogDebugRaycastCrash, Fatal, TEXT("dtNavMeshQuery::raycast doesn't have valid navmesh!"));
 	
 	*t = 0;
 	if (pathCount)
@@ -3068,10 +3069,10 @@ dtStatus dtNavMeshQuery::raycast(dtPolyRef startRef, const float* startPos, cons
 		{
 			unsigned int salt, it, ip;
 			m_nav->decodePolyId(curRef, salt, it, ip);
-			UE_CLOG(it >= (unsigned int)m_nav->getMaxTiles(), LogDebugRaycastCrash, Fatal, TEXT("dtNavMeshQuery::raycast tried to access invalid tile with ref:0x%X (tileIdx:%d, maxTiles:%d) - out of bounds!"), curRef, it, m_nav->getMaxTiles());
-			UE_CLOG(m_nav->getTile(it) == nullptr, LogDebugRaycastCrash, Fatal, TEXT("dtNavMeshQuery::raycast tried to access invalid tile with ref:0x%X (tileIdx:%d, maxTiles:%d) - empty tile!"), curRef, it, m_nav->getMaxTiles());
-			UE_CLOG(m_nav->getTile(it)->header == nullptr, LogDebugRaycastCrash, Fatal, TEXT("dtNavMeshQuery::raycast tried to access invalid tile with ref:0x%X (tileIdx:%d, maxTiles:%d) - missing tile header!"), curRef, it, m_nav->getMaxTiles());
-			UE_CLOG(ip >= (unsigned int)m_nav->getTile(it)->header->polyCount, LogDebugRaycastCrash, Fatal, TEXT("dtNavMeshQuery::raycast tried to access invalid poly with ref:0x%X (polyIdx:%d, maxPolys:%d)!"), curRef, ip, m_nav->getTile(it)->header->polyCount);
+			//UE_CLOG(it >= (unsigned int)m_nav->getMaxTiles(), LogDebugRaycastCrash, Fatal, TEXT("dtNavMeshQuery::raycast tried to access invalid tile with ref:0x%X (tileIdx:%d, maxTiles:%d) - out of bounds!"), curRef, it, m_nav->getMaxTiles());
+			//UE_CLOG(m_nav->getTile(it) == nullptr, LogDebugRaycastCrash, Fatal, TEXT("dtNavMeshQuery::raycast tried to access invalid tile with ref:0x%X (tileIdx:%d, maxTiles:%d) - empty tile!"), curRef, it, m_nav->getMaxTiles());
+			//UE_CLOG(m_nav->getTile(it)->header == nullptr, LogDebugRaycastCrash, Fatal, TEXT("dtNavMeshQuery::raycast tried to access invalid tile with ref:0x%X (tileIdx:%d, maxTiles:%d) - missing tile header!"), curRef, it, m_nav->getMaxTiles());
+			//UE_CLOG(ip >= (unsigned int)m_nav->getTile(it)->header->polyCount, LogDebugRaycastCrash, Fatal, TEXT("dtNavMeshQuery::raycast tried to access invalid poly with ref:0x%X (polyIdx:%d, maxPolys:%d)!"), curRef, ip, m_nav->getTile(it)->header->polyCount);
 		}
 		m_nav->getTileAndPolyByRefUnsafe(curRef, &tile, &poly);
 		
@@ -3138,10 +3139,10 @@ dtStatus dtNavMeshQuery::raycast(dtPolyRef startRef, const float* startPos, cons
 			{
 				unsigned int salt, it, ip;
 				m_nav->decodePolyId(link.ref, salt, it, ip);
-				UE_CLOG(it >= (unsigned int)m_nav->getMaxTiles(), LogDebugRaycastCrash, Fatal, TEXT("dtNavMeshQuery::raycast tried to access invalid nei tile with ref:0x%X (tileIdx:%d, maxTiles:%d) - out of bounds!"), link.ref, it, m_nav->getMaxTiles());
-				UE_CLOG(m_nav->getTile(it) == nullptr, LogDebugRaycastCrash, Fatal, TEXT("dtNavMeshQuery::raycast tried to access invalid nei tile with ref:0x%X (tileIdx:%d, maxTiles:%d) - empty tile!"), link.ref, it, m_nav->getMaxTiles());
-				UE_CLOG(m_nav->getTile(it)->header == nullptr, LogDebugRaycastCrash, Fatal, TEXT("dtNavMeshQuery::raycast tried to access invalid nei tile with ref:0x%X (tileIdx:%d, maxTiles:%d) - missing tile header!"), link.ref, it, m_nav->getMaxTiles());
-				UE_CLOG(ip >= (unsigned int)m_nav->getTile(it)->header->polyCount, LogDebugRaycastCrash, Fatal, TEXT("dtNavMeshQuery::raycast tried to access invalid nei poly with ref:0x%X (polyIdx:%d, maxPolys:%d)!"), link.ref, ip, m_nav->getTile(it)->header->polyCount);
+				//UE_CLOG(it >= (unsigned int)m_nav->getMaxTiles(), LogDebugRaycastCrash, Fatal, TEXT("dtNavMeshQuery::raycast tried to access invalid nei tile with ref:0x%X (tileIdx:%d, maxTiles:%d) - out of bounds!"), link.ref, it, m_nav->getMaxTiles());
+				//UE_CLOG(m_nav->getTile(it) == nullptr, LogDebugRaycastCrash, Fatal, TEXT("dtNavMeshQuery::raycast tried to access invalid nei tile with ref:0x%X (tileIdx:%d, maxTiles:%d) - empty tile!"), link.ref, it, m_nav->getMaxTiles());
+				//UE_CLOG(m_nav->getTile(it)->header == nullptr, LogDebugRaycastCrash, Fatal, TEXT("dtNavMeshQuery::raycast tried to access invalid nei tile with ref:0x%X (tileIdx:%d, maxTiles:%d) - missing tile header!"), link.ref, it, m_nav->getMaxTiles());
+				//UE_CLOG(ip >= (unsigned int)m_nav->getTile(it)->header->polyCount, LogDebugRaycastCrash, Fatal, TEXT("dtNavMeshQuery::raycast tried to access invalid nei poly with ref:0x%X (polyIdx:%d, maxPolys:%d)!"), link.ref, ip, m_nav->getTile(it)->header->polyCount);
 			}
 			m_nav->getTileAndPolyByRefUnsafe(link.ref, &nextTile, &nextPoly);
 
@@ -3173,7 +3174,7 @@ dtStatus dtNavMeshQuery::raycast(dtPolyRef startRef, const float* startPos, cons
 			
 			// Check for partial edge links.
 			const int v0 = poly->verts[link.edge];
-			CA_SUPPRESS(6385);
+			//CA_SUPPRESS(6385);
 			const int v1 = poly->verts[(link.edge+1) % poly->vertCount];
 			const float* left = &tile->verts[v0*3];
 			const float* right = &tile->verts[v1*3];
@@ -4582,7 +4583,7 @@ dtStatus dtNavMeshQuery::findDistanceToWall(dtPolyRef startRef, const float* cen
 			
 			// Calc distance to the edge.
 			const float* va = &bestTile->verts[bestPoly->verts[link.edge]*3];
-			CA_SUPPRESS(6385);
+			//CA_SUPPRESS(6385);
 			const float* vb = &bestTile->verts[bestPoly->verts[(link.edge+1) % bestPoly->vertCount]*3];
 			float tseg;
 			float distSqr = dtDistancePtSegSqr2D(centerPos, va, vb, tseg);

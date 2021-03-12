@@ -343,6 +343,8 @@
     <ClCompile Include="..\Source\Server\NavigationSystem\RecastNavigation\DebugUtils\RecastDump.cpp">
       <Filter>Server\NavigationSystem\RecastNavigation\DebugUtils</Filter>
     </ClCompile>
+    <ClCompile Include="..\Source\Server\NavigationSystem\RecastNavigation\Detour\DetourAssert.cpp" />
+    <ClCompile Include="..\Source\Server\NavigationSystem\RecastNavigation\Recast\RecastAssert.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\ActorComponent.h">
@@ -657,6 +659,9 @@
     </ClInclude>
     <ClInclude Include="..\Source\Server\NavigationSystem\RecastNavigation\DebugUtils\RecastDump.h">
       <Filter>Server\NavigationSystem\RecastNavigation\DebugUtils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\Server\NavigationSystem\RecastNavigation\RecastNavigationSystemInclude.h">
+      <Filter>Server\NavigationSystem\RecastNavigation</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

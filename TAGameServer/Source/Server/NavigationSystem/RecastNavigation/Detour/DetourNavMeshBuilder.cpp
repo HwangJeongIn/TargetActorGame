@@ -22,6 +22,7 @@
 #include "Detour/DetourNavMeshBuilder.h"
 #include "Detour/DetourNavMesh.h"
 #include "Detour/DetourCommon.h"
+#include "RecastNavigationSystemInclude.h"
 
 static unsigned short MESH_NULL_IDX = 0xffff;
 

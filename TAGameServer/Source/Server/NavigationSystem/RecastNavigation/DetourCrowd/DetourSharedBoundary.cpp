@@ -1,6 +1,7 @@
 // Copyright Epic Games, Inc. All Rights Reserved.
 
 #include "DetourCrowd/DetourSharedBoundary.h"
+#include "RecastNavigationSystemInclude.h"
 
 void dtSharedBoundary::Initialize()
 {
@@ -23,12 +24,19 @@ void dtSharedBoundary::Tick(float DeltaTime)
 		const float MaxLifeTime = 2.0f;
 		NextClearTime = CurrentTime + MaxLifeTime;
 
-		for (TSparseArray<dtSharedBoundaryData>::TIterator It(Data); It; ++It)
+
+		std::vector<dtSharedBoundaryData>::iterator It = Data.begin();
+		const std::vector<dtSharedBoundaryData>::const_iterator End = Data.end();
+		for (; It != End;)
 		{
 			const float LastAccess = CurrentTime - It->AccessTime;
 			if (LastAccess >= MaxLifeTime)
 			{
-				It.RemoveCurrent();
+				It = Data.erase(It);
+			}
+			else
+			{
+				++It;
 			}
 		}
 	}
@@ -61,7 +69,8 @@ int32 dtSharedBoundary::CacheData(float* Center, float Radius, dtPolyRef CenterP
 		NewData.SingleAreaId = 0;
 
 		FindEdges(NewData, CenterPoly, NavQuery, NavFilter);
-		DataIdx = Data.Add(NewData);
+		Data.push_back(NewData);
+		DataIdx = Data.size() - 1;
 	}
 
 	Data[DataIdx].AccessTime = CurrentTime;
@@ -96,7 +105,8 @@ int32 dtSharedBoundary::CacheData(float* Center, float Radius, dtPolyRef CenterP
 		NewData.SingleAreaId = SingleAreaId;
 
 		FindEdges(NewData, CenterPoly, NavQuery, &SingleAreaFilter);
-		DataIdx = Data.Add(NewData);
+		Data.push_back(NewData);
+		DataIdx = Data.size() - 1;
 	}
 
 	SingleAreaFilter.setAreaCost(SingleAreaId, DT_UNWALKABLE_POLY_COST);
@@ -126,29 +136,32 @@ void dtSharedBoundary::FindEdges(dtSharedBoundaryData& SharedData, dtPolyRef Cen
 		NewEdge.p0 = WallPolys[Idx * 2];
 		NewEdge.p1 = WallPolys[Idx * 2 + 1];
 
-		SharedData.Edges.Add(NewEdge);
+		SharedData.Edges.push_back(NewEdge);
 	}
 
-	SharedData.Polys.Reserve(NumNeis);
+	SharedData.Polys.reserve(NumNeis);
 	for (int32 Idx = 0; Idx < NumNeis; Idx++)
 	{
-		SharedData.Polys.Add(NeiPolys[Idx]);
+		SharedData.Polys.insert(NeiPolys[Idx]);
 	}
 }
 
 int32 dtSharedBoundary::FindData(float* Center, float Radius, dtPolyRef ReqPoly, dtQueryFilter* NavFilter) const
 {
 	const float RadiusThr = 50.0f;
-	const float DistThrSq = FMath::Square(Radius * 0.5f);
+	
+	float TempValue = (Radius * 0.5f);
+	const float DistThrSq = TempValue * TempValue;
 
-	for (int32 Idx = 0; Idx < Data.Num(); Idx++)
+	const int32 DataSize = Data.size();
+	for (int32 Idx = 0; Idx < DataSize; Idx++)
 	{
 		if (Data[Idx].Filter == NavFilter)
 		{
 			const float DistSq = dtVdistSqr(Center, Data[Idx].Center);
 			if (DistSq <= DistThrSq && dtAbs(Data[Idx].Radius - Radius) < RadiusThr)
 			{
-				if (Data[Idx].Polys.Contains(ReqPoly))
+				if (0 < Data[Idx].Polys.count(ReqPoly))
 				{
 					return Idx;
 				}
@@ -161,17 +174,19 @@ int32 dtSharedBoundary::FindData(float* Center, float Radius, dtPolyRef ReqPoly,
 
 int32 dtSharedBoundary::FindData(float* Center, float Radius, dtPolyRef ReqPoly, uint8 SingleAreaId) const
 {
-	const float DistThrSq = FMath::Square(Radius * 0.5f);
+	float TempValue = (Radius * 0.5f);
+	const float DistThrSq = TempValue * TempValue;
 	const float RadiusThr = 50.0f;
 
-	for (int32 Idx = 0; Idx < Data.Num(); Idx++)
+	const int32 DataSize = Data.size();
+	for (int32 Idx = 0; Idx < DataSize; Idx++)
 	{
 		if (Data[Idx].SingleAreaId == SingleAreaId)
 		{
 			const float DistSq = dtVdistSqr(Center, Data[Idx].Center);
 			if (DistSq <= DistThrSq && dtAbs(Data[Idx].Radius - Radius) < RadiusThr)
 			{
-				if (Data[Idx].Polys.Contains(ReqPoly))
+				if (0 < Data[Idx].Polys.count(ReqPoly))
 				{
 					return Idx;
 				}
@@ -184,7 +199,7 @@ int32 dtSharedBoundary::FindData(float* Center, float Radius, dtPolyRef ReqPoly,
 
 bool dtSharedBoundary::HasSample(int32 Idx) const
 {
-	return (Idx >= 0) && (Idx < Data.GetMaxIndex()) && Data.IsAllocated(Idx);
+	return (Idx >= 0) && (Idx < Data.size());//&& Data.IsAllocated(Idx);
 }
 
 bool dtSharedBoundary::IsValid(int32 Idx, dtNavMeshQuery* NavQuery, dtQueryFilter* NavFilter) const
@@ -192,7 +207,9 @@ bool dtSharedBoundary::IsValid(int32 Idx, dtNavMeshQuery* NavQuery, dtQueryFilte
 	bool bValid = HasSample(Idx);
 	if (bValid)
 	{
-		for (auto It = Data[Idx].Polys.CreateConstIterator(); It; ++It)
+		std::unordered_set<dtPolyRef>::const_iterator It = Data[Idx].Polys.begin();
+		const std::unordered_set<dtPolyRef>::const_iterator End = Data[Idx].Polys.end();
+		for (; It != End; ++It)
 		{
 			const dtPolyRef TestRef = *It;
 			const bool bValidRef = NavQuery->isValidPolyRef(TestRef, NavFilter);

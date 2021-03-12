@@ -22,7 +22,7 @@
 #ifndef RECASTALLOC_H
 #define RECASTALLOC_H
 
-#include "CoreMinimal.h"
+
 
 /// Provides hint values to the memory allocator on how long the
 /// memory is expected to be used.
@@ -47,7 +47,7 @@ typedef void (rcFreeFunc)(void* ptr);
 /// Sets the base custom allocation functions to be used by Recast.
 ///  @param[in]		allocFunc	The memory allocation function to be used by #rcAlloc
 ///  @param[in]		freeFunc	The memory de-allocation function to be used by #rcFree
-NAVMESH_API void rcAllocSetCustom(rcAllocFunc *allocFunc, rcFreeFunc *freeFunc);
+void rcAllocSetCustom(rcAllocFunc *allocFunc, rcFreeFunc *freeFunc);
 
 /// Allocates a memory block.
 ///  @param[in]		size	The size, in bytes of memory, to allocate.

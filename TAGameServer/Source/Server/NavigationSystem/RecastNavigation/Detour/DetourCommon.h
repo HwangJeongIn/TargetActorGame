@@ -22,7 +22,7 @@
 #ifndef DETOURCOMMON_H
 #define DETOURCOMMON_H
 
-#include "CoreMinimal.h"
+
 
 /**
 @defgroup detour Detour
@@ -74,7 +74,7 @@ template<class T> inline T dtClamp(T v, T mn, T mx) { return v < mn ? mn : (v > 
 /// Returns the square root of the value.
 ///  @param[in]		x	The value.
 ///  @return The square root of the vlaue.
-NAVMESH_API float dtSqrt(float x);
+float dtSqrt(float x);
 
 /// @}
 /// @name Vector helper functions.
@@ -217,7 +217,7 @@ inline float dtVlenSqr(const float* v)
 ///  @param[in]		v1	A point. [(x, y, z)]
 ///  @param[in]		v2	A point. [(x, y, z)]
 /// @return The distance between the two points.
-NAVMESH_API inline float dtVdist(const float* v1, const float* v2)
+inline float dtVdist(const float* v1, const float* v2)
 {
 	const float dx = v2[0] - v1[0];
 	const float dy = v2[1] - v1[1];

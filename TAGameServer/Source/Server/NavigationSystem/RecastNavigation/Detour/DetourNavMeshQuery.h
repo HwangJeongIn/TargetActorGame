@@ -22,10 +22,11 @@
 #ifndef DETOURNAVMESHQUERY_H
 #define DETOURNAVMESHQUERY_H
 
-#include "CoreMinimal.h"
+
 #include "Detour/DetourAlloc.h"
 #include "Detour/DetourNavMesh.h"
 #include "Detour/DetourCommon.h"
+#include "RecastNavigationSystemInclude.h"
 
 //@UE4 BEGIN
 #define WITH_FIXED_AREA_ENTERING_COST 1
@@ -42,7 +43,7 @@
 // Special link filter is custom filter run only for offmesh links with assigned UserId
 // Used by smart navlinks in UE4
 //
-struct NAVMESH_API dtQuerySpecialLinkFilter
+struct dtQuerySpecialLinkFilter
 {
 	virtual ~dtQuerySpecialLinkFilter() {}
 
@@ -55,7 +56,7 @@ struct NAVMESH_API dtQuerySpecialLinkFilter
 };
 
 // [UE4: moved all filter variables to struct, DO NOT mess with virtual functions here!]
-struct NAVMESH_API dtQueryFilterData
+struct dtQueryFilterData
 {
 	float m_areaCost[DT_MAX_AREAS];		///< Cost per area type. (Used by default implementation.)
 #if WITH_FIXED_AREA_ENTERING_COST
@@ -84,7 +85,7 @@ struct NAVMESH_API dtQueryFilterData
 
 /// Defines polygon filtering and traversal costs for navigation mesh query operations.
 /// @ingroup detour
-class NAVMESH_API dtQueryFilter
+class dtQueryFilter
 {
 protected:
 	dtQueryFilterData data;
@@ -287,7 +288,7 @@ struct dtQueryResultPack
 	dtQueryResultPack(dtPolyRef inRef, float inCost, const float* inPos, unsigned int inFlag);
 };
 
-struct NAVMESH_API dtQueryResult
+struct dtQueryResult
 {
 	inline void reserve(int n) { data.resize(n); data.resize(0); }
 	inline int size() const { return data.size(); }
@@ -320,7 +321,7 @@ protected:
 /// Provides the ability to perform pathfinding related queries against
 /// a navigation mesh.
 /// @ingroup detour
-class NAVMESH_API dtNavMeshQuery
+class dtNavMeshQuery
 {
 public:
 	dtNavMeshQuery();
@@ -796,11 +797,11 @@ private:
 /// Allocates a query object using the Detour allocator.
 /// @return An allocated query object, or null on failure.
 /// @ingroup detour
-NAVMESH_API dtNavMeshQuery* dtAllocNavMeshQuery();
+dtNavMeshQuery* dtAllocNavMeshQuery();
 
 /// Frees the specified query object using the Detour allocator.
 ///  @param[in]		query		A query object allocated using #dtAllocNavMeshQuery
 /// @ingroup detour
-NAVMESH_API void dtFreeNavMeshQuery(dtNavMeshQuery* query);
+void dtFreeNavMeshQuery(dtNavMeshQuery* query);
 
 #endif // DETOURNAVMESHQUERY_H

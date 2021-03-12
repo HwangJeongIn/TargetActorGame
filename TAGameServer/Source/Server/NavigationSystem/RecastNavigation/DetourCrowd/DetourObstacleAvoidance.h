@@ -22,7 +22,7 @@
 #ifndef DETOUROBSTACLEAVOIDANCE_H
 #define DETOUROBSTACLEAVOIDANCE_H
 
-#include "CoreMinimal.h"
+
 
 struct dtObstacleCircle
 {
@@ -40,7 +40,7 @@ struct dtObstacleSegment
 	unsigned char canIgnore : 1;
 };
 
-class NAVMESH_API dtObstacleAvoidanceDebugData
+class dtObstacleAvoidanceDebugData
 {
 public:
 	dtObstacleAvoidanceDebugData();
@@ -74,15 +74,15 @@ private:
 	float* m_tpen;
 };
 
-NAVMESH_API dtObstacleAvoidanceDebugData* dtAllocObstacleAvoidanceDebugData();
-NAVMESH_API void dtFreeObstacleAvoidanceDebugData(dtObstacleAvoidanceDebugData* ptr);
+dtObstacleAvoidanceDebugData* dtAllocObstacleAvoidanceDebugData();
+void dtFreeObstacleAvoidanceDebugData(dtObstacleAvoidanceDebugData* ptr);
 
 
 static const int DT_MAX_PATTERN_DIVS = 32;		///< Max numver of adaptive divs.
 static const int DT_MAX_PATTERN_RINGS = 4;		///< Max number of adaptive rings.
 static const int DT_MAX_CUSTOM_SAMPLES = 16;	///< Max number of custom samples in single pattern
 
-struct NAVMESH_API dtObstacleAvoidanceParams
+struct dtObstacleAvoidanceParams
 {
 	float velBias;
 	float weightDesVel;
@@ -104,7 +104,7 @@ struct dtObstacleAvoidancePattern
 	int nsamples;							///< Number of samples
 };
 
-class NAVMESH_API dtObstacleAvoidanceQuery
+class dtObstacleAvoidanceQuery
 {
 public:
 	dtObstacleAvoidanceQuery();
@@ -188,8 +188,8 @@ private:
 	int m_nsegments;
 };
 
-NAVMESH_API dtObstacleAvoidanceQuery* dtAllocObstacleAvoidanceQuery();
-NAVMESH_API void dtFreeObstacleAvoidanceQuery(dtObstacleAvoidanceQuery* ptr);
+dtObstacleAvoidanceQuery* dtAllocObstacleAvoidanceQuery();
+void dtFreeObstacleAvoidanceQuery(dtObstacleAvoidanceQuery* ptr);
 
 
 #endif // DETOUROBSTACLEAVOIDANCE_H

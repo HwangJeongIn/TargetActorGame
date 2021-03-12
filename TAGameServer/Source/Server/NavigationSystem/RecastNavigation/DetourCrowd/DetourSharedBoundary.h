@@ -2,8 +2,11 @@
 
 #pragma once
 
-#include "CoreMinimal.h"
+
 #include "Detour/DetourNavMeshQuery.h"
+#include "RecastNavigationSystemInclude.h"
+#include <vector>
+#include <unordered_set>
 
 struct dtSharedBoundaryEdge
 {
@@ -21,8 +24,8 @@ struct dtSharedBoundaryData
 	dtQueryFilter* Filter;
 	uint8 SingleAreaId;
 	
-	TArray<dtSharedBoundaryEdge> Edges;
-	TSet<dtPolyRef> Polys;
+	std::vector<dtSharedBoundaryEdge> Edges;
+	std::unordered_set<dtPolyRef> Polys;
 
 	dtSharedBoundaryData() : Filter(nullptr) {}
 };
@@ -30,7 +33,7 @@ struct dtSharedBoundaryData
 class dtSharedBoundary
 {
 public:
-	TSparseArray<dtSharedBoundaryData> Data;
+	std::vector<dtSharedBoundaryData> Data;
 	dtQueryFilter SingleAreaFilter;
 	float CurrentTime;
 	float NextClearTime;

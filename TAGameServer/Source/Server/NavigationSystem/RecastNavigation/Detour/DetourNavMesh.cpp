@@ -22,6 +22,7 @@
 #include "Detour/DetourNavMesh.h"
 #include "Detour/DetourCommon.h"
 #include "Detour/DetourAssert.h"
+#include "RecastNavigationSystemInclude.h"
 
 enum ESlabOverlapFlag
 {
@@ -427,7 +428,7 @@ static dtOffMeshSegmentData* initSegmentIntersection(dtMeshTile* tile)
 	{
 		dtOffMeshSegmentConnection& con = tile->offMeshSeg[i];
 		
-		CA_SUPPRESS(6385);
+		////CA_SUPPRESS(6385);
 		gatherSegmentIntersections(tile, con.startA, con.endA, con.rad, segs[i].listA);
 		gatherSegmentIntersections(tile, con.startB, con.endB, con.rad, segs[i].listB);
 	}
@@ -1370,7 +1371,7 @@ void dtNavMesh::closestPointOnPolyInTile(const dtMeshTile* tile, unsigned int ip
 		}
 		const float* va = &verts[imin*3];
 		const float* vb = &verts[((imin+1)%nv)*3];
-		CA_SUPPRESS(6385);
+		//CA_SUPPRESS(6385);
 		dtVlerp(closest, va, vb, edget[imin]);
 	}
 	
@@ -1387,7 +1388,7 @@ void dtNavMesh::closestPointOnPolyInTile(const dtMeshTile* tile, unsigned int ip
 			{
 				if (t[k] < poly->vertCount)
 				{
-					CA_SUPPRESS(6385);
+					//CA_SUPPRESS(6385);
 					v[k] = &tile->verts[poly->verts[t[k]]*3];
 				}
 				else

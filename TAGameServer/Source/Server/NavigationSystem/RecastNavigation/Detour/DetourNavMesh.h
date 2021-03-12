@@ -22,7 +22,7 @@
 #ifndef DETOURNAVMESH_H
 #define DETOURNAVMESH_H
 
-#include "CoreMinimal.h"
+
 #include "Detour/DetourAlloc.h"
 #include "Detour/DetourStatus.h"
 
@@ -421,7 +421,7 @@ struct dtNavMeshParams
 
 /// A navigation mesh based on tiles of convex polygons.
 /// @ingroup detour
-class NAVMESH_API dtNavMesh
+class dtNavMesh
 {
 public:
 	dtNavMesh();
@@ -864,12 +864,12 @@ private:
 /// Allocates a navigation mesh object using the Detour allocator.
 /// @return A navigation mesh that is ready for initialization, or null on failure.
 ///  @ingroup detour
-NAVMESH_API dtNavMesh* dtAllocNavMesh();
+dtNavMesh* dtAllocNavMesh();
 
 /// Frees the specified navigation mesh object using the Detour allocator.
 ///  @param[in]	navmesh		A navigation mesh allocated using #dtAllocNavMesh
 ///  @ingroup detour
-NAVMESH_API void dtFreeNavMesh(dtNavMesh* navmesh);
+void dtFreeNavMesh(dtNavMesh* navmesh);
 
 // @UE4 BEGIN: helper for reading tiles
 struct ReadTilesHelper

@@ -23,6 +23,7 @@
 #include "DetourCrowd/DetourProximityGrid.h"
 #define _USE_MATH_DEFINES
 #include "Detour/DetourAssert.h"
+#include "RecastNavigationSystemInclude.h"
 
 
 dtCrowd* dtAllocCrowd()
@@ -600,7 +601,7 @@ int dtCrowd::addAgent(const float* pos, const dtCrowdAgentParams& params, const 
 	// Find nearest position on navmesh and place the agent there.
 	float nearest[3];
 	dtPolyRef ref;
-	m_navquery->updateLinkFilter(params.linkFilter.Get());
+	m_navquery->updateLinkFilter(params.linkFilter.get());
 	m_navquery->findNearestPoly(pos, m_ext, &m_filters[ag->params.filter], &ref, nearest);
 	
 	ag->corridor.reset(ref, nearest);
@@ -853,7 +854,7 @@ void dtCrowd::updateMoveRequest(const float /*dt*/)
 
 			// Quick seach towards the goal.
 			static const int MAX_ITER = 20;
-			m_navquery->updateLinkFilter(ag->params.linkFilter.Get());
+			m_navquery->updateLinkFilter(ag->params.linkFilter.get());
 			const float costLimit = FLT_MAX; //@UE4
 			m_navquery->initSlicedFindPath(path[0], ag->targetRef, ag->npos, ag->targetPos, costLimit, &m_filters[ag->params.filter]); //@UE4
 			m_navquery->updateSlicedFindPath(MAX_ITER, 0);
@@ -1016,12 +1017,12 @@ void dtCrowd::updateMoveRequest(const float /*dt*/)
 					}
 					
 					// Check for partial path.
-					CA_SUPPRESS(6385);
+					//CA_SUPPRESS(6385);
 					if (res[nres-1] != ag->targetRef)
 					{
 						// Partial path, constrain target position inside the last polygon.
 						float nearest[3];
-						m_navquery->updateLinkFilter(ag->params.linkFilter.Get());
+						m_navquery->updateLinkFilter(ag->params.linkFilter.get());
 						status = m_navquery->closestPointOnPoly(res[nres - 1], targetPos, nearest);
 						if (dtStatusSucceed(status))
 							dtVcopy(targetPos, nearest);
@@ -1079,7 +1080,7 @@ void dtCrowd::updateTopologyOptimization(dtCrowdAgent** agents, const int nagent
 	for (int i = 0; i < nqueue; ++i)
 	{
 		dtCrowdAgent* ag = queue[i];
-		m_navquery->updateLinkFilter(ag->params.linkFilter.Get());
+		m_navquery->updateLinkFilter(ag->params.linkFilter.get());
 		ag->corridor.optimizePathTopology(m_navquery, &m_filters[ag->params.filter]);
 		ag->topologyOptTime = 0;
 	}
@@ -1105,7 +1106,7 @@ void dtCrowd::checkPathValidity(dtCrowdAgent** agents, const int nagents, const 
 			{
 				float nearest[3];
 				dtPolyRef ref;
-				m_navquery->updateLinkFilter(ag->params.linkFilter.Get());
+				m_navquery->updateLinkFilter(ag->params.linkFilter.get());
 				m_navquery->findNearestPoly(ag->npos, m_ext, &m_filters[ag->params.filter], &ref, nearest);
 
 				if (ref)
@@ -1133,7 +1134,7 @@ void dtCrowd::checkPathValidity(dtCrowdAgent** agents, const int nagents, const 
 		float agentPos[3];
 		dtPolyRef agentRef = ag->corridor.getFirstPoly();
 		dtVcopy(agentPos, ag->npos);
-		m_navquery->updateLinkFilter(ag->params.linkFilter.Get());
+		m_navquery->updateLinkFilter(ag->params.linkFilter.get());
 		if (!m_navquery->isValidPolyRef(agentRef, &m_filters[ag->params.filter]))
 		{
 			// Current location is not valid, try to reposition.
@@ -1262,7 +1263,7 @@ void dtCrowd::updateStepProximityData(const float dt, dtCrowdAgentDebugInfo* deb
 		if (ag->state != DT_CROWDAGENT_STATE_WALKING)
 			continue;
 
-		m_navquery->updateLinkFilter(ag->params.linkFilter.Get());
+		m_navquery->updateLinkFilter(ag->params.linkFilter.get());
 		int sharedDataIdx = -1;
 		if (m_raycastSingleArea)
 		{
@@ -1328,7 +1329,7 @@ void dtCrowd::updateStepNextMovePoint(const float dt, dtCrowdAgentDebugInfo* deb
 		const bool bAllowCuttingCorners = (ag->boundary.getSegmentCount() == 0);
 
 		// Find corners for steering
-		m_navquery->updateLinkFilter(ag->params.linkFilter.Get());
+		m_navquery->updateLinkFilter(ag->params.linkFilter.get());
 		ag->ncorners = ag->corridor.findCorners(ag->cornerVerts, ag->cornerFlags, ag->cornerPolys,
 			DT_CROWDAGENT_MAX_CORNERS, m_navquery, &m_filters[ag->params.filter],
 			ag->params.radius * m_pathOffsetRadiusMultiplier, ag->params.radius * 4.0f, bAllowCuttingCorners);
@@ -1395,7 +1396,7 @@ void dtCrowd::updateStepNextMovePoint(const float dt, dtCrowdAgentDebugInfo* deb
 			// Prepare to off-mesh connection.
 			const int idx = ag - m_agents;
 			dtCrowdAgentAnimation* anim = &m_agentAnims[idx];
-			m_navquery->updateLinkFilter(ag->params.linkFilter.Get());
+			m_navquery->updateLinkFilter(ag->params.linkFilter.get());
 
 			// Adjust the path over the off-mesh connection.
 			dtPolyRef refs[2];
@@ -1669,7 +1670,7 @@ void dtCrowd::updateStepCorridor(const float dt, dtCrowdAgentDebugInfo*)
 			continue;
 
 		// Move along navmesh.
-		m_navquery->updateLinkFilter(ag->params.linkFilter.Get());
+		m_navquery->updateLinkFilter(ag->params.linkFilter.get());
 		const bool bMoved = ag->corridor.movePosition(ag->npos, m_navquery, &m_filters[ag->params.filter]);
 		if (bMoved)
 		{

@@ -22,7 +22,7 @@
 #ifndef DETOURNAVMESHBUILDER_H
 #define DETOURNAVMESHBUILDER_H
 
-#include "CoreMinimal.h"
+
 #include "Detour/DetourAlloc.h"
 
 struct dtOffMeshLinkCreateParams
@@ -150,17 +150,17 @@ struct dtNavMeshCreateParams
 ///  @param[out]	outData		The resulting tile data.
 ///  @param[out]	outDataSize	The size of the tile data array.
 /// @return True if the tile data was successfully created.
-NAVMESH_API bool dtCreateNavMeshData(dtNavMeshCreateParams* params, unsigned char** outData, int* outDataSize);
+bool dtCreateNavMeshData(dtNavMeshCreateParams* params, unsigned char** outData, int* outDataSize);
 
 /// Swaps the endianess of the tile data's header (#dtMeshHeader).
 ///  @param[in,out]	data		The tile data array.
 ///  @param[in]		dataSize	The size of the data array.
-NAVMESH_API bool dtNavMeshHeaderSwapEndian(unsigned char* data, const int dataSize);
+bool dtNavMeshHeaderSwapEndian(unsigned char* data, const int dataSize);
 
 /// Swaps endianess of the tile data.
 ///  @param[in,out]	data		The tile data array.
 ///  @param[in]		dataSize	The size of the data array.
-NAVMESH_API bool dtNavMeshDataSwapEndian(unsigned char* data, const int dataSize);
+bool dtNavMeshDataSwapEndian(unsigned char* data, const int dataSize);
 
 #endif // DETOURNAVMESHBUILDER_H
 

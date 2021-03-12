@@ -22,7 +22,7 @@
 #ifndef RECAST_H
 #define RECAST_H
 
-#include "CoreMinimal.h"
+
 
 /// The value of PI used by Recast.
 static const float RC_PI = 3.14159265f;
@@ -102,12 +102,12 @@ enum rcTimerLabel
 	RC_MAX_TIMERS
 };
 
-NAVMESH_API DECLARE_LOG_CATEGORY_EXTERN(LogRecast, Log, All);
+//DECLARE_LOG_CATEGORY_EXTERN(LogRecast, Log, All);
 
 /// Provides an interface for optional logging and performance tracking of the Recast 
 /// build process.
 /// @ingroup recast
-class NAVMESH_API rcContext
+class rcContext
 {
 public:
 
@@ -493,85 +493,85 @@ struct rcPolyMeshDetail
 ///  @return A heightfield that is ready for initialization, or null on failure.
 ///  @ingroup recast
 ///  @see rcCreateHeightfield, rcFreeHeightField
-NAVMESH_API rcHeightfield* rcAllocHeightfield();
+rcHeightfield* rcAllocHeightfield();
 
 /// Frees the specified heightfield object using the Recast allocator.
 ///  @param[in]		hf	A heightfield allocated using #rcAllocHeightfield
 ///  @ingroup recast
 ///  @see rcAllocHeightfield
-NAVMESH_API void rcFreeHeightField(rcHeightfield* hf);
+void rcFreeHeightField(rcHeightfield* hf);
 
 /// Allocates a compact heightfield object using the Recast allocator.
 ///  @return A compact heightfield that is ready for initialization, or null on failure.
 ///  @ingroup recast
 ///  @see rcBuildCompactHeightfield, rcFreeCompactHeightfield
-NAVMESH_API rcCompactHeightfield* rcAllocCompactHeightfield();
+rcCompactHeightfield* rcAllocCompactHeightfield();
 
 /// Frees the specified compact heightfield object using the Recast allocator.
 ///  @param[in]		chf		A compact heightfield allocated using #rcAllocCompactHeightfield
 ///  @ingroup recast
 ///  @see rcAllocCompactHeightfield
-NAVMESH_API void rcFreeCompactHeightfield(rcCompactHeightfield* chf);
+void rcFreeCompactHeightfield(rcCompactHeightfield* chf);
 
 /// Allocates a heightfield layer set using the Recast allocator.
 ///  @return A heightfield layer set that is ready for initialization, or null on failure.
 ///  @ingroup recast
 ///  @see rcBuildHeightfieldLayers, rcFreeHeightfieldLayerSet
-NAVMESH_API rcHeightfieldLayerSet* rcAllocHeightfieldLayerSet();
+rcHeightfieldLayerSet* rcAllocHeightfieldLayerSet();
 
 /// Frees the specified heightfield layer set using the Recast allocator.
 ///  @param[in]		lset	A heightfield layer set allocated using #rcAllocHeightfieldLayerSet
 ///  @ingroup recast
 ///  @see rcAllocHeightfieldLayerSet
-NAVMESH_API void rcFreeHeightfieldLayerSet(rcHeightfieldLayerSet* lset);
+void rcFreeHeightfieldLayerSet(rcHeightfieldLayerSet* lset);
 
 /// Allocates a contour set object using the Recast allocator.
 ///  @return A contour set that is ready for initialization, or null on failure.
 ///  @ingroup recast
 ///  @see rcBuildContours, rcFreeContourSet
-NAVMESH_API rcContourSet* rcAllocContourSet();
+rcContourSet* rcAllocContourSet();
 
 /// Frees the specified contour set using the Recast allocator.
 ///  @param[in]		cset	A contour set allocated using #rcAllocContourSet
 ///  @ingroup recast
 ///  @see rcAllocContourSet
-NAVMESH_API void rcFreeContourSet(rcContourSet* cset);
+void rcFreeContourSet(rcContourSet* cset);
 
 /// Allocates a cluster set object using the Recast allocator.
 ///  @return A cluster set that is ready for initialization, or null on failure.
 ///  @ingroup recast
 ///  @see rcBuildClusters, rcFreeClusterSet
-NAVMESH_API rcClusterSet* rcAllocClusterSet();
+rcClusterSet* rcAllocClusterSet();
 
 /// Frees the specified cluster set using the Recast allocator.
 ///  @param[in]		clset	A cluster set allocated using #rcAllocClusterSet
 ///  @ingroup recast
 ///  @see rcAllocClusterSet
-NAVMESH_API void rcFreeClusterSet(rcClusterSet* clset);
+void rcFreeClusterSet(rcClusterSet* clset);
 
 /// Allocates a polygon mesh object using the Recast allocator.
 ///  @return A polygon mesh that is ready for initialization, or null on failure.
 ///  @ingroup recast
 ///  @see rcBuildPolyMesh, rcFreePolyMesh
-NAVMESH_API rcPolyMesh* rcAllocPolyMesh();
+rcPolyMesh* rcAllocPolyMesh();
 
 /// Frees the specified polygon mesh using the Recast allocator.
 ///  @param[in]		pmesh	A polygon mesh allocated using #rcAllocPolyMesh
 ///  @ingroup recast
 ///  @see rcAllocPolyMesh
-NAVMESH_API void rcFreePolyMesh(rcPolyMesh* pmesh);
+void rcFreePolyMesh(rcPolyMesh* pmesh);
 
 /// Allocates a detail mesh object using the Recast allocator.
 ///  @return A detail mesh that is ready for initialization, or null on failure.
 ///  @ingroup recast
 ///  @see rcBuildPolyMeshDetail, rcFreePolyMeshDetail
-NAVMESH_API rcPolyMeshDetail* rcAllocPolyMeshDetail();
+rcPolyMeshDetail* rcAllocPolyMeshDetail();
 
 /// Frees the specified detail mesh using the Recast allocator.
 ///  @param[in]		dmesh	A detail mesh allocated using #rcAllocPolyMeshDetail
 ///  @ingroup recast
 ///  @see rcAllocPolyMeshDetail
-NAVMESH_API void rcFreePolyMeshDetail(rcPolyMeshDetail* dmesh);
+void rcFreePolyMeshDetail(rcPolyMeshDetail* dmesh);
 
 /// @}
 
@@ -819,7 +819,7 @@ inline void rcVnormalize(float* v)
 ///  @param[in]		nv		The number of vertices in the @p verts array.
 ///  @param[out]	bmin	The minimum bounds of the AABB. [(x, y, z)] [Units: wu]
 ///  @param[out]	bmax	The maximum bounds of the AABB. [(x, y, z)] [Units: wu]
-NAVMESH_API void rcCalcBounds(const float* verts, int nv, float* bmin, float* bmax);
+void rcCalcBounds(const float* verts, int nv, float* bmin, float* bmax);
 
 /// Calculates the grid size based on the bounding box and grid cell size.
 ///  @ingroup recast
@@ -828,7 +828,7 @@ NAVMESH_API void rcCalcBounds(const float* verts, int nv, float* bmin, float* bm
 ///  @param[in]		cs		The xz-plane cell size. [Limit: > 0] [Units: wu]
 ///  @param[out]	w		The width along the x-axis. [Limit: >= 0] [Units: vx]
 ///  @param[out]	h		The height along the z-axis. [Limit: >= 0] [Units: vx]
-NAVMESH_API void rcCalcGridSize(const float* bmin, const float* bmax, float cs, int* w, int* h);
+void rcCalcGridSize(const float* bmin, const float* bmax, float cs, int* w, int* h);
 
 /// Initializes a new heightfield.
 ///  @ingroup recast
@@ -840,7 +840,7 @@ NAVMESH_API void rcCalcGridSize(const float* bmin, const float* bmax, float cs, 
 ///  @param[in]		bmax	The maximum bounds of the field's AABB. [(x, y, z)] [Units: wu]
 ///  @param[in]		cs		The xz-plane cell size to use for the field. [Limit: > 0] [Units: wu]
 ///  @param[in]		ch		The y-axis cell size to use for field. [Limit: > 0] [Units: wu]
-NAVMESH_API bool rcCreateHeightfield(rcContext* ctx, rcHeightfield& hf, int width, int height,
+bool rcCreateHeightfield(rcContext* ctx, rcHeightfield& hf, int width, int height,
 						 const float* bmin, const float* bmax,
 						 float cs, float ch);
 
@@ -850,7 +850,7 @@ NAVMESH_API bool rcCreateHeightfield(rcContext* ctx, rcHeightfield& hf, int widt
 ///  @param[in]		bmin	The minimum bounds of the field's AABB. [(x, y, z)] [Units: wu]
 ///  @param[in]		bmax	The maximum bounds of the field's AABB. [(x, y, z)] [Units: wu]
 ///  @param[in,out]	hf		The heightfield toreset.
-NAVMESH_API void rcResetHeightfield(rcHeightfield& hf);
+void rcResetHeightfield(rcHeightfield& hf);
 
 /// Sets the area id of all triangles with a slope below the specified value
 /// to #RC_WALKABLE_AREA.
@@ -863,7 +863,7 @@ NAVMESH_API void rcResetHeightfield(rcHeightfield& hf);
 ///  @param[in]		tris				The triangle vertex indices. [(vertA, vertB, vertC) * @p nt]
 ///  @param[in]		nt					The number of triangles.
 ///  @param[out]	areas				The triangle area ids. [Length: >= @p nt]
-NAVMESH_API void rcMarkWalkableTriangles(rcContext* ctx, const float walkableSlopeAngle, const float* verts, int nv,
+void rcMarkWalkableTriangles(rcContext* ctx, const float walkableSlopeAngle, const float* verts, int nv,
 							 const int* tris, int nt, unsigned char* areas); 
 
 /// Sets the area id of all triangles with a slope below the specified value
@@ -877,7 +877,7 @@ NAVMESH_API void rcMarkWalkableTriangles(rcContext* ctx, const float walkableSlo
 ///  @param[in]		tris				The triangle vertex indices. [(vertA, vertB, vertC) * @p nt]
 ///  @param[in]		nt					The number of triangles.
 ///  @param[out]	areas				The triangle area ids. [Length: >= @p nt]
-NAVMESH_API void rcMarkWalkableTrianglesCos(rcContext* ctx, const float walkableSlopeCos, const float* verts, int nv,
+void rcMarkWalkableTrianglesCos(rcContext* ctx, const float walkableSlopeCos, const float* verts, int nv,
 							    const int* tris, int nt, unsigned char* areas);
 
 /// Sets the area id of all triangles with a slope greater than or equal to the specified value to #RC_NULL_AREA.
@@ -890,7 +890,7 @@ NAVMESH_API void rcMarkWalkableTrianglesCos(rcContext* ctx, const float walkable
 ///  @param[in]		tris				The triangle vertex indices. [(vertA, vertB, vertC) * @p nt]
 ///  @param[in]		nt					The number of triangles.
 ///  @param[out]	areas				The triangle area ids. [Length: >= @p nt]
-NAVMESH_API void rcClearUnwalkableTriangles(rcContext* ctx, const float walkableSlopeAngle, const float* verts, int nv,
+void rcClearUnwalkableTriangles(rcContext* ctx, const float walkableSlopeAngle, const float* verts, int nv,
 								const int* tris, int nt, unsigned char* areas); 
 
 /// Adds a span to the specified heightfield.
@@ -905,15 +905,15 @@ NAVMESH_API void rcClearUnwalkableTriangles(rcContext* ctx, const float walkable
 ///  @param[in]		smax			The maximum height of the span. [Limit: <= #RC_SPAN_MAX_HEIGHT] [Units: vx]
 ///  @param[in]		area			The area id of the span. [Limit: <= #RC_WALKABLE_AREA)
 ///  @param[in]		flagMergeThr	The merge theshold. [Limit: >= 0] [Units: vx]
-NAVMESH_API void rcAddSpan(rcContext* ctx, rcHeightfield& hf, const int x, const int y,
+void rcAddSpan(rcContext* ctx, rcHeightfield& hf, const int x, const int y,
 			   const unsigned short smin, const unsigned short smax,
 			   const unsigned char area, const int flagMergeThr);
 
-NAVMESH_API void rcAddSpans(rcContext* ctx, rcHeightfield& hf, const int flagMergeThr,
+void rcAddSpans(rcContext* ctx, rcHeightfield& hf, const int flagMergeThr,
 			    const rcSpanCache* cachedSpans, const int nspans);
 
-NAVMESH_API int rcCountSpans(rcContext* ctx, rcHeightfield& hf);
-NAVMESH_API void rcCacheSpans(rcContext* ctx, rcHeightfield& hf, rcSpanCache* cachedSpans);
+int rcCountSpans(rcContext* ctx, rcHeightfield& hf);
+void rcCacheSpans(rcContext* ctx, rcHeightfield& hf, rcSpanCache* cachedSpans);
 
 /// Rasterizes a triangle into the specified heightfield.
 ///  @ingroup recast
@@ -925,7 +925,7 @@ NAVMESH_API void rcCacheSpans(rcContext* ctx, rcHeightfield& hf, rcSpanCache* ca
 ///  @param[in,out]	solid			An initialized heightfield.
 ///  @param[in]		flagMergeThr	The distance where the walkable flag is favored over the non-walkable flag.
 ///  								[Limit: >= 0] [Units: vx]
-NAVMESH_API void rcRasterizeTriangle(rcContext* ctx, const float* v0, const float* v1, const float* v2,
+void rcRasterizeTriangle(rcContext* ctx, const float* v0, const float* v1, const float* v2,
 						 const unsigned char area, rcHeightfield& solid,
 						 const int flagMergeThr = 1);
 
@@ -941,7 +941,7 @@ NAVMESH_API void rcRasterizeTriangle(rcContext* ctx, const float* v0, const floa
 ///  @param[in]		flagMergeThr	The distance where the walkable flag is favored over the non-walkable flag. 
 ///  								[Limit: >= 0] [Units: vx]
 ///  @param[in]     int				Flags to change the rasterization behavior		//UE4
-NAVMESH_API void rcRasterizeTriangles(rcContext* ctx, const float* verts, const int nv,
+void rcRasterizeTriangles(rcContext* ctx, const float* verts, const int nv,
 						  const int* tris, const unsigned char* areas, const int nt,
 						  rcHeightfield& solid, const int flagMergeThr = 1, const int rasterizationFlags = 0 /*UE4*/);
 
@@ -957,7 +957,7 @@ NAVMESH_API void rcRasterizeTriangles(rcContext* ctx, const float* verts, const 
 ///  @param[in]		flagMergeThr	The distance where the walkable flag is favored over the non-walkable flag. 
 ///  								[Limit: >= 0] [Units: vx]
 ///  @param[in]     int				Flags to change the rasterization behavior		//UE4
-NAVMESH_API void rcRasterizeTriangles(rcContext* ctx, const float* verts, const int nv,
+void rcRasterizeTriangles(rcContext* ctx, const float* verts, const int nv,
 						  const unsigned short* tris, const unsigned char* areas, const int nt,
 						  rcHeightfield& solid, const int flagMergeThr = 1, const int rasterizationFlags = 0 /*UE4*/);
 
@@ -970,7 +970,7 @@ NAVMESH_API void rcRasterizeTriangles(rcContext* ctx, const float* verts, const 
 ///  @param[in,out]	solid			An initialized heightfield.
 ///  @param[in]		flagMergeThr	The distance where the walkable flag is favored over the non-walkable flag. 
 ///  								[Limit: >= 0] [Units: vx]
-NAVMESH_API void rcRasterizeTriangles(rcContext* ctx, const float* verts, const unsigned char* areas, const int nt,
+void rcRasterizeTriangles(rcContext* ctx, const float* verts, const unsigned char* areas, const int nt,
 						  rcHeightfield& solid, const int flagMergeThr = 1);
 
 /// Marks non-walkable spans as walkable if their maximum is within @p walkableClimp of a walkable neighbor. 
@@ -979,7 +979,7 @@ NAVMESH_API void rcRasterizeTriangles(rcContext* ctx, const float* verts, const 
 ///  @param[in]		walkableClimb	Maximum ledge height that is considered to still be traversable. 
 ///  								[Limit: >=0] [Units: vx]
 ///  @param[in,out]	solid			A fully built heightfield.  (All spans have been added.)
-NAVMESH_API void rcFilterLowHangingWalkableObstacles(rcContext* ctx, const int walkableClimb, rcHeightfield& solid);
+void rcFilterLowHangingWalkableObstacles(rcContext* ctx, const int walkableClimb, rcHeightfield& solid);
 
 /// Marks spans that are ledges as not-walkable. 
 ///  @ingroup recast
@@ -989,7 +989,7 @@ NAVMESH_API void rcFilterLowHangingWalkableObstacles(rcContext* ctx, const int w
 ///  @param[in]		walkableClimb	Maximum ledge height that is considered to still be traversable. 
 ///  								[Limit: >=0] [Units: vx]
 ///  @param[in,out]	solid			A fully built heightfield.  (All spans have been added.)
-NAVMESH_API void rcFilterLedgeSpans(rcContext* ctx, const int walkableHeight,
+void rcFilterLedgeSpans(rcContext* ctx, const int walkableHeight,
 						const int walkableClimb, rcHeightfield& solid);
 
 /// Marks walkable spans as not walkable if the clearance above the span is less than the specified height. 
@@ -998,15 +998,15 @@ NAVMESH_API void rcFilterLedgeSpans(rcContext* ctx, const int walkableHeight,
 ///  @param[in]		walkableHeight	Minimum floor to 'ceiling' height that will still allow the floor area to 
 ///  								be considered walkable. [Limit: >= 3] [Units: vx]
 ///  @param[in,out]	solid			A fully built heightfield.  (All spans have been added.)
-NAVMESH_API void rcFilterWalkableLowHeightSpans(rcContext* ctx, int walkableHeight, rcHeightfield& solid);
-NAVMESH_API void rcFilterWalkableLowHeightSpansSequences(rcContext* ctx, int walkableHeight, rcHeightfield& solid);
+void rcFilterWalkableLowHeightSpans(rcContext* ctx, int walkableHeight, rcHeightfield& solid);
+void rcFilterWalkableLowHeightSpansSequences(rcContext* ctx, int walkableHeight, rcHeightfield& solid);
 
 /// Returns the number of spans contained in the specified heightfield.
 ///  @ingroup recast
 ///  @param[in,out]	ctx		The build context to use during the operation.
 ///  @param[in]		hf		An initialized heightfield.
 ///  @returns The number of spans in the heightfield.
-NAVMESH_API int rcGetHeightFieldSpanCount(rcContext* ctx, rcHeightfield& hf);
+int rcGetHeightFieldSpanCount(rcContext* ctx, rcHeightfield& hf);
 
 /// @}
 /// @name Compact Heightfield Functions
@@ -1023,7 +1023,7 @@ NAVMESH_API int rcGetHeightFieldSpanCount(rcContext* ctx, rcHeightfield& hf);
 ///  @param[in]		hf				The heightfield to be compacted.
 ///  @param[out]	chf				The resulting compact heightfield. (Must be pre-allocated.)
 ///  @returns True if the operation completed successfully.
-NAVMESH_API bool rcBuildCompactHeightfield(rcContext* ctx, const int walkableHeight, const int walkableClimb,
+bool rcBuildCompactHeightfield(rcContext* ctx, const int walkableHeight, const int walkableClimb,
 							   rcHeightfield& hf, rcCompactHeightfield& chf);
 
 /// Erodes the walkable area within the heightfield by the specified radius. 
@@ -1032,7 +1032,7 @@ NAVMESH_API bool rcBuildCompactHeightfield(rcContext* ctx, const int walkableHei
 ///  @param[in]		radius	The radius of erosion. [Limits: 0 < value < 255] [Units: vx]
 ///  @param[in,out]	chf		The populated compact heightfield to erode.
 ///  @returns True if the operation completed successfully.
-NAVMESH_API bool rcErodeWalkableArea(rcContext* ctx, int radius, rcCompactHeightfield& chf);
+bool rcErodeWalkableArea(rcContext* ctx, int radius, rcCompactHeightfield& chf);
 
 /// Erodes the walkable area within the heightfield by the specified radius. 
 /// Additionally, it will mark all spans that are too low (rcMarkLowAreas)
@@ -1044,7 +1044,7 @@ NAVMESH_API bool rcErodeWalkableArea(rcContext* ctx, int radius, rcCompactHeight
 ///  @param[in]		filterFlags	See: rcFilterLowAreaFlags
 ///  @param[in,out]	chf		The populated compact heightfield to erode.
 ///  @returns True if the operation completed successfully.
-NAVMESH_API bool rcErodeWalkableAndLowAreas(rcContext* ctx, int radius, unsigned int height,
+bool rcErodeWalkableAndLowAreas(rcContext* ctx, int radius, unsigned int height,
 											unsigned char areaId, unsigned char filterFlags,
 											rcCompactHeightfield& chf);
 
@@ -1053,7 +1053,7 @@ NAVMESH_API bool rcErodeWalkableAndLowAreas(rcContext* ctx, int radius, unsigned
 ///  @param[in,out]	ctx		The build context to use during the operation.
 ///  @param[in,out]	chf		A populated compact heightfield.
 ///  @returns True if the operation completed successfully.
-NAVMESH_API bool rcMedianFilterWalkableArea(rcContext* ctx, rcCompactHeightfield& chf);
+bool rcMedianFilterWalkableArea(rcContext* ctx, rcCompactHeightfield& chf);
 
 /// Marks all spans that have insufficient free space above
 ///  @ingroup recast
@@ -1062,7 +1062,7 @@ NAVMESH_API bool rcMedianFilterWalkableArea(rcContext* ctx, rcCompactHeightfield
 ///  @param[in]		height	Height threshold [Units: vx]
 ///  @param[in]		areaId	The area id to apply [Limit: <= @RC_WALKABLE_AREA]
 ///  @returns True if the operation completed successfully.
-NAVMESH_API bool rcMarkLowAreas(rcContext* ctx, unsigned int height, unsigned char areaId, rcCompactHeightfield& chf);
+bool rcMarkLowAreas(rcContext* ctx, unsigned int height, unsigned char areaId, rcCompactHeightfield& chf);
 
 /// Applies an area id to all spans within the specified bounding box. (AABB) 
 ///  @ingroup recast
@@ -1071,7 +1071,7 @@ NAVMESH_API bool rcMarkLowAreas(rcContext* ctx, unsigned int height, unsigned ch
 ///  @param[in]		bmax	The maximum of the bounding box. [(x, y, z)]
 ///  @param[in]		areaId	The area id to apply. [Limit: <= #RC_WALKABLE_AREA]
 ///  @param[in,out]	chf		A populated compact heightfield.
-NAVMESH_API void rcMarkBoxArea(rcContext* ctx, const float* bmin, const float* bmax, unsigned char areaId,
+void rcMarkBoxArea(rcContext* ctx, const float* bmin, const float* bmax, unsigned char areaId,
 				   rcCompactHeightfield& chf);
 
 /// Applies the area id to the all spans within the specified convex polygon. 
@@ -1083,7 +1083,7 @@ NAVMESH_API void rcMarkBoxArea(rcContext* ctx, const float* bmin, const float* b
 ///  @param[in]		hmax	The height of the top of the polygon.
 ///  @param[in]		areaId	The area id to apply. [Limit: <= #RC_WALKABLE_AREA]
 ///  @param[in,out]	chf		A populated compact heightfield.
-NAVMESH_API void rcMarkConvexPolyArea(rcContext* ctx, const float* verts, const int nverts,
+void rcMarkConvexPolyArea(rcContext* ctx, const float* verts, const int nverts,
 						  const float hmin, const float hmax, unsigned char areaId,
 						  rcCompactHeightfield& chf);
 
@@ -1094,7 +1094,7 @@ NAVMESH_API void rcMarkConvexPolyArea(rcContext* ctx, const float* verts, const 
 ///  @param[out]	outVerts	The offset vertices (should hold up to 2 * @p nverts) [Form: (x, y, z) * return value]
 ///  @param[in]		maxOutVerts	The max number of vertices that can be stored to @p outVerts.
 ///  @returns Number of vertices in the offset polygon or 0 if too few vertices in @p outVerts.
-NAVMESH_API int rcOffsetPoly(const float* verts, const int nverts, const float offset,
+int rcOffsetPoly(const float* verts, const int nverts, const float offset,
 				 float* outVerts, const int maxOutVerts);
 
 /// Applies the area id to all spans within the specified cylinder.
@@ -1105,7 +1105,7 @@ NAVMESH_API int rcOffsetPoly(const float* verts, const int nverts, const float o
 ///  @param[in]		h		The height of the cylinder.
 ///  @param[in]		areaId	The area id to apply. [Limit: <= #RC_WALKABLE_AREA]
 ///  @param[in,out]	chf	A populated compact heightfield.
-NAVMESH_API void rcMarkCylinderArea(rcContext* ctx, const float* pos,
+void rcMarkCylinderArea(rcContext* ctx, const float* pos,
 						const float r, const float h, unsigned char areaId,
 						rcCompactHeightfield& chf);
 
@@ -1116,7 +1116,7 @@ NAVMESH_API void rcMarkCylinderArea(rcContext* ctx, const float* pos,
 ///  @param[in]		bmax	The maximum of the bounding box. [(x, y, z)]
 ///  @param[in]		areaId	The area id to apply. [Limit: <= #RC_WALKABLE_AREA]
 ///  @param[in,out]	chf		A populated compact heightfield.
-NAVMESH_API void rcReplaceBoxArea(rcContext* ctx, const float* bmin, const float* bmax,
+void rcReplaceBoxArea(rcContext* ctx, const float* bmin, const float* bmax,
 	unsigned char areaId, unsigned char filterAreaId,
 	rcCompactHeightfield& chf);
 
@@ -1129,7 +1129,7 @@ NAVMESH_API void rcReplaceBoxArea(rcContext* ctx, const float* bmin, const float
 ///  @param[in]		hmax	The height of the top of the polygon.
 ///  @param[in]		areaId	The area id to apply. [Limit: <= #RC_WALKABLE_AREA]
 ///  @param[in,out]	chf		A populated compact heightfield.
-NAVMESH_API void rcReplaceConvexPolyArea(rcContext* ctx, const float* verts, const int nverts,
+void rcReplaceConvexPolyArea(rcContext* ctx, const float* verts, const int nverts,
 	const float hmin, const float hmax, unsigned char areaId, unsigned char filterAreaId,
 	rcCompactHeightfield& chf);
 
@@ -1141,7 +1141,7 @@ NAVMESH_API void rcReplaceConvexPolyArea(rcContext* ctx, const float* verts, con
 ///  @param[in]		h		The height of the cylinder.
 ///  @param[in]		areaId	The area id to apply. [Limit: <= #RC_WALKABLE_AREA]
 ///  @param[in,out]	chf	A populated compact heightfield.
-NAVMESH_API void rcReplaceCylinderArea(rcContext* ctx, const float* pos,
+void rcReplaceCylinderArea(rcContext* ctx, const float* pos,
 	const float r, const float h, unsigned char areaId, unsigned char filterAreaId,
 	rcCompactHeightfield& chf);
 
@@ -1150,7 +1150,7 @@ NAVMESH_API void rcReplaceCylinderArea(rcContext* ctx, const float* pos,
 ///  @param[in,out]	ctx		The build context to use during the operation.
 ///  @param[in,out]	chf		A populated compact heightfield.
 ///  @returns True if the operation completed successfully.
-NAVMESH_API bool rcBuildDistanceField(rcContext* ctx, rcCompactHeightfield& chf);
+bool rcBuildDistanceField(rcContext* ctx, rcCompactHeightfield& chf);
 
 /// Builds region data for the heightfield using watershed partitioning. 
 ///  @ingroup recast
@@ -1163,7 +1163,7 @@ NAVMESH_API bool rcBuildDistanceField(rcContext* ctx, rcCompactHeightfield& chf)
 ///  @param[in]		mergeRegionArea		Any regions with a span count smaller than this value will, if possible,
 ///  								be merged with larger regions. [Limit: >=0] [Units: vx] 
 ///  @returns True if the operation completed successfully.
-NAVMESH_API bool rcBuildRegions(rcContext* ctx, rcCompactHeightfield& chf,
+bool rcBuildRegions(rcContext* ctx, rcCompactHeightfield& chf,
 					const int borderSize, const int minRegionArea, const int mergeRegionArea);
 
 /// Builds region data for the heightfield using simple monotone partitioning.
@@ -1177,7 +1177,7 @@ NAVMESH_API bool rcBuildRegions(rcContext* ctx, rcCompactHeightfield& chf,
 ///  @param[in]		mergeRegionArea	Any regions with a span count smaller than this value will, if possible, 
 ///  								be merged with larger regions. [Limit: >=0] [Units: vx] 
 ///  @returns True if the operation completed successfully.
-NAVMESH_API bool rcBuildRegionsMonotone(rcContext* ctx, rcCompactHeightfield& chf,
+bool rcBuildRegionsMonotone(rcContext* ctx, rcCompactHeightfield& chf,
 							const int borderSize, const int minRegionArea, const int mergeRegionArea);
 
 /// Builds region data for the heightfield using simple monotone partitioning.
@@ -1192,7 +1192,7 @@ NAVMESH_API bool rcBuildRegionsMonotone(rcContext* ctx, rcCompactHeightfield& ch
 ///  								be merged with larger regions. [Limit: >=0] [Units: vx] 
 ///	 @param[in]		chunkSize		Size of subregion [Units: vx]
 ///  @returns True if the operation completed successfully.
-NAVMESH_API bool rcBuildRegionsChunky(rcContext* ctx, rcCompactHeightfield& chf,
+bool rcBuildRegionsChunky(rcContext* ctx, rcCompactHeightfield& chf,
 						  const int borderSize, const int minRegionArea, const int mergeRegionArea,
 						  const int chunkSize);
 
@@ -1255,7 +1255,7 @@ inline int rcGetDirOffsetY(int dir)
 ///  							to be considered walkable. [Limit: >= 3] [Units: vx]
 ///  @param[out]	lset		The resulting layer set. (Must be pre-allocated.)
 ///  @returns True if the operation completed successfully.
-NAVMESH_API bool rcBuildHeightfieldLayers(rcContext* ctx, rcCompactHeightfield& chf,
+bool rcBuildHeightfieldLayers(rcContext* ctx, rcCompactHeightfield& chf,
 							  const int borderSize, const int walkableHeight,
 							  rcHeightfieldLayerSet& lset);
 
@@ -1269,7 +1269,7 @@ NAVMESH_API bool rcBuildHeightfieldLayers(rcContext* ctx, rcCompactHeightfield& 
 ///  							to be considered walkable. [Limit: >= 3] [Units: vx]
 ///  @param[out]	lset		The resulting layer set. (Must be pre-allocated.)
 ///  @returns True if the operation completed successfully.
-NAVMESH_API bool rcBuildHeightfieldLayersMonotone(rcContext* ctx, rcCompactHeightfield& chf,
+bool rcBuildHeightfieldLayersMonotone(rcContext* ctx, rcCompactHeightfield& chf,
 									  const int borderSize, const int walkableHeight,
 									  rcHeightfieldLayerSet& lset);
 
@@ -1284,7 +1284,7 @@ NAVMESH_API bool rcBuildHeightfieldLayersMonotone(rcContext* ctx, rcCompactHeigh
 ///  @param[in]		chunkSize	Size of chunk of subregion [Units: vx]
 ///  @param[out]	lset		The resulting layer set. (Must be pre-allocated.)
 ///  @returns True if the operation completed successfully.
-NAVMESH_API bool rcBuildHeightfieldLayersChunky(rcContext* ctx, rcCompactHeightfield& chf,
+bool rcBuildHeightfieldLayersChunky(rcContext* ctx, rcCompactHeightfield& chf,
 									const int borderSize, const int walkableHeight,
 									const int chunkSize,
 									rcHeightfieldLayerSet& lset);
@@ -1302,7 +1302,7 @@ NAVMESH_API bool rcBuildHeightfieldLayersChunky(rcContext* ctx, rcCompactHeightf
 ///  @param[out]	cset		The resulting contour set. (Must be pre-allocated.)
 ///  @param[in]		buildFlags	The build flags. (See: #rcBuildContoursFlags)
 ///  @returns True if the operation completed successfully.
-NAVMESH_API bool rcBuildContours(rcContext* ctx, rcCompactHeightfield& chf,
+bool rcBuildContours(rcContext* ctx, rcCompactHeightfield& chf,
 					 const float maxError, const int maxEdgeLen,
 					 rcContourSet& cset, const int flags = RC_CONTOUR_TESS_WALL_EDGES);
 
@@ -1311,7 +1311,7 @@ NAVMESH_API bool rcBuildContours(rcContext* ctx, rcCompactHeightfield& chf,
 /// @param[in,out]	ctx			The build context to use during the operaiton
 /// @param[in]		cset		Countour set
 /// @param[out]		clusters	Resulting cluster set
-NAVMESH_API bool rcBuildClusters(rcContext* ctx, rcContourSet& cset, rcClusterSet& clusters);
+bool rcBuildClusters(rcContext* ctx, rcContourSet& cset, rcClusterSet& clusters);
 
 /// Builds a polygon mesh from the provided contours.
 ///  @ingroup recast
@@ -1321,7 +1321,7 @@ NAVMESH_API bool rcBuildClusters(rcContext* ctx, rcContourSet& cset, rcClusterSe
 ///  						contour to polygon conversion process. [Limit: >= 3] 
 ///  @param[out]	mesh	The resulting polygon mesh. (Must be re-allocated.)
 ///  @returns True if the operation completed successfully.
-NAVMESH_API bool rcBuildPolyMesh(rcContext* ctx, rcContourSet& cset, const int nvp, rcPolyMesh& mesh);
+bool rcBuildPolyMesh(rcContext* ctx, rcContourSet& cset, const int nvp, rcPolyMesh& mesh);
 
 /// Merges multiple polygon meshes into a single mesh.
 ///  @ingroup recast
@@ -1330,7 +1330,7 @@ NAVMESH_API bool rcBuildPolyMesh(rcContext* ctx, rcContourSet& cset, const int n
 ///  @param[in]		nmeshes	The number of polygon meshes in the meshes array.
 ///  @param[in]		mesh	The resulting polygon mesh. (Must be pre-allocated.)
 ///  @returns True if the operation completed successfully.
-NAVMESH_API bool rcMergePolyMeshes(rcContext* ctx, rcPolyMesh** meshes, const int nmeshes, rcPolyMesh& mesh);
+bool rcMergePolyMeshes(rcContext* ctx, rcPolyMesh** meshes, const int nmeshes, rcPolyMesh& mesh);
 
 /// Builds a detail mesh from the provided polygon mesh.
 ///  @ingroup recast
@@ -1342,7 +1342,7 @@ NAVMESH_API bool rcMergePolyMeshes(rcContext* ctx, rcPolyMesh** meshes, const in
 ///  								heightfield data. [Limit: >=0] [Units: wu]
 ///  @param[out]	dmesh			The resulting detail mesh.  (Must be pre-allocated.)
 ///  @returns True if the operation completed successfully.
-NAVMESH_API bool rcBuildPolyMeshDetail(rcContext* ctx, const rcPolyMesh& mesh, const rcCompactHeightfield& chf,
+bool rcBuildPolyMeshDetail(rcContext* ctx, const rcPolyMesh& mesh, const rcCompactHeightfield& chf,
 						   const float sampleDist, const float sampleMaxError,
 						   rcPolyMeshDetail& dmesh);
 
@@ -1352,7 +1352,7 @@ NAVMESH_API bool rcBuildPolyMeshDetail(rcContext* ctx, const rcPolyMesh& mesh, c
 ///  @param[in]		src		The source mesh to copy from.
 ///  @param[out]	dst		The resulting detail mesh. (Must be pre-allocated, must be empty mesh.)
 ///  @returns True if the operation completed successfully.
-NAVMESH_API bool rcCopyPolyMesh(rcContext* ctx, const rcPolyMesh& src, rcPolyMesh& dst);
+bool rcCopyPolyMesh(rcContext* ctx, const rcPolyMesh& src, rcPolyMesh& dst);
 
 /// Merges multiple detail meshes into a single detail mesh.
 ///  @ingroup recast
@@ -1361,7 +1361,7 @@ NAVMESH_API bool rcCopyPolyMesh(rcContext* ctx, const rcPolyMesh& src, rcPolyMes
 ///  @param[in]		nmeshes	The number of detail meshes in the meshes array.
 ///  @param[out]	mesh	The resulting detail mesh. (Must be pre-allocated.)
 ///  @returns True if the operation completed successfully.
-NAVMESH_API bool rcMergePolyMeshDetails(rcContext* ctx, rcPolyMeshDetail** meshes, const int nmeshes, rcPolyMeshDetail& mesh);
+bool rcMergePolyMeshDetails(rcContext* ctx, rcPolyMeshDetail** meshes, const int nmeshes, rcPolyMeshDetail& mesh);
 
 /// @}
 

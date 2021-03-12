@@ -22,7 +22,7 @@
 #ifndef DETOURTILECACHE_H
 #define DETOURTILECACHE_H
 
-#include "CoreMinimal.h"
+
 #include "Detour/DetourStatus.h"
 
 struct dtTileCacheAlloc;
@@ -92,7 +92,7 @@ struct dtTileCacheParams
 //@UE4 END
 };
 
-struct NAVMESH_API dtTileCacheMeshProcess
+struct dtTileCacheMeshProcess
 {
 	virtual void markAreas(struct dtTileCacheLayer* layer, const float* orig, const float cs, const float ch) = 0;
 	virtual void process(struct dtNavMeshCreateParams* params,
@@ -100,7 +100,7 @@ struct NAVMESH_API dtTileCacheMeshProcess
 };
 
 
-class NAVMESH_API dtTileCache
+class dtTileCache
 {
 public:
 	dtTileCache();
@@ -237,7 +237,7 @@ private:
 	
 };
 
-NAVMESH_API dtTileCache* dtAllocTileCache();
-NAVMESH_API void dtFreeTileCache(dtTileCache* tc);
+dtTileCache* dtAllocTileCache();
+void dtFreeTileCache(dtTileCache* tc);
 
 #endif

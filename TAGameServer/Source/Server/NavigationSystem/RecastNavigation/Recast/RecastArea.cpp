@@ -19,11 +19,12 @@
 // 3. This notice may not be removed or altered from any source distribution.
 //
 
-#include "CoreMinimal.h"
+
 #define _USE_MATH_DEFINES
 #include "Recast/Recast.h"
 #include "Recast/RecastAlloc.h"
 #include "Recast/RecastAssert.h"
+#include "RecastNavigationSystemInclude.h"
 
 /// @par 
 /// 

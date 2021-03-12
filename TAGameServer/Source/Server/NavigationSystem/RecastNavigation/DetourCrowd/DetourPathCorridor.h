@@ -22,15 +22,16 @@
 #ifndef DETOUTPATHCORRIDOR_H
 #define DETOUTPATHCORRIDOR_H
 
-#include "CoreMinimal.h"
+
 #include "Detour/DetourNavMesh.h"
+#include "RecastNavigationSystemInclude.h"
 
 class dtNavMeshQuery;
 class dtQueryFilter;
 
 /// Represents a dynamic polygon corridor used to plan agent movement.
 /// @ingroup crowd, detour
-class NAVMESH_API dtPathCorridor
+class dtPathCorridor
 {
 	float m_pos[3];
 	float m_target[3];
@@ -38,10 +39,10 @@ class NAVMESH_API dtPathCorridor
 	float m_nextExpectedCorner[3];
 	float m_nextExpectedCorner2[3];
 	float m_moveSegAngle;
-	uint32 m_hasNextExpectedCorner : 1;
-	uint32 m_hasNextExpectedCorner2 : 1;
-	uint32 m_isInSkipRange : 1;
-	uint32 m_enableEarlyReach : 1;
+	uint32 m_hasNextExpectedCorner;
+	uint32 m_hasNextExpectedCorner2;
+	uint32 m_isInSkipRange;
+	uint32 m_enableEarlyReach;
 
 	dtPolyRef* m_path;
 	int m_npath;

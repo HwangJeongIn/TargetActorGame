@@ -19,11 +19,12 @@
 // 3. This notice may not be removed or altered from any source distribution.
 //
 
-#include "CoreMinimal.h"
+
 #define _USE_MATH_DEFINES
 #include "Recast/Recast.h"
 #include "Recast/RecastAlloc.h"
 #include "Recast/RecastAssert.h"
+#include "RecastNavigationSystemInclude.h"
 
 inline bool overlapBounds(const float* amin, const float* amax, const float* bmin, const float* bmax)
 {
@@ -751,7 +752,7 @@ static void rasterizeTri(const float* v0, const float* v1, const float* v2,
 						int othervert = (Hits.Hits[i] >> 2) & 3;
 						int basevert = Hits.Hits[i] & 3;
 
-						CA_SUPPRESS(6385);
+						//CA_SUPPRESS(6385);
 						intersectZ(vertarray[basevert], &edges[edge][0], cz, Inter[i]);
 						int x = (int)floorf((Inter[i][0] - bmin[0])*ics);
 						xInter[i] = x;

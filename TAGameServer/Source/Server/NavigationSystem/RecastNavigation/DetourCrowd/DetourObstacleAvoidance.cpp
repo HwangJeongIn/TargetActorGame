@@ -22,6 +22,7 @@
 #include "DetourCrowd/DetourObstacleAvoidance.h"
 #include "Detour/DetourAssert.h"
 #include "DetourCrowd/DetourCrowd.h"
+#include "RecastNavigationSystemInclude.h"
 
 static const float DT_PI = 3.14159265f;
 

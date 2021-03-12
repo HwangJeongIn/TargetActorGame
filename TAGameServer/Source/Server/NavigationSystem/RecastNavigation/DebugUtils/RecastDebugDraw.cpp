@@ -23,6 +23,7 @@
 #define _USE_MATH_DEFINES
 #include "DebugUtils/DebugDraw.h"
 #include "Recast/Recast.h"
+#include "RecastNavigationSystemInclude.h"
 
 void duDebugDrawTriMesh(duDebugDraw* dd, const float* verts, int /*nverts*/,
 						const int* tris, const float* normals, int ntris,

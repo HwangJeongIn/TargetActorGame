@@ -20,6 +20,7 @@
 //
 
 #include "Recast/RecastAlloc.h"
+#include "RecastNavigationSystemInclude.h"
 
 static void *rcAllocDefault(int size, rcAllocHint)
 {

@@ -22,8 +22,9 @@
 #ifndef DETOURPATHQUEUE_H
 #define DETOURPATHQUEUE_H
 
-#include "CoreMinimal.h"
+
 #include "Detour/DetourNavMeshQuery.h"
+#include <memory>
 
 static const unsigned int DT_PATHQ_INVALID = 0;
 
@@ -46,7 +47,7 @@ class dtPathQueue
 		int keepAlive;
 
 		const dtQueryFilter* filter;
-		TSharedPtr<dtQuerySpecialLinkFilter> linkFilter;
+		std::shared_ptr<dtQuerySpecialLinkFilter> linkFilter;
 	};
 	
 	static const int MAX_QUEUE = 8;
@@ -69,7 +70,7 @@ public:
 	dtPathQueueRef request(dtPolyRef startRef, dtPolyRef endRef,
 						   const float* startPos, const float* endPos, const float costLimit,
 						   const dtQueryFilter* filter,
-						   TSharedPtr<dtQuerySpecialLinkFilter> linkFilter);
+						   std::shared_ptr<dtQuerySpecialLinkFilter> linkFilter);
 	
 	dtStatus getRequestStatus(dtPathQueueRef ref) const;
 	

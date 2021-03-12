@@ -843,7 +843,7 @@ void duDebugDrawTileCacheContours(duDebugDraw* dd, const struct dtTileCacheConto
 				const float cy = (ay+by)*0.5f;
 				const float cz = (az+bz)*0.5f;
 
-				CA_SUPPRESS(6385);
+				////CA_SUPPRESS(6385);
 				const float dx = cx + offs[d*2+0]*2*cs;
 				const float dy = cy;
 				const float dz = cz + offs[d*2+1]*2*cs;
@@ -988,7 +988,7 @@ void duDebugDrawTileCachePolyMesh(duDebugDraw* dd, const struct dtTileCachePolyM
 				
 				int d = p[nvp+j] & 0xf;
 
-				CA_SUPPRESS(6385);
+				//CA_SUPPRESS(6385);
 				const float dx = cx + offs[d*2+0]*2*cs;
 				const float dy = cy;
 				const float dz = cz + offs[d*2+1]*2*cs;

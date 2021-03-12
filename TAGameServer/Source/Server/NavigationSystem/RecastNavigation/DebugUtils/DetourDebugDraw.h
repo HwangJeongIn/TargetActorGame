@@ -22,7 +22,7 @@
 #ifndef DETOURDEBUGDRAW_H
 #define DETOURDEBUGDRAW_H
 
-#include "CoreMinimal.h"
+
 #include "Detour/DetourNavMesh.h"
 
 class dtNavMeshQuery;

@@ -23,6 +23,7 @@
 #include "Recast/Recast.h"
 #include "Recast/RecastAlloc.h"
 #include "Recast/RecastAssert.h"
+#include "RecastNavigationSystemInclude.h"
 
 
 static int getCornerHeight(int x, int y, int i, int dir,

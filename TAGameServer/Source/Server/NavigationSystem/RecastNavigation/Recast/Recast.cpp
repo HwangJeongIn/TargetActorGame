@@ -23,8 +23,8 @@
 #define _USE_MATH_DEFINES
 #include "Recast/RecastAlloc.h"
 #include "Recast/RecastAssert.h"
+#include "RecastNavigationSystemInclude.h"
 
-DEFINE_LOG_CATEGORY(LogRecast);
 
 float rcSqrt(float x)
 {
@@ -59,7 +59,9 @@ void rcContext::log(const rcLogCategory category, const char* format, ...)
 	char msg[MSG_SIZE];
 	va_list ap;
 	va_start(ap, format);
-	int len = FCStringAnsi::GetVarArgs(msg, MSG_SIZE, format, ap);
+	
+	//int len = FCStringAnsi::GetVarArgs(msg, MSG_SIZE, format, ap);
+	int len = vsnprintf(msg, MSG_SIZE, format, ap);
 	if (len >= MSG_SIZE)
 	{
 		len = MSG_SIZE-1;
@@ -440,7 +442,7 @@ bool rcBuildCompactHeightfield(rcContext* ctx, const int walkableHeight, const i
 	chf.cells = (rcCompactCell*)rcAlloc(sizeof(rcCompactCell)*w*h, RC_ALLOC_PERM);
 	if (!chf.cells)
 	{
-		UE_LOG(LogRecast, VeryVerbose, TEXT("rcBuildCompactHeightfield: Out of memory 'chf.cells' (%d)"), w*h);
+		//UE_LOG(LogRecast, VeryVerbose, TEXT("rcBuildCompactHeightfield: Out of memory 'chf.cells' (%d)"), w*h);
 		return false;
 	}
 	memset(chf.cells, 0, sizeof(rcCompactCell)*w*h);
@@ -448,14 +450,14 @@ bool rcBuildCompactHeightfield(rcContext* ctx, const int walkableHeight, const i
 	if (!chf.spans)
 	{
 		//converted to UE_log to avoid false positives with Chaos
-		UE_LOG(LogRecast, VeryVerbose, TEXT("rcBuildCompactHeightfield: Out of memory 'chf.spans' (%d)"), spanCount);
+		//UE_LOG(LogRecast, VeryVerbose, TEXT("rcBuildCompactHeightfield: Out of memory 'chf.spans' (%d)"), spanCount);
 		return false;
 	}
 	memset(chf.spans, 0, sizeof(rcCompactSpan)*spanCount);
 	chf.areas = (unsigned char*)rcAlloc(sizeof(unsigned char)*spanCount, RC_ALLOC_PERM);
 	if (!chf.areas)
 	{
-		UE_LOG(LogRecast, VeryVerbose, TEXT("rcBuildCompactHeightfield: Out of memory 'chf.areas' (%d)"), spanCount);
+		//UE_LOG(LogRecast, VeryVerbose, TEXT("rcBuildCompactHeightfield: Out of memory 'chf.areas' (%d)"), spanCount);
 		return false;
 	}
 	memset(chf.areas, RC_NULL_AREA, sizeof(unsigned char)*spanCount);

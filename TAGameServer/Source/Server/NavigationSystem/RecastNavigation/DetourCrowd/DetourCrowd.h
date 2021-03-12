@@ -22,13 +22,15 @@
 #ifndef DETOURCROWD_H
 #define DETOURCROWD_H
 
-#include "CoreMinimal.h"
+
 #include "Detour/DetourNavMeshQuery.h"
 #include "DetourCrowd/DetourObstacleAvoidance.h"
 #include "DetourCrowd/DetourSharedBoundary.h"
 #include "DetourCrowd/DetourLocalBoundary.h"
 #include "DetourCrowd/DetourPathCorridor.h"
 #include "DetourCrowd/DetourPathQueue.h"
+#include <memory>
+#include <unordered_map>
 
 class dtProximityGrid;
 
@@ -81,7 +83,7 @@ struct dtCrowdAgentParams
 	void* userData;
 
 	/// UE4: special link filter used by this agent
-	TSharedPtr<dtQuerySpecialLinkFilter> linkFilter;
+	std::shared_ptr<dtQuerySpecialLinkFilter> linkFilter;
 
 	float radius;						///< Agent radius. [Limit: >= 0]
 	float height;						///< Agent height. [Limit: > 0]
@@ -131,7 +133,7 @@ enum MoveRequestState
 
 /// Represents an agent managed by a #dtCrowd object.
 /// @ingroup crowd
-struct NAVMESH_API dtCrowdAgent
+struct dtCrowdAgent
 {
 	/// The path corridor the agent is using.
 	dtPathCorridor corridor;
@@ -186,7 +188,7 @@ struct NAVMESH_API dtCrowdAgent
 	unsigned char state;
 };
 
-struct NAVMESH_API dtCrowdAgentAnimation
+struct dtCrowdAgentAnimation
 {
 	float initPos[3], startPos[3], endPos[3];
 	dtPolyRef polyRef;
@@ -215,17 +217,17 @@ enum CrowdBoundaryFlags
 	DT_CROWD_BOUNDARY_IGNORE = 1 << 0,
 };
 
-struct NAVMESH_API dtCrowdAgentDebugInfo
+struct dtCrowdAgentDebugInfo
 {
 	int idx;
 	float optStart[3], optEnd[3];
 	dtObstacleAvoidanceDebugData* vod;
-	TMap<int32, FString> agentLog;
+	std::unordered_map<int32, std::string> agentLog;
 };
 
 /// Provides local steering behaviors for a group of agents. 
 /// @ingroup crowd
-class NAVMESH_API dtCrowd
+class dtCrowd
 {
 	int m_maxAgents;
 	int m_numActiveAgents;
@@ -520,7 +522,7 @@ public:
 
 	inline int getNumActiveAgents() const { return m_numActiveAgents; }
 
-	inline int getAgentIndex(const dtCrowdAgent* agent) const  { return agent - m_agents; }
+	inline int getAgentIndex(const dtCrowdAgent* agent) const  { return static_cast<int>(agent - m_agents); }
 
 	/// Gets all agent animations
 	const dtCrowdAgentAnimation* getAgentAnims() const { return m_agentAnims;  }
@@ -529,12 +531,12 @@ public:
 /// Allocates a crowd object using the Detour allocator.
 /// @return A crowd object that is ready for initialization, or null on failure.
 ///  @ingroup crowd
-NAVMESH_API dtCrowd* dtAllocCrowd();
+dtCrowd* dtAllocCrowd();
 
 /// Frees the specified crowd object using the Detour allocator.
 ///  @param[in]		ptr		A crowd object allocated using #dtAllocCrowd
 ///  @ingroup crowd
-NAVMESH_API void dtFreeCrowd(dtCrowd* ptr);
+void dtFreeCrowd(dtCrowd* ptr);
 
 
 #endif // DETOURCROWD_H

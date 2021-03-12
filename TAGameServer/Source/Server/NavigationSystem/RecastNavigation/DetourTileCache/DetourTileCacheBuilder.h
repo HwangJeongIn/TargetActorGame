@@ -22,7 +22,7 @@
 #ifndef DETOURTILECACHEBUILDER_H
 #define DETOURTILECACHEBUILDER_H
 
-#include "CoreMinimal.h"
+
 #include "Detour/DetourAlloc.h"
 #include "Detour/DetourStatus.h"
 
@@ -106,7 +106,7 @@ struct dtTileCacheDistanceField
 	unsigned short* data;	///< distance for every cell in layer
 };
 
-class NAVMESH_API dtTileCacheLogContext
+class dtTileCacheLogContext
 {
 public:
 	/// Logs a message.
@@ -125,7 +125,7 @@ protected:
 
 //@UE4 END
 
-struct NAVMESH_API dtTileCacheAlloc
+struct dtTileCacheAlloc
 {
 	virtual ~dtTileCacheAlloc() = default;
 
@@ -144,7 +144,7 @@ struct NAVMESH_API dtTileCacheAlloc
 	}
 };
 
-struct NAVMESH_API dtTileCacheCompressor
+struct dtTileCacheCompressor
 {
 	virtual int maxCompressedSize(const int bufferSize) = 0;
 	virtual dtStatus compress(const unsigned char* buffer, const int bufferSize,
@@ -183,99 +183,99 @@ inline int getDirOffsetY(int dir)
 }
 //@UE4 END
 
-NAVMESH_API dtStatus dtBuildTileCacheLayer(dtTileCacheCompressor* comp,
+dtStatus dtBuildTileCacheLayer(dtTileCacheCompressor* comp,
 							   dtTileCacheLayerHeader* header,
 							   const unsigned short* heights,
 							   const unsigned char* areas,
 							   const unsigned char* cons,
 							   unsigned char** outData, int* outDataSize);
 
-NAVMESH_API void dtFreeTileCacheLayer(dtTileCacheAlloc* alloc, dtTileCacheLayer* layer);
+void dtFreeTileCacheLayer(dtTileCacheAlloc* alloc, dtTileCacheLayer* layer);
 
-NAVMESH_API dtStatus dtDecompressTileCacheLayer(dtTileCacheAlloc* alloc, dtTileCacheCompressor* comp,
+dtStatus dtDecompressTileCacheLayer(dtTileCacheAlloc* alloc, dtTileCacheCompressor* comp,
 									unsigned char* compressed, const int compressedSize,
 									dtTileCacheLayer** layerOut);
 
-NAVMESH_API dtTileCacheContourSet* dtAllocTileCacheContourSet(dtTileCacheAlloc* alloc);
-NAVMESH_API void dtFreeTileCacheContourSet(dtTileCacheAlloc* alloc, dtTileCacheContourSet* cset);
+dtTileCacheContourSet* dtAllocTileCacheContourSet(dtTileCacheAlloc* alloc);
+void dtFreeTileCacheContourSet(dtTileCacheAlloc* alloc, dtTileCacheContourSet* cset);
 
-NAVMESH_API dtTileCacheClusterSet* dtAllocTileCacheClusterSet(dtTileCacheAlloc* alloc);
-NAVMESH_API void dtFreeTileCacheClusterSet(dtTileCacheAlloc* alloc, dtTileCacheClusterSet* clusters);
+dtTileCacheClusterSet* dtAllocTileCacheClusterSet(dtTileCacheAlloc* alloc);
+void dtFreeTileCacheClusterSet(dtTileCacheAlloc* alloc, dtTileCacheClusterSet* clusters);
 
-NAVMESH_API dtTileCachePolyMesh* dtAllocTileCachePolyMesh(dtTileCacheAlloc* alloc);
-NAVMESH_API void dtFreeTileCachePolyMesh(dtTileCacheAlloc* alloc, dtTileCachePolyMesh* lmesh);
+dtTileCachePolyMesh* dtAllocTileCachePolyMesh(dtTileCacheAlloc* alloc);
+void dtFreeTileCachePolyMesh(dtTileCacheAlloc* alloc, dtTileCachePolyMesh* lmesh);
 
 //@UE4 BEGIN
-NAVMESH_API dtTileCachePolyMeshDetail* dtAllocTileCachePolyMeshDetail(dtTileCacheAlloc* alloc);
-NAVMESH_API void dtFreeTileCachePolyMeshDetail(dtTileCacheAlloc* alloc, dtTileCachePolyMeshDetail* dmesh);
+dtTileCachePolyMeshDetail* dtAllocTileCachePolyMeshDetail(dtTileCacheAlloc* alloc);
+void dtFreeTileCachePolyMeshDetail(dtTileCacheAlloc* alloc, dtTileCachePolyMeshDetail* dmesh);
 
-NAVMESH_API dtTileCacheDistanceField* dtAllocTileCacheDistanceField(dtTileCacheAlloc* alloc);
-NAVMESH_API void dtFreeTileCacheDistanceField(dtTileCacheAlloc* alloc, dtTileCacheDistanceField* dfield);
+dtTileCacheDistanceField* dtAllocTileCacheDistanceField(dtTileCacheAlloc* alloc);
+void dtFreeTileCacheDistanceField(dtTileCacheAlloc* alloc, dtTileCacheDistanceField* dfield);
 //@UE4 END
 
-NAVMESH_API dtStatus dtMarkCylinderArea(dtTileCacheLayer& layer, const float* orig, const float cs, const float ch,
+dtStatus dtMarkCylinderArea(dtTileCacheLayer& layer, const float* orig, const float cs, const float ch,
 	const float* pos, const float radius, const float height, const unsigned char areaId);
 
 //@UE4 BEGIN: more shapes
-NAVMESH_API dtStatus dtMarkBoxArea(dtTileCacheLayer& layer, const float* orig, const float cs, const float ch,
+dtStatus dtMarkBoxArea(dtTileCacheLayer& layer, const float* orig, const float cs, const float ch,
 	const float* pos, const float* extent, const unsigned char areaId);
 
-NAVMESH_API dtStatus dtMarkConvexArea(dtTileCacheLayer& layer, const float* orig, const float cs, const float ch,
+dtStatus dtMarkConvexArea(dtTileCacheLayer& layer, const float* orig, const float cs, const float ch,
 	const float* verts, const int nverts, const float hmin, const float hmax, const unsigned char areaId);
 
-NAVMESH_API dtStatus dtReplaceCylinderArea(dtTileCacheLayer& layer, const float* orig, const float cs, const float ch,
+dtStatus dtReplaceCylinderArea(dtTileCacheLayer& layer, const float* orig, const float cs, const float ch,
 	const float* pos, const float radius, const float height, const unsigned char areaId,
 	const unsigned char filterAreaId);
 
-NAVMESH_API dtStatus dtReplaceBoxArea(dtTileCacheLayer& layer, const float* orig, const float cs, const float ch,
+dtStatus dtReplaceBoxArea(dtTileCacheLayer& layer, const float* orig, const float cs, const float ch,
 	const float* pos, const float* extent, const unsigned char areaId, const unsigned char filterAreaId);
 
-NAVMESH_API dtStatus dtReplaceConvexArea(dtTileCacheLayer& layer, const float* orig, const float cs, const float ch,
+dtStatus dtReplaceConvexArea(dtTileCacheLayer& layer, const float* orig, const float cs, const float ch,
 	const float* verts, const int nverts, const float hmin, const float hmax, const unsigned char areaId,
 	const unsigned char filterAreaId);
 
-NAVMESH_API dtStatus dtReplaceArea(dtTileCacheLayer& layer, const unsigned char areaId, const unsigned char filterAreaId);
+dtStatus dtReplaceArea(dtTileCacheLayer& layer, const unsigned char areaId, const unsigned char filterAreaId);
 
 //@UE4 END
 
 
 //@UE4 BEGIN: renamed building regions to dtBuildTileCacheRegionsMonotone, added new region generation
-NAVMESH_API dtStatus dtBuildTileCacheDistanceField(dtTileCacheAlloc* alloc, dtTileCacheLayer& layer, dtTileCacheDistanceField& dfield);
+dtStatus dtBuildTileCacheDistanceField(dtTileCacheAlloc* alloc, dtTileCacheLayer& layer, dtTileCacheDistanceField& dfield);
 
-NAVMESH_API dtStatus dtBuildTileCacheRegions(dtTileCacheAlloc* alloc,
+dtStatus dtBuildTileCacheRegions(dtTileCacheAlloc* alloc,
 								const int minRegionArea, const int mergeRegionArea,
 								dtTileCacheLayer& layer, dtTileCacheDistanceField dfield);
 
-NAVMESH_API dtStatus dtBuildTileCacheRegionsMonotone(dtTileCacheAlloc* alloc,
+dtStatus dtBuildTileCacheRegionsMonotone(dtTileCacheAlloc* alloc,
 								const int minRegionArea, const int mergeRegionArea,
 								dtTileCacheLayer& layer);
 
-NAVMESH_API dtStatus dtBuildTileCacheRegionsChunky(dtTileCacheAlloc* alloc,
+dtStatus dtBuildTileCacheRegionsChunky(dtTileCacheAlloc* alloc,
 								const int minRegionArea, const int mergeRegionArea,
 								dtTileCacheLayer& layer, int regionChunkSize);
 //@UE4 END
 
-NAVMESH_API dtStatus dtBuildTileCacheContours(dtTileCacheAlloc* alloc,
+dtStatus dtBuildTileCacheContours(dtTileCacheAlloc* alloc,
 								dtTileCacheLayer& layer,
 								const int walkableClimb, const float maxError,
 								const float cs, const float ch,
 								dtTileCacheContourSet& lcset,
 								dtTileCacheClusterSet& lclusters);
 
-NAVMESH_API dtStatus dtBuildTileCachePolyMesh(dtTileCacheAlloc* alloc,
+dtStatus dtBuildTileCachePolyMesh(dtTileCacheAlloc* alloc,
 								dtTileCacheLogContext* ctx,
 								dtTileCacheContourSet& lcset,
 								dtTileCachePolyMesh& mesh);
 
 //@UE4 BEGIN
-NAVMESH_API dtStatus dtBuildTileCachePolyMeshDetail(dtTileCacheAlloc* alloc,
+dtStatus dtBuildTileCachePolyMeshDetail(dtTileCacheAlloc* alloc,
 								const float cs, const float ch,
 								const float sampleDist, const float sampleMaxError,
 								dtTileCacheLayer& layer,
 								dtTileCachePolyMesh& lmesh,
 								dtTileCachePolyMeshDetail& dmesh);
 
-NAVMESH_API dtStatus dtBuildTileCacheClusters(dtTileCacheAlloc* alloc,
+dtStatus dtBuildTileCacheClusters(dtTileCacheAlloc* alloc,
 								dtTileCacheClusterSet& lclusters,
 								dtTileCachePolyMesh& lmesh);
 //@UE4 END
@@ -285,7 +285,7 @@ NAVMESH_API dtStatus dtBuildTileCacheClusters(dtTileCacheAlloc* alloc,
 /// UE4: not anymore, there are short types as well now
 ///  @param[in,out]	data		The tile data array.
 ///  @param[in]		dataSize	The size of the data array.
-NAVMESH_API bool dtTileCacheHeaderSwapEndian(unsigned char* data, const int dataSize);
+bool dtTileCacheHeaderSwapEndian(unsigned char* data, const int dataSize);
 
 
 #endif // DETOURTILECACHEBUILDER_H

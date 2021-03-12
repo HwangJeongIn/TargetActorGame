@@ -22,7 +22,7 @@
 #ifndef DETOURNODE_H
 #define DETOURNODE_H
 
-#include "CoreMinimal.h"
+
 #include "Detour/DetourNavMesh.h"
 
 enum dtNodeFlags

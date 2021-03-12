@@ -22,14 +22,14 @@
 #ifndef DETOURLOCALBOUNDARY_H
 #define DETOURLOCALBOUNDARY_H
 
-#include "CoreMinimal.h"
+
 #include "Detour/DetourNavMesh.h"
 
 class dtNavMeshQuery;
 class dtQueryFilter;
 class dtSharedBoundary;
 
-class NAVMESH_API dtLocalBoundary
+class dtLocalBoundary
 {
 	static const int MAX_LOCAL_SEGS = 8;
 	static const int MAX_LOCAL_POLYS = 16;

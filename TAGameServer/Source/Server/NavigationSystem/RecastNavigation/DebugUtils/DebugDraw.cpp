@@ -21,6 +21,7 @@
 
 #include "DebugUtils/DebugDraw.h"
 #include "Recast/RecastAlloc.h" // UE4
+#include "RecastNavigationSystemInclude.h"
 #define _USE_MATH_DEFINES
 
 

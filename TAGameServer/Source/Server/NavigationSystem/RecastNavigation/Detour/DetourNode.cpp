@@ -22,6 +22,7 @@
 #include "Detour/DetourNode.h"
 #include "Detour/DetourAssert.h"
 #include "Detour/DetourCommon.h"
+#include "RecastNavigationSystemInclude.h"
 
 #if USE_64BIT_ADDRESS
 

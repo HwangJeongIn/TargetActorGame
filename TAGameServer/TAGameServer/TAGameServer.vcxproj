@@ -94,6 +94,7 @@
     <ClCompile Include="..\Source\Server\NavigationSystem\RecastNavigation\DetourTileCache\DetourTileCacheDetail.cpp" />
     <ClCompile Include="..\Source\Server\NavigationSystem\RecastNavigation\DetourTileCache\DetourTileCacheRegion.cpp" />
     <ClCompile Include="..\Source\Server\NavigationSystem\RecastNavigation\Detour\DetourAlloc.cpp" />
+    <ClCompile Include="..\Source\Server\NavigationSystem\RecastNavigation\Detour\DetourAssert.cpp" />
     <ClCompile Include="..\Source\Server\NavigationSystem\RecastNavigation\Detour\DetourCommon.cpp" />
     <ClCompile Include="..\Source\Server\NavigationSystem\RecastNavigation\Detour\DetourNavMesh.cpp" />
     <ClCompile Include="..\Source\Server\NavigationSystem\RecastNavigation\Detour\DetourNavMeshBuilder.cpp" />
@@ -102,6 +103,7 @@
     <ClCompile Include="..\Source\Server\NavigationSystem\RecastNavigation\Recast\Recast.cpp" />
     <ClCompile Include="..\Source\Server\NavigationSystem\RecastNavigation\Recast\RecastAlloc.cpp" />
     <ClCompile Include="..\Source\Server\NavigationSystem\RecastNavigation\Recast\RecastArea.cpp" />
+    <ClCompile Include="..\Source\Server\NavigationSystem\RecastNavigation\Recast\RecastAssert.cpp" />
     <ClCompile Include="..\Source\Server\NavigationSystem\RecastNavigation\Recast\RecastContour.cpp" />
     <ClCompile Include="..\Source\Server\NavigationSystem\RecastNavigation\Recast\RecastFilter.cpp" />
     <ClCompile Include="..\Source\Server\NavigationSystem\RecastNavigation\Recast\RecastLayers.cpp" />
@@ -213,6 +215,7 @@
     <ClInclude Include="..\Source\Server\NavigationSystem\RecastNavigation\Detour\DetourNavMeshQuery.h" />
     <ClInclude Include="..\Source\Server\NavigationSystem\RecastNavigation\Detour\DetourNode.h" />
     <ClInclude Include="..\Source\Server\NavigationSystem\RecastNavigation\Detour\DetourStatus.h" />
+    <ClInclude Include="..\Source\Server\NavigationSystem\RecastNavigation\RecastNavigationSystemInclude.h" />
     <ClInclude Include="..\Source\Server\NavigationSystem\RecastNavigation\Recast\Recast.h" />
     <ClInclude Include="..\Source\Server\NavigationSystem\RecastNavigation\Recast\RecastAlloc.h" />
     <ClInclude Include="..\Source\Server\NavigationSystem\RecastNavigation\Recast\RecastAssert.h" />

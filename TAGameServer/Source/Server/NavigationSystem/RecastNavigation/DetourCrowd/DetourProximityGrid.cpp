@@ -23,6 +23,7 @@
 #include "Detour/DetourCommon.h"
 #include "Detour/DetourAlloc.h"
 #include "Detour/DetourAssert.h"
+#include "RecastNavigationSystemInclude.h"
 
 
 dtProximityGrid* dtAllocProximityGrid()

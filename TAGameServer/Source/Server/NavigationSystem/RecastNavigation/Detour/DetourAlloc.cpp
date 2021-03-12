@@ -20,6 +20,7 @@
 //
 
 #include "Detour/DetourAlloc.h"
+#include "RecastNavigationSystemInclude.h"
 
 static void *dtAllocDefault(int size, dtAllocHint)
 {
