@@ -1,4 +1,4 @@
-﻿#include "Server/ServerApp.h"
+#include "Server/ServerApp.h"
 #include "Server/ServerActorManager.h"
 #include "Server/ServerActorSystemManager.h"
 #include "Server/AllPacketServer.h"
@@ -13,6 +13,9 @@
 #include "Common/ActorComponentTypeList.h"
 #include "Common/ActorEvent.h"
 #include <thread>
+//test
+#include "Common/Serializer.h"
+#include "Common/FileLoader.h"
 
 
 
@@ -250,6 +253,38 @@ namespace ta
 
 	void ServerApp::run(void) noexcept
 	{
+		// 테스트
+
+		std::string filePath("E:/GitLocal/TargetActorGame/TAGameServer/test.txt");
+		std::string fileString;
+		Serializer sl;
+
+		{
+			fileString.clear();
+			sl.allocBuffer(1024 * 1024);
+			sl.setMode(Serializer::SerializerMode::Write);
+			int8 a = 1;
+			int16 b = 2;
+			int32 c = 3;
+
+			sl << a << b << c;
+			sl.exportToFile(filePath);
+			//FileLoader::saveFileString(filePath, fileString);
+		}
+
+		{
+			fileString.clear();
+			sl.allocBuffer(1024 * 1024);
+			sl.setMode(Serializer::SerializerMode::Read);
+			sl.importFromFile(filePath);
+
+			int8 a = 0;
+			int16 b = 0;
+			int32 c = 0;
+			sl << a << b << c;
+		}
+
+
 		if (false == initialize())
 		{
 			TA_ASSERT_DEV(false, "비정상적인 상황입니다.");
@@ -268,9 +303,10 @@ namespace ta
 			return;
 		}
 
+
 		CommonApp::run();
 
-		// 테스트
+
 		//logTest();
 
 		Socket* network = _actorManager->getOwnerActor()->getNetwork_();

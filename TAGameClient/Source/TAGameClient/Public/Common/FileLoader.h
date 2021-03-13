@@ -32,9 +32,10 @@ namespace ta
 		static bool loadXml(const fs::path filePath, XmlNode* rootOutput) noexcept;
 		static bool loadObj(const fs::path filePath, ObjGroup* objGroupOutput) noexcept;
 
+		static bool loadFileString(const fs::path& filePath, std::string& fileString) noexcept;
+		static bool saveFileString(const fs::path& filePath, const std::string& fileString) noexcept;
 
 	private:
-		static bool loadFileString(const fs::path filePath, std::string& fileString) noexcept;
 
 		static bool loadXmlAttributeFromString(const std::string& nodeString, XmlNode* output) noexcept;
 

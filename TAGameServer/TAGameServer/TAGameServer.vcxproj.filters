@@ -343,8 +343,24 @@
     <ClCompile Include="..\Source\Server\NavigationSystem\RecastNavigation\DebugUtils\RecastDump.cpp">
       <Filter>Server\NavigationSystem\RecastNavigation\DebugUtils</Filter>
     </ClCompile>
-    <ClCompile Include="..\Source\Server\NavigationSystem\RecastNavigation\Detour\DetourAssert.cpp" />
-    <ClCompile Include="..\Source\Server\NavigationSystem\RecastNavigation\Recast\RecastAssert.cpp" />
+    <ClCompile Include="..\Source\Server\NavigationSystem\RecastNavigation\NavMeshPoint.cpp">
+      <Filter>Server\NavigationSystem\RecastNavigation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Source\Server\NavigationSystem\RecastNavigation\RecastNavigationSystemUtility.cpp">
+      <Filter>Server\NavigationSystem\RecastNavigation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Source\Server\NavigationSystem\RecastNavigation\Recast\RecastAssert.cpp">
+      <Filter>Server\NavigationSystem\RecastNavigation\Recast</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Source\Server\NavigationSystem\RecastNavigation\Detour\DetourAssert.cpp">
+      <Filter>Server\NavigationSystem\RecastNavigation\Detour</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Source\Server\NavigationSystem\RecastNavigation\NavMeshPath.cpp">
+      <Filter>Server\NavigationSystem\RecastNavigation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\Serializer.cpp">
+      <Filter>Common</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\ActorComponent.h">
@@ -662,6 +678,18 @@
     </ClInclude>
     <ClInclude Include="..\Source\Server\NavigationSystem\RecastNavigation\RecastNavigationSystemInclude.h">
       <Filter>Server\NavigationSystem\RecastNavigation</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\Server\NavigationSystem\RecastNavigation\RecastNavigationSystemUtility.h">
+      <Filter>Server\NavigationSystem\RecastNavigation</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\Server\NavigationSystem\RecastNavigation\NavMeshPoint.h">
+      <Filter>Server\NavigationSystem\RecastNavigation</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\Server\NavigationSystem\RecastNavigation\NavMeshPath.h">
+      <Filter>Server\NavigationSystem\RecastNavigation</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\Serializer.h">
+      <Filter>Common</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

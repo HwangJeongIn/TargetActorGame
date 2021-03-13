@@ -21,7 +21,7 @@ void ATANonPlayer::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	return;
+	//return;
 
 	AController* controller = GetController();
 
@@ -36,7 +36,7 @@ void ATANonPlayer::Tick(float DeltaTime)
 		if (nullptr != test1)
 		{
 			TA_LOG_DEV("AIController1");
-			test1->MoveToLocation(GetActorLocation() + FVector(200, 0, 0), 1.0f);
+			test1->MoveToLocation(GetActorLocation() + FVector(600, 0, 0), 1.0f);
 
 			return;
 		}

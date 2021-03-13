@@ -17,6 +17,12 @@
     <ClCompile Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\MemoryStream.cpp">
       <Filter>Common</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\Serializer.cpp">
+      <Filter>Common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\FileLoader.cpp">
+      <Filter>Common</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\IdlCompiler.h">
@@ -26,6 +32,12 @@
       <Filter>Common</Filter>
     </ClInclude>
     <ClInclude Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\MemoryStream.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\Serializer.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\FileLoader.h">
       <Filter>Common</Filter>
     </ClInclude>
   </ItemGroup>

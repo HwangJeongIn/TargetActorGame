@@ -216,6 +216,7 @@
     <ClCompile Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\NetworkMessageQueue.cpp" />
     <ClCompile Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\ScopedLock.cpp" />
     <ClCompile Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\Sector.cpp" />
+    <ClCompile Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\Serializer.cpp" />
     <ClCompile Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\Socket.cpp" />
     <ClCompile Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\CommonSpawnDataManager.cpp" />
     <ClCompile Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\StringUtility.cpp" />
@@ -296,6 +297,7 @@
     <ClInclude Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\NetworkMessageQueue.h" />
     <ClInclude Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\ScopedLock.h" />
     <ClInclude Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\Sector.h" />
+    <ClInclude Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\Serializer.h" />
     <ClInclude Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\Socket.h" />
     <ClInclude Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\CommonSpawnDataManager.h" />
     <ClInclude Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\StringUtility.h" />

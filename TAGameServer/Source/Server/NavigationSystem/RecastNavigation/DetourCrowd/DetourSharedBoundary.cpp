@@ -26,8 +26,8 @@ void dtSharedBoundary::Tick(float DeltaTime)
 
 
 		std::vector<dtSharedBoundaryData>::iterator It = Data.begin();
-		const std::vector<dtSharedBoundaryData>::const_iterator End = Data.end();
-		for (; It != End;)
+		//const std::vector<dtSharedBoundaryData>::const_iterator End = Data.end();
+		for (; It != Data.end();)
 		{
 			const float LastAccess = CurrentTime - It->AccessTime;
 			if (LastAccess >= MaxLifeTime)

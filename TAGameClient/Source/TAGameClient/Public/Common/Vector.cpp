@@ -3,6 +3,8 @@
 
 namespace ta
 {
+	const Vector Vector::Zero(0.0f, 0.0f, 0.0f);
+
 	Vector::Vector(const float x, const float y, const float z) noexcept
 		: _x(x), _y(y), _z(z)
 	{

@@ -151,14 +151,18 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\FileLoader.cpp" />
     <ClCompile Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\IdlCompiler.cpp" />
     <ClCompile Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\MemoryStream.cpp" />
+    <ClCompile Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\Serializer.cpp" />
     <ClCompile Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\StringUtility.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\FileLoader.h" />
     <ClInclude Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\IdlCompiler.h" />
     <ClInclude Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\MemoryStream.h" />
+    <ClInclude Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\Serializer.h" />
     <ClInclude Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\StringUtility.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

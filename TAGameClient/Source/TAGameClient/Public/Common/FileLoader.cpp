@@ -153,7 +153,23 @@ namespace ta
 		return true;
 	}
 
-	bool FileLoader::loadFileString(const fs::path filePath, std::string& fileString) noexcept
+	bool FileLoader::saveFileString(const fs::path& filePath, const std::string& fileString) noexcept
+	{
+		std::ofstream out(filePath);
+		if (false == out.is_open())
+		{
+			TA_ASSERT_DEV(false, "비정상입니다.");
+			return false;
+		}
+
+		out.write(&fileString[0], fileString.size());
+		//out.flush();
+		out.close();
+
+		return true;
+	}
+
+	bool FileLoader::loadFileString(const fs::path& filePath, std::string& fileString) noexcept
 	{
 		std::ifstream in;
 		in.open(filePath);

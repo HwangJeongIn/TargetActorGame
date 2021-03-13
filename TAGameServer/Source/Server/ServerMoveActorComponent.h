@@ -22,7 +22,10 @@ namespace ta
 
 		bool checkExistInViewList_(const ActorKey& target) const noexcept;
 
+		// dtQuerySpecialLinkFilterget
+
 	private:
 		std::unordered_set<ActorKey> _viewList;
+		//dtQuerySpecialLinkFilter _defaultQuerySpecialLinkFilter;
 	};
 }

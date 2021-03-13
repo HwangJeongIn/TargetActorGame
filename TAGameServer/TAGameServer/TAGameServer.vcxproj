@@ -72,6 +72,7 @@
     <ClCompile Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\NonBlockingQueue.cpp" />
     <ClCompile Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\ScopedLock.cpp" />
     <ClCompile Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\Sector.cpp" />
+    <ClCompile Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\Serializer.cpp" />
     <ClCompile Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\Socket.cpp" />
     <ClCompile Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\StringUtility.cpp" />
     <ClCompile Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\ThreadLoadTaskManager.cpp" />
@@ -100,6 +101,9 @@
     <ClCompile Include="..\Source\Server\NavigationSystem\RecastNavigation\Detour\DetourNavMeshBuilder.cpp" />
     <ClCompile Include="..\Source\Server\NavigationSystem\RecastNavigation\Detour\DetourNavMeshQuery.cpp" />
     <ClCompile Include="..\Source\Server\NavigationSystem\RecastNavigation\Detour\DetourNode.cpp" />
+    <ClCompile Include="..\Source\Server\NavigationSystem\RecastNavigation\NavMeshPath.cpp" />
+    <ClCompile Include="..\Source\Server\NavigationSystem\RecastNavigation\NavMeshPoint.cpp" />
+    <ClCompile Include="..\Source\Server\NavigationSystem\RecastNavigation\RecastNavigationSystemUtility.cpp" />
     <ClCompile Include="..\Source\Server\NavigationSystem\RecastNavigation\Recast\Recast.cpp" />
     <ClCompile Include="..\Source\Server\NavigationSystem\RecastNavigation\Recast\RecastAlloc.cpp" />
     <ClCompile Include="..\Source\Server\NavigationSystem\RecastNavigation\Recast\RecastArea.cpp" />
@@ -187,6 +191,7 @@
     <ClInclude Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\NonBlockingQueue.h" />
     <ClInclude Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\ScopedLock.h" />
     <ClInclude Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\Sector.h" />
+    <ClInclude Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\Serializer.h" />
     <ClInclude Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\Socket.h" />
     <ClInclude Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\StringUtility.h" />
     <ClInclude Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\ThreadLoadTaskManager.h" />
@@ -215,7 +220,10 @@
     <ClInclude Include="..\Source\Server\NavigationSystem\RecastNavigation\Detour\DetourNavMeshQuery.h" />
     <ClInclude Include="..\Source\Server\NavigationSystem\RecastNavigation\Detour\DetourNode.h" />
     <ClInclude Include="..\Source\Server\NavigationSystem\RecastNavigation\Detour\DetourStatus.h" />
+    <ClInclude Include="..\Source\Server\NavigationSystem\RecastNavigation\NavMeshPath.h" />
+    <ClInclude Include="..\Source\Server\NavigationSystem\RecastNavigation\NavMeshPoint.h" />
     <ClInclude Include="..\Source\Server\NavigationSystem\RecastNavigation\RecastNavigationSystemInclude.h" />
+    <ClInclude Include="..\Source\Server\NavigationSystem\RecastNavigation\RecastNavigationSystemUtility.h" />
     <ClInclude Include="..\Source\Server\NavigationSystem\RecastNavigation\Recast\Recast.h" />
     <ClInclude Include="..\Source\Server\NavigationSystem\RecastNavigation\Recast\RecastAlloc.h" />
     <ClInclude Include="..\Source\Server\NavigationSystem\RecastNavigation\Recast\RecastAssert.h" />

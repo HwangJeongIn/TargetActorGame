@@ -1,11 +1,20 @@
 #pragma once
 
 #include "Common/CommonMoveActorSystem.h"
+#include "Detour/DetourNavMesh.h"
+#include "Detour/DetourNavMeshQuery.h"
+#include <vector>
 
+
+class dtNavMeshQuery;
+class dtQueryFilter;
+struct dtQueryResult;
 
 namespace ta
 {
 	class ServerMoveActorComponent;
+	class NavMeshPath;
+	class NavMeshPoint;
 }
 
 
@@ -37,7 +46,6 @@ namespace ta
 		bool moveToRandomPoint(CommonMoveActorComponent* myMove) const noexcept;
 
 
-
 	private:
 		bool processPostMove(CommonActor* target, const Vector& newPos) const noexcept;
 		bool processNearSectors(CommonActor* targetActor
@@ -52,5 +60,41 @@ namespace ta
 
 		bool activateAiIfDisabled(const ActorKey& targetActorKey) const noexcept;
 		bool deactivateAiIfNotDisabled(const ActorKey& targetActorKey) const noexcept;
+
+
+	public:
+		// Navigation =========================================================================================================================================
+		bool findPath(const ActorKey& targetActorKey, const Vector& startPos, const Vector& endPos, NavMeshPath& path) noexcept;
+
+	private:
+		bool preparePathFinding(const Vector& startPos, const Vector& endPos,
+								const dtNavMeshQuery& query, const dtQueryFilter& queryFilter,
+								Vector& recastStartPos, dtPolyRef& startPoly,
+								Vector& recastEndPos, dtPolyRef& endPoly) const noexcept;
+
+
+		bool generatePath(dtStatus findPathStatus, NavMeshPath& path,
+						  const dtNavMeshQuery& query, const dtQueryFilter* queryFilter,
+						  dtPolyRef startPoly, dtPolyRef endPoly,
+						  const Vector& startPos, const Vector& endPos,
+						  const Vector& recastStartPos, const Vector& recastEndPos,
+						  dtQueryResult& pathResult) const noexcept;
+		
+		bool findStraightPathFromCorridor(const Vector& startPos, const Vector& endPos, 
+										  const std::vector<dtPolyRef>& pathCorridor, std::vector<NavMeshPoint*>& pathPoints, std::vector<uint32>* customLinks) const noexcept;
+
+
+		float calcSegmentCostOnPoly(const dtPolyRef& PolyID, const dtQueryFilter* queryFilter, const Vector& startPos, const Vector& endPos) const noexcept;
+
+		// Navigation =========================================================================================================================================
+
+	private:
+		
+		// dtQuerySpecialLinkFilter _defaultQuerySpecialLinkFilter;
+		dtNavMesh* _detourNavMesh; 
+		dtQueryFilter _defaultQueryFilter;
+		const int32 _defaultMaxNodes;
+		const float _defaultCostLimit;
+		// Navigation =========================================================================================================================================
 	};
 }

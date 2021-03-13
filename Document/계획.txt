@@ -11,10 +11,12 @@
 				- dtNavMesh* FPImplRecastNavMesh::DetourNavMesh
 				- 이 데이터에서 필요한 데이터들(Mesh, DetailMesh 등)을 뽑아서 직렬화해서 서버쪽 파일로 넘겨준다.
 				- 서버쪽에서는 이 파일을 받아서 길찾기 관련 알고리즘 구현
-				- ue4에서 길찾기에 필요한 요소
-					- FNavAgentProperties : 에이전트 관련 정보들(높이 등) 필요한것만 추출해서 새로 생성
-					- FNavMeshPath : 좀더 생각
-					- FNavPathPoint : 위치정보 리스트로 코드에 맞게 새로생성
+				
+				list
+					- 직렬화 로직 구현 - 진행중
+					- recast관련 길찾기 코드 작성 - 완료
+					- recast 관련 소스코드 포팅 - 완료
+					- ue4 길찾기 코드 분석 - 완료
 
 	3월 15일 ~ 3월 22일 (1주 예정)
 	

@@ -1,4 +1,4 @@
-#include "Server/ServerMoveActorSystem.h"
+﻿#include "Server/ServerMoveActorSystem.h"
 #include "Server/ServerApp.h"
 #include "Server/ServerActorManager.h"
 #include "Server/AllPacketServer.h"
@@ -9,11 +9,17 @@
 #include "Common/ScopedLock.h"
 #include "Common/CommonActor.h"
 #include "Common/GetComponentAndSystem.h"
+#include "RecastNavigationSystemUtility.h"
+#include "NavMeshPoint.h"
+#include "NavMeshPath.h"
 
 
 namespace ta
 {
 	ServerMoveActorSystem::ServerMoveActorSystem(void) noexcept
+		: _defaultMaxNodes(2048)
+		, _defaultCostLimit(3.40282347e+38)
+		, _detourNavMesh(nullptr)
 	{
 	}
 
@@ -26,8 +32,8 @@ namespace ta
 	}
 
 	bool ServerMoveActorSystem::processMoveActor(CommonActor* target
-													, const Vector& newPos
-													, const bool isForced) const noexcept
+												 , const Vector& newPos
+												 , const bool isForced) const noexcept
 	{
 		return moveActorAndNotify(target, newPos, isForced);
 	}
@@ -58,7 +64,7 @@ namespace ta
 												   , const std::unordered_set<SectorKey>& fromSectors
 												   , const std::unordered_set<SectorKey>& toSectors) const noexcept
 	{
-		
+
 		const ActorType targetActorType = targetActor->getActorType();
 		const ActorKey targetActorKey = targetActor->getActorKey();
 
@@ -77,7 +83,7 @@ namespace ta
 		}
 
 		// 여기서 oldViewList, newViewList 액터 타입까지 받아두고 사용하기로 한다. // 어차피 중간에 필요해서 받아야한다.
-		std::unordered_map<ActorKey,ActorType> oldViewList;
+		std::unordered_map<ActorKey, ActorType> oldViewList;
 		{
 			std::unordered_set<ActorKey> tempOldViewList;
 			{
@@ -167,7 +173,7 @@ namespace ta
 				}
 			}
 		}
-		
+
 		// Destroy처리
 		{
 			std::unordered_map<ActorKey, ActorType>::iterator it = oldViewList.begin();
@@ -271,7 +277,7 @@ namespace ta
 					}
 
 					// 나한테 알리기
-					if(ActorType::Player == targetActorActorType)
+					if (ActorType::Player == targetActorActorType)
 					{
 						createActorInClient(targetActorKey, *it, sectorActorType);
 					}
@@ -312,7 +318,7 @@ namespace ta
 					// 나한테 알리기
 					if (ActorType::Player == targetActorActorType)
 					{
-						destroyActorInClient(targetActorKey , *it);
+						destroyActorInClient(targetActorKey, *it);
 					}
 				}
 			}
@@ -394,7 +400,7 @@ namespace ta
 		if (false == moveActorAndNotify(myMove->getOwner(), targetPosition, true))
 		{
 			TA_ASSERT_DEV(false, "비정상입니다.")
-			return false;
+				return false;
 		}
 		return true;
 	}
@@ -417,7 +423,7 @@ namespace ta
 		}
 		return true;
 	}
-	
+
 	void ServerMoveActorSystem::moveActorInClient(ServerMoveActorComponent* clientActorMoveCom, const ActorKey& targetActorKey) const noexcept
 	{
 		const ActorKey& clientActorKey = clientActorMoveCom->getOwnerActorKey();
@@ -502,7 +508,7 @@ namespace ta
 			output.insert(std::pair(*it, actorType));
 		}
 	}
-	
+
 	bool ServerMoveActorSystem::activateAiIfDisabled(const ActorKey& targetActorKey) const noexcept
 	{
 		// AI인 경우 새로들어온것이 플레이어인경우 + AI가 비활성화되어있는 경우 AI를 깨워준다.
@@ -526,7 +532,7 @@ namespace ta
 
 		return true;
 	}
-	
+
 	bool ServerMoveActorSystem::deactivateAiIfNotDisabled(const ActorKey& targetActorKey) const noexcept
 	{
 		// AI인 경우 새로들어온것이 플레이어인경우 + AI가 비활성화되어있는 경우 AI를 깨워준다.
@@ -549,5 +555,333 @@ namespace ta
 		}
 
 		return true;
+	}
+
+	bool ServerMoveActorSystem::findPath(const ActorKey& targetActorKey, const Vector& startPos, const Vector& endPos, NavMeshPath& path) noexcept
+	{
+		if (true == path.hasPathPoint())
+		{
+			path.clearPath();
+		}
+
+		if (nullptr == _detourNavMesh)
+		{
+			TA_ASSERT_DEV(false, "비정상입니다.");
+			return false;
+		}
+
+		CommonActor* targetActor = GetActorManager()->getActor(targetActorKey);
+		if (nullptr == targetActor)
+		{
+			TA_ASSERT_DEV(false, "비정상입니다.");
+			return false;
+		}
+
+		dtNavMeshQuery query;
+		query.init(_detourNavMesh, _defaultMaxNodes, nullptr);
+
+		Vector recastStartPos, recastEndPos;
+		dtPolyRef startPoly, endPoly;
+		const bool prepareClear = preparePathFinding(startPos, endPos,
+													 query, _defaultQueryFilter,
+													 recastStartPos, startPoly,
+													 recastEndPos, endPoly);
+
+		if (false == prepareClear)
+		{
+			TA_LOG_DEV("preparePathFinding 실패");
+			return false;
+		}
+
+		dtQueryResult pathResult;
+		const dtStatus findPathStatus = query.findPath(startPoly, endPoly,
+													   &recastStartPos._x, &recastEndPos._x,
+													   _defaultCostLimit, &_defaultQueryFilter, pathResult, 0);
+
+
+
+		generatePath(findPathStatus, path, query, &_defaultQueryFilter,
+					 startPoly, endPoly,
+					 RecastVectorToTAVector(recastStartPos), RecastVectorToTAVector(recastEndPos),
+					 recastStartPos, recastEndPos,
+					 pathResult);
+
+
+
+		//		if (dtStatusDetail(FindPathStatus, DT_PARTIAL_RESULT))
+		//		{
+		//			Path.SetIsPartial(true);
+		//			// this means path finding algorithm reached the limit of InQueryFilter.GetMaxSearchNodes()
+		//			// nodes in A* node pool. This can mean resulting path is way off.
+		//			Path.SetSearchReachedLimit(dtStatusDetail(FindPathStatus, DT_OUT_OF_NODES));
+		//		}
+		//
+		//#if ENABLE_VISUAL_LOG
+		//		if (dtStatusDetail(FindPathStatus, DT_INVALID_CYCLE_PATH))
+		//		{
+		//			UE_VLOG(NavMeshOwner, LogNavigation, Error, TEXT("FPImplRecastNavMesh::FindPath resulted in a cyclic path!"));
+		//			FVisualLogEntry* Entry = FVisualLogger::Get().GetLastEntryForObject(NavMeshOwner);
+		//			if (Entry)
+		//			{
+		//				Path.DescribeSelfToVisLog(Entry);
+		//			}
+		//		}
+		//#endif // ENABLE_VISUAL_LOG
+		//
+		//		Path.MarkReady();
+		//
+		//		return DTStatusToNavQueryResult(FindPathStatus);
+
+		return true;
+	}
+
+	bool ServerMoveActorSystem::preparePathFinding(const Vector& startPos, const Vector& endPos,
+												   const dtNavMeshQuery& query, const dtQueryFilter& queryFilter,
+												   Vector& recastStartPos, dtPolyRef& startPoly,
+												   Vector& recastEndPos, dtPolyRef& endPoly) const noexcept
+	{
+		TA_TEMP_DEV("필요에 따라 변경");
+		//const Vector navExtent = NavMeshOwner->GetModifiedQueryExtent(NavMeshOwner->GetDefaultQueryExtent());
+		const float extent[3] = { 0.0f, 0.0f, 0.008f };
+		const Vector recastStartToProject = TAVectorToRecastVector(startPos);
+		const Vector recastEndToProject = TAVectorToRecastVector(endPos);
+
+		startPoly = INVALID_NAVNODEREF;
+		query.findNearestPoly(&recastStartToProject._x, extent, &queryFilter, &startPoly, &recastStartPos._x);
+		if (startPoly == INVALID_NAVNODEREF)
+		{
+			TA_ASSERT_DEV(false, "비정상입니다.");
+			return false;
+		}
+
+		endPoly = INVALID_NAVNODEREF;
+		query.findNearestPoly(&recastEndToProject._x, extent, &queryFilter, &endPoly, &recastEndPos._x);
+		if (endPoly == INVALID_NAVNODEREF)
+		{
+			TA_ASSERT_DEV(false, "비정상입니다.");
+			return false;
+		}
+
+		return true;
+	}
+
+	bool ServerMoveActorSystem::generatePath(dtStatus findPathStatus, NavMeshPath& path,
+											 const dtNavMeshQuery& query, const dtQueryFilter* queryFilter,
+											 dtPolyRef startPoly, dtPolyRef endPoly,
+											 const Vector& startPos, const Vector& endPos,
+											 const Vector& recastStartPos, const Vector& recastEndPos,
+											 dtQueryResult& pathResult) const noexcept
+	{
+		// check for special case, where path has not been found, and starting polygon
+		// was the one closest to the target
+		if (pathResult.size() == 1 && dtStatusDetail(findPathStatus, DT_PARTIAL_RESULT))
+		{
+			// in this case we find a point on starting polygon, that's closest to destination
+			// and store it as path end
+			Vector recastHandPlacedPathEnd;
+			query.closestPointOnPolyBoundary(startPoly, &recastEndPos._x, &recastHandPlacedPathEnd._x);
+
+			path.addPathPoint(RecastVectorToTAVector(recastStartPos), startPoly);
+			path.addPathPoint(RecastVectorToTAVector(recastHandPlacedPathEnd), startPoly);
+
+			path.addPathCorridor(pathResult.getRef(0));
+			path.addPathCorridorCost(calcSegmentCostOnPoly(startPoly, queryFilter, recastHandPlacedPathEnd, recastStartPos));
+
+			return true;
+		}
+
+		// note that for recast partial path is successful, while we treat it as failed, just marking it as partial
+		if (true == dtStatusSucceed(findPathStatus))
+		{
+			// check if navlink poly at end of path is allowed
+			TA_TEMP_DEV("나중에 필요하면 추가");
+			int32 pathSize = pathResult.size();
+			//if (pathSize > 1 /* && bAllowNavLinkAsPathEnd*/) 
+			//{
+			//	uint16 polyFlags = 0;
+			//	_detourNavMesh->getPolyFlags(pathResult.getRef(pathSize - 1), &polyFlags);
+			//
+			//	if (polyFlags & ARecastNavMesh::GetNavLinkFlag())
+			//	{
+			//		pathSize--;
+			//	}
+			//}
+
+			if (pathSize == 1)
+			{
+				// failsafe cost for single poly corridor
+				path.addPathCorridorCost(calcSegmentCostOnPoly(startPoly, queryFilter, endPos, startPos));
+			}
+			else
+			{
+				for (int32 i = 0; i < pathSize; i++)
+				{
+					path.addPathCorridorCost(pathResult.getCost(i));
+				}
+			}
+
+			// copy over corridor poly data
+			for (int i = 0; i < pathSize; ++i)
+			{
+				path.addPathCorridor(pathResult.getRef(i));
+			}
+
+			//Path.OnPathCorridorUpdated();
+
+			TA_TEMP_DEV("나중에 필요하면 추가");
+			// if we're backtracking this is the time to reverse the path.
+			//if (Filter->getIsBacktracking())
+			//{
+			//	// for a proper string-pulling of a backtracking path we need to
+			//	// reverse the data right now.
+			//	Path.Invert();
+			//	Swap(StartPolyID, EndPolyID);
+			//	Swap(startPos, endPos);
+			//	Swap(RecastStartPos, RecastEndPos);
+			//}
+
+//#if STATS
+//			if (dtStatusDetail(FindPathStatus, DT_OUT_OF_NODES))
+//			{
+//				INC_DWORD_STAT(STAT_Navigation_OutOfNodesPath);
+//			}
+//
+//			if (dtStatusDetail(FindPathStatus, DT_PARTIAL_RESULT))
+//			{
+//				INC_DWORD_STAT(STAT_Navigation_PartialPath);
+//			}
+//#endif
+
+			//if (Path.WantsStringPulling())
+			{
+				Vector finalEndPos = endPos;
+
+				// if path is partial (path corridor doesn't contain EndPolyID), find new RecastEndPos on last poly in corridor
+				if (dtStatusDetail(findPathStatus, DT_PARTIAL_RESULT))
+				{
+					dtPolyRef lastPoly = path.getPathCorridor().back();
+					float newEndPoint[3];
+
+					const dtStatus newEndPointStatus = query.closestPointOnPoly(lastPoly, &recastEndPos._x, newEndPoint);
+					if (dtStatusSucceed(newEndPointStatus))
+					{
+						finalEndPos = RecastVectorToTAVector(newEndPoint);
+					}
+				}
+
+				findStraightPathFromCorridor(startPos, finalEndPos, path.getPathCorridor(), path.getPath(), &(path.getCustomLinkIds()));
+			}
+			TA_TEMP_DEV("나중에 필요하면 추가");
+			//else
+			//{
+			//	// make sure at least beginning and end of path are added
+			//	new(Path.GetPathPoints()) FNavPathPoint(startPos, StartPolyID);
+			//	new(Path.GetPathPoints()) FNavPathPoint(endPos, EndPolyID);
+			//
+			//	// collect all custom links Ids
+			//	for (int32 Idx = 0; Idx < Path.PathCorridor.Num(); Idx++)
+			//	{
+			//		const dtOffMeshConnection* OffMeshCon = DetourNavMesh->getOffMeshConnectionByRef(Path.PathCorridor[Idx]);
+			//		if (OffMeshCon)
+			//		{
+			//			Path.CustomLinkIds.Add(OffMeshCon->userId);
+			//		}
+			//	}
+			//}
+
+			TA_TEMP_DEV("나중에 필요하면 추가");
+			//if (Path.WantsPathCorridor())
+			//{
+			//	TArray<FNavigationPortalEdge> PathCorridorEdges;
+			//	GetEdgesForPathCorridorImpl(&Path.PathCorridor, &PathCorridorEdges, NavQuery);
+			//	Path.SetPathCorridorEdges(PathCorridorEdges);
+			//}
+			return true;
+		}
+		return false;
+	}
+
+	bool ServerMoveActorSystem::findStraightPathFromCorridor(const Vector& startPos, const Vector& endPos,
+															 const std::vector<dtPolyRef>& pathCorridor, std::vector<NavMeshPoint*>& pathPoints, std::vector<uint32>* customLinks) const noexcept
+	{
+		dtNavMeshQuery query;
+		query.init(_detourNavMesh, _defaultMaxNodes);
+
+
+		const Vector recastStartPos = TAVectorToRecastVector(startPos);
+		const Vector recastEndPos = TAVectorToRecastVector(endPos);
+		bool rv = false;
+
+		dtQueryResult stringPullResult;
+		const dtStatus stringPullStatus = query.findStraightPath(&recastStartPos._x, &recastEndPos._x,
+																 &pathCorridor[0], pathCorridor.size(), stringPullResult, DT_STRAIGHTPATH_AREA_CROSSINGS);
+		{
+			const uint32 count = pathPoints.size();
+			for (uint32 index = 0; index < count; ++index)
+			{
+				delete pathPoints[index];
+			}
+			pathPoints.clear();
+		}
+
+		if (true == dtStatusSucceed(stringPullStatus))
+		{
+			const int32 stringPullResultSize = stringPullResult.size();
+			pathPoints.reserve(stringPullResultSize);
+			// convert to desired format
+			NavMeshPoint* curVert = nullptr;
+			for (int32 vertIdx = 0; vertIdx < stringPullResultSize; ++vertIdx)
+			{
+				const float* curRecastVert = stringPullResult.getPos(vertIdx);
+
+				NavMeshPoint* curVert = new NavMeshPoint(RecastVectorToTAVector(curRecastVert), stringPullResult.getRef(vertIdx));
+
+				pathPoints.push_back(curVert);
+
+				TA_TEMP_DEV("");
+				//FNavMeshNodeFlags CurNodeFlags(0);
+				//CurNodeFlags.PathFlags = StringPullResult.getFlag(VertIdx);
+				//
+				//uint8 AreaID = RECAST_DEFAULT_AREA;
+				//DetourNavMesh->getPolyArea(CurVert->NodeRef, &AreaID);
+				//CurNodeFlags.Area = AreaID;
+				//
+				//const UClass* AreaClass = NavMeshOwner->GetAreaClass(AreaID);
+				//const UNavArea* DefArea = AreaClass ? ((UClass*)AreaClass)->GetDefaultObject<UNavArea>() : NULL;
+				//CurNodeFlags.AreaFlags = DefArea ? DefArea->GetAreaFlags() : 0;
+				//
+				//CurVert->Flags = CurNodeFlags.Pack();
+				//
+				//// include smart link data
+				//// if there will be more "edge types" we change this implementation to something more generic
+				//if (customLinks && (CurNodeFlags.PathFlags & DT_STRAIGHTPATH_OFFMESH_CONNECTION))
+				//{
+				//	const dtOffMeshConnection* offMeshCon = DetourNavMesh->getOffMeshConnectionByRef(CurVert->NodeRef);
+				//	if (offMeshCon)
+				//	{
+				//		CurVert->CustomLinkId = OffMeshCon->userId;
+				//		CustomLinks->Add(OffMeshCon->userId);
+				//	}
+				//}
+				//
+				//CurVert++;
+			}
+
+			// findStraightPath returns 0 for polyId of last point for some reason, even though it knows the poly id.  We will fill that in correctly with the last poly id of the corridor.
+			// @TODO shouldn't it be the same as EndPolyID? (nope, it could be partial path)
+			pathPoints.back()->_polyRef = pathCorridor.back();
+			rv = true;
+		}
+
+		return rv;
+	}
+
+	float ta::ServerMoveActorSystem::calcSegmentCostOnPoly(const dtPolyRef& PolyID, const dtQueryFilter* queryFilter, const Vector& startPos, const Vector& endPos) const noexcept
+	{
+		uint8 areaID = RECAST_DEFAULT_AREA;
+		_detourNavMesh->getPolyArea(PolyID, &areaID);
+
+		const float areaTravelCost = queryFilter->getAreaCost(areaID);
+		return areaTravelCost * (endPos - startPos).size();
 	}
 }
