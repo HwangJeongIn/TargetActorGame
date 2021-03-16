@@ -19,20 +19,37 @@ namespace ta
 
 	bool CommonActorManager::initialize(void) noexcept
 	{
-		_actorDataPool = nullptr;
-		_allSectors = nullptr;
+		if (false == _actorDataPool->initialize())
+		{
+			TA_ASSERT_DEV(false, "비정상적인 상황입니다.");
+			return false;
+		}
 
 		return true;
 	}
 
 	bool CommonActorManager::open(void) noexcept
 	{
+		if (false == _actorDataPool->open())
+		{
+			TA_ASSERT_DEV(false, "비정상적인 상황입니다.");
+			return false;
+		}
+
+		for (uint32 index = 0; index < CountOfSectors; ++index)
+		{
+			_allSectors[index].setSectorKey(SectorKey(index));
+		}
+
 		return true;
 	}
 
 	void CommonActorManager::close(void) noexcept
 	{
+		_actorDataPool->close();
+
 		delete _actorDataPool;
+		delete[] _allSectors;
 	}
 
 	CommonActor* CommonActorManager::getOwnerActor(void) noexcept

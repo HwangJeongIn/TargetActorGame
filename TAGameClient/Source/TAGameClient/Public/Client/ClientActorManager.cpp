@@ -16,16 +16,10 @@ namespace ta
 
     bool ClientActorManager::initialize(void) noexcept
     {
-        if (false == CommonActorManager::initialize())
-        {
-            TA_ASSERT_DEV(false, "비정상적인 상황입니다.");
-            return false;
-        }
-
         _allSectors = new ClientSector[CountOfSectors];
-
         _actorDataPool = new ClientActorDataPool;
-        if (false == _actorDataPool->initialize())
+
+        if (false == CommonActorManager::initialize())
         {
             TA_ASSERT_DEV(false, "비정상적인 상황입니다.");
             return false;
@@ -42,26 +36,11 @@ namespace ta
             return false;
         }
 
-        for (uint32 index = 0; index < CountOfSectors; ++index)
-        {
-            _allSectors[index].setSectorKey(SectorKey(index));
-        }
-
-        if (false == _actorDataPool->open())
-        {
-            TA_ASSERT_DEV(false, "비정상적인 상황입니다.");
-            return false;
-        }
-
         return true;
     }
 
     void ClientActorManager::close(void) noexcept
     {
-        _actorDataPool->close();
-
-        delete[] _allSectors;
-
         CommonActorManager::close();
     }
 

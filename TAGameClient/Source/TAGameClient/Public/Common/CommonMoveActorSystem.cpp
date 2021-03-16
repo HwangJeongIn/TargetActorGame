@@ -8,6 +8,15 @@
 
 namespace ta
 {
+#ifdef TA_SERVER
+	const fs::path NavigationMeshPath = fs::absolute(L"./../../TAGameClient/NavigationMesh");
+#else
+	fs::path NavigationMeshPath = "";
+#endif
+}
+
+namespace ta
+{
 	CommonMoveActorSystem::~CommonMoveActorSystem(void) noexcept
 	{
 	}

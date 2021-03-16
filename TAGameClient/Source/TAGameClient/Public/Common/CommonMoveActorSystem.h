@@ -3,6 +3,17 @@
 #include "Common/ActorSystem.h"
 #include "Common/KeyDefinition.h"
 #include <unordered_set>
+#include <filesystem>
+
+
+namespace fs = std::filesystem;
+
+#ifndef TA_SERVER
+namespace ta
+{
+	extern fs::path NavigationMeshPath;
+}
+#endif
 
 
 namespace ta

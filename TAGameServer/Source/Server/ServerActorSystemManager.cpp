@@ -18,12 +18,6 @@ namespace ta
     
     bool ServerActorSystemManager::initialize(void) noexcept
     {
-        if (false == __super::initialize())
-        {
-            TA_ASSERT_DEV(false, "비정상적인 상황입니다.");
-            return false;
-        }
-
         uint32 systemCount = static_cast<uint32>(ActorSystemType::Count);
         _actorSystems.reserve(systemCount);
 
@@ -34,12 +28,14 @@ namespace ta
             switch (systemType)
             {
 
-#define CREATE_SYSTEM(SystemType, SystemName)                 \
-            case ActorSystemType::SystemType:                 \
-                {                                             \
-                    _actorSystems.push_back(new SystemName);  \
-                }                                             \
-                break;
+#define CREATE_SYSTEM(SystemType, SystemName)                \
+            case ActorSystemType::SystemType:                \
+                {                                            \
+                    SystemName* newSystem = new SystemName;  \
+                    _actorSystems.push_back(newSystem);      \
+                                                             \
+                }                                            \
+                break;                                       \
 
 
              CREATE_SYSTEM(ActionSystem, ServerActionActorSystem)
@@ -60,22 +56,29 @@ namespace ta
             }
         }
 
+        if (false == CommonActorSystemManager::initialize())
+        {
+            TA_ASSERT_DEV(false, "비정상적인 상황입니다.");
+            return false;
+        }
+
         return true;
     }
 
     bool ServerActorSystemManager::open(void) noexcept
     {
-        if (false == __super::open())
+        if (false == CommonActorSystemManager::open())
         {
             TA_ASSERT_DEV(false, "비정상적인 상황입니다.");
             return false;
         }
+
         return true;
     }
 
     void ServerActorSystemManager::close(void) noexcept
     {
-        __super::close();
+        CommonActorSystemManager::close();
     }
 }
 

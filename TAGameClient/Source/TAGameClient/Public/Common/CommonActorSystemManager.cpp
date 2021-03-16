@@ -28,11 +28,37 @@ namespace ta
 
 	bool CommonActorSystemManager::initialize(void) noexcept
 	{
+		const uint32 count = _actorSystems.size();
+		for (uint32 index = 0; index < count; ++index)
+		{
+			if (nullptr != _actorSystems[index])
+			{
+				if (false == _actorSystems[index]->initialize())
+				{
+					TA_ASSERT_DEV(false, "비정상적인 상황입니다.");
+					return false;
+				}
+			}
+		}
+
 		return true;
 	}
 
 	bool CommonActorSystemManager::open(void) noexcept
 	{
+		const uint32 count = _actorSystems.size();
+		for (uint32 index = 0; index < count; ++index)
+		{
+			if (nullptr != _actorSystems[index])
+			{
+				if (false == _actorSystems[index]->open())
+				{
+					TA_ASSERT_DEV(false, "비정상적인 상황입니다.");
+					return false;
+				}
+			}
+		}
+
 		return true;
 	}
 
@@ -43,6 +69,7 @@ namespace ta
 		{
 			if (nullptr != _actorSystems[index])
 			{
+				_actorSystems[index]->close();
 				delete _actorSystems[index];
 			}
 		}

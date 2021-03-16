@@ -17,6 +17,10 @@ namespace ta
 	public:
 		virtual void update(const ActorSystemUpdateParameter& updateParameter) const noexcept;
 		const ActorSystemType getActorSystemType(void) const noexcept;
+
+		virtual bool initialize(void) noexcept;
+		virtual bool open(void) noexcept;
+		virtual void close(void) noexcept;
 		
 		virtual ~ActorSystem(void) noexcept;
 	protected:

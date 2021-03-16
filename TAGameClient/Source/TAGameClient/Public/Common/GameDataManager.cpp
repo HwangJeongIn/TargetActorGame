@@ -12,7 +12,7 @@ namespace ta
 #ifdef TA_SERVER
 	const fs::path GameDataXmlPath = fs::absolute(L"./../../TAGameClient/GameData/Xml");
 #else
-	fs::path GameDataXmlPath = fs::absolute(L"./../../GameData/Xml");
+	fs::path GameDataXmlPath = "";
 #endif
 }
 

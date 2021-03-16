@@ -12,6 +12,20 @@ namespace ta
 		return _actorSystemType;
 	}
 
+	bool ActorSystem::initialize(void) noexcept
+	{
+		return true;
+	}
+
+	bool ActorSystem::open(void) noexcept
+	{
+		return true;
+	}
+
+	void ActorSystem::close(void) noexcept
+	{
+	}
+
 	ActorSystem::ActorSystem(const ActorSystemType& actorSystemType) noexcept
 		: _actorSystemType(actorSystemType)
 	{

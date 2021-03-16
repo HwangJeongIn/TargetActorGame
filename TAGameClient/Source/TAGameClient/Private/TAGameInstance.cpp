@@ -16,6 +16,7 @@
 #include "Runtime/Engine/Public/EngineUtils.h"
 #include "Common/GameDataManager.h"
 #include "Common/CommonSpawnDataManager.h"
+#include "Common/CommonMoveActorSystem.h"
 
 
 
@@ -98,15 +99,20 @@ UTAGameInstance::UTAGameInstance()
 		//TA_LOG_DEV("%s", *FPaths::GetProjectFilePath());
 		//TA_LOG_DEV("test log");
 		//TA_LOG_DEV("%s", fs::current_path().c_str());
+		const TCHAR* projectFilePath = *FPaths::GetProjectFilePath();
 
-		ta::GameDataXmlPath = *FPaths::GetProjectFilePath();
+		ta::GameDataXmlPath = projectFilePath;
 		ta::GameDataXmlPath /= "../GameData/Xml";
 		TA_LOG_DEV("%s", ta::GameDataXmlPath.c_str());
 
 
-		ta::SpawnDataPath = *FPaths::GetProjectFilePath();
+		ta::SpawnDataPath = projectFilePath;
 		ta::SpawnDataPath /= "../SpawnData";
 		TA_LOG_DEV("%s", ta::SpawnDataPath.c_str());
+
+		ta::NavigationMeshPath = projectFilePath;
+		ta::NavigationMeshPath /= "../NavigationMesh";
+		TA_LOG_DEV("%s", ta::NavigationMeshPath.c_str());
 	}
 }
 

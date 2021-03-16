@@ -18,12 +18,6 @@ namespace ta
 
     bool ClientActorSystemManager::initialize(void) noexcept
     {
-        if (false == CommonActorSystemManager::initialize())
-        {
-            TA_ASSERT_DEV(false, "비정상적인 상황입니다.");
-            return false;
-        }
-
         uint32 systemCount = static_cast<uint32>(ActorSystemType::Count);
         _actorSystems.reserve(systemCount);
 
@@ -33,13 +27,14 @@ namespace ta
 
             switch (systemType)
             {
-
-#define CREATE_SYSTEM(SystemType, SystemName)                 \
-            case ActorSystemType::SystemType:                 \
-                {                                             \
-                    _actorSystems.push_back(new SystemName);  \
-                }                                             \
-                break;
+#define CREATE_SYSTEM(SystemType, SystemName)                \
+            case ActorSystemType::SystemType:                \
+                {                                            \
+                    SystemName* newSystem = new SystemName;  \
+                    _actorSystems.push_back(newSystem);      \
+                                                             \
+                }                                            \
+                break;                                       \
 
 
                 CREATE_SYSTEM(ActionSystem, ClientActionActorSystem)
@@ -58,6 +53,12 @@ namespace ta
                 }
                 break;
             }
+        }
+
+        if (false == CommonActorSystemManager::initialize())
+        {
+            TA_ASSERT_DEV(false, "비정상적인 상황입니다.");
+            return false;
         }
 
         return true;
