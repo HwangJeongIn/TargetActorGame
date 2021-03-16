@@ -1,5 +1,5 @@
 // Copyright Epic Games, Inc. All Rights Reserved.
-// Modified version of Recast/Detour's source file
+// Modified version of RecastNavigation/Recast/Detour's source file
 
 //
 // Copyright (c) 2009-2010 Mikko Mononen memon@inside.org
@@ -19,89 +19,92 @@
 // 3. This notice may not be removed or altered from any source distribution.
 //
 
-#include "Recast/RecastAlloc.h"
-#include "RecastNavigationSystemInclude.h"
+#include "RecastNavigation/RecastNavigationSystemInclude.h"
+#include "RecastNavigation/Recast/RecastAlloc.h"
 
-static void *rcAllocDefault(int size, rcAllocHint)
+namespace ta
 {
-	return malloc(size);
-}
-
-static void rcFreeDefault(void *ptr)
-{
-	free(ptr);
-}
-
-void rcMemCpy(void* dst, void* src, int size)
-{
-	memcpy(dst, src, size);
-}
-
-static rcAllocFunc* sRecastAllocFunc = rcAllocDefault;
-static rcFreeFunc* sRecastFreeFunc = rcFreeDefault;
-
-/// @see rcAlloc, rcFree
-void rcAllocSetCustom(rcAllocFunc *allocFunc, rcFreeFunc *freeFunc)
-{
-	sRecastAllocFunc = allocFunc ? allocFunc : rcAllocDefault;
-	sRecastFreeFunc = freeFunc ? freeFunc : rcFreeDefault;
-}
-
-/// @see rcAllocSetCustom
-void* rcAlloc(int size, rcAllocHint hint)
-{
-	return sRecastAllocFunc(size, hint);
-}
-
-/// @par
-///
-/// @warning This function leaves the value of @p ptr unchanged.  So it still
-/// points to the same (now invalid) location, and not to null.
-/// 
-/// @see rcAllocSetCustom
-void rcFree(void* ptr)
-{
-	if (ptr)
-		sRecastFreeFunc(ptr);
-}
-
-/// @class rcIntArray
-///
-/// While it is possible to pre-allocate a specific array size during 
-/// construction or by using the #resize method, certain methods will 
-/// automatically resize the array as needed.
-///
-/// @warning The array memory is not initialized to zero when the size is 
-/// manually set during construction or when using #resize.
-
-/// @par
-///
-/// Using this method ensures the array is at least large enough to hold
-/// the specified number of elements.  This can improve performance by
-/// avoiding auto-resizing during use.
-void rcIntArray::resize(int n)
-{
-	if (n > m_cap)
+	static void* rcAllocDefault(int size, rcAllocHint)
 	{
-		if (!m_cap) m_cap = n;
-		while (m_cap < n) m_cap *= 2;
-		int* newData = (int*)rcAlloc(m_cap*sizeof(int), RC_ALLOC_TEMP);
-		if (m_size && newData) memcpy(newData, m_data, m_size*sizeof(int));
-		rcFree(m_data);
-		m_data = newData;
-	}
-	m_size = n;
-}
-
-// @UE4 BEGIN: added contains()
-bool rcIntArray::contains(int v) const
-{
-	for (int i = 0; i < m_size; i++)
-	{
-		if (m_data[i] == v)
-			return true;
+		return malloc(size);
 	}
 
-	return false;
+	static void rcFreeDefault(void* ptr)
+	{
+		free(ptr);
+	}
+
+	void rcMemCpy(void* dst, void* src, int size)
+	{
+		memcpy(dst, src, size);
+	}
+
+	static rcAllocFunc* sRecastAllocFunc = rcAllocDefault;
+	static rcFreeFunc* sRecastFreeFunc = rcFreeDefault;
+
+	/// @see rcAlloc, rcFree
+	void rcAllocSetCustom(rcAllocFunc* allocFunc, rcFreeFunc* freeFunc)
+	{
+		sRecastAllocFunc = allocFunc ? allocFunc : rcAllocDefault;
+		sRecastFreeFunc = freeFunc ? freeFunc : rcFreeDefault;
+	}
+
+	/// @see rcAllocSetCustom
+	void* rcAlloc(int size, rcAllocHint hint)
+	{
+		return sRecastAllocFunc(size, hint);
+	}
+
+	/// @par
+	///
+	/// @warning This function leaves the value of @p ptr unchanged.  So it still
+	/// points to the same (now invalid) location, and not to null.
+	/// 
+	/// @see rcAllocSetCustom
+	void rcFree(void* ptr)
+	{
+		if (ptr)
+			sRecastFreeFunc(ptr);
+	}
+
+	/// @class rcIntArray
+	///
+	/// While it is possible to pre-allocate a specific array size during 
+	/// construction or by using the #resize method, certain methods will 
+	/// automatically resize the array as needed.
+	///
+	/// @warning The array memory is not initialized to zero when the size is 
+	/// manually set during construction or when using #resize.
+
+	/// @par
+	///
+	/// Using this method ensures the array is at least large enough to hold
+	/// the specified number of elements.  This can improve performance by
+	/// avoiding auto-resizing during use.
+	void rcIntArray::resize(int n)
+	{
+		if (n > m_cap)
+		{
+			if (!m_cap) m_cap = n;
+			while (m_cap < n) m_cap *= 2;
+			int* newData = (int*)rcAlloc(m_cap * sizeof(int), RC_ALLOC_TEMP);
+			if (m_size && newData) memcpy(newData, m_data, m_size * sizeof(int));
+			rcFree(m_data);
+			m_data = newData;
+		}
+		m_size = n;
+	}
+
+	// @UE4 BEGIN: added contains()
+	bool rcIntArray::contains(int v) const
+	{
+		for (int i = 0; i < m_size; i++)
+		{
+			if (m_data[i] == v)
+				return true;
+		}
+
+		return false;
+	}
 }
 // @UE4 END

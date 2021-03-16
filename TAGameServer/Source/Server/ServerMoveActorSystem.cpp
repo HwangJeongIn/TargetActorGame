@@ -1,4 +1,4 @@
-#include "Server/ServerMoveActorSystem.h"
+﻿#include "Server/ServerMoveActorSystem.h"
 #include "Server/ServerApp.h"
 #include "Server/ServerActorManager.h"
 #include "Server/AllPacketServer.h"
@@ -10,9 +10,9 @@
 #include "Common/CommonActor.h"
 #include "Common/GetComponentAndSystem.h"
 #include "Common/Serializer.h"
-#include "RecastNavigationSystemUtility.h"
-#include "NavMeshPoint.h"
-#include "NavMeshPath.h"
+#include "RecastNavigation/RecastNavigationSystemUtility.h"
+#include "RecastNavigation/NavMeshPoint.h"
+#include "RecastNavigation/NavMeshPath.h"
 
 
 namespace ta
@@ -39,19 +39,6 @@ namespace ta
 		}
 
 		return true;
-	}
-
-	bool ServerMoveActorSystem::serializeNavigationMesh(Serializer& Ar, dtNavMesh* DetourNavMesh) noexcept
-	{
-		return false;
-	}
-
-	void ServerMoveActorSystem::serializeRecastMeshTile(Serializer& Ar, int32 NavMeshVersion, unsigned char*& TileData, int32& TileDataSize) noexcept
-	{
-	}
-
-	void ServerMoveActorSystem::serializeCompressedTileCacheData(Serializer& Ar, int32 NavMeshVersion, unsigned char*& CompressedData, int32& CompressedDataSize) noexcept
-	{
 	}
 
 	void ServerMoveActorSystem::update(const ActorSystemUpdateParameter& updateParameter) const noexcept

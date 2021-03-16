@@ -1,5 +1,5 @@
 // Copyright Epic Games, Inc. All Rights Reserved.
-// Modified version of Recast/Detour's source file
+// Modified version of RecastNavigation/Recast/Detour's source file
 
 //
 // Copyright (c) 2009-2010 Mikko Mononen memon@inside.org

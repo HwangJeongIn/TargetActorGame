@@ -18,18 +18,20 @@
 
 #include "DetourAssert.h"
 
+namespace ta
+{
 #ifndef NDEBUG
+	static dtAssertFailFunc* sAssertFailFunc = 0;
 
-static dtAssertFailFunc* sAssertFailFunc = 0;
+	void dtAssertFailSetCustom(dtAssertFailFunc* assertFailFunc)
+	{
+		sAssertFailFunc = assertFailFunc;
+	}
 
-void dtAssertFailSetCustom(dtAssertFailFunc* assertFailFunc)
-{
-	sAssertFailFunc = assertFailFunc;
-}
-
-dtAssertFailFunc* dtAssertFailGetCustom()
-{
-	return sAssertFailFunc;
-}
+	dtAssertFailFunc* dtAssertFailGetCustom()
+	{
+		return sAssertFailFunc;
+	}
 
 #endif
+}

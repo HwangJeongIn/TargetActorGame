@@ -1,5 +1,5 @@
 // Copyright Epic Games, Inc. All Rights Reserved.
-// Modified version of Recast/Detour's source file
+// Modified version of RecastNavigation/Recast/Detour's source file
 
 //
 // Copyright (c) 2009-2010 Mikko Mononen memon@inside.org
@@ -19,14 +19,18 @@
 // 3. This notice may not be removed or altered from any source distribution.
 //
 
-
-#include "Detour/DetourCommon.h"
-#include "Detour/DetourAssert.h"
-#include "Detour/DetourAlloc.h"
-#include "DetourTileCache/DetourTileCacheBuilder.h"
-#include "RecastNavigationSystemInclude.h"
 #define _USE_MATH_DEFINES
+#include "RecastNavigation/RecastNavigationSystemInclude.h"
+#include "RecastNavigation/Detour/DetourCommon.h"
+#include "RecastNavigation/Detour/DetourAssert.h"
+#include "RecastNavigation/Detour/DetourAlloc.h"
+#include "RecastNavigation/DetourTileCache/DetourTileCacheBuilder.h"
 
+
+
+
+namespace ta
+{
 static const unsigned DT_UNSET_PATCH_HEIGHT = 0xffff;
 static const unsigned DT_UNSET_LAYER_HEIGHT = 0xffff;
 
@@ -1124,4 +1128,5 @@ dtStatus dtBuildTileCachePolyMeshDetail(dtTileCacheAlloc* alloc,
 	}
 
 	return DT_SUCCESS;
+}
 }

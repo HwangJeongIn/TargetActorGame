@@ -7,13 +7,16 @@
 #include "Common/Serializer.h"
 
 #if defined(TA_SERVER) && !defined(TA_CLIENT_IN_SERVER)
+#include "RecastNavigation/Detour/DetourNavMesh.h"
+#include "RecastNavigation/Detour/DetourNavMeshQuery.h"
+#include "RecastNavigation/NavMeshPoint.h"
+#include "RecastNavigation/NavMeshPath.h"
+#elif !defined(TA_SERVER)
 #include "Detour/DetourNavMesh.h"
 #include "Detour/DetourNavMeshQuery.h"
-#include "NavMeshPoint.h"
-#include "NavMeshPath.h"
-#elif !defined(TA_SERVER)
-
 #endif
+
+
 
 namespace ta
 {
@@ -158,18 +161,18 @@ namespace ta
 
 				for (int i = 0; i < NumTiles; ++i)
 				{
-					dtTileRef TileRef = MAX_UINT64;
+					dtTileRef TileRef = _MAX_UINT64;
 					int32 TileDataSize = 0;
 					Ar << TileRef << TileDataSize;
 
-					if (TileRef == MAX_UINT64 || TileDataSize == 0)
+					if (TileRef == _MAX_UINT64 || TileDataSize == 0)
 					{
 						continue;
 					}
 
 					unsigned char* TileData = NULL;
 					TileDataSize = 0;
-					serializeRecastMeshTile(Ar, 13, TileData, TileDataSize);
+					//serializeRecastMeshTile(Ar, 13, TileData, TileDataSize);
 
 					if (TileData != NULL)
 					{

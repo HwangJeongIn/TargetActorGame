@@ -1,5 +1,5 @@
 // Copyright Epic Games, Inc. All Rights Reserved.
-// Modified version of Recast/Detour's source file
+// Modified version of RecastNavigation/Recast/Detour's source file
 
 //
 // Copyright (c) 2009-2010 Mikko Mononen memon@inside.org
@@ -23,7 +23,8 @@
 #define RECAST_H
 
 
-
+namespace ta
+{
 /// The value of PI used by Recast.
 static const float RC_PI = 3.14159265f;
 
@@ -1364,6 +1365,8 @@ bool rcCopyPolyMesh(rcContext* ctx, const rcPolyMesh& src, rcPolyMesh& dst);
 bool rcMergePolyMeshDetails(rcContext* ctx, rcPolyMeshDetail** meshes, const int nmeshes, rcPolyMeshDetail& mesh);
 
 /// @}
+
+}
 
 #endif // RECAST_H
 

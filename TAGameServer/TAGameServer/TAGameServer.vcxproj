@@ -168,6 +168,7 @@
     <ClInclude Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\CommonMoveActorSystem.h" />
     <ClInclude Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\CommonNetwork.h" />
     <ClInclude Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\CommonSpawnDataManager.h" />
+    <ClInclude Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\CommonTypeDefinition.h" />
     <ClInclude Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\ComponentData.h" />
     <ClInclude Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\EndPoint.h" />
     <ClInclude Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\ActorEventTimer.h" />
@@ -317,7 +318,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>TA_SERVER;WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)\..\TAGameClient\Source\TAGameClient\Public;$(SolutionDir)\..\TAGameClient\Source\TAGameClient\Public\Common\NavigationSystem\RecastNavigation;$(SolutionDir)\Source</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)\..\TAGameClient\Source\TAGameClient\Public;$(SolutionDir)\..\TAGameClient\Source\TAGameClient\Public\Common\NavigationSystem;$(SolutionDir)\Source</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <DisableSpecificWarnings>4267;4819;</DisableSpecificWarnings>
     </ClCompile>
@@ -335,7 +336,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>TA_SERVER;WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)\..\TAGameClient\Source\TAGameClient\Public;$(SolutionDir)\..\TAGameClient\Source\TAGameClient\Public\Common\NavigationSystem\RecastNavigation;$(SolutionDir)\Source</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)\..\TAGameClient\Source\TAGameClient\Public;$(SolutionDir)\..\TAGameClient\Source\TAGameClient\Public\Common\NavigationSystem;$(SolutionDir)\Source</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <DisableSpecificWarnings>4267;4819;</DisableSpecificWarnings>
     </ClCompile>
@@ -353,7 +354,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>TA_SERVER;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)\..\TAGameClient\Source\TAGameClient\Public;$(SolutionDir)\..\TAGameClient\Source\TAGameClient\Public\Common\NavigationSystem\RecastNavigation;$(SolutionDir)\Source</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)\..\TAGameClient\Source\TAGameClient\Public;$(SolutionDir)\..\TAGameClient\Source\TAGameClient\Public\Common\NavigationSystem;$(SolutionDir)\Source</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <DisableSpecificWarnings>4267;4819;</DisableSpecificWarnings>
     </ClCompile>
@@ -371,7 +372,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>TA_SERVER;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)\..\TAGameClient\Source\TAGameClient\Public;$(SolutionDir)\..\TAGameClient\Source\TAGameClient\Public\Common\NavigationSystem\RecastNavigation;$(SolutionDir)\Source</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)\..\TAGameClient\Source\TAGameClient\Public;$(SolutionDir)\..\TAGameClient\Source\TAGameClient\Public\Common\NavigationSystem;$(SolutionDir)\Source</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <DisableSpecificWarnings>4267;4819;</DisableSpecificWarnings>
     </ClCompile>

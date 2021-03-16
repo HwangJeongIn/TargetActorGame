@@ -18,11 +18,11 @@ namespace ta
 	bool ClientMoveActorSystem::initialize(void) noexcept
 	{
 #ifndef TA_SERVER
-		Serializer slW;
-		slW.setMode(Serializer::SerializerMode::Write);
-		serializeNavigationMesh(slW, );
-
-		slW.exportToFile(NavigationMeshPath);
+		//Serializer slW;
+		//slW.setMode(Serializer::SerializerMode::Write);
+		//serializeNavigationMesh(slW, );
+		//
+		//slW.exportToFile(NavigationMeshPath);
 
 #endif
 		return true;

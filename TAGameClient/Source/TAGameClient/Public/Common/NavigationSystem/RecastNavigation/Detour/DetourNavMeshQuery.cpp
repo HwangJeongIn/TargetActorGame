@@ -1,5 +1,5 @@
 // Copyright Epic Games, Inc. All Rights Reserved.
-// Modified version of Recast/Detour's source file
+// Modified version of RecastNavigation/Recast/Detour's source file
 
 //
 // Copyright (c) 2009-2010 Mikko Mononen memon@inside.org
@@ -19,11 +19,13 @@
 // 3. This notice may not be removed or altered from any source distribution.
 //
 
-#include "Detour/DetourNavMeshQuery.h"
-#include "Detour/DetourNode.h"
-#include "Detour/DetourAssert.h"
-#include "RecastNavigationSystemInclude.h"
+#include "RecastNavigation/RecastNavigationSystemInclude.h"
+#include "RecastNavigation/Detour/DetourNavMeshQuery.h"
+#include "RecastNavigation/Detour/DetourNode.h"
+#include "RecastNavigation/Detour/DetourAssert.h"
 
+namespace ta
+{
 //DEFINE_LOG_CATEGORY_STATIC(LogDebugRaycastCrash, All, All);
 
 /// @class dtQueryFilter
@@ -4668,4 +4670,5 @@ bool dtNavMeshQuery::isInClosedList(dtPolyRef ref) const
 	if (!m_nodePool) return false;
 	const dtNode* node = m_nodePool->findNode(ref);
 	return node && node->flags & DT_NODE_CLOSED;
+}
 }

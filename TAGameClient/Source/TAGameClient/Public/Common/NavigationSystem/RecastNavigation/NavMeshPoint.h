@@ -1,9 +1,9 @@
 #pragma once
 
+#include "RecastNavigation/RecastNavigationSystemInclude.h"
 #include "Common/CommonBase.h"
 #include "Common/Vector.h"
-#include "Detour/DetourNavMesh.h"
-#include "RecastNavigationSystemInclude.h"
+#include "RecastNavigation/Detour/DetourNavMesh.h"
 
 
 namespace ta

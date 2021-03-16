@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Common/CommonBase.h"
-#include "NavMeshPoint.h"
+#include "RecastNavigation/NavMeshPoint.h"
 #include <vector>
 
 

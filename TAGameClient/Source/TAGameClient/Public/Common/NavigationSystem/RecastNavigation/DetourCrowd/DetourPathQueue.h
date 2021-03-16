@@ -1,5 +1,5 @@
 // Copyright Epic Games, Inc. All Rights Reserved.
-// Modified version of Recast/Detour's source file
+// Modified version of RecastNavigation/Recast/Detour's source file
 
 //
 // Copyright (c) 2009-2010 Mikko Mononen memon@inside.org
@@ -23,61 +23,64 @@
 #define DETOURPATHQUEUE_H
 
 
-#include "Detour/DetourNavMeshQuery.h"
+#include "RecastNavigation/Detour/DetourNavMeshQuery.h"
 #include <memory>
 
-static const unsigned int DT_PATHQ_INVALID = 0;
-
-typedef unsigned int dtPathQueueRef;
-
-class dtPathQueue
+namespace ta
 {
-	struct PathQuery
+	static const unsigned int DT_PATHQ_INVALID = 0;
+
+	typedef unsigned int dtPathQueueRef;
+
+	class dtPathQueue
 	{
-		dtPathQueueRef ref;
-		/// Path find start and end location.
-		float startPos[3], endPos[3];
-		dtPolyRef startRef, endRef;
-		float costLimit;
-		/// Result.
-		dtPolyRef* path;
-		int npath;
-		/// State.
-		dtStatus status;
-		int keepAlive;
+		struct PathQuery
+		{
+			dtPathQueueRef ref;
+			/// Path find start and end location.
+			float startPos[3], endPos[3];
+			dtPolyRef startRef, endRef;
+			float costLimit;
+			/// Result.
+			dtPolyRef* path;
+			int npath;
+			/// State.
+			dtStatus status;
+			int keepAlive;
 
-		const dtQueryFilter* filter;
-		std::shared_ptr<dtQuerySpecialLinkFilter> linkFilter;
+			const dtQueryFilter* filter;
+			std::shared_ptr<dtQuerySpecialLinkFilter> linkFilter;
+		};
+
+		static const int MAX_QUEUE = 8;
+		PathQuery m_queue[MAX_QUEUE];
+		dtPathQueueRef m_nextHandle;
+		int m_maxPathSize;
+		int m_queueHead;
+		dtNavMeshQuery* m_navquery;
+
+		void purge();
+
+	public:
+		dtPathQueue();
+		~dtPathQueue();
+
+		bool init(const int maxPathSize, const int maxSearchNodeCount, dtNavMesh* nav);
+
+		void update(const int maxIters);
+
+		dtPathQueueRef request(dtPolyRef startRef, dtPolyRef endRef,
+							   const float* startPos, const float* endPos, const float costLimit,
+							   const dtQueryFilter* filter,
+							   std::shared_ptr<dtQuerySpecialLinkFilter> linkFilter);
+
+		dtStatus getRequestStatus(dtPathQueueRef ref) const;
+
+		dtStatus getPathResult(dtPathQueueRef ref, dtPolyRef* path, int* pathSize, const int maxPath);
+
+		inline const dtNavMeshQuery* getNavQuery() const { return m_navquery; }
+
 	};
-	
-	static const int MAX_QUEUE = 8;
-	PathQuery m_queue[MAX_QUEUE];
-	dtPathQueueRef m_nextHandle;
-	int m_maxPathSize;
-	int m_queueHead;
-	dtNavMeshQuery* m_navquery;
-	
-	void purge();
-	
-public:
-	dtPathQueue();
-	~dtPathQueue();
-	
-	bool init(const int maxPathSize, const int maxSearchNodeCount, dtNavMesh* nav);
-	
-	void update(const int maxIters);
-	
-	dtPathQueueRef request(dtPolyRef startRef, dtPolyRef endRef,
-						   const float* startPos, const float* endPos, const float costLimit,
-						   const dtQueryFilter* filter,
-						   std::shared_ptr<dtQuerySpecialLinkFilter> linkFilter);
-	
-	dtStatus getRequestStatus(dtPathQueueRef ref) const;
-	
-	dtStatus getPathResult(dtPathQueueRef ref, dtPolyRef* path, int* pathSize, const int maxPath);
-	
-	inline const dtNavMeshQuery* getNavQuery() const { return m_navquery; }
-
-};
+}
 
 #endif // DETOURPATHQUEUE_H

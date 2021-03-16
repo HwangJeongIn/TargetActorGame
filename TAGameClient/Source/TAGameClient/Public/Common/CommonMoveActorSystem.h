@@ -13,10 +13,11 @@ namespace ta
 {
 	extern fs::path NavigationMeshPath;
 }
+
+class dtNavMesh;
 #endif
 
 
-class dtNavMesh;
 
 namespace ta
 {
@@ -24,7 +25,13 @@ namespace ta
 	class Vector;
 	class CommonMoveActorComponent;
 	class Serializer;
+
+#if defined(TA_SERVER) && !defined(TA_CLIENT_IN_SERVER)
+	class dtNavMesh;
+#endif
 }
+
+
 
 
 namespace ta

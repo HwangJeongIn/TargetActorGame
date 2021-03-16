@@ -8,7 +8,7 @@ public class TAGameClient : ModuleRules
 	{
 		//PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
 	
-		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore", "UMG", "SlateCore", "NavigationSystem"});
+		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore", "UMG", "SlateCore", "NavigationSystem", "Navmesh"});
 
 		PCHUsage = PCHUsageMode.NoSharedPCHs;
 		PrivatePCHHeaderFile = "PCH.h";
@@ -16,6 +16,8 @@ public class TAGameClient : ModuleRules
 
 		PrivateDependencyModuleNames.AddRange(new string[] { });
 
+		// ../ => TAGameClient
+		PrivateIncludePaths.Add("../Source/TAGameClient/Public/Common/NavigationSystem");
 
 		// Uncomment if you are using Slate UI
 		// PrivateDependencyModuleNames.AddRange(new string[] { "Slate", "SlateCore" });

@@ -18,18 +18,21 @@
 
 #include "RecastAssert.h"
 
+namespace ta
+{
 #ifndef NDEBUG
 
-static rcAssertFailFunc* sRecastAssertFailFunc = 0;
+	static rcAssertFailFunc* sRecastAssertFailFunc = 0;
 
-void rcAssertFailSetCustom(rcAssertFailFunc* assertFailFunc)
-{
-	sRecastAssertFailFunc = assertFailFunc;
-}
+	void rcAssertFailSetCustom(rcAssertFailFunc* assertFailFunc)
+	{
+		sRecastAssertFailFunc = assertFailFunc;
+	}
 
-rcAssertFailFunc* rcAssertFailGetCustom()
-{
-	return sRecastAssertFailFunc;
-}
+	rcAssertFailFunc* rcAssertFailGetCustom()
+	{
+		return sRecastAssertFailFunc;
+	}
 
 #endif
+}

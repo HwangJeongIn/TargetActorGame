@@ -1,5 +1,5 @@
 // Copyright Epic Games, Inc. All Rights Reserved.
-// Modified version of Recast/Detour's source file
+// Modified version of RecastNavigation/Recast/Detour's source file
 
 //
 // Copyright (c) 2009-2010 Mikko Mononen memon@inside.org
@@ -23,9 +23,10 @@
 #define DETOURASSERT_H
 
 
-
-// Note: This header file's only purpose is to include define assert.
-// Feel free to change the file and include your own implementation instead.
+namespace ta
+{
+	// Note: This header file's only purpose is to include define assert.
+	// Feel free to change the file and include your own implementation instead.
 
 #ifdef NDEBUG
 // From http://cnicholson.net/2009/02/stupid-c-tricks-adventures-in-assert/
@@ -37,14 +38,14 @@
 //  @param[in]		file  Filename of the failed assertion.
 //  @param[in]		line  Line number of the failed assertion.
 ///  @see dtAssertFailSetCustom
-typedef void (dtAssertFailFunc)(const char* expression, const char* file, int line);
+	typedef void (dtAssertFailFunc)(const char* expression, const char* file, int line);
 
-/// Sets the base custom assertion failure function to be used by Detour.
-///  @param[in]		assertFailFunc	The function to be invoked in case of failure of #dtAssert
-void dtAssertFailSetCustom(dtAssertFailFunc * assertFailFunc);
+	/// Sets the base custom assertion failure function to be used by Detour.
+	///  @param[in]		assertFailFunc	The function to be invoked in case of failure of #dtAssert
+	void dtAssertFailSetCustom(dtAssertFailFunc* assertFailFunc);
 
-/// Gets the base custom assertion failure function to be used by Detour.
-dtAssertFailFunc* dtAssertFailGetCustom();
+	/// Gets the base custom assertion failure function to be used by Detour.
+	dtAssertFailFunc* dtAssertFailGetCustom();
 
 #	include <assert.h> 
 #	define dtAssert(expression) \
@@ -54,8 +55,9 @@ dtAssertFailFunc* dtAssertFailGetCustom();
 			else if(!(expression)) { (*failFunc)(#expression, __FILE__, __LINE__); } \
 		}
 
-//#	include <assert.h> 
-//#	define dtAssert(x) { assert(x); CA_ASSUME(x); } (void)0
+	//#	include <assert.h> 
+	//#	define dtAssert(x) { assert(x); CA_ASSUME(x); } (void)0
 #endif
+}
 
 #endif // DETOURASSERT_H

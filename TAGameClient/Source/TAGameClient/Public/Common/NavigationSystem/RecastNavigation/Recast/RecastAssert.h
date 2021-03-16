@@ -1,5 +1,5 @@
 // Copyright Epic Games, Inc. All Rights Reserved.
-// Modified version of Recast/Detour's source file
+// Modified version of RecastNavigation/Recast/Detour's source file
 
 //
 // Copyright (c) 2009-2010 Mikko Mononen memon@inside.org
@@ -26,27 +26,28 @@
 
 // Note: This header file's only purpose is to include define assert.
 // Feel free to change the file and include your own implementation instead.
-
+namespace ta
+{
 #ifdef NDEBUG
-// From http://cnicholson.net/2009/02/stupid-c-tricks-adventures-in-assert/
+	// From http://cnicholson.net/2009/02/stupid-c-tricks-adventures-in-assert/
 #	define rcAssert(x) do { (void)sizeof((x)); } while((void)(__LINE__==-1),false)  
 #else
-//#	include <assert.h> 
-//#	define rcAssert(x) { assert(x); CA_ASSUME(x); } (void)0
+	//#	include <assert.h> 
+	//#	define rcAssert(x) { assert(x); CA_ASSUME(x); } (void)0
 
-/// An assertion failure function.
-//  @param[in]		expression  asserted expression.
-//  @param[in]		file  Filename of the failed assertion.
-//  @param[in]		line  Line number of the failed assertion.
-///  @see rcAssertFailSetCustom
-typedef void (rcAssertFailFunc)(const char* expression, const char* file, int line);
+	/// An assertion failure function.
+	//  @param[in]		expression  asserted expression.
+	//  @param[in]		file  Filename of the failed assertion.
+	//  @param[in]		line  Line number of the failed assertion.
+	///  @see rcAssertFailSetCustom
+	typedef void (rcAssertFailFunc)(const char* expression, const char* file, int line);
 
-/// Sets the base custom assertion failure function to be used by Recast.
-///  @param[in]		assertFailFunc	The function to be used in case of failure of #dtAssert
-void rcAssertFailSetCustom(rcAssertFailFunc * assertFailFunc);
+	/// Sets the base custom assertion failure function to be used by Recast.
+	///  @param[in]		assertFailFunc	The function to be used in case of failure of #dtAssert
+	void rcAssertFailSetCustom(rcAssertFailFunc* assertFailFunc);
 
-/// Gets the base custom assertion failure function to be used by Recast.
-rcAssertFailFunc* rcAssertFailGetCustom();
+	/// Gets the base custom assertion failure function to be used by Recast.
+	rcAssertFailFunc* rcAssertFailGetCustom();
 
 #	include <assert.h> 
 #	define rcAssert(expression) \
@@ -58,5 +59,5 @@ rcAssertFailFunc* rcAssertFailGetCustom();
 
 
 #endif
-
+}
 #endif // RECASTASSERT_H

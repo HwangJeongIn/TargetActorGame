@@ -1,5 +1,5 @@
 // Copyright Epic Games, Inc. All Rights Reserved.
-// Modified version of Recast/Detour's source file
+// Modified version of RecastNavigation/Recast/Detour's source file
 
 //
 // Copyright (c) 2009-2010 Mikko Mononen memon@inside.org
@@ -19,10 +19,10 @@
 // 3. This notice may not be removed or altered from any source distribution.
 //
 
-#include "DebugUtils/DebugDraw.h"
-#include "Recast/RecastAlloc.h" // UE4
-#include "RecastNavigationSystemInclude.h"
 #define _USE_MATH_DEFINES
+#include "RecastNavigation/RecastNavigationSystemInclude.h"
+#include "RecastNavigation/DebugUtils/DebugDraw.h"
+#include "RecastNavigation/Recast/RecastAlloc.h" // UE4
 
 namespace ta
 {

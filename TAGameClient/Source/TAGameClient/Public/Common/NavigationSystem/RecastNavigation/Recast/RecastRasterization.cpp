@@ -1,5 +1,5 @@
 // Copyright Epic Games, Inc. All Rights Reserved.
-// Modified version of Recast/Detour's source file
+// Modified version of RecastNavigation/Recast/Detour's source file
 
 //
 // Copyright (c) 2009-2010 Mikko Mononen memon@inside.org
@@ -21,11 +21,13 @@
 
 
 #define _USE_MATH_DEFINES
-#include "Recast/Recast.h"
-#include "Recast/RecastAlloc.h"
-#include "Recast/RecastAssert.h"
-#include "RecastNavigationSystemInclude.h"
+#include "RecastNavigation/RecastNavigationSystemInclude.h"
+#include "RecastNavigation/Recast/Recast.h"
+#include "RecastNavigation/Recast/RecastAlloc.h"
+#include "RecastNavigation/Recast/RecastAssert.h"
 
+namespace ta
+{
 inline bool overlapBounds(const float* amin, const float* amax, const float* bmin, const float* bmax)
 {
 	bool overlap = true;
@@ -1076,4 +1078,5 @@ void rcRasterizeTriangles(rcContext* ctx, const float* verts, const unsigned cha
 	
 	if (ctx)
 		ctx->stopTimer(RC_TIMER_RASTERIZE_TRIANGLES);
+}
 }

@@ -1,5 +1,5 @@
 // Copyright Epic Games, Inc. All Rights Reserved.
-// Modified version of Recast/Detour's source file
+// Modified version of RecastNavigation/Recast/Detour's source file
 
 //
 // Copyright (c) 2009-2010 Mikko Mononen memon@inside.org
@@ -19,11 +19,13 @@
 // 3. This notice may not be removed or altered from any source distribution.
 //
 
-#include "DetourTileCache/DetourTileCacheBuilder.h"
-#include "Detour/DetourCommon.h"
-#include "Detour/DetourAssert.h"
-#include "RecastNavigationSystemInclude.h"
+#include "RecastNavigation/RecastNavigationSystemInclude.h"
+#include "RecastNavigation/DetourTileCache/DetourTileCacheBuilder.h"
+#include "RecastNavigation/Detour/DetourCommon.h"
+#include "RecastNavigation/Detour/DetourAssert.h"
 
+namespace ta
+{
 static const int MAX_VERTS_PER_POLY = 6;	// TODO: use the DT_VERTS_PER_POLYGON
 static const int MAX_REM_EDGES = 48;		// TODO: make this an expression.
 
@@ -2714,4 +2716,5 @@ void dtTileCacheLogContext::dtLog(const char* format, ...)
 	}
 	va_end(ap);
 	doDtLog(msg, len);
+}
 }

@@ -2,6 +2,7 @@
 
 // ta header
 
+#include "Common/CommonTypeDefinition.h"
 #include "Common/CommonDataTypeDefinition.h"
 #include "Common/CommonLog.h"
 

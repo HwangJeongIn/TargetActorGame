@@ -1,5 +1,5 @@
 // Copyright Epic Games, Inc. All Rights Reserved.
-// Modified version of Recast/Detour's source file
+// Modified version of RecastNavigation/Recast/Detour's source file
 
 //
 // Copyright (c) 2009-2010 Mikko Mononen memon@inside.org
@@ -19,13 +19,15 @@
 // 3. This notice may not be removed or altered from any source distribution.
 //
 
-#include "DetourCrowd/DetourCrowd.h"
-#include "DetourCrowd/DetourProximityGrid.h"
 #define _USE_MATH_DEFINES
-#include "Detour/DetourAssert.h"
-#include "RecastNavigationSystemInclude.h"
+#include "RecastNavigation/RecastNavigationSystemInclude.h"
+#include "RecastNavigation/DetourCrowd/DetourCrowd.h"
+#include "RecastNavigation/DetourCrowd/DetourProximityGrid.h"
+#include "RecastNavigation/Detour/DetourAssert.h"
 
 
+namespace ta
+{
 dtCrowd* dtAllocCrowd()
 {
 	void* mem = dtAlloc(sizeof(dtCrowd), DT_ALLOC_PERM);
@@ -1394,7 +1396,7 @@ void dtCrowd::updateStepNextMovePoint(const float dt, dtCrowdAgentDebugInfo* deb
 		if (overOffmeshConnection(ag, triggerRadius))
 		{
 			// Prepare to off-mesh connection.
-			const int idx = ag - m_agents;
+			const int idx = static_cast<int>(ag - m_agents);
 			dtCrowdAgentAnimation* anim = &m_agentAnims[idx];
 			m_navquery->updateLinkFilter(ag->params.linkFilter.get());
 
@@ -1880,4 +1882,5 @@ void dtCrowd::setSeparationFilter(float InFilter)
 void dtCrowd::setPathOffsetRadiusMultiplier(float RadiusMultiplier)
 {
 	m_pathOffsetRadiusMultiplier = RadiusMultiplier;
+}
 }

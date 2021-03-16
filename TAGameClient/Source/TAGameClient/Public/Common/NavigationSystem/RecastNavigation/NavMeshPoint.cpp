@@ -1,4 +1,4 @@
-#include "NavMeshPoint.h"
+#include "RecastNavigation/NavMeshPoint.h"
 
 
 namespace ta

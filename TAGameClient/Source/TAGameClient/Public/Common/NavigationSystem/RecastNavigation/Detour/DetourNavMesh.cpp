@@ -1,5 +1,5 @@
 // Copyright Epic Games, Inc. All Rights Reserved.
-// Modified version of Recast/Detour's source file
+// Modified version of RecastNavigation/Recast/Detour's source file
 
 //
 // Copyright (c) 2009-2010 Mikko Mononen memon@inside.org
@@ -19,11 +19,13 @@
 // 3. This notice may not be removed or altered from any source distribution.
 //
 
-#include "Detour/DetourNavMesh.h"
-#include "Detour/DetourCommon.h"
-#include "Detour/DetourAssert.h"
-#include "RecastNavigationSystemInclude.h"
+#include "RecastNavigation/RecastNavigationSystemInclude.h"
+#include "RecastNavigation/Detour/DetourNavMesh.h"
+#include "RecastNavigation/Detour/DetourCommon.h"
+#include "RecastNavigation/Detour/DetourAssert.h"
 
+namespace ta
+{
 enum ESlabOverlapFlag
 {
 	SLABOVERLAP_Cross = 1,
@@ -2525,5 +2527,6 @@ void dtNavMesh::applyWorldOffset(const float* offset)
 void dtNavMesh::applyAreaCostOrder(unsigned char* costOrder)
 {
 	memcpy(m_areaCostOrder, costOrder, sizeof(m_areaCostOrder));
+}
 }
 //@UE4 END
