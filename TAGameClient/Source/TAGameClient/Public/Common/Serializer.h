@@ -11,10 +11,11 @@ namespace ta
 		MemoryBuffer(void) noexcept;
 		virtual ~MemoryBuffer(void) noexcept;
 
-		void allocBuffer(const int64 size) noexcept;
+		void copyBuffer(char* input, int64 inputNum) noexcept;	// 복사할 버퍼가 실체가 있는 경우
+		void prepareCopyBuffer(int64 inputNum) noexcept;		// 복사할 버퍼가 실체가 없는 경우, 데이터 복사는 알아서 해줘야한다. ex) 파일에서 그대로 읽어올 때
 		void resetBuffer(void) noexcept;
-
 		void setBeginPos(void) noexcept;
+		void setEndPos(void) noexcept;
 
 		bool write(void* input, int64 num) noexcept;
 		bool write(void* input, int64 offset, int64 num) noexcept;
@@ -23,15 +24,20 @@ namespace ta
 		bool read(void* input, int64 offset, int64 num) noexcept;
 
 		int64 getDataSize(void) const noexcept;
-		uint8* getData(void) noexcept;
+		char* getData(void) noexcept;
+		const char* getData(void) const noexcept;
 
 		bool exportToFile(const std::string& filePath) noexcept;
 		bool importFromFile(const std::string& filePath) noexcept;
 
 	private:
+		void allocBuffer(const int64 size) noexcept;
+		void growBuffer(const int64 size) noexcept;
+
+	private:
 		int64 _currentPos;
 
-		uint8* _data;
+		char* _data;
 		int64 _numBytes;
 		int64 _maxBytes;
 	};
@@ -54,7 +60,6 @@ namespace ta
 		virtual ~Serializer(void) noexcept;
 
 		void setMode(const SerializerMode input) noexcept;
-		void allocBuffer(const int64 size) noexcept;
 		
 		bool exportToFile(const std::string& filePath) noexcept;
 		bool importFromFile(const std::string& filePath) noexcept;

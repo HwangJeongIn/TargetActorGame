@@ -1,6 +1,7 @@
 #include "Common/FileLoader.h"
 #include "Common/StringUtility.h"
 #include "Common/Vector.h"
+#include "Common/Serializer.h"
 
 #include <fstream>
 
@@ -33,13 +34,14 @@ namespace ta
 			return false;
 		}
 
-		std::string fileString;
-		if (false == FileLoader::loadFileString(filePath, fileString))
+		MemoryBuffer tempBuffer;
+		if (false == FileLoader::loadFileString(filePath, tempBuffer))
 		{
 			TA_ASSERT_DEV(false, "비정상입니다.");
 			return false;
 		}
 
+		std::string fileString(tempBuffer.getData());
 		std::vector<std::string> splitedStrings;
 		Split(fileString, "<>", splitedStrings);
 		const uint32 splitedStringCount = splitedStrings.size();
@@ -111,15 +113,16 @@ namespace ta
 			return false;
 		}
 
-		std::string tempfileString;
-		if (false == FileLoader::loadFileString(filePath, tempfileString))
+		MemoryBuffer tempBuffer;
+		if (false == FileLoader::loadFileString(filePath, tempBuffer))
 		{
 			TA_ASSERT_DEV(false, "비정상입니다.");
 			return false;
 		}
 
+		std::string tempFileString(tempBuffer.getData());
 		std::string fileString;
-		Trim(tempfileString, fileString, "\t");
+		Trim(tempFileString, fileString, "\t");
 
 		std::vector<std::string> splitedStrings;
 		Split(fileString, "\n ", splitedStrings);
@@ -153,7 +156,7 @@ namespace ta
 		return true;
 	}
 
-	bool FileLoader::saveFileString(const fs::path& filePath, const std::string& fileString) noexcept
+	bool FileLoader::saveFileString(const fs::path& filePath, const MemoryBuffer& buffer) noexcept
 	{
 		std::ofstream out(filePath);
 		if (false == out.is_open())
@@ -162,14 +165,14 @@ namespace ta
 			return false;
 		}
 
-		out.write(&fileString[0], fileString.size());
+		out.write(buffer.getData(), buffer.getDataSize());
 		//out.flush();
 		out.close();
 
 		return true;
 	}
 
-	bool FileLoader::loadFileString(const fs::path& filePath, std::string& fileString) noexcept
+	bool FileLoader::loadFileString(const fs::path& filePath, MemoryBuffer& buffer) noexcept
 	{
 		std::ifstream in;
 		in.open(filePath);
@@ -179,13 +182,12 @@ namespace ta
 			return false;
 		}
 
-		fileString.clear();
 		in.seekg(0, std::ios::end); // end에서 0떨어진곳으로 이동
-		const long long size = in.tellg();
+		int64 stringSize = static_cast<int64>(in.tellg());
 		in.seekg(0, std::ios::beg); // begin에서 0떨어진곳으로 이동
 
-		fileString.resize(size, 0);
-		in.read(&fileString[0], size);
+		buffer.prepareCopyBuffer(stringSize);
+		in.read(buffer.getData(), stringSize);
 
 		in.close();
 		return true;

@@ -255,34 +255,36 @@ namespace ta
 	{
 		// 테스트
 
-		std::string filePath("E:/GitLocal/TargetActorGame/TAGameServer/test.txt");
-		std::string fileString;
-		Serializer sl;
-
+		if(false)
 		{
-			fileString.clear();
-			sl.allocBuffer(1024 * 1024);
-			sl.setMode(Serializer::SerializerMode::Write);
-			int8 a = 1;
-			int16 b = 2;
-			int32 c = 3;
+			std::string filePath("E:/GitLocal/TargetActorGame/TAGameServer/test.txt");
 
-			sl << a << b << c;
-			sl.exportToFile(filePath);
-			//FileLoader::saveFileString(filePath, fileString);
+			Serializer slW;
+			Serializer slR;
+
+			{
+				//sl.allocBuffer(1024 * 1024);
+				slW.setMode(Serializer::SerializerMode::Write);
+				int8 a = 1;
+				int16 b = 2;
+				int32 c = 3;
+
+				slW << a << b << c;
+				slW.exportToFile(filePath);
+				//FileLoader::saveFileString(filePath, fileString);
+			}
+
+			int8 outA = 0;
+			int16 outB = 0;
+			int32 outC = 0;
+			{
+				//sl.allocBuffer(1024 * 1024);
+				slR.setMode(Serializer::SerializerMode::Read);
+				slR.importFromFile(filePath);
+				slR << outA << outB << outC;
+			}
 		}
 
-		{
-			fileString.clear();
-			sl.allocBuffer(1024 * 1024);
-			sl.setMode(Serializer::SerializerMode::Read);
-			sl.importFromFile(filePath);
-
-			int8 a = 0;
-			int16 b = 0;
-			int32 c = 0;
-			sl << a << b << c;
-		}
 
 
 		if (false == initialize())

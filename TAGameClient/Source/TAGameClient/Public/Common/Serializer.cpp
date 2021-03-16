@@ -18,15 +18,20 @@ namespace ta
 		resetBuffer();
 	}
 
-	void MemoryBuffer::allocBuffer(const int64 size) noexcept
+	void MemoryBuffer::copyBuffer(char* input, int64 inputNum) noexcept
 	{
-		resetBuffer();
+		growBuffer(inputNum);
+		memcpy(_data, input, _numBytes);
 
-		_data = (uint8*)malloc(size);
-		memset(_data, 0, size);
-		_maxBytes = size;
-		_numBytes = 0;
-		_currentPos = 0;
+		_numBytes = inputNum;
+		setBeginPos(); // _currentPos = _numBytes;
+	}
+
+	void MemoryBuffer::prepareCopyBuffer(int64 inputNum) noexcept
+	{
+		growBuffer(inputNum);
+		_numBytes = inputNum;
+		setBeginPos();
 	}
 
 	void MemoryBuffer::resetBuffer(void) noexcept
@@ -45,6 +50,11 @@ namespace ta
 	void MemoryBuffer::setBeginPos(void) noexcept
 	{
 		_currentPos = 0;
+	}
+
+	void MemoryBuffer::setEndPos(void) noexcept
+	{
+		_currentPos = _numBytes;
 	}
 
 	bool MemoryBuffer::write(void* input, int64 num) noexcept
@@ -66,10 +76,9 @@ namespace ta
 		}
 
 		const int64 finalPos = offset + num;
-		if (_maxBytes < finalPos)
+		while (_maxBytes < finalPos)
 		{
-			TA_ASSERT_DEV(false, "write => buffer overrun");
-			return false;
+			growBuffer(_maxBytes * 2);
 		}
 
 		_numBytes = (finalPos < _numBytes) ? _numBytes : finalPos;
@@ -112,7 +121,12 @@ namespace ta
 		return _numBytes;
 	}
 
-	uint8* MemoryBuffer::getData(void) noexcept
+	char* MemoryBuffer::getData(void) noexcept
+	{
+		return _data;
+	}
+
+	const char* MemoryBuffer::getData(void) const noexcept
 	{
 		return _data;
 	}
@@ -121,10 +135,9 @@ namespace ta
 	{
 		
 		std::string result;
-		//memcpy(result[0], )
-		if (false == FileLoader::saveFileString(filePath, (char*)_data))
+		if (false == FileLoader::saveFileString(filePath, *this))
 		{
-			TA_ASSERT_DEV(false, "read => buffer overrun");
+			TA_ASSERT_DEV(false, "saveFileString failed");
 			return false;
 		}
 
@@ -133,14 +146,43 @@ namespace ta
 
 	bool MemoryBuffer::importFromFile(const std::string& filePath) noexcept
 	{
-		std::string result;
-		if (false == FileLoader::loadFileString(filePath, result))
+		char* result = nullptr;
+		uint32 resultSize = 0;
+		if (false == FileLoader::loadFileString(filePath, *this))
 		{
-			TA_ASSERT_DEV(false, "read => buffer overrun");
+			TA_ASSERT_DEV(false, "importFromFile failed");
 			return false;
 		}
 
 		return true;
+	}
+
+	void MemoryBuffer::allocBuffer(const int64 size) noexcept
+	{
+		resetBuffer();
+
+		_data = (char*)malloc(size);
+		memset(_data, 0, size);
+		_maxBytes = size;
+		_numBytes = 0;
+		_currentPos = 0;
+	}
+
+	void MemoryBuffer::growBuffer(const int64 size) noexcept
+	{
+		if (size <= _maxBytes)
+		{
+			TA_LOG_DEV("current size is bigger");
+			return;
+		}
+
+		TA_LOG_DEV("grow buffer");
+		char* temp = _data;
+		_data = (char*)malloc(size);
+		memset(_data, 0, size);
+		memcpy(_data, temp, _maxBytes);
+		_maxBytes = size;
+		free(temp);
 	}
 }
 
@@ -159,11 +201,6 @@ namespace ta
 	void Serializer::setMode(const SerializerMode input) noexcept
 	{
 		_mode = input;
-	}
-
-	void Serializer::allocBuffer(const int64 size) noexcept
-	{
-		_buffer.allocBuffer(size);
 	}
 
 	bool Serializer::exportToFile(const std::string& filePath) noexcept
