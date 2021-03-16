@@ -26,6 +26,12 @@ namespace ta
 		ServerMoveActorSystem(void) noexcept;
 		virtual ~ServerMoveActorSystem(void) noexcept;
 
+		virtual bool initialize(void) noexcept override final;
+
+		virtual bool serializeNavigationMesh(Serializer& Ar, dtNavMesh* DetourNavMesh) noexcept override final;
+		virtual void serializeRecastMeshTile(Serializer& Ar, int32 NavMeshVersion, unsigned char*& TileData, int32& TileDataSize) noexcept override final;
+		virtual void serializeCompressedTileCacheData(Serializer& Ar, int32 NavMeshVersion, unsigned char*& CompressedData, int32& CompressedDataSize) noexcept override final;
+
 		virtual void update(const ActorSystemUpdateParameter& updateParameter) const noexcept;
 
 

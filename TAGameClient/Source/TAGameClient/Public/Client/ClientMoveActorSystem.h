@@ -7,6 +7,7 @@ namespace ta
 {
 	class Vector;
 	class CommonActor;
+	class Serializer;
 }
 
 
@@ -18,6 +19,7 @@ namespace ta
 		ClientMoveActorSystem(void) noexcept;
 		virtual ~ClientMoveActorSystem(void) noexcept;
 
+		virtual bool initialize(void) noexcept override final;
 		virtual void update(const ActorSystemUpdateParameter& updateParameter) const noexcept;
 
 		virtual bool processMoveActor(CommonActor* target

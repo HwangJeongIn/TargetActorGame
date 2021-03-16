@@ -203,6 +203,11 @@ namespace ta
 		_mode = input;
 	}
 
+	const Serializer::SerializerMode Serializer::getMode(void) const noexcept
+	{
+		return _mode;
+	}
+
 	bool Serializer::exportToFile(const std::string& filePath) noexcept
 	{
 		return _buffer.exportToFile(filePath);

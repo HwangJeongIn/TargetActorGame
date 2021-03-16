@@ -7,26 +7,26 @@
     <Filter Include="Common">
       <UniqueIdentifier>{21dbb016-85d6-47f9-9d39-5420e0a39f7d}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Server\NavigationSystem">
-      <UniqueIdentifier>{2bb6b76e-d9b2-4df7-899d-96c9b678d50c}</UniqueIdentifier>
+    <Filter Include="Common\NavigationSystem">
+      <UniqueIdentifier>{760551df-4b22-4a38-9763-4fb883eff600}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Server\NavigationSystem\RecastNavigation">
-      <UniqueIdentifier>{fb31654f-fc4c-4b0e-8e12-3a09f6b0033d}</UniqueIdentifier>
+    <Filter Include="Common\NavigationSystem\RecastNavigation">
+      <UniqueIdentifier>{ec9b0411-2481-4ae9-824c-ad41b0df5610}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Server\NavigationSystem\RecastNavigation\DebugUtils">
-      <UniqueIdentifier>{14e976c2-c383-43e9-8a25-7de97d4aea02}</UniqueIdentifier>
+    <Filter Include="Common\NavigationSystem\RecastNavigation\DebugUtils">
+      <UniqueIdentifier>{d214a2c6-14bc-41f7-bd76-6ed59f7ebb77}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Server\NavigationSystem\RecastNavigation\Detour">
-      <UniqueIdentifier>{8a29dbe8-bdf3-4733-b869-7d38c6380e1a}</UniqueIdentifier>
+    <Filter Include="Common\NavigationSystem\RecastNavigation\Detour">
+      <UniqueIdentifier>{bb17877d-6a17-419d-b821-23214d190638}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Server\NavigationSystem\RecastNavigation\DetourCrowd">
-      <UniqueIdentifier>{347c75cb-ea08-43f3-b007-e8dceb014ef4}</UniqueIdentifier>
+    <Filter Include="Common\NavigationSystem\RecastNavigation\DetourCrowd">
+      <UniqueIdentifier>{f7161bde-11ac-4b65-8f58-d4da6ce852d0}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Server\NavigationSystem\RecastNavigation\DetourTileCache">
-      <UniqueIdentifier>{1a92003a-5cd7-4000-8d45-1cc782b5eb58}</UniqueIdentifier>
+    <Filter Include="Common\NavigationSystem\RecastNavigation\DetourTileCache">
+      <UniqueIdentifier>{90cab270-43fc-4478-98a0-c8c2bce97384}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Server\NavigationSystem\RecastNavigation\Recast">
-      <UniqueIdentifier>{98bd27af-352f-4ae7-b67a-e771d15288d3}</UniqueIdentifier>
+    <Filter Include="Common\NavigationSystem\RecastNavigation\Recast">
+      <UniqueIdentifier>{e6e274d9-0743-411a-bdbf-f3ced98dbfe6}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -250,116 +250,116 @@
       <Filter>Common</Filter>
     </ClCompile>
     <ClCompile Include="..\Source\Server\Pathfinding.cpp" />
-    <ClCompile Include="..\Source\Server\NavigationSystem\RecastNavigation\Recast\Recast.cpp">
-      <Filter>Server\NavigationSystem\RecastNavigation\Recast</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Source\Server\NavigationSystem\RecastNavigation\Recast\RecastAlloc.cpp">
-      <Filter>Server\NavigationSystem\RecastNavigation\Recast</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Source\Server\NavigationSystem\RecastNavigation\Recast\RecastArea.cpp">
-      <Filter>Server\NavigationSystem\RecastNavigation\Recast</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Source\Server\NavigationSystem\RecastNavigation\Recast\RecastContour.cpp">
-      <Filter>Server\NavigationSystem\RecastNavigation\Recast</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Source\Server\NavigationSystem\RecastNavigation\Recast\RecastFilter.cpp">
-      <Filter>Server\NavigationSystem\RecastNavigation\Recast</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Source\Server\NavigationSystem\RecastNavigation\Recast\RecastLayers.cpp">
-      <Filter>Server\NavigationSystem\RecastNavigation\Recast</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Source\Server\NavigationSystem\RecastNavigation\Recast\RecastMesh.cpp">
-      <Filter>Server\NavigationSystem\RecastNavigation\Recast</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Source\Server\NavigationSystem\RecastNavigation\Recast\RecastMeshDetail.cpp">
-      <Filter>Server\NavigationSystem\RecastNavigation\Recast</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Source\Server\NavigationSystem\RecastNavigation\Recast\RecastRasterization.cpp">
-      <Filter>Server\NavigationSystem\RecastNavigation\Recast</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Source\Server\NavigationSystem\RecastNavigation\Recast\RecastRegion.cpp">
-      <Filter>Server\NavigationSystem\RecastNavigation\Recast</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Source\Server\NavigationSystem\RecastNavigation\DetourTileCache\DetourTileCache.cpp">
-      <Filter>Server\NavigationSystem\RecastNavigation\DetourTileCache</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Source\Server\NavigationSystem\RecastNavigation\DetourTileCache\DetourTileCacheBuilder.cpp">
-      <Filter>Server\NavigationSystem\RecastNavigation\DetourTileCache</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Source\Server\NavigationSystem\RecastNavigation\DetourTileCache\DetourTileCacheDetail.cpp">
-      <Filter>Server\NavigationSystem\RecastNavigation\DetourTileCache</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Source\Server\NavigationSystem\RecastNavigation\DetourTileCache\DetourTileCacheRegion.cpp">
-      <Filter>Server\NavigationSystem\RecastNavigation\DetourTileCache</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Source\Server\NavigationSystem\RecastNavigation\DetourCrowd\DetourCrowd.cpp">
-      <Filter>Server\NavigationSystem\RecastNavigation\DetourCrowd</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Source\Server\NavigationSystem\RecastNavigation\DetourCrowd\DetourLocalBoundary.cpp">
-      <Filter>Server\NavigationSystem\RecastNavigation\DetourCrowd</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Source\Server\NavigationSystem\RecastNavigation\DetourCrowd\DetourObstacleAvoidance.cpp">
-      <Filter>Server\NavigationSystem\RecastNavigation\DetourCrowd</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Source\Server\NavigationSystem\RecastNavigation\DetourCrowd\DetourPathCorridor.cpp">
-      <Filter>Server\NavigationSystem\RecastNavigation\DetourCrowd</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Source\Server\NavigationSystem\RecastNavigation\DetourCrowd\DetourPathQueue.cpp">
-      <Filter>Server\NavigationSystem\RecastNavigation\DetourCrowd</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Source\Server\NavigationSystem\RecastNavigation\DetourCrowd\DetourProximityGrid.cpp">
-      <Filter>Server\NavigationSystem\RecastNavigation\DetourCrowd</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Source\Server\NavigationSystem\RecastNavigation\DetourCrowd\DetourSharedBoundary.cpp">
-      <Filter>Server\NavigationSystem\RecastNavigation\DetourCrowd</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Source\Server\NavigationSystem\RecastNavigation\Detour\DetourAlloc.cpp">
-      <Filter>Server\NavigationSystem\RecastNavigation\Detour</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Source\Server\NavigationSystem\RecastNavigation\Detour\DetourCommon.cpp">
-      <Filter>Server\NavigationSystem\RecastNavigation\Detour</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Source\Server\NavigationSystem\RecastNavigation\Detour\DetourNavMesh.cpp">
-      <Filter>Server\NavigationSystem\RecastNavigation\Detour</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Source\Server\NavigationSystem\RecastNavigation\Detour\DetourNavMeshBuilder.cpp">
-      <Filter>Server\NavigationSystem\RecastNavigation\Detour</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Source\Server\NavigationSystem\RecastNavigation\Detour\DetourNavMeshQuery.cpp">
-      <Filter>Server\NavigationSystem\RecastNavigation\Detour</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Source\Server\NavigationSystem\RecastNavigation\Detour\DetourNode.cpp">
-      <Filter>Server\NavigationSystem\RecastNavigation\Detour</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Source\Server\NavigationSystem\RecastNavigation\DebugUtils\DebugDraw.cpp">
-      <Filter>Server\NavigationSystem\RecastNavigation\DebugUtils</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Source\Server\NavigationSystem\RecastNavigation\DebugUtils\DetourDebugDraw.cpp">
-      <Filter>Server\NavigationSystem\RecastNavigation\DebugUtils</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Source\Server\NavigationSystem\RecastNavigation\DebugUtils\RecastDebugDraw.cpp">
-      <Filter>Server\NavigationSystem\RecastNavigation\DebugUtils</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Source\Server\NavigationSystem\RecastNavigation\DebugUtils\RecastDump.cpp">
-      <Filter>Server\NavigationSystem\RecastNavigation\DebugUtils</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Source\Server\NavigationSystem\RecastNavigation\NavMeshPoint.cpp">
-      <Filter>Server\NavigationSystem\RecastNavigation</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Source\Server\NavigationSystem\RecastNavigation\RecastNavigationSystemUtility.cpp">
-      <Filter>Server\NavigationSystem\RecastNavigation</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Source\Server\NavigationSystem\RecastNavigation\Recast\RecastAssert.cpp">
-      <Filter>Server\NavigationSystem\RecastNavigation\Recast</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Source\Server\NavigationSystem\RecastNavigation\Detour\DetourAssert.cpp">
-      <Filter>Server\NavigationSystem\RecastNavigation\Detour</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Source\Server\NavigationSystem\RecastNavigation\NavMeshPath.cpp">
-      <Filter>Server\NavigationSystem\RecastNavigation</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\Serializer.cpp">
       <Filter>Common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\NavigationSystem\RecastNavigation\Recast\Recast.cpp">
+      <Filter>Common\NavigationSystem\RecastNavigation\Recast</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\NavigationSystem\RecastNavigation\Recast\RecastAlloc.cpp">
+      <Filter>Common\NavigationSystem\RecastNavigation\Recast</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\NavigationSystem\RecastNavigation\Recast\RecastArea.cpp">
+      <Filter>Common\NavigationSystem\RecastNavigation\Recast</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\NavigationSystem\RecastNavigation\Recast\RecastAssert.cpp">
+      <Filter>Common\NavigationSystem\RecastNavigation\Recast</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\NavigationSystem\RecastNavigation\Recast\RecastContour.cpp">
+      <Filter>Common\NavigationSystem\RecastNavigation\Recast</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\NavigationSystem\RecastNavigation\Recast\RecastFilter.cpp">
+      <Filter>Common\NavigationSystem\RecastNavigation\Recast</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\NavigationSystem\RecastNavigation\Recast\RecastLayers.cpp">
+      <Filter>Common\NavigationSystem\RecastNavigation\Recast</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\NavigationSystem\RecastNavigation\Recast\RecastMesh.cpp">
+      <Filter>Common\NavigationSystem\RecastNavigation\Recast</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\NavigationSystem\RecastNavigation\Recast\RecastMeshDetail.cpp">
+      <Filter>Common\NavigationSystem\RecastNavigation\Recast</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\NavigationSystem\RecastNavigation\Recast\RecastRasterization.cpp">
+      <Filter>Common\NavigationSystem\RecastNavigation\Recast</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\NavigationSystem\RecastNavigation\Recast\RecastRegion.cpp">
+      <Filter>Common\NavigationSystem\RecastNavigation\Recast</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\NavigationSystem\RecastNavigation\DetourTileCache\DetourTileCache.cpp">
+      <Filter>Common\NavigationSystem\RecastNavigation\DetourTileCache</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\NavigationSystem\RecastNavigation\DetourTileCache\DetourTileCacheBuilder.cpp">
+      <Filter>Common\NavigationSystem\RecastNavigation\DetourTileCache</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\NavigationSystem\RecastNavigation\DetourTileCache\DetourTileCacheDetail.cpp">
+      <Filter>Common\NavigationSystem\RecastNavigation\DetourTileCache</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\NavigationSystem\RecastNavigation\DetourTileCache\DetourTileCacheRegion.cpp">
+      <Filter>Common\NavigationSystem\RecastNavigation\DetourTileCache</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\NavigationSystem\RecastNavigation\DetourCrowd\DetourCrowd.cpp">
+      <Filter>Common\NavigationSystem\RecastNavigation\DetourCrowd</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\NavigationSystem\RecastNavigation\DetourCrowd\DetourLocalBoundary.cpp">
+      <Filter>Common\NavigationSystem\RecastNavigation\DetourCrowd</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\NavigationSystem\RecastNavigation\DetourCrowd\DetourObstacleAvoidance.cpp">
+      <Filter>Common\NavigationSystem\RecastNavigation\DetourCrowd</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\NavigationSystem\RecastNavigation\DetourCrowd\DetourPathCorridor.cpp">
+      <Filter>Common\NavigationSystem\RecastNavigation\DetourCrowd</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\NavigationSystem\RecastNavigation\DetourCrowd\DetourPathQueue.cpp">
+      <Filter>Common\NavigationSystem\RecastNavigation\DetourCrowd</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\NavigationSystem\RecastNavigation\DetourCrowd\DetourProximityGrid.cpp">
+      <Filter>Common\NavigationSystem\RecastNavigation\DetourCrowd</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\NavigationSystem\RecastNavigation\DetourCrowd\DetourSharedBoundary.cpp">
+      <Filter>Common\NavigationSystem\RecastNavigation\DetourCrowd</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\NavigationSystem\RecastNavigation\Detour\DetourAlloc.cpp">
+      <Filter>Common\NavigationSystem\RecastNavigation\Detour</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\NavigationSystem\RecastNavigation\Detour\DetourAssert.cpp">
+      <Filter>Common\NavigationSystem\RecastNavigation\Detour</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\NavigationSystem\RecastNavigation\Detour\DetourCommon.cpp">
+      <Filter>Common\NavigationSystem\RecastNavigation\Detour</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\NavigationSystem\RecastNavigation\Detour\DetourNavMesh.cpp">
+      <Filter>Common\NavigationSystem\RecastNavigation\Detour</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\NavigationSystem\RecastNavigation\Detour\DetourNavMeshBuilder.cpp">
+      <Filter>Common\NavigationSystem\RecastNavigation\Detour</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\NavigationSystem\RecastNavigation\Detour\DetourNavMeshQuery.cpp">
+      <Filter>Common\NavigationSystem\RecastNavigation\Detour</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\NavigationSystem\RecastNavigation\Detour\DetourNode.cpp">
+      <Filter>Common\NavigationSystem\RecastNavigation\Detour</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\NavigationSystem\RecastNavigation\DebugUtils\DebugDraw.cpp">
+      <Filter>Common\NavigationSystem\RecastNavigation\DebugUtils</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\NavigationSystem\RecastNavigation\DebugUtils\DetourDebugDraw.cpp">
+      <Filter>Common\NavigationSystem\RecastNavigation\DebugUtils</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\NavigationSystem\RecastNavigation\DebugUtils\RecastDebugDraw.cpp">
+      <Filter>Common\NavigationSystem\RecastNavigation\DebugUtils</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\NavigationSystem\RecastNavigation\DebugUtils\RecastDump.cpp">
+      <Filter>Common\NavigationSystem\RecastNavigation\DebugUtils</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\NavigationSystem\RecastNavigation\NavMeshPoint.cpp">
+      <Filter>Common\NavigationSystem\RecastNavigation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\NavigationSystem\RecastNavigation\RecastNavigationSystemUtility.cpp">
+      <Filter>Common\NavigationSystem\RecastNavigation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\NavigationSystem\RecastNavigation\NavMeshPath.cpp">
+      <Filter>Common\NavigationSystem\RecastNavigation</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -604,92 +604,92 @@
       <Filter>Common</Filter>
     </ClInclude>
     <ClInclude Include="..\Source\Server\Pathfinding.h" />
-    <ClInclude Include="..\Source\Server\NavigationSystem\RecastNavigation\Recast\Recast.h">
-      <Filter>Server\NavigationSystem\RecastNavigation\Recast</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Source\Server\NavigationSystem\RecastNavigation\Recast\RecastAlloc.h">
-      <Filter>Server\NavigationSystem\RecastNavigation\Recast</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Source\Server\NavigationSystem\RecastNavigation\Recast\RecastAssert.h">
-      <Filter>Server\NavigationSystem\RecastNavigation\Recast</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Source\Server\NavigationSystem\RecastNavigation\DetourTileCache\DetourTileCache.h">
-      <Filter>Server\NavigationSystem\RecastNavigation\DetourTileCache</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Source\Server\NavigationSystem\RecastNavigation\DetourTileCache\DetourTileCacheBuilder.h">
-      <Filter>Server\NavigationSystem\RecastNavigation\DetourTileCache</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Source\Server\NavigationSystem\RecastNavigation\DetourCrowd\DetourCrowd.h">
-      <Filter>Server\NavigationSystem\RecastNavigation\DetourCrowd</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Source\Server\NavigationSystem\RecastNavigation\DetourCrowd\DetourLocalBoundary.h">
-      <Filter>Server\NavigationSystem\RecastNavigation\DetourCrowd</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Source\Server\NavigationSystem\RecastNavigation\DetourCrowd\DetourObstacleAvoidance.h">
-      <Filter>Server\NavigationSystem\RecastNavigation\DetourCrowd</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Source\Server\NavigationSystem\RecastNavigation\DetourCrowd\DetourPathCorridor.h">
-      <Filter>Server\NavigationSystem\RecastNavigation\DetourCrowd</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Source\Server\NavigationSystem\RecastNavigation\DetourCrowd\DetourPathQueue.h">
-      <Filter>Server\NavigationSystem\RecastNavigation\DetourCrowd</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Source\Server\NavigationSystem\RecastNavigation\DetourCrowd\DetourProximityGrid.h">
-      <Filter>Server\NavigationSystem\RecastNavigation\DetourCrowd</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Source\Server\NavigationSystem\RecastNavigation\DetourCrowd\DetourSharedBoundary.h">
-      <Filter>Server\NavigationSystem\RecastNavigation\DetourCrowd</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Source\Server\NavigationSystem\RecastNavigation\Detour\DetourAlloc.h">
-      <Filter>Server\NavigationSystem\RecastNavigation\Detour</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Source\Server\NavigationSystem\RecastNavigation\Detour\DetourAssert.h">
-      <Filter>Server\NavigationSystem\RecastNavigation\Detour</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Source\Server\NavigationSystem\RecastNavigation\Detour\DetourCommon.h">
-      <Filter>Server\NavigationSystem\RecastNavigation\Detour</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Source\Server\NavigationSystem\RecastNavigation\Detour\DetourNavMesh.h">
-      <Filter>Server\NavigationSystem\RecastNavigation\Detour</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Source\Server\NavigationSystem\RecastNavigation\Detour\DetourNavMeshBuilder.h">
-      <Filter>Server\NavigationSystem\RecastNavigation\Detour</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Source\Server\NavigationSystem\RecastNavigation\Detour\DetourNavMeshQuery.h">
-      <Filter>Server\NavigationSystem\RecastNavigation\Detour</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Source\Server\NavigationSystem\RecastNavigation\Detour\DetourNode.h">
-      <Filter>Server\NavigationSystem\RecastNavigation\Detour</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Source\Server\NavigationSystem\RecastNavigation\Detour\DetourStatus.h">
-      <Filter>Server\NavigationSystem\RecastNavigation\Detour</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Source\Server\NavigationSystem\RecastNavigation\DebugUtils\DebugDraw.h">
-      <Filter>Server\NavigationSystem\RecastNavigation\DebugUtils</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Source\Server\NavigationSystem\RecastNavigation\DebugUtils\DetourDebugDraw.h">
-      <Filter>Server\NavigationSystem\RecastNavigation\DebugUtils</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Source\Server\NavigationSystem\RecastNavigation\DebugUtils\RecastDebugDraw.h">
-      <Filter>Server\NavigationSystem\RecastNavigation\DebugUtils</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Source\Server\NavigationSystem\RecastNavigation\DebugUtils\RecastDump.h">
-      <Filter>Server\NavigationSystem\RecastNavigation\DebugUtils</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Source\Server\NavigationSystem\RecastNavigation\RecastNavigationSystemInclude.h">
-      <Filter>Server\NavigationSystem\RecastNavigation</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Source\Server\NavigationSystem\RecastNavigation\RecastNavigationSystemUtility.h">
-      <Filter>Server\NavigationSystem\RecastNavigation</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Source\Server\NavigationSystem\RecastNavigation\NavMeshPoint.h">
-      <Filter>Server\NavigationSystem\RecastNavigation</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Source\Server\NavigationSystem\RecastNavigation\NavMeshPath.h">
-      <Filter>Server\NavigationSystem\RecastNavigation</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\Serializer.h">
       <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\NavigationSystem\RecastNavigation\Recast\Recast.h">
+      <Filter>Common\NavigationSystem\RecastNavigation\Recast</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\NavigationSystem\RecastNavigation\Recast\RecastAlloc.h">
+      <Filter>Common\NavigationSystem\RecastNavigation\Recast</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\NavigationSystem\RecastNavigation\Recast\RecastAssert.h">
+      <Filter>Common\NavigationSystem\RecastNavigation\Recast</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\NavigationSystem\RecastNavigation\DetourTileCache\DetourTileCache.h">
+      <Filter>Common\NavigationSystem\RecastNavigation\DetourTileCache</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\NavigationSystem\RecastNavigation\DetourTileCache\DetourTileCacheBuilder.h">
+      <Filter>Common\NavigationSystem\RecastNavigation\DetourTileCache</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\NavigationSystem\RecastNavigation\DetourCrowd\DetourCrowd.h">
+      <Filter>Common\NavigationSystem\RecastNavigation\DetourCrowd</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\NavigationSystem\RecastNavigation\DetourCrowd\DetourLocalBoundary.h">
+      <Filter>Common\NavigationSystem\RecastNavigation\DetourCrowd</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\NavigationSystem\RecastNavigation\DetourCrowd\DetourObstacleAvoidance.h">
+      <Filter>Common\NavigationSystem\RecastNavigation\DetourCrowd</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\NavigationSystem\RecastNavigation\DetourCrowd\DetourPathCorridor.h">
+      <Filter>Common\NavigationSystem\RecastNavigation\DetourCrowd</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\NavigationSystem\RecastNavigation\DetourCrowd\DetourPathQueue.h">
+      <Filter>Common\NavigationSystem\RecastNavigation\DetourCrowd</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\NavigationSystem\RecastNavigation\DetourCrowd\DetourProximityGrid.h">
+      <Filter>Common\NavigationSystem\RecastNavigation\DetourCrowd</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\NavigationSystem\RecastNavigation\DetourCrowd\DetourSharedBoundary.h">
+      <Filter>Common\NavigationSystem\RecastNavigation\DetourCrowd</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\NavigationSystem\RecastNavigation\Detour\DetourAlloc.h">
+      <Filter>Common\NavigationSystem\RecastNavigation\Detour</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\NavigationSystem\RecastNavigation\Detour\DetourAssert.h">
+      <Filter>Common\NavigationSystem\RecastNavigation\Detour</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\NavigationSystem\RecastNavigation\Detour\DetourCommon.h">
+      <Filter>Common\NavigationSystem\RecastNavigation\Detour</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\NavigationSystem\RecastNavigation\Detour\DetourNavMesh.h">
+      <Filter>Common\NavigationSystem\RecastNavigation\Detour</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\NavigationSystem\RecastNavigation\Detour\DetourNavMeshBuilder.h">
+      <Filter>Common\NavigationSystem\RecastNavigation\Detour</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\NavigationSystem\RecastNavigation\Detour\DetourNavMeshQuery.h">
+      <Filter>Common\NavigationSystem\RecastNavigation\Detour</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\NavigationSystem\RecastNavigation\Detour\DetourNode.h">
+      <Filter>Common\NavigationSystem\RecastNavigation\Detour</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\NavigationSystem\RecastNavigation\Detour\DetourStatus.h">
+      <Filter>Common\NavigationSystem\RecastNavigation\Detour</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\NavigationSystem\RecastNavigation\DebugUtils\DebugDraw.h">
+      <Filter>Common\NavigationSystem\RecastNavigation\DebugUtils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\NavigationSystem\RecastNavigation\DebugUtils\DetourDebugDraw.h">
+      <Filter>Common\NavigationSystem\RecastNavigation\DebugUtils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\NavigationSystem\RecastNavigation\DebugUtils\RecastDebugDraw.h">
+      <Filter>Common\NavigationSystem\RecastNavigation\DebugUtils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\NavigationSystem\RecastNavigation\DebugUtils\RecastDump.h">
+      <Filter>Common\NavigationSystem\RecastNavigation\DebugUtils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\NavigationSystem\RecastNavigation\NavMeshPoint.h">
+      <Filter>Common\NavigationSystem\RecastNavigation</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\NavigationSystem\RecastNavigation\RecastNavigationSystemInclude.h">
+      <Filter>Common\NavigationSystem\RecastNavigation</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\NavigationSystem\RecastNavigation\RecastNavigationSystemUtility.h">
+      <Filter>Common\NavigationSystem\RecastNavigation</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\NavigationSystem\RecastNavigation\NavMeshPath.h">
+      <Filter>Common\NavigationSystem\RecastNavigation</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

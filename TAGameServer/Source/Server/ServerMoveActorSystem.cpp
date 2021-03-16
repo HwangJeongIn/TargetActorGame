@@ -1,4 +1,4 @@
-﻿#include "Server/ServerMoveActorSystem.h"
+#include "Server/ServerMoveActorSystem.h"
 #include "Server/ServerApp.h"
 #include "Server/ServerActorManager.h"
 #include "Server/AllPacketServer.h"
@@ -9,6 +9,7 @@
 #include "Common/ScopedLock.h"
 #include "Common/CommonActor.h"
 #include "Common/GetComponentAndSystem.h"
+#include "Common/Serializer.h"
 #include "RecastNavigationSystemUtility.h"
 #include "NavMeshPoint.h"
 #include "NavMeshPath.h"
@@ -24,6 +25,32 @@ namespace ta
 	}
 
 	ServerMoveActorSystem::~ServerMoveActorSystem(void) noexcept
+	{
+	}
+
+	bool ServerMoveActorSystem::initialize(void) noexcept
+	{
+		Serializer slR;
+		slR.setMode(Serializer::SerializerMode::Read);
+		if (false == serializeNavigationMesh(slR, _detourNavMesh))
+		{
+			TA_ASSERT_DEV(false, "비정상");
+			return false;
+		}
+
+		return true;
+	}
+
+	bool ServerMoveActorSystem::serializeNavigationMesh(Serializer& Ar, dtNavMesh* DetourNavMesh) noexcept
+	{
+		return false;
+	}
+
+	void ServerMoveActorSystem::serializeRecastMeshTile(Serializer& Ar, int32 NavMeshVersion, unsigned char*& TileData, int32& TileDataSize) noexcept
+	{
+	}
+
+	void ServerMoveActorSystem::serializeCompressedTileCacheData(Serializer& Ar, int32 NavMeshVersion, unsigned char*& CompressedData, int32& CompressedDataSize) noexcept
 	{
 	}
 

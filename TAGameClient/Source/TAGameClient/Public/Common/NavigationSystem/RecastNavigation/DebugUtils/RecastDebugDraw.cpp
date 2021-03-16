@@ -25,6 +25,9 @@
 #include "Recast/Recast.h"
 #include "RecastNavigationSystemInclude.h"
 
+namespace ta
+{
+
 void duDebugDrawTriMesh(duDebugDraw* dd, const float* verts, int /*nverts*/,
 						const int* tris, const float* normals, int ntris,
 						const unsigned char* flags, const float texScale)
@@ -1065,4 +1068,6 @@ void duDebugDrawPolyMeshDetail(duDebugDraw* dd, const struct rcPolyMeshDetail& d
 			dd->vertex(&verts[j*3], colv);
 	}
 	dd->end();
+}
+
 }

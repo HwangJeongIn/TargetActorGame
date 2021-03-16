@@ -60,6 +60,7 @@ namespace ta
 		virtual ~Serializer(void) noexcept;
 
 		void setMode(const SerializerMode input) noexcept;
+		const Serializer::SerializerMode getMode(void) const noexcept;
 		
 		bool exportToFile(const std::string& filePath) noexcept;
 		bool importFromFile(const std::string& filePath) noexcept;

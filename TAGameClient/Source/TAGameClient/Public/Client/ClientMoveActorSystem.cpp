@@ -3,7 +3,7 @@
 #include "Common/CommonActor.h"
 #include "Common/CommonMoveActorComponent.h"
 #include "Common/ScopedLock.h"
-
+#include "Common/Serializer.h"
 
 namespace ta
 {
@@ -13,6 +13,19 @@ namespace ta
 
 	ClientMoveActorSystem::~ClientMoveActorSystem(void) noexcept
 	{
+	}
+
+	bool ClientMoveActorSystem::initialize(void) noexcept
+	{
+#ifndef TA_SERVER
+		Serializer slW;
+		slW.setMode(Serializer::SerializerMode::Write);
+		serializeNavigationMesh(slW, );
+
+		slW.exportToFile(NavigationMeshPath);
+
+#endif
+		return true;
 	}
 
 	void ClientMoveActorSystem::update(const ActorSystemUpdateParameter& updateParameter) const noexcept
