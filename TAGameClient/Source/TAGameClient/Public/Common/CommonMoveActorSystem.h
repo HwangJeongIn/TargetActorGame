@@ -43,7 +43,7 @@ namespace ta
 		static const ActorSystemType getActorSystemType(void) noexcept;
 
 #ifndef TA_CLIENT_IN_SERVER
-		bool serializeNavigationMesh(Serializer& Ar, dtNavMesh* DetourNavMesh) noexcept;
+		bool serializeNavigationMesh(Serializer& Ar, dtNavMesh*& DetourNavMesh) noexcept;
 		void serializeRecastMeshTile(Serializer& Ar, int32 NavMeshVersion, unsigned char*& TileData, int32& TileDataSize) noexcept;
 		void serializeCompressedTileCacheData(Serializer& Ar, int32 NavMeshVersion, unsigned char*& CompressedData, int32& CompressedDataSize) noexcept;
 #endif

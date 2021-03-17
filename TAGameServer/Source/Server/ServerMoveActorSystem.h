@@ -1,6 +1,7 @@
-#pragma once
+﻿#pragma once
 
 #include "Common/CommonMoveActorSystem.h"
+#include "Common/Vector.h"
 #include "RecastNavigation/Detour/DetourNavMesh.h"
 #include "RecastNavigation/Detour/DetourNavMeshQuery.h"
 #include <vector>
@@ -67,6 +68,8 @@ namespace ta
 	public:
 		// Navigation =========================================================================================================================================
 		bool findPath(const ActorKey& targetActorKey, const Vector& startPos, const Vector& endPos, NavMeshPath& path) noexcept;
+		bool projectPointToNavMesh(const Vector& point, Vector& result) const noexcept;
+		
 
 	private:
 		bool preparePathFinding(const Vector& startPos, const Vector& endPos,
@@ -95,6 +98,9 @@ namespace ta
 		// dtQuerySpecialLinkFilter _defaultQuerySpecialLinkFilter;
 		dtNavMesh* _detourNavMesh; 
 		dtQueryFilter _defaultQueryFilter;
+
+		const Vector _defaultRecastExtent;
+		const Vector _defaultExtent;
 		const int32 _defaultMaxNodes;
 		const float _defaultCostLimit;
 		// Navigation =========================================================================================================================================

@@ -20,7 +20,9 @@
 namespace ta
 {
 	ServerMoveActorSystem::ServerMoveActorSystem(void) noexcept
-		: _defaultMaxNodes(2048)
+		: _defaultRecastExtent{ 50.0f, 250.0f, 50.0f }
+		, _defaultExtent(50.0f, 50.0f, 250.0f)
+		, _defaultMaxNodes(2048)
 		, _defaultCostLimit(3.40282347e+38)
 		, _detourNavMesh(nullptr)
 	{
@@ -43,7 +45,6 @@ namespace ta
 			return false;
 		}
 
-	
 		const uint32 count = navigationMeshFiles.size();
 		std::string extention;
 		for (uint32 index = 0; index < count; ++index)
@@ -75,6 +76,13 @@ namespace ta
 #endif 
 		}
 		
+		// test
+		
+		if(true)
+		{
+			NavMeshPath path;
+			findPath(ActorKey(), Vector(-60, 260, 73), Vector(540, 260, 73), path);
+		}
 
 		return true;
 	}
@@ -622,12 +630,12 @@ namespace ta
 			return false;
 		}
 
-		CommonActor* targetActor = GetActorManager()->getActor(targetActorKey);
-		if (nullptr == targetActor)
-		{
-			TA_ASSERT_DEV(false, "비정상입니다.");
-			return false;
-		}
+		//CommonActor* targetActor = GetActorManager()->getActor(targetActorKey);
+		//if (nullptr == targetActor)
+		//{
+		//	TA_ASSERT_DEV(false, "비정상입니다.");
+		//	return false;
+		//}
 
 		dtNavMeshQuery query;
 		query.init(_detourNavMesh, _defaultMaxNodes, nullptr);
@@ -687,6 +695,41 @@ namespace ta
 		return true;
 	}
 
+	bool ServerMoveActorSystem::projectPointToNavMesh(const Vector& point, Vector& result) const noexcept
+	{
+		if (nullptr == _detourNavMesh)
+		{
+			return false;
+		}
+
+		dtNavMeshQuery query;
+		query.init(_detourNavMesh, _defaultMaxNodes, nullptr);
+
+		bool rv = false;
+		float rcClosestPoint[3];
+		const Vector rcPoint = TAVectorToRecastVector(point);
+		//const Vector rcExtent = TAVectorToRecastVector(_defaultExtent);
+		dtPolyRef polyRef;
+		query.findNearestPoly2D(&rcPoint._x, &_defaultExtent._x, &_defaultQueryFilter, &polyRef, rcClosestPoint);
+
+		if (polyRef > 0)
+		{
+			// one last step required due to recast's BVTree imprecision
+			const Vector& closestPoint = RecastVectorToTAVector(rcClosestPoint);
+			const Vector closestPointDelta = closestPoint - point;
+			if (-_defaultExtent._x <= closestPointDelta._x && closestPointDelta._x <= _defaultExtent._x
+				&& -_defaultExtent._y <= closestPointDelta._y && closestPointDelta._y <= _defaultExtent._y
+				&& -_defaultExtent._z <= closestPointDelta._z && closestPointDelta._z <= _defaultExtent._z)
+			{
+				rv = true;
+				result = closestPoint;
+			}
+		}
+		
+
+		return rv;
+	}
+
 	bool ServerMoveActorSystem::preparePathFinding(const Vector& startPos, const Vector& endPos,
 												   const dtNavMeshQuery& query, const dtQueryFilter& queryFilter,
 												   Vector& recastStartPos, dtPolyRef& startPoly,
@@ -694,12 +737,12 @@ namespace ta
 	{
 		TA_TEMP_DEV("필요에 따라 변경");
 		//const Vector navExtent = NavMeshOwner->GetModifiedQueryExtent(NavMeshOwner->GetDefaultQueryExtent());
-		const float extent[3] = { 0.0f, 0.0f, 0.008f };
+		//const float extent[3] = { 0.0f, 0.0f, 0.008f };
 		const Vector recastStartToProject = TAVectorToRecastVector(startPos);
 		const Vector recastEndToProject = TAVectorToRecastVector(endPos);
 
 		startPoly = INVALID_NAVNODEREF;
-		query.findNearestPoly(&recastStartToProject._x, extent, &queryFilter, &startPoly, &recastStartPos._x);
+		query.findNearestPoly(&recastStartToProject._x, &_defaultRecastExtent._x, &queryFilter, &startPoly, &recastStartPos._x);
 		if (startPoly == INVALID_NAVNODEREF)
 		{
 			TA_ASSERT_DEV(false, "비정상입니다.");
@@ -707,7 +750,7 @@ namespace ta
 		}
 
 		endPoly = INVALID_NAVNODEREF;
-		query.findNearestPoly(&recastEndToProject._x, extent, &queryFilter, &endPoly, &recastEndPos._x);
+		query.findNearestPoly(&recastEndToProject._x, &_defaultRecastExtent._x, &queryFilter, &endPoly, &recastEndPos._x);
 		if (endPoly == INVALID_NAVNODEREF)
 		{
 			TA_ASSERT_DEV(false, "비정상입니다.");

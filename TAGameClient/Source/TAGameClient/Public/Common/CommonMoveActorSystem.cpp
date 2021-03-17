@@ -39,7 +39,7 @@ namespace ta
 	}
 
 #ifndef TA_CLIENT_IN_SERVER
-	bool CommonMoveActorSystem::serializeNavigationMesh(Serializer& Ar, dtNavMesh* DetourNavMesh) noexcept
+	bool CommonMoveActorSystem::serializeNavigationMesh(Serializer& Ar, dtNavMesh*& DetourNavMesh) noexcept
 	{
 		const Serializer::SerializerMode mode = Ar.getMode();
 		// 쓰려는데 없다? => 오류
@@ -172,7 +172,7 @@ namespace ta
 
 					unsigned char* TileData = NULL;
 					TileDataSize = 0;
-					//serializeRecastMeshTile(Ar, 13, TileData, TileDataSize);
+					serializeRecastMeshTile(Ar, 13, TileData, TileDataSize);
 
 					if (TileData != NULL)
 					{
