@@ -10,6 +10,8 @@
 #include "Common/CommonActor.h"
 #include "Common/GetComponentAndSystem.h"
 #include "Common/Serializer.h"
+#include "Common/FileLoader.h"
+#include "Common/StringUtility.h"
 #include "RecastNavigation/RecastNavigationSystemUtility.h"
 #include "RecastNavigation/NavMeshPoint.h"
 #include "RecastNavigation/NavMeshPath.h"
@@ -32,11 +34,47 @@ namespace ta
 	{
 		Serializer slR;
 		slR.setMode(Serializer::SerializerMode::Read);
-		if (false == serializeNavigationMesh(slR, _detourNavMesh))
+
+		std::vector<fs::path> navigationMeshFiles;
+		FileLoader::getFilePathsFromDirectory(NavigationMeshPath, navigationMeshFiles);
+		if (0 == navigationMeshFiles.size())
 		{
 			TA_ASSERT_DEV(false, "비정상");
 			return false;
 		}
+
+	
+		const uint32 count = navigationMeshFiles.size();
+		std::string extention;
+		for (uint32 index = 0; index < count; ++index)
+		{
+			Extension(navigationMeshFiles[index].string(), extention);
+			if (0 != extention.compare("rnm"))
+			{
+				continue;
+			}
+			if (false == slR.importFromFile(navigationMeshFiles[index]))
+			{
+				TA_ASSERT_DEV(false, "비정상");
+				return false;
+			}
+
+			// 일단 하나밖에 없다 , 추가하려면 하자
+			if (false == serializeNavigationMesh(slR, _detourNavMesh))
+			{
+				TA_ASSERT_DEV(false, "비정상");
+				return false;
+			}
+
+#ifdef CAN_CREATE_LOG_FILE
+			if (false == slR.exportLogData(navigationMeshFiles[index] += "Read"))
+			{
+				TA_ASSERT_DEV(false, "비정상");
+				return false;
+			}
+#endif 
+		}
+		
 
 		return true;
 	}

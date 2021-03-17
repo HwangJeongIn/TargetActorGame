@@ -1,4 +1,4 @@
-#include "Common/StringUtility.h"
+﻿#include "Common/StringUtility.h"
 #include "Common/Vector.h"
 #include <cstdlib>
 #include <sstream>
@@ -71,6 +71,29 @@ namespace ta
 			if ('.' == inOut[index])
 			{
 				inOut.resize(index);
+				return;
+			}
+			--index;
+		}
+	}
+
+	void Extension(const std::string& input, std::string& output) noexcept
+	{
+		const uint32 size = input.size();
+		if (0 == size)
+		{
+			return;
+		}
+
+		output.clear();
+		int32 index = static_cast<int32>(size);
+		--index;
+
+		while (0 <= index)
+		{
+			if ('.' == input[index])
+			{
+				output = input.substr(index + 1, size - (index+1));
 				return;
 			}
 			--index;

@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 
 #include "Common/CommonBase.h"
@@ -35,6 +35,7 @@ namespace ta
 
 		static bool loadFileString(const fs::path& filePath, MemoryBuffer& buffer) noexcept;
 		static bool saveFileString(const fs::path& filePath, const MemoryBuffer& buffer) noexcept;
+		static bool saveFileString(const fs::path& filePath, const std::string& buffer) noexcept;
 
 	private:
 

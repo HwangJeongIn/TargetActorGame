@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 #include "Common/CommonMoveActorSystem.h"
 
@@ -7,7 +7,6 @@ namespace ta
 {
 	class Vector;
 	class CommonActor;
-	class Serializer;
 }
 
 
@@ -21,6 +20,10 @@ namespace ta
 
 		virtual bool initialize(void) noexcept override final;
 		virtual void update(const ActorSystemUpdateParameter& updateParameter) const noexcept;
+
+#ifndef TA_SERVER
+		bool exportRecastNavMesh(void) noexcept;
+#endif
 
 		virtual bool processMoveActor(CommonActor* target
 										 , const Vector& newPos

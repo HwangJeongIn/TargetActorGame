@@ -1,4 +1,4 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+﻿// Fill out your copyright notice in the Description page of Project Settings.
 
 
 #include "TAPlayer.h"
@@ -7,6 +7,8 @@
 #include "TAAIController.h"
 #include "TAPlayerController.h"
 #include "DrawDebugHelpers.h"
+#include "Common/GetComponentAndSystem.h"
+#include "Client/ClientMoveActorSystem.h"
 
 
 // Sets default values
@@ -215,6 +217,9 @@ void ATAPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 	PlayerInputComponent->BindAction(TEXT("Attack"), EInputEvent::IE_Pressed, this, &ATAPlayer::attack);
 	PlayerInputComponent->BindAction(TEXT("ToggleInventory"), EInputEvent::IE_Pressed, this, &ATAPlayer::toggleInventory);
 	PlayerInputComponent->BindAction(TEXT("ToggleMousePoint"), EInputEvent::IE_Pressed, this, &ATAPlayer::toggleMousePoint);
+
+	// temp
+	PlayerInputComponent->BindAction(TEXT("ExportRecastNavMesh"), EInputEvent::IE_Pressed, this, &ATAPlayer::exportRecastNavMesh);
 }
 
 void ATAPlayer::PostInitializeComponents()
@@ -490,6 +495,13 @@ void ATAPlayer::toggleMousePoint(void) noexcept
 	ATAPlayerController* controller = static_cast<ATAPlayerController*>(GetController());
 	controller->bShowMouseCursor = !(controller->bShowMouseCursor);
 	TA_LOG_DEV("Toggle mouse point : %d", controller->bShowMouseCursor);
+}
+
+void ATAPlayer::exportRecastNavMesh(void) noexcept
+{
+	ta::ClientMoveActorSystem* clientMoveActorSystem = ta::GetActorSystem<ta::ClientMoveActorSystem>();
+	const bool result = clientMoveActorSystem->exportRecastNavMesh();
+	TA_LOG_DEV("ExportRecastNavMesh result : %d", result);
 }
 
 void ATAPlayer::onAttackMontageEnded(UAnimMontage* montage, bool interrupted) noexcept

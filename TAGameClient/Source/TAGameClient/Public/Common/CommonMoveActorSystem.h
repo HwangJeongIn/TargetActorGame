@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 #include "Common/ActorSystem.h"
 #include "Common/KeyDefinition.h"
@@ -8,27 +8,27 @@
 
 namespace fs = std::filesystem;
 
-#ifndef TA_SERVER
-namespace ta
-{
-	extern fs::path NavigationMeshPath;
-}
 
+#ifndef TA_SERVER
 class dtNavMesh;
 #endif
 
-
-
 namespace ta
 {
+#if defined(TA_SERVER) && !defined(TA_CLIENT_IN_SERVER)
+	class dtNavMesh;
+	extern const fs::path NavigationMeshPath;
+#elif !defined(TA_SERVER)
+	extern fs::path NavigationMeshPath;
+#endif
+
 	class CommonActor;
 	class Vector;
 	class CommonMoveActorComponent;
 	class Serializer;
 
-#if defined(TA_SERVER) && !defined(TA_CLIENT_IN_SERVER)
-	class dtNavMesh;
-#endif
+
+
 }
 
 

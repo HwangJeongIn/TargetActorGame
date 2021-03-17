@@ -1,4 +1,4 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+﻿// Fill out your copyright notice in the Description page of Project Settings.
 
 
 #include "TAGameInstance.h"
@@ -98,18 +98,20 @@ UTAGameInstance::UTAGameInstance()
 		//TA_LOG_DEV("%s", *FPaths::GetProjectFilePath());
 		//TA_LOG_DEV("test log");
 		//TA_LOG_DEV("%s", fs::current_path().c_str());
-		const TCHAR* projectFilePath = *FPaths::GetProjectFilePath();
+		
+		// 스트링 에러남
+		//const TCHAR* projectFilePath = *FPaths::GetProjectFilePath();
 
-		ta::GameDataXmlPath = projectFilePath;
+		ta::GameDataXmlPath = *FPaths::GetProjectFilePath();
 		ta::GameDataXmlPath /= "../GameData/Xml";
 		TA_LOG_DEV("%s", ta::GameDataXmlPath.c_str());
 
 
-		ta::SpawnDataPath = projectFilePath;
+		ta::SpawnDataPath = *FPaths::GetProjectFilePath();
 		ta::SpawnDataPath /= "../SpawnData";
 		TA_LOG_DEV("%s", ta::SpawnDataPath.c_str());
 
-		ta::NavigationMeshPath = projectFilePath;
+		ta::NavigationMeshPath = *FPaths::GetProjectFilePath();
 		ta::NavigationMeshPath /= "../NavigationMesh";
 		TA_LOG_DEV("%s", ta::NavigationMeshPath.c_str());
 	}

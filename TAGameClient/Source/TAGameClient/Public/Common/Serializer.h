@@ -1,7 +1,11 @@
-#pragma once
+﻿#pragma once
 
 #include "Common/CommonBase.h"
+#include <filesystem>
 
+namespace fs = std::filesystem;
+
+#define CAN_CREATE_LOG_FILE
 
 namespace ta
 {
@@ -17,18 +21,26 @@ namespace ta
 		void setBeginPos(void) noexcept;
 		void setEndPos(void) noexcept;
 
-		bool write(void* input, int64 num) noexcept;
-		bool write(void* input, int64 offset, int64 num) noexcept;
+		bool write(void* input, int64 num, const TADataType& dataType) noexcept;
+		bool write(void* input, int64 offset, int64 num, const TADataType& dataType) noexcept;
 
-		bool read(void* input, int64 num) noexcept;
-		bool read(void* input, int64 offset, int64 num) noexcept;
+		bool read(void* input, int64 num, const TADataType& dataType) noexcept;
+		bool read(void* input, int64 offset, int64 num, const TADataType& dataType) noexcept;
+
+#ifdef CAN_CREATE_LOG_FILE
+		void writeLog(void* input, int64 offset, int64 num, const TADataType& dataType, bool isWriteMode) noexcept;
+#endif
 
 		int64 getDataSize(void) const noexcept;
 		char* getData(void) noexcept;
 		const char* getData(void) const noexcept;
 
-		bool exportToFile(const std::string& filePath) noexcept;
-		bool importFromFile(const std::string& filePath) noexcept;
+		bool exportToFile(const fs::path& filePath) noexcept;
+		bool importFromFile(const fs::path& filePath) noexcept;
+
+#ifdef CAN_CREATE_LOG_FILE
+		bool exportLogData(const fs::path& filePath) noexcept;
+#endif
 
 	private:
 		void allocBuffer(const int64 size) noexcept;
@@ -40,6 +52,10 @@ namespace ta
 		char* _data;
 		int64 _numBytes;
 		int64 _maxBytes;
+
+#ifdef CAN_CREATE_LOG_FILE
+		std::string _logData;
+#endif
 	};
 
 }
@@ -62,8 +78,12 @@ namespace ta
 		void setMode(const SerializerMode input) noexcept;
 		const Serializer::SerializerMode getMode(void) const noexcept;
 		
-		bool exportToFile(const std::string& filePath) noexcept;
-		bool importFromFile(const std::string& filePath) noexcept;
+		bool exportToFile(const fs::path& filePath) noexcept;
+		bool importFromFile(const fs::path& filePath) noexcept;
+
+#ifdef CAN_CREATE_LOG_FILE
+		bool exportLogData(const fs::path& filePath) noexcept;
+#endif
 
 		Serializer& operator<<(uint8& value) noexcept;
 		Serializer& operator<<(uint16& value) noexcept;
@@ -77,7 +97,7 @@ namespace ta
 		Serializer& operator<<(float& value) noexcept;
 
 	private:
-		bool serialize(void* data, int64 num) noexcept;
+		bool serialize(void* data, int64 num, const TADataType& dataType) noexcept;
 
 		//template<typename T>
 		//Serializer& serialize(T& Value)

@@ -1,9 +1,19 @@
-#include "Client/ClientMoveActorSystem.h"
+﻿#include "Client/ClientMoveActorSystem.h"
 #include "Client/AllPacketClient.h"
 #include "Common/CommonActor.h"
 #include "Common/CommonMoveActorComponent.h"
 #include "Common/ScopedLock.h"
+
+#ifndef TA_SERVER
+
 #include "Common/Serializer.h"
+#include "NavigationSystem.h"
+#include "TAGameInstance.h"
+#include "TAPlayerController.h"
+#include "NavMesh/RecastNavMesh.h"
+
+#endif
+
 
 namespace ta
 {
@@ -17,20 +27,85 @@ namespace ta
 
 	bool ClientMoveActorSystem::initialize(void) noexcept
 	{
-#ifndef TA_SERVER
-		//Serializer slW;
-		//slW.setMode(Serializer::SerializerMode::Write);
-		//serializeNavigationMesh(slW, );
-		//
-		//slW.exportToFile(NavigationMeshPath);
-
-#endif
 		return true;
 	}
 
 	void ClientMoveActorSystem::update(const ActorSystemUpdateParameter& updateParameter) const noexcept
 	{
 	}
+
+#ifndef TA_SERVER
+	bool ClientMoveActorSystem::exportRecastNavMesh(void) noexcept
+	{
+		UNavigationSystemV1* navSys = FNavigationSystem::GetCurrent<UNavigationSystemV1>(GetTAGameWorld());
+		if (nullptr == navSys)
+		{
+			TA_ASSERT_DEV(false, "비정상입니다.");
+			return false;
+		}
+
+		ATAPlayerController* playerController = GetFirstTAPlayerController();
+		if (nullptr == playerController)
+		{
+			TA_ASSERT_DEV(false, "비정상입니다.");
+			return false;
+		}
+
+		//FNavAgentProperties nagAgentProperties;
+		//nagAgentProperties.bCanCrouch = 0;
+		//nagAgentProperties.bCanJump = 1;
+		//nagAgentProperties.bCanWalk = 1;
+		//nagAgentProperties.bCanSwim = 1;
+		//nagAgentProperties.bCanFly = 0;
+		//
+		//nagAgentProperties.AgentRadius = 34.0f;
+		//nagAgentProperties.AgentHeight = 142.0f;
+		//nagAgentProperties.AgentStepHeight = -1.0f;
+		//nagAgentProperties.NavWalkingSearchHeightScale = 0.5f;
+
+		ANavigationData* navData = (navSys == nullptr) ? nullptr : navSys->GetNavDataForProps(playerController->GetNavAgentPropertiesRef()
+																							  , FVector::ZeroVector);
+
+		ARecastNavMesh* recastNavMesh = Cast<ARecastNavMesh>(navData);
+		if (nullptr == recastNavMesh)
+		{
+			TA_ASSERT_DEV(false, "비정상입니다.");
+			return false;
+		}
+
+		dtNavMesh* detourNavMesh = recastNavMesh->GetRecastMesh();
+		if (nullptr == detourNavMesh)
+		{
+			TA_ASSERT_DEV(false, "비정상입니다.");
+			return false;
+		}
+
+		Serializer slW;
+		slW.setMode(Serializer::SerializerMode::Write);
+		if (false == serializeNavigationMesh(slW, detourNavMesh))
+		{
+			TA_ASSERT_DEV(false, "비정상입니다.");
+			return false;
+		}
+
+		fs::path finalPath = NavigationMeshPath / "RecastNavigationMesh.rnm";
+		if (false == slW.exportToFile(finalPath))
+		{
+			TA_ASSERT_DEV(false, "비정상입니다.");
+			return false;
+		}
+
+#ifdef CAN_CREATE_LOG_FILE
+		if (false == slW.exportLogData(finalPath += "Write"))
+		{
+			TA_ASSERT_DEV(false, "비정상");
+			return false;
+		}
+#endif 
+
+		return true;
+	}
+#endif
 
 	bool ClientMoveActorSystem::processMoveActor(CommonActor* target, const Vector& newPos, const bool isForced) const noexcept
 	{

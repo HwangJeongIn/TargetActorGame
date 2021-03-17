@@ -1,4 +1,4 @@
-#include "Common/FileLoader.h"
+﻿#include "Common/FileLoader.h"
 #include "Common/StringUtility.h"
 #include "Common/Vector.h"
 #include "Common/Serializer.h"
@@ -161,11 +161,27 @@ namespace ta
 		std::ofstream out(filePath);
 		if (false == out.is_open())
 		{
-			TA_ASSERT_DEV(false, "비정상입니다.");
+			TA_ASSERT_DEV(false, "비정상입니다. %s", filePath.c_str());
 			return false;
 		}
 
 		out.write(buffer.getData(), buffer.getDataSize());
+		//out.flush();
+		out.close();
+
+		return true;
+	}
+
+	bool FileLoader::saveFileString(const fs::path& filePath, const std::string& buffer) noexcept
+	{
+		std::ofstream out(filePath);
+		if (false == out.is_open())
+		{
+			TA_ASSERT_DEV(false, "비정상입니다. %s", filePath.c_str());
+			return false;
+		}
+
+		out.write(buffer.c_str(), buffer.size());
 		//out.flush();
 		out.close();
 
@@ -178,7 +194,7 @@ namespace ta
 		in.open(filePath);
 		if (false == in.is_open())
 		{
-			TA_ASSERT_DEV(false, "비정상입니다.");
+			TA_ASSERT_DEV(false, "비정상입니다. %s", filePath.c_str());
 			return false;
 		}
 

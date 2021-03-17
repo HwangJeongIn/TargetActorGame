@@ -1,7 +1,27 @@
-#pragma once
+﻿#pragma once
 #include <functional>
 #include "Common/CommonTypeDefinition.h"
 
+
+
+
+namespace ta
+{
+	enum class TADataType : uint8
+	{
+		Int8 = 0
+		, Int16
+		, Int32
+		, Int64
+		, Uint8
+		, Uint16
+		, Uint32
+		, Uint64
+		, Bool
+		, Float
+		, Count
+	};
+}
 
 
 namespace ta

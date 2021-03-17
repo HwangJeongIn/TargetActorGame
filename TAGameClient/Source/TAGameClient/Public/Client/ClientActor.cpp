@@ -1,4 +1,4 @@
-#include "Client/ClientActor.h"
+﻿#include "Client/ClientActor.h"
 #include "Common/ScopedLock.h"
 
 #ifndef TA_SERVER
@@ -97,7 +97,7 @@ namespace ta
 	
 	bool ClientActor::destroyUnrealCharacter_(void) noexcept
 	{
-		if (false == _unrealCharacter->Destroy())
+		if (false == _unrealCharacter->ConditionalBeginDestroy())
 		{
 			TA_ASSERT_DEV(false, "액터 삭제에 실패했습니다.");
 			return false;

@@ -1,4 +1,4 @@
-#include "Common/EnumUtility.h"
+﻿#include "Common/EnumUtility.h"
 
 namespace ta
 {
@@ -52,37 +52,53 @@ namespace ta
 	TA_COMPILE_DEV(4 == static_cast<uint8>(ItemType::Count), "여기도 확인해주세요");
 
 
+	const std::unordered_map<std::string, TADataType> TADataTypeConverter
+	{
+		 { "Int8", TADataType::Int8	}
+		,{ "Int16", TADataType::Int16 }
+		,{ "Int32", TADataType::Int32 }
+		,{ "Int64", TADataType::Int64 }
+		,{ "Uint8", TADataType::Uint8 }
+		,{ "Uint16", TADataType::Uint16 }
+		,{ "Uint32", TADataType::Uint32 }
+		,{ "Uint64", TADataType::Uint64 }
+		,{ "Bool", TADataType::Bool }
+		,{ "Float", TADataType::Float }
+	};
+	TA_COMPILE_DEV(10 == static_cast<uint8>(TADataType::Count), "여기도 확인해주세요");
 
-#define CONVERT_FUNCTION_DEFINITION(EnumTypeName)									 \
-																					 \
-	template <>																		 \
-	bool ConvertEnumToString(EnumTypeName& enumValue, std::string& output) noexcept	 \
-	{																				 \
-		auto it = EnumTypeName##Converter.begin();									 \
-		const auto end = EnumTypeName##Converter.end();								 \
-		for (; it != end; ++it)														 \
-		{																			 \
-			if (enumValue == it->second)											 \
-			{																		 \
-				output = it->first;													 \
-				return true;														 \
-			}																		 \
-		}																			 \
-		return false;																 \
-	}																				 \
-																					 \
-	template <>																		 \
-	EnumTypeName ConvertStringToEnum(const std::string& input) noexcept				 \
-	{																				 \
-		auto target = EnumTypeName##Converter.find(input);							 \
-		if (EnumTypeName##Converter.end() == target)								 \
-		{																			 \
-			TA_ASSERT_DEV(false, "비정상입니다.");									 \
-			return EnumTypeName::Count;												 \
-		}																			 \
-																					 \
-		return target->second;														 \
-	}																				 \
+
+
+#define CONVERT_FUNCTION_DEFINITION(EnumTypeName)											 \
+																							 \
+	template <>																				 \
+	bool ConvertEnumToString(const EnumTypeName& enumValue, std::string& output) noexcept	 \
+	{																					     \
+		auto it = EnumTypeName##Converter.begin();										     \
+		const auto end = EnumTypeName##Converter.end();									     \
+		for (; it != end; ++it)															     \
+		{																				     \
+			if (enumValue == it->second)												     \
+			{																			     \
+				output = it->first;														     \
+				return true;															     \
+			}																			     \
+		}																				     \
+		return false;																	     \
+	}																					     \
+																						     \
+	template <>																			     \
+	EnumTypeName ConvertStringToEnum(const std::string& input) noexcept					     \
+	{																					     \
+		auto target = EnumTypeName##Converter.find(input);								     \
+		if (EnumTypeName##Converter.end() == target)									     \
+		{																				     \
+			TA_ASSERT_DEV(false, "비정상입니다.");										     \
+			return EnumTypeName::Count;													     \
+		}																				     \
+																						     \
+		return target->second;															     \
+	}																					     \
 
 
 	CONVERT_FUNCTION_DEFINITION(ActorType)
@@ -90,6 +106,9 @@ namespace ta
 	CONVERT_FUNCTION_DEFINITION(AiClassType)
 	CONVERT_FUNCTION_DEFINITION(GameWorldType)
 	CONVERT_FUNCTION_DEFINITION(ItemType)
+	CONVERT_FUNCTION_DEFINITION(TADataType)
+
+
 
 
 #undef CONVERT_FUNCTION_DEFINITION

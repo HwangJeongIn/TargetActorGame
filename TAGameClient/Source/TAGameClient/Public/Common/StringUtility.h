@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 #include "Common/CommonBase.h"
 #include <filesystem>
@@ -22,6 +22,7 @@ namespace ta
 	extern void Trim(const std::string& input, std::string& output, const std::string& targetCharacters) noexcept;
 	extern void TrimEmpty(const std::string& input, std::string& output) noexcept;
 	extern void TrimExtension(std::string& inOut) noexcept;
+	extern void Extension(const std::string& input, std::string& output) noexcept;
 	extern void Split(const std::string& input, const std::string& delimiters, std::vector<std::string>& output) noexcept;
 
 	extern void MakeStringWithBracket(const std::vector<std::string>& items
