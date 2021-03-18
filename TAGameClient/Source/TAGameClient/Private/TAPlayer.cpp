@@ -553,8 +553,8 @@ void ATAPlayer::interact(const InteractType& interactType, float range, float ra
 												   , ECollisionChannel::ECC_GameTraceChannel2 // config/defaultEngine.ini 확인결과 ECC_GameTraceChannel1 : TPCharacter , ECC_GameTraceChannel2 : Attack
 												   , FCollisionShape::MakeSphere(radius)
 												   , params);
-#define ENABLE_DRAW_DEBUG
-#ifdef ENABLE_DRAW_DEBUG
+#define _ENABLE_DRAW_DEBUG
+#ifdef _ENABLE_DRAW_DEBUG
 
 	const FVector traceRangeCenter = actorPosition + attackRangeWithDirection * 0.5f;
 	const float halfLength = range * 0.5f + radius;
@@ -572,7 +572,7 @@ void ATAPlayer::interact(const InteractType& interactType, float range, float ra
 					 , debugLifeTime);
 
 #endif
-#undef ENABLE_DRAW_DEBUG
+#undef _ENABLE_DRAW_DEBUG
 
 	if (true == result)
 	{

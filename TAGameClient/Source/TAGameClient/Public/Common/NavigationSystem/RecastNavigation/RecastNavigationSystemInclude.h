@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 namespace ta
 {
@@ -24,6 +24,7 @@ namespace ta
 }
 
 #include "Common/CommonTypeDefinition.h"
+
 //#include <iostream>
 #include <cmath>
 #include <cstdio>
