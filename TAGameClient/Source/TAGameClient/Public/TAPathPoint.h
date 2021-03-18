@@ -3,19 +3,20 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "GameFramework/Actor.h"
+#include "TANotSpawnedActor.h"
 #include "TAPathPoint.generated.h"
 
-class USphereComponent;
 
 UCLASS()
-class TAGAMECLIENT_API ATAPathPoint : public AActor
+class TAGAMECLIENT_API ATAPathPoint : public ATANotSpawnedActor
 {
 	GENERATED_BODY()
 	
 public:	
 	// Sets default values for this actor's properties
 	ATAPathPoint();
+
+	ATAPathPoint* getNext(void) noexcept;
 
 protected:
 	// Called when the game starts or when spawned
@@ -24,7 +25,19 @@ protected:
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
+	virtual void PostEditChangeProperty(FPropertyChangedEvent& PropertyChangedEvent) override;
 
-	UPROPERTY(VisibleAnyWhere)
-	USphereComponent* _sphereComponent;
+private:
+	void setPointColor(const bool isSinglePathPoint) noexcept;
+
+
+public:
+	UPROPERTY()
+	bool _isValidMaterial;
+
+	UPROPERTY(EditAnyWhere)
+	UMaterialInstanceDynamic* _materialInstance;
+
+	UPROPERTY(EditAnyWhere)
+	TWeakObjectPtr<ATAPathPoint> _next;
 };

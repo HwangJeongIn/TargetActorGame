@@ -79,7 +79,8 @@ namespace ta
 		{
 			if (!m_cap) m_cap = n;
 			while (m_cap < n) m_cap *= 2;
-			int* newData = (int*)dtAlloc(m_cap * sizeof(int), DT_ALLOC_TEMP);
+			// 언리얼에서 모호한 호출이라고 빌드 에러 낸다. 같은 네임스페이스라도 전역함수는 명시적 호출로 바꿨다.
+			int* newData = (int*)ta::dtAlloc(m_cap * sizeof(int), DT_ALLOC_TEMP);
 			if (m_size && newData) memcpy(newData, m_data, m_size * sizeof(int));
 			dtFree(m_data);
 			m_data = newData;

@@ -26,6 +26,7 @@
 #include "RecastNavigation/DetourTileCache/DetourTileCacheBuilder.h"
 #include "RecastNavigation/Detour/DetourNode.h"
 
+
 namespace ta
 {
 	inline const dtLink& getLinkHelper(const dtMeshTile* tile, unsigned int link)
