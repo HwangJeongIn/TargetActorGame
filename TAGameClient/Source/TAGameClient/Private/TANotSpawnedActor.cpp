@@ -11,6 +11,11 @@ ATANotSpawnedActor::ATANotSpawnedActor()
 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = false;
 
+	_sceneComponent = CreateDefaultSubobject<USceneComponent>(TEXT("USceneComponent"));
+	TA_ASSERT_DEV((nullptr != _sceneComponent), "비정상");
+	RootComponent = _sceneComponent;
+
+
 	_staticMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("UStaticMeshComponent"));
 	TA_ASSERT_DEV((nullptr != _staticMesh), "비정상");
 
@@ -19,8 +24,8 @@ ATANotSpawnedActor::ATANotSpawnedActor()
 	_staticMesh->bIsEditorOnly = 1;
 	_staticMesh->SetGenerateOverlapEvents(false);
 	_staticMesh->SetEnableGravity(false);
-	
-	RootComponent = _staticMesh;
+	_staticMesh->SetupAttachment(_sceneComponent);
+
 }
 
 // Called when the game starts or when spawned
@@ -30,10 +35,9 @@ void ATANotSpawnedActor::BeginPlay()
 	
 }
 
-// Called every frame
-void ATANotSpawnedActor::Tick(float DeltaTime)
+void ATANotSpawnedActor::setActorLocationAsStaticMeshBottom(const float staticMeshHeight) noexcept
 {
-	Super::Tick(DeltaTime);
-
+	TA_LOG_DEV("StaticMeshHeight : %.1f", staticMeshHeight);
+	_staticMesh->SetWorldLocation(GetActorLocation() + FVector(0.0f, 0.0f, (0.0f == staticMeshHeight) ? 0.0f : staticMeshHeight / 2.0f));
 }
 

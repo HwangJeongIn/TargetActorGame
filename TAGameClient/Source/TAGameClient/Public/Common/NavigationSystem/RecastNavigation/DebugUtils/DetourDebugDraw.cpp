@@ -29,7 +29,7 @@
 
 namespace ta
 {
-	inline const dtLink& getLinkHelper(const dtMeshTile* tile, unsigned int link)
+	inline const dtLink& getLinkHelper(const ta::dtMeshTile* tile, unsigned int link)
 	{
 		return (link < (unsigned int)tile->header->maxLinkCount) ? tile->links[link] : tile->dynamicLinksO[link - tile->header->maxLinkCount];
 	}
@@ -48,7 +48,7 @@ namespace ta
 		return dx * dx + dz * dz;
 	}
 
-	static void drawPolyBoundaries(duDebugDraw* dd, const dtMeshTile* tile,
+	static void drawPolyBoundaries(ta::duDebugDraw* dd, const ta::dtMeshTile* tile,
 								   const unsigned int col, const float linew,
 								   bool inner)
 	{
@@ -58,11 +58,11 @@ namespace ta
 
 		for (int i = 0; i < tile->header->polyCount; ++i)
 		{
-			const dtPoly* p = &tile->polys[i];
+			const ta::dtPoly* p = &tile->polys[i];
 
 			if (p->getType() != DT_POLYTYPE_GROUND) continue;
 
-			const dtPolyDetail* pd = &tile->detailMeshes[i];
+			const ta::dtPolyDetail* pd = &tile->detailMeshes[i];
 
 			for (int j = 0, nj = (int)p->vertCount; j < nj; ++j)
 			{
@@ -133,10 +133,10 @@ namespace ta
 		dd->end();
 	}
 
-	static void drawMeshTile(duDebugDraw* dd, const dtNavMesh& mesh, const dtNavMeshQuery* query,
-							 const dtMeshTile* tile, unsigned char flags)
+	static void drawMeshTile(ta::duDebugDraw* dd, const ta::dtNavMesh& mesh, const ta::dtNavMeshQuery* query,
+							 const ta::dtMeshTile* tile, unsigned char flags)
 	{
-		dtPolyRef base = mesh.getPolyRefBase(tile);
+		ta::dtPolyRef base = mesh.getPolyRefBase(tile);
 
 		int tileNum = mesh.decodePolyIdTile(base);
 
@@ -145,14 +145,14 @@ namespace ta
 		dd->begin(DU_DRAW_TRIS);
 		for (int i = 0; i < tile->header->polyCount; ++i)
 		{
-			const dtPoly* p = &tile->polys[i];
+			const ta::dtPoly* p = &tile->polys[i];
 			if (p->getType() != DT_POLYTYPE_GROUND)	// Skip off-mesh links.
 				continue;
 
-			const dtPolyDetail* pd = &tile->detailMeshes[i];
+			const ta::dtPolyDetail* pd = &tile->detailMeshes[i];
 
 			unsigned int col;
-			if (query && query->isInClosedList(base | (dtPolyRef)i))
+			if (query && query->isInClosedList(base | (ta::dtPolyRef)i))
 				col = duRGBA(255, 196, 0, 64);
 			else
 			{
@@ -194,19 +194,19 @@ namespace ta
 			dd->begin(DU_DRAW_LINES, 2.0f);
 			for (int i = 0; i < tile->header->polyCount; ++i)
 			{
-				const dtPoly* p = &tile->polys[i];
+				const ta::dtPoly* p = &tile->polys[i];
 
 				// draw offmesh connection - point type
 				if (p->getType() != DT_POLYTYPE_OFFMESH_POINT)
 					continue;
 
 				unsigned int col, col2;
-				if (query && query->isInClosedList(base | (dtPolyRef)i))
+				if (query && query->isInClosedList(base | (ta::dtPolyRef)i))
 					col = duRGBA(255, 196, 0, 220);
 				else
 					col = duDarkenCol(duIntToCol(p->getArea(), 220));
 
-				const dtOffMeshConnection* con = &tile->offMeshCons[i - tile->header->offMeshBase];
+				const ta::dtOffMeshConnection* con = &tile->offMeshCons[i - tile->header->offMeshBase];
 				const float* va = &tile->verts[p->verts[0] * 3];
 				const float* vb = &tile->verts[p->verts[1] * 3];
 
@@ -252,7 +252,7 @@ namespace ta
 			dd->begin(DU_DRAW_LINES, 4.0f);
 			for (int i = 0; i < tile->header->polyCount; ++i)
 			{
-				const dtPoly* p = &tile->polys[i];
+				const ta::dtPoly* p = &tile->polys[i];
 				if (p->getType() == DT_POLYTYPE_OFFMESH_SEGMENT)
 				{
 					float* vA0 = &tile->verts[p->verts[0] * 3];
@@ -270,12 +270,12 @@ namespace ta
 			dd->begin(DU_DRAW_QUADS);
 			for (int i = 0; i < tile->header->polyCount; ++i)
 			{
-				const dtPoly* p = &tile->polys[i];
+				const ta::dtPoly* p = &tile->polys[i];
 				if (p->getType() != DT_POLYTYPE_OFFMESH_SEGMENT)	// Skip regular polys.
 					continue;
 
 				unsigned int col;
-				if (query && query->isInClosedList(base | (dtPolyRef)i))
+				if (query && query->isInClosedList(base | (ta::dtPolyRef)i))
 					col = duRGBA(255, 196, 0, 220);
 				else
 					col = duDarkenCol(duIntToCol(p->getArea(), 220));
@@ -302,46 +302,46 @@ namespace ta
 	}
 
 
-	void duDebugDrawNavMesh(duDebugDraw* dd, const dtNavMesh& mesh, unsigned char flags)
+	void duDebugDrawNavMesh(ta::duDebugDraw* dd, const ta::dtNavMesh& mesh, unsigned char flags)
 	{
 		if (!dd) return;
 
 		for (int i = 0; i < mesh.getMaxTiles(); ++i)
 		{
-			const dtMeshTile* tile = mesh.getTile(i);
+			const ta::dtMeshTile* tile = mesh.getTile(i);
 			if (!tile->header) continue;
 			drawMeshTile(dd, mesh, 0, tile, flags);
 		}
 	}
 
-	void duDebugDrawNavMeshWithClosedList(struct duDebugDraw* dd, const dtNavMesh& mesh, const dtNavMeshQuery& query, unsigned char flags)
+	void duDebugDrawNavMeshWithClosedList(struct ta::duDebugDraw* dd, const ta::dtNavMesh& mesh, const ta::dtNavMeshQuery& query, unsigned char flags)
 	{
 		if (!dd) return;
 
-		const dtNavMeshQuery* q = (flags & DU_DRAWNAVMESH_CLOSEDLIST) ? &query : 0;
+		const ta::dtNavMeshQuery* q = (flags & DU_DRAWNAVMESH_CLOSEDLIST) ? &query : 0;
 
 		for (int i = 0; i < mesh.getMaxTiles(); ++i)
 		{
-			const dtMeshTile* tile = mesh.getTile(i);
+			const ta::dtMeshTile* tile = mesh.getTile(i);
 			if (!tile->header) continue;
 			drawMeshTile(dd, mesh, q, tile, flags);
 		}
 	}
 
-	void duDebugDrawNavMeshNodes(struct duDebugDraw* dd, const dtNavMeshQuery& query)
+	void duDebugDrawNavMeshNodes(struct ta::duDebugDraw* dd, const ta::dtNavMeshQuery& query)
 	{
 		if (!dd) return;
 
-		const dtNodePool* pool = query.getNodePool();
+		const ta::dtNodePool* pool = query.getNodePool();
 		if (pool)
 		{
 			const float off = 0.5f;
 			dd->begin(DU_DRAW_POINTS, 4.0f);
 			for (int i = 0; i < pool->getHashSize(); ++i)
 			{
-				for (dtNodeIndex j = pool->getFirst(i); j != DT_NULL_IDX; j = pool->getNext(j))
+				for (ta::dtNodeIndex j = pool->getFirst(i); j != DT_NULL_IDX; j = pool->getNext(j))
 				{
-					const dtNode* node = pool->getNodeAtIdx(j + 1);
+					const ta::dtNode* node = pool->getNodeAtIdx(j + 1);
 					if (!node) continue;
 					dd->vertex(node->pos[0], node->pos[1] + off, node->pos[2], duRGBA(255, 192, 0, 255));
 				}
@@ -351,12 +351,12 @@ namespace ta
 			dd->begin(DU_DRAW_LINES, 2.0f);
 			for (int i = 0; i < pool->getHashSize(); ++i)
 			{
-				for (dtNodeIndex j = pool->getFirst(i); j != DT_NULL_IDX; j = pool->getNext(j))
+				for (ta::dtNodeIndex j = pool->getFirst(i); j != DT_NULL_IDX; j = pool->getNext(j))
 				{
-					const dtNode* node = pool->getNodeAtIdx(j + 1);
+					const ta::dtNode* node = pool->getNodeAtIdx(j + 1);
 					if (!node) continue;
 					if (!node->pidx) continue;
-					const dtNode* parent = pool->getNodeAtIdx(node->pidx);
+					const ta::dtNode* parent = pool->getNodeAtIdx(node->pidx);
 					if (!parent) continue;
 					dd->vertex(node->pos[0], node->pos[1] + off, node->pos[2], duRGBA(255, 192, 0, 128));
 					dd->vertex(parent->pos[0], parent->pos[1] + off, parent->pos[2], duRGBA(255, 192, 0, 128));
@@ -367,7 +367,7 @@ namespace ta
 	}
 
 
-	static void drawMeshTileBVTree(duDebugDraw* dd, const dtMeshTile* tile)
+	static void drawMeshTileBVTree(ta::duDebugDraw* dd, const ta::dtMeshTile* tile)
 	{
 		// Draw BV nodes.
 		const float cs = 1.0f / tile->header->bvQuantFactor;
@@ -388,19 +388,19 @@ namespace ta
 		dd->end();
 	}
 
-	void duDebugDrawNavMeshBVTree(duDebugDraw* dd, const dtNavMesh& mesh)
+	void duDebugDrawNavMeshBVTree(ta::duDebugDraw* dd, const ta::dtNavMesh& mesh)
 	{
 		if (!dd) return;
 
 		for (int i = 0; i < mesh.getMaxTiles(); ++i)
 		{
-			const dtMeshTile* tile = mesh.getTile(i);
+			const ta::dtMeshTile* tile = mesh.getTile(i);
 			if (!tile->header) continue;
 			drawMeshTileBVTree(dd, tile);
 		}
 	}
 
-	static void drawMeshTilePortal(duDebugDraw* dd, const dtMeshTile* tile)
+	static void drawMeshTilePortal(ta::duDebugDraw* dd, const ta::dtMeshTile* tile)
 	{
 		// Draw portals
 		const float padx = 0.04f;
@@ -414,7 +414,7 @@ namespace ta
 
 			for (int i = 0; i < tile->header->polyCount; ++i)
 			{
-				dtPoly* poly = &tile->polys[i];
+				ta::dtPoly* poly = &tile->polys[i];
 
 				// Create new links.
 				const int nv = poly->vertCount;
@@ -472,44 +472,44 @@ namespace ta
 		dd->end();
 	}
 
-	void duDebugDrawNavMeshPortals(duDebugDraw* dd, const dtNavMesh& mesh)
+	void duDebugDrawNavMeshPortals(ta::duDebugDraw* dd, const ta::dtNavMesh& mesh)
 	{
 		if (!dd) return;
 
 		for (int i = 0; i < mesh.getMaxTiles(); ++i)
 		{
-			const dtMeshTile* tile = mesh.getTile(i);
+			const ta::dtMeshTile* tile = mesh.getTile(i);
 			if (!tile->header) continue;
 			drawMeshTilePortal(dd, tile);
 		}
 	}
 
-	void duDebugDrawNavMeshPolysWithFlags(struct duDebugDraw* dd, const dtNavMesh& mesh,
+	void duDebugDrawNavMeshPolysWithFlags(struct ta::duDebugDraw* dd, const ta::dtNavMesh& mesh,
 										  const unsigned short polyFlags, const unsigned int col)
 	{
 		if (!dd) return;
 
 		for (int i = 0; i < mesh.getMaxTiles(); ++i)
 		{
-			const dtMeshTile* tile = mesh.getTile(i);
+			const ta::dtMeshTile* tile = mesh.getTile(i);
 			if (!tile->header) continue;
-			dtPolyRef base = mesh.getPolyRefBase(tile);
+			ta::dtPolyRef base = mesh.getPolyRefBase(tile);
 
 			for (int j = 0; j < tile->header->polyCount; ++j)
 			{
-				const dtPoly* p = &tile->polys[j];
+				const ta::dtPoly* p = &tile->polys[j];
 				if ((p->flags & polyFlags) == 0) continue;
-				duDebugDrawNavMeshPoly(dd, mesh, base | (dtPolyRef)j, col);
+				duDebugDrawNavMeshPoly(dd, mesh, base | (ta::dtPolyRef)j, col);
 			}
 		}
 	}
 
-	void duDebugDrawNavMeshPoly(duDebugDraw* dd, const dtNavMesh& mesh, dtPolyRef ref, const unsigned int col)
+	void duDebugDrawNavMeshPoly(ta::duDebugDraw* dd, const ta::dtNavMesh& mesh, ta::dtPolyRef ref, const unsigned int col)
 	{
 		if (!dd) return;
 
-		const dtMeshTile* tile = 0;
-		const dtPoly* poly = 0;
+		const ta::dtMeshTile* tile = 0;
+		const ta::dtPoly* poly = 0;
 		if (dtStatusFailed(mesh.getTileAndPolyByRef(ref, &tile, &poly)))
 			return;
 
@@ -520,7 +520,7 @@ namespace ta
 
 		if (poly->getType() == DT_POLYTYPE_OFFMESH_POINT)
 		{
-			dtOffMeshConnection* con = &tile->offMeshCons[ip - tile->header->offMeshBase];
+			ta::dtOffMeshConnection* con = &tile->offMeshCons[ip - tile->header->offMeshBase];
 
 			dd->begin(DU_DRAW_LINES, 2.0f);
 
@@ -542,7 +542,7 @@ namespace ta
 		}
 		else if (poly->getType() == DT_POLYTYPE_GROUND)
 		{
-			const dtPolyDetail* pd = &tile->detailMeshes[ip];
+			const ta::dtPolyDetail* pd = &tile->detailMeshes[ip];
 
 			dd->begin(DU_DRAW_TRIS);
 			for (int i = 0; i < pd->triCount; ++i)
@@ -563,43 +563,43 @@ namespace ta
 
 	}
 
-	void duDebugDrawNavMeshClusters(struct duDebugDraw* dd, const dtNavMesh& mesh)
+	void duDebugDrawNavMeshClusters(struct ta::duDebugDraw* dd, const ta::dtNavMesh& mesh)
 	{
 		if (!dd) return;
 
 		for (int i = 0; i < mesh.getMaxTiles(); ++i)
 		{
-			const dtMeshTile* tile = mesh.getTile(i);
+			const ta::dtMeshTile* tile = mesh.getTile(i);
 			if (!tile->header) continue;
 
-			dtPolyRef base = mesh.getPolyRefBase(tile);
+			ta::dtPolyRef base = mesh.getPolyRefBase(tile);
 			for (int ip = 0; ip < tile->header->polyCount; ip++)
 			{
-				duDebugDrawNavMeshPoly(dd, mesh, base | (dtPolyRef)ip, duIntToCol(tile->polyClusters[ip], 255));
+				duDebugDrawNavMeshPoly(dd, mesh, base | (ta::dtPolyRef)ip, duIntToCol(tile->polyClusters[ip], 255));
 			}
 		}
 	}
 
 
-	void duDebugDrawNavMeshCluster(struct duDebugDraw* dd, const dtNavMesh& mesh, dtClusterRef ref, const unsigned int col)
+	void duDebugDrawNavMeshCluster(struct ta::duDebugDraw* dd, const ta::dtNavMesh& mesh, dtClusterRef ref, const unsigned int col)
 	{
 		if (!dd) return;
 
-		const dtMeshTile* tile = mesh.getTileByRef(ref);
+		const ta::dtMeshTile* tile = mesh.getTileByRef(ref);
 		const unsigned int clusterIdx = mesh.decodeClusterIdCluster(ref);
-		const dtPolyRef base = mesh.getPolyRefBase(tile);
+		const ta::dtPolyRef base = mesh.getPolyRefBase(tile);
 
 		if (tile->header)
 		{
 			for (int ip = 0; ip < tile->header->polyCount; ip++)
 			{
 				if (tile->polyClusters[ip] == clusterIdx)
-					duDebugDrawNavMeshPoly(dd, mesh, base | (dtPolyRef)ip, col);
+					duDebugDrawNavMeshPoly(dd, mesh, base | (ta::dtPolyRef)ip, col);
 			}
 		}
 	}
 
-	static void debugDrawTileCachePortals(struct duDebugDraw* dd, const dtTileCacheLayer& layer, const float cs, const float ch)
+	static void debugDrawTileCachePortals(struct ta::duDebugDraw* dd, const ta::dtTileCacheLayer& layer, const float cs, const float ch)
 	{
 		const int w = (int)layer.header->width;
 		const int h = (int)layer.header->height;
@@ -640,7 +640,7 @@ namespace ta
 		dd->end();
 	}
 
-	void duDebugDrawTileCacheLayerAreas(struct duDebugDraw* dd, const dtTileCacheLayer& layer, const float cs, const float ch)
+	void duDebugDrawTileCacheLayerAreas(struct ta::duDebugDraw* dd, const ta::dtTileCacheLayer& layer, const float cs, const float ch)
 	{
 		const int w = (int)layer.header->width;
 		const int h = (int)layer.header->height;
@@ -694,7 +694,7 @@ namespace ta
 		debugDrawTileCachePortals(dd, layer, cs, ch);
 	}
 
-	void duDebugDrawTileCacheLayerDistance(struct duDebugDraw* dd, const dtTileCacheLayer& layer, const dtTileCacheDistanceField& dfield, const float cs, const float ch)
+	void duDebugDrawTileCacheLayerDistance(struct ta::duDebugDraw* dd, const ta::dtTileCacheLayer& layer, const dtTileCacheDistanceField& dfield, const float cs, const float ch)
 	{
 		const int w = (int)layer.header->width;
 		const int h = (int)layer.header->height;
@@ -746,7 +746,7 @@ namespace ta
 		debugDrawTileCachePortals(dd, layer, cs, ch);
 	}
 
-	void duDebugDrawTileCacheLayerRegions(struct duDebugDraw* dd, const dtTileCacheLayer& layer, const float cs, const float ch)
+	void duDebugDrawTileCacheLayerRegions(struct ta::duDebugDraw* dd, const ta::dtTileCacheLayer& layer, const float cs, const float ch)
 	{
 		const int w = (int)layer.header->width;
 		const int h = (int)layer.header->height;
@@ -810,7 +810,7 @@ namespace ta
 		dtTileCacheContour* conts;
 	};*/
 
-	void duDebugDrawTileCacheContours(duDebugDraw* dd, const struct dtTileCacheContourSet& lcset,
+	void duDebugDrawTileCacheContours(ta::duDebugDraw* dd, const struct dtTileCacheContourSet& lcset,
 									  const float* orig, const float cs, const float ch)
 	{
 		if (!dd) return;
@@ -823,7 +823,7 @@ namespace ta
 
 		for (int i = 0; i < lcset.nconts; ++i)
 		{
-			const dtTileCacheContour& c = lcset.conts[i];
+			const ta::dtTileCacheContour& c = lcset.conts[i];
 			unsigned int color = 0;
 
 			color = duIntToCol(i, a);
@@ -868,7 +868,7 @@ namespace ta
 
 		for (int i = 0; i < lcset.nconts; ++i)
 		{
-			const dtTileCacheContour& c = lcset.conts[i];
+			const ta::dtTileCacheContour& c = lcset.conts[i];
 			unsigned int color = 0;
 
 			for (int j = 0; j < c.nverts; ++j)
@@ -891,13 +891,13 @@ namespace ta
 		dd->end();
 	}
 
-	void duDebugDrawTileCacheClusters(duDebugDraw* dd, const struct dtTileCacheClusterSet& lclusters)
+	void duDebugDrawTileCacheClusters(ta::duDebugDraw* dd, const struct ta::dtTileCacheClusterSet& lclusters)
 	{
 		// empty for now
 	}
 
 
-	void duDebugDrawTileCachePolyMesh(duDebugDraw* dd, const struct dtTileCachePolyMesh& lmesh,
+	void duDebugDrawTileCachePolyMesh(ta::duDebugDraw* dd, const struct ta::dtTileCachePolyMesh& lmesh,
 									  const float* orig, const float cs, const float ch)
 	{
 		if (!dd) return;
@@ -1032,7 +1032,7 @@ namespace ta
 		dd->end();
 	}
 	
-	void duDebugDrawTileCacheDetailMesh(duDebugDraw* dd, const struct dtTileCachePolyMeshDetail& dmesh)
+	void duDebugDrawTileCacheDetailMesh(ta::duDebugDraw* dd, const struct ta::dtTileCachePolyMeshDetail& dmesh)
 	{
 		if (!dd) return;
 	

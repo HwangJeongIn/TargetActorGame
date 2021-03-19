@@ -378,7 +378,7 @@ namespace ta
 		dtPoly* polys;						///< The tile polygons. [Size: dtMeshHeader::polyCount]
 		float* verts;						///< The tile vertices. [Size: dtMeshHeader::vertCount]
 		dtLink* links;						///< The tile links. [Size: dtMeshHeader::maxLinkCount]
-		dtPolyDetail* detailMeshes;			///< The tile's detail sub-meshes. [Size: dtMeshHeader::detailMeshCount]
+		ta::dtPolyDetail* detailMeshes;			///< The tile's detail sub-meshes. [Size: dtMeshHeader::detailMeshCount]
 
 		/// The detail mesh's unique vertices. [(x, y, z) * dtMeshHeader::detailVertCount]
 		float* detailVerts;
@@ -390,7 +390,7 @@ namespace ta
 		/// (Will be null if bounding volumes are disabled.)
 		dtBVNode* bvTree;
 
-		dtOffMeshConnection* offMeshCons;		///< The tile off-mesh connections. [Size: dtMeshHeader::offMeshConCount]
+		ta::dtOffMeshConnection* offMeshCons;		///< The tile off-mesh connections. [Size: dtMeshHeader::offMeshConCount]
 		dtOffMeshSegmentConnection* offMeshSeg;	///< The tile off-mesh connections. [Size: dtMeshHeader::offMeshSegConCount]
 
 		unsigned char* data;					///< The tile data. (Not directly accessed under normal situations.)
@@ -565,7 +565,7 @@ namespace ta
 		/// Gets the specified off-mesh connection: point type.
 		///  @param[in]	ref		The polygon reference of the off-mesh connection.
 		/// @return The specified off-mesh connection, or null if the polygon reference is not valid.
-		const dtOffMeshConnection* getOffMeshConnectionByRef(dtPolyRef ref) const;
+		const ta::dtOffMeshConnection* getOffMeshConnectionByRef(dtPolyRef ref) const;
 
 		/// Gets the specified off-mesh connection: segment type
 		///  @param[in]	ref		The polygon reference of the off-mesh connection.

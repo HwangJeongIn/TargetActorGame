@@ -7,6 +7,7 @@
 #include "TANotSpawnedActor.generated.h"
 
 class UStaticMeshComponent;
+class USceneComponent;
 
 UCLASS()
 class TAGAMECLIENT_API ATANotSpawnedActor : public AActor
@@ -21,20 +22,22 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-public:	
-	// Called every frame
-	virtual void Tick(float DeltaTime) override;
+	void setActorLocationAsStaticMeshBottom(const float staticMeshHeight) noexcept;
 
 protected:
 
-	// 테스트 결과 3개중에 static mesh로 결정
-
-	//UPROPERTY(VisibleAnyWhere)
-	//USceneComponent* _sceneComponent;
-
+	// 테스트 결과 2개중에 static mesh로 결정
 	//UPROPERTY(VisibleAnyWhere)
 	//UPrimitiveComponent* _primitiveComponent;
 
 	UPROPERTY(VisibleAnyWhere)
 	UStaticMeshComponent* _staticMesh;
+
+private:
+	// 액터자체에 transform정보를 넣어주기 위해서 root에 SceneComponent를 배치했다.
+	// static mesh의 경우 위치 크기가 유동적으로 바뀔 수 있기 때문에 하위 컴포넌트로 추가 했다.
+	// 특히 static mesh의 피봇을 그 mesh의 바닥으로 설정할 수 있고, 
+	// 회전시킬때 Actor자체를 회전(Root = SceneComponent 의 transform와 동기화됨)를 회전시키면 설정된 피봇을 중심으로 회전시킬 수 있어서 편리하다.
+	UPROPERTY(VisibleAnyWhere)
+	USceneComponent* _sceneComponent;
 };

@@ -16,7 +16,6 @@ public:
 	// Sets default values for this actor's properties
 	ATAPathPoint();
 
-	ATAPathPoint* getNext(void) noexcept;
 
 protected:
 	// Called when the game starts or when spawned
@@ -28,16 +27,41 @@ public:
 	virtual void PostEditChangeProperty(FPropertyChangedEvent& PropertyChangedEvent) override;
 
 private:
+	void setPointInfo(const bool isSinglePathPoint) noexcept;
 	void setPointColor(const bool isSinglePathPoint) noexcept;
+
+	ATAPathPoint* getNext(void) noexcept;
+	ATAPathPoint* getPrev(void) noexcept;
+
+	void setNext(ATAPathPoint* input) noexcept;
+	void setPrev(ATAPathPoint* input) noexcept;
 
 
 public:
 	UPROPERTY()
 	bool _isValidMaterial;
 
+	UPROPERTY()
+	float _defaultHeight;
+
+	UPROPERTY()
+	float _defaultHeightScale;
+
 	UPROPERTY(EditAnyWhere)
 	UMaterialInstanceDynamic* _materialInstance;
 
 	UPROPERTY(EditAnyWhere)
 	TWeakObjectPtr<ATAPathPoint> _next;
+
+	UPROPERTY(EditAnyWhere)
+	TWeakObjectPtr<ATAPathPoint> _prev;
+
+	UPROPERTY(EditAnyWhere)
+	FVector _destination;
+
+	UPROPERTY(VisibleAnyWhere)
+	UStaticMesh* _sphere; 
+
+	UPROPERTY(VisibleAnyWhere)
+	UStaticMesh* _cone;
 };
