@@ -43,15 +43,15 @@ namespace ta
 		DU_DRAWNAVMESH_COLOR_TILES = 0x04,
 	};
 
-	void duDebugDrawNavMesh(struct ta::duDebugDraw* dd, const ta::dtNavMesh& mesh, unsigned char flags);
-	void duDebugDrawNavMeshWithClosedList(struct ta::duDebugDraw* dd, const ta::dtNavMesh& mesh, const ta::dtNavMeshQuery& query, unsigned char flags);
-	void duDebugDrawNavMeshNodes(struct ta::duDebugDraw* dd, const ta::dtNavMeshQuery& query);
-	void duDebugDrawNavMeshBVTree(struct ta::duDebugDraw* dd, const ta::dtNavMesh& mesh);
-	void duDebugDrawNavMeshPortals(struct ta::duDebugDraw* dd, const ta::dtNavMesh& mesh);
-	void duDebugDrawNavMeshPolysWithFlags(struct ta::duDebugDraw* dd, const ta::dtNavMesh& mesh, const unsigned short polyFlags, const unsigned int col);
-	void duDebugDrawNavMeshPoly(struct ta::duDebugDraw* dd, const ta::dtNavMesh& mesh, ta::dtPolyRef ref, const unsigned int col);
-	void duDebugDrawNavMeshClusters(struct ta::duDebugDraw* dd, const ta::dtNavMesh& mesh);
-	void duDebugDrawNavMeshCluster(struct ta::duDebugDraw* dd, const ta::dtNavMesh& mesh, ta::dtClusterRef ref, const unsigned int col);
+	void duDebugDrawNavMesh(struct ta::duDebugDraw* dd, const dtNavMesh& mesh, unsigned char flags);
+	void duDebugDrawNavMeshWithClosedList(struct ta::duDebugDraw* dd, const dtNavMesh& mesh, const dtNavMeshQuery& query, unsigned char flags);
+	void duDebugDrawNavMeshNodes(struct ta::duDebugDraw* dd, const dtNavMeshQuery& query);
+	void duDebugDrawNavMeshBVTree(struct ta::duDebugDraw* dd, const dtNavMesh& mesh);
+	void duDebugDrawNavMeshPortals(struct ta::duDebugDraw* dd, const dtNavMesh& mesh);
+	void duDebugDrawNavMeshPolysWithFlags(struct ta::duDebugDraw* dd, const dtNavMesh& mesh, const unsigned short polyFlags, const unsigned int col);
+	void duDebugDrawNavMeshPoly(struct ta::duDebugDraw* dd, const dtNavMesh& mesh, dtPolyRef ref, const unsigned int col);
+	void duDebugDrawNavMeshClusters(struct ta::duDebugDraw* dd, const dtNavMesh& mesh);
+	void duDebugDrawNavMeshCluster(struct ta::duDebugDraw* dd, const dtNavMesh& mesh, ta::dtClusterRef ref, const unsigned int col);
 
 	void duDebugDrawTileCacheLayerAreas(struct ta::duDebugDraw* dd, const ta::dtTileCacheLayer& layer, const float cs, const float ch);
 	void duDebugDrawTileCacheLayerDistance(struct ta::duDebugDraw* dd, const ta::dtTileCacheLayer& layer,
