@@ -9,6 +9,10 @@
 class UStaticMeshComponent;
 class USceneComponent;
 
+
+extern bool GetFolderName(const FString& folderPath, FString& folderName, uint8 depth = 1) noexcept;
+
+
 UCLASS()
 class TAGAMECLIENT_API ATANotSpawnedActor : public AActor
 {

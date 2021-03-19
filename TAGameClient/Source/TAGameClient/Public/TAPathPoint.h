@@ -7,6 +7,8 @@
 #include "TAPathPoint.generated.h"
 
 
+int32 GetTargetFolderPathPoints(ULevel* level, const FString& targetFolderName, TArray<ATAPathPoint*>& output) noexcept;
+
 UCLASS()
 class TAGAMECLIENT_API ATAPathPoint : public ATANotSpawnedActor
 {
@@ -27,7 +29,8 @@ public:
 	virtual void PostEditChangeProperty(FPropertyChangedEvent& PropertyChangedEvent) override;
 
 private:
-	void setPointInfo(const bool isSinglePathPoint) noexcept;
+	void setDefaultPathPoint(void) noexcept;
+	void refreshPathPoint(void) noexcept;
 	void setPointColor(const bool isSinglePathPoint) noexcept;
 
 	ATAPathPoint* getNext(void) noexcept;
@@ -36,8 +39,10 @@ private:
 	void setNext(ATAPathPoint* input) noexcept;
 	void setPrev(ATAPathPoint* input) noexcept;
 
-
 public:
+	UPROPERTY(EditAnyWhere, Category = ATAPathPoint)
+	bool _refreshCurrentPath;
+
 	UPROPERTY()
 	bool _isValidMaterial;
 
@@ -47,21 +52,21 @@ public:
 	UPROPERTY()
 	float _defaultHeightScale;
 
-	UPROPERTY(EditAnyWhere)
-	UMaterialInstanceDynamic* _materialInstance;
+	UPROPERTY()
+	float _defaultWidthScale;
 
-	UPROPERTY(EditAnyWhere)
+	UPROPERTY(EditAnyWhere, Category = ATAPathPoint)
 	TWeakObjectPtr<ATAPathPoint> _next;
 
-	UPROPERTY(EditAnyWhere)
+	UPROPERTY(EditAnyWhere, Category = ATAPathPoint)
 	TWeakObjectPtr<ATAPathPoint> _prev;
 
-	UPROPERTY(EditAnyWhere)
-	FVector _destination;
+	UPROPERTY(EditAnyWhere, Category = ATAPathPoint)
+	UMaterialInstanceDynamic* _materialInstance;
 
-	UPROPERTY(VisibleAnyWhere)
+	UPROPERTY(VisibleAnyWhere, Category = ATAPathPoint)
 	UStaticMesh* _sphere; 
 
-	UPROPERTY(VisibleAnyWhere)
+	UPROPERTY(VisibleAnyWhere, Category = ATAPathPoint)
 	UStaticMesh* _cone;
 };

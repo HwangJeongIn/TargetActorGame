@@ -133,7 +133,7 @@ namespace ta
 		dd->end();
 	}
 
-	static void drawMeshTile(ta::duDebugDraw* dd, const dtNavMesh& mesh, const dtNavMeshQuery* query,
+	static void drawMeshTile(ta::duDebugDraw* dd, const dtNavMesh& mesh, const ta::dtNavMeshQuery* query,
 							 const dtMeshTile* tile, unsigned char flags)
 	{
 		dtPolyRef base = mesh.getPolyRefBase(tile);
@@ -206,7 +206,7 @@ namespace ta
 				else
 					col = duDarkenCol(duIntToCol(p->getArea(), 220));
 
-				const ta::dtOffMeshConnection* con = &tile->offMeshCons[i - tile->header->offMeshBase];
+				const dtOffMeshConnection* con = &tile->offMeshCons[i - tile->header->offMeshBase];
 				const float* va = &tile->verts[p->verts[0] * 3];
 				const float* vb = &tile->verts[p->verts[1] * 3];
 
@@ -328,7 +328,7 @@ namespace ta
 		}
 	}
 
-	void duDebugDrawNavMeshNodes(struct ta::duDebugDraw* dd, const dtNavMeshQuery& query)
+	void duDebugDrawNavMeshNodes(struct ta::duDebugDraw* dd, const ta::dtNavMeshQuery& query)
 	{
 		if (!dd) return;
 
@@ -520,7 +520,7 @@ namespace ta
 
 		if (poly->getType() == DT_POLYTYPE_OFFMESH_POINT)
 		{
-			ta::dtOffMeshConnection* con = &tile->offMeshCons[ip - tile->header->offMeshBase];
+			dtOffMeshConnection* con = &tile->offMeshCons[ip - tile->header->offMeshBase];
 
 			dd->begin(DU_DRAW_LINES, 2.0f);
 

@@ -5,6 +5,24 @@
 #include "Components/StaticMeshComponent.h"
 #include "Common/CommonBase.h"
 
+
+bool GetFolderName(const FString& folderPath, FString& folderName, uint8 depth/* = 1*/) noexcept
+{
+	TA_LOG_DEV("GetFolderName => folderPath : %s", *folderPath);
+	TArray<FString> splitedStrings;
+	const int32 num = folderPath.ParseIntoArray(splitedStrings, TEXT("/"), true);
+
+	if (num != (depth + 1))
+	{
+		TA_LOG_DEV("depth에 맞지않음 num : %d, depth : %d", num, depth);
+		return false;
+	}
+
+	folderName = splitedStrings[num - 1];
+	return true;
+}
+
+
 // Sets default values
 ATANotSpawnedActor::ATANotSpawnedActor()
 {

@@ -6,6 +6,38 @@
 #include "DrawDebugHelpers.h"
 #include "Common/CommonBase.h"
 
+int32 GetTargetFolderPathPoints(ULevel* level, const FString& targetFolderName, TArray<ATAPathPoint*>& output) noexcept
+{
+	int32 index = -1;
+	ATAPathPoint* currentPathPoint = nullptr;
+	FString currentPathPointFolderName;
+	for (AActor* actor : level->Actors)
+	{
+		++index;
+		currentPathPoint = Cast<ATAPathPoint>(actor);
+		if (nullptr == currentPathPoint)
+		{
+			continue;
+		}
+
+		if (false == GetFolderName(currentPathPoint->GetFolderPath().ToString(), currentPathPointFolderName))
+		{
+			continue;
+		}
+
+		//TA_LOG_DEV("%d => name : %s / folder path : %s", index, *currentPathPoint->GetName(), *currentPathPoint->GetFolderPath().ToString());
+		if (targetFolderName != currentPathPointFolderName)
+		{
+			TA_LOG_DEV("actor is in different folder name");
+			continue;
+		}
+
+		output.Add(currentPathPoint);
+	}
+
+	return output.Num();
+}
+
 // Sets default values
 ATAPathPoint::ATAPathPoint()
 {
@@ -24,25 +56,27 @@ ATAPathPoint::ATAPathPoint()
 	// GetComponentsBoundingBox는 생성자에서 0, 0, 0이 나온다. // 아직 계산되기 전일듯
 	// StaticMesh의 Bound의 경우 생성자에서 SetActorScale3D으로 값을 변경해도 초기값 그대로 나온다. 
 
-	SetActorScale3D(FVector(0.5f, 0.5f, 1.0f));
+	_staticMesh->SetStaticMesh(_sphere);
+
 	_defaultHeight = _staticMesh->Bounds.GetBox().GetSize().Z;
 	_defaultHeightScale = _staticMesh->GetComponentScale().Z;
+	_defaultWidthScale = _staticMesh->GetComponentScale().X;
+
+	_refreshCurrentPath = false;
+
+	setDefaultPathPoint();
 }
 
-// Called when the game starts or when spawned
 void ATAPathPoint::BeginPlay()
 {
 	Super::BeginPlay();
 
-	setPointInfo(true);
 	//setPointColor(true);
 }
 
-// Called every frame
 void ATAPathPoint::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
 }
 
 void ATAPathPoint::PostEditChangeProperty(FPropertyChangedEvent& PropertyChangedEvent)
@@ -53,16 +87,9 @@ void ATAPathPoint::PostEditChangeProperty(FPropertyChangedEvent& PropertyChanged
 	TA_LOG_DEV("PropertyName : %s", *PropertyName.ToString());
 	if (PropertyName == GET_MEMBER_NAME_CHECKED(ATAPathPoint, _next))
 	{
+		// next가 바뀌었을때 해당 next에 접근해서 prev도 바꿔주자
 		TA_LOG_DEV("_next is changed");
-		/* Because you are inside the class, you should see the value already changed */
-		if (nullptr == getNext())
-		{
-			setPointInfo(true);
-		}
-		else
-		{
-			setPointInfo(false);
-		}
+		refreshPathPoint();
 
 		///* if you want to use bool property */
 		//UWeakObjectProperty* prop = static_cast<UWeakObjectProperty*>(PropertyChangedEvent.Property);
@@ -71,91 +98,110 @@ void ATAPathPoint::PostEditChangeProperty(FPropertyChangedEvent& PropertyChanged
 		//else
 		//	undothings()
 	}
+	else if (PropertyName == GET_MEMBER_NAME_CHECKED(ATAPathPoint, _refreshCurrentPath))
+	{
+		TA_LOG_DEV("_refreshCurrentPath is changed : %d", _refreshCurrentPath);
+
+		if (true == _refreshCurrentPath)
+		{
+			//_refreshCurrentPath = false;
+			ULevel* currentLevel = GetLevel();
+			if (nullptr == currentLevel)
+			{
+				TA_ASSERT_DEV(false, "current level is nullptr");
+				return;
+			}
+
+			if ("PathPointLevel" != currentLevel->GetOuter()->GetName())
+			{
+				TA_ASSERT_DEV(false, "current level is not PathPointLevel");
+				return;
+			}
+
+			FString ownerFolderName;
+			if (false == GetFolderName(GetFolderPath().ToString(), ownerFolderName))
+			{
+				TA_ASSERT_DEV(false, "비정상");
+				return;
+			}
+
+			TArray<ATAPathPoint*> folderPathPoints;
+			const int32 folderPathPointCount = GetTargetFolderPathPoints(currentLevel, ownerFolderName, folderPathPoints);
+			if (0 == folderPathPointCount)
+			{
+				TA_LOG_DEV("0 == folderPathPointCount");
+				return;
+			}
+
+			ATAPathPoint* prevPathPoint = nullptr;
+			for (ATAPathPoint* currentPathPoint : folderPathPoints)
+			{ 
+				if (nullptr != prevPathPoint)
+				{
+					prevPathPoint->setNext(currentPathPoint);
+					prevPathPoint->refreshPathPoint();
+					currentPathPoint->setPrev(prevPathPoint);
+				}
+
+				prevPathPoint = currentPathPoint;
+			}
+		}
+	}
 }
 
-void ATAPathPoint::setPointInfo(const bool isSinglePathPoint) noexcept
+void ATAPathPoint::setDefaultPathPoint(void) noexcept
 {
-	//SetActorScale3D(FVector(1.0f, 1.0f, 1.0f));
-	//FVector temp = GetComponentsBoundingBox(true, false).GetSize();// _staticMesh->Bounds.GetBox().GetSize();
-	//TA_LOG_DEV("%.1f, %.1f, %.1f", temp.X, temp.Y, temp.Z);
-	//
-	//SetActorScale3D(FVector(1.0f, 1.0f, 3.0f));
-	//temp = GetComponentsBoundingBox(true, false).GetSize(); //_staticMesh->Bounds.GetBox().GetSize();
-	//TA_LOG_DEV("%.1f, %.1f, %.1f", temp.X, temp.Y, temp.Z);
-	//
-	//SetActorScale3D(FVector(1.0f, 1.0f, 1.0f));
-	//temp = GetComponentsBoundingBox(false, false).GetSize();// _staticMesh->Bounds.GetBox().GetSize();
-	//TA_LOG_DEV("%.1f, %.1f, %.1f", temp.X, temp.Y, temp.Z);
-	//
-	//SetActorScale3D(FVector(1.0f, 1.0f, 3.0f));
-	//temp = GetComponentsBoundingBox(false, false).GetSize(); //_staticMesh->Bounds.GetBox().GetSize();
-	//TA_LOG_DEV("%.1f, %.1f, %.1f", temp.X, temp.Y, temp.Z);
-	//
-	//SetActorScale3D(FVector(1.0f, 1.0f, 1.0f));
-	//temp = _staticMesh->Bounds.GetBox().GetSize();
-	//TA_LOG_DEV("%.1f, %.1f, %.1f", temp.X, temp.Y, temp.Z);
-	//
-	//SetActorScale3D(FVector(1.0f, 1.0f, 3.0f));
-	//temp = _staticMesh->Bounds.GetBox().GetSize();
-	//TA_LOG_DEV("%.1f, %.1f, %.1f", temp.X, temp.Y, temp.Z);
-	
+	_staticMesh->SetStaticMesh(_sphere);
+	_staticMesh->SetRelativeScale3D(FVector(_defaultWidthScale / 2, _defaultWidthScale / 2, _defaultHeightScale / 2));
+	SetActorRotation(FQuat::Identity);
+}
 
-
-
-	if (false == isSinglePathPoint)
+void ATAPathPoint::refreshPathPoint(void) noexcept
+{
+	ATAPathPoint* next = getNext();
+	if (nullptr == next)
 	{
-		_staticMesh->SetStaticMesh(_cone);
+		setDefaultPathPoint();
+		TA_LOG_DEV("single path point");
+		return;
+	}
 
-		ATAPathPoint* pathPoint = getNext();
-		if (nullptr == pathPoint)
-		{
-			TA_ASSERT_DEV(false, "비정상");
-			return;
-		}
+	// nullptr != next
+	if (this == next)
+	{
+		setDefaultPathPoint();
+		TA_LOG_DEV("같은 포인트");
+		return;
+	}
 
-		if (this == pathPoint)
-		{
-			TA_ASSERT_DEV(false, "같은 포인트");
-			return;
-		}
-		
+	//next->setPrev(this);
+
+	_staticMesh->SetStaticMesh(_cone);
+	// extend cone to next path point and rotate actor
+	{
 		FVector origin = GetActorLocation();
-		FVector destination = pathPoint->GetActorLocation();
-		
-		FVector directionWithScalar = pathPoint->GetActorLocation() - GetActorLocation();
+		FVector destination = next->GetActorLocation();
+
+		FVector directionWithScalar = next->GetActorLocation() - GetActorLocation();
 		const float distance = directionWithScalar.Size();
 		FVector directionOnly = directionWithScalar;
 		directionOnly.Normalize();
-
 
 		TA_ASSERT_DEV(0.0f != _defaultHeight, "비정상");
 		TA_ASSERT_DEV(0.0f != _defaultHeightScale, "비정상");
 
 		float finalScaleZ = (distance / _defaultHeight) / _defaultHeightScale;
-		
 
-		FVector finalScale = GetActorScale3D();
+		// 부모 Component가 1이라서 사실상 Relative지만 World로 보는게 맞다.
+		FVector finalScale = _staticMesh->GetRelativeScale3D();
 		finalScale.Z = finalScaleZ;
-		SetActorScale3D(finalScale);
+		_staticMesh->SetRelativeScale3D(finalScale);
 
 		// Actor의 시작점이 StaticMesh의 가장 아래로 세팅
 		setActorLocationAsStaticMeshBottom(distance);
-		
-		//UWorld* world = GetWorld();
-		//if (nullptr == world)
-		//{
-		//	TA_ASSERT_DEV(false, "비정상");
-		//	return;
-		//}
-		////DrawDebugLine(world, GetActorLocation(), pathPoint->GetActorLocation(), FColor::Magenta, true, -1, 0, 2);
 
+		SetActorRotation(FRotationMatrix::MakeFromZ(directionOnly).ToQuat());
 	}
-	else
-	{
-		_staticMesh->SetStaticMesh(_sphere);
-	}
-
-	//setPointColor(isSinglePathPoint);
 }
 
 void ATAPathPoint::setPointColor(const bool isSinglePathPoint) noexcept
