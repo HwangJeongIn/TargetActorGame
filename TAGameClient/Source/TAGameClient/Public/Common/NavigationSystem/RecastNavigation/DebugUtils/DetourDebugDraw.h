@@ -51,7 +51,7 @@ namespace ta
 	void duDebugDrawNavMeshPolysWithFlags(struct ta::duDebugDraw* dd, const dtNavMesh& mesh, const unsigned short polyFlags, const unsigned int col);
 	void duDebugDrawNavMeshPoly(struct ta::duDebugDraw* dd, const dtNavMesh& mesh, dtPolyRef ref, const unsigned int col);
 	void duDebugDrawNavMeshClusters(struct ta::duDebugDraw* dd, const dtNavMesh& mesh);
-	void duDebugDrawNavMeshCluster(struct ta::duDebugDraw* dd, const dtNavMesh& mesh, ta::dtClusterRef ref, const unsigned int col);
+	void duDebugDrawNavMeshCluster(struct ta::duDebugDraw* dd, const dtNavMesh& mesh, dtClusterRef ref, const unsigned int col);
 
 	void duDebugDrawTileCacheLayerAreas(struct ta::duDebugDraw* dd, const ta::dtTileCacheLayer& layer, const float cs, const float ch);
 	void duDebugDrawTileCacheLayerDistance(struct ta::duDebugDraw* dd, const ta::dtTileCacheLayer& layer,

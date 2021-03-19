@@ -58,11 +58,11 @@ namespace ta
 
 		for (int i = 0; i < tile->header->polyCount; ++i)
 		{
-			const ta::dtPoly* p = &tile->polys[i];
+			const dtPoly* p = &tile->polys[i];
 
 			if (p->getType() != DT_POLYTYPE_GROUND) continue;
 
-			const ta::dtPolyDetail* pd = &tile->detailMeshes[i];
+			const dtPolyDetail* pd = &tile->detailMeshes[i];
 
 			for (int j = 0, nj = (int)p->vertCount; j < nj; ++j)
 			{
@@ -145,11 +145,11 @@ namespace ta
 		dd->begin(DU_DRAW_TRIS);
 		for (int i = 0; i < tile->header->polyCount; ++i)
 		{
-			const ta::dtPoly* p = &tile->polys[i];
+			const dtPoly* p = &tile->polys[i];
 			if (p->getType() != DT_POLYTYPE_GROUND)	// Skip off-mesh links.
 				continue;
 
-			const ta::dtPolyDetail* pd = &tile->detailMeshes[i];
+			const dtPolyDetail* pd = &tile->detailMeshes[i];
 
 			unsigned int col;
 			if (query && query->isInClosedList(base | (dtPolyRef)i))
@@ -194,7 +194,7 @@ namespace ta
 			dd->begin(DU_DRAW_LINES, 2.0f);
 			for (int i = 0; i < tile->header->polyCount; ++i)
 			{
-				const ta::dtPoly* p = &tile->polys[i];
+				const dtPoly* p = &tile->polys[i];
 
 				// draw offmesh connection - point type
 				if (p->getType() != DT_POLYTYPE_OFFMESH_POINT)
@@ -252,7 +252,7 @@ namespace ta
 			dd->begin(DU_DRAW_LINES, 4.0f);
 			for (int i = 0; i < tile->header->polyCount; ++i)
 			{
-				const ta::dtPoly* p = &tile->polys[i];
+				const dtPoly* p = &tile->polys[i];
 				if (p->getType() == DT_POLYTYPE_OFFMESH_SEGMENT)
 				{
 					float* vA0 = &tile->verts[p->verts[0] * 3];
@@ -270,7 +270,7 @@ namespace ta
 			dd->begin(DU_DRAW_QUADS);
 			for (int i = 0; i < tile->header->polyCount; ++i)
 			{
-				const ta::dtPoly* p = &tile->polys[i];
+				const dtPoly* p = &tile->polys[i];
 				if (p->getType() != DT_POLYTYPE_OFFMESH_SEGMENT)	// Skip regular polys.
 					continue;
 
@@ -414,7 +414,7 @@ namespace ta
 
 			for (int i = 0; i < tile->header->polyCount; ++i)
 			{
-				ta::dtPoly* poly = &tile->polys[i];
+				dtPoly* poly = &tile->polys[i];
 
 				// Create new links.
 				const int nv = poly->vertCount;
@@ -497,7 +497,7 @@ namespace ta
 
 			for (int j = 0; j < tile->header->polyCount; ++j)
 			{
-				const ta::dtPoly* p = &tile->polys[j];
+				const dtPoly* p = &tile->polys[j];
 				if ((p->flags & polyFlags) == 0) continue;
 				duDebugDrawNavMeshPoly(dd, mesh, base | (dtPolyRef)j, col);
 			}
@@ -509,7 +509,7 @@ namespace ta
 		if (!dd) return;
 
 		const dtMeshTile* tile = 0;
-		const ta::dtPoly* poly = 0;
+		const dtPoly* poly = 0;
 		if (dtStatusFailed(mesh.getTileAndPolyByRef(ref, &tile, &poly)))
 			return;
 
@@ -542,7 +542,7 @@ namespace ta
 		}
 		else if (poly->getType() == DT_POLYTYPE_GROUND)
 		{
-			const ta::dtPolyDetail* pd = &tile->detailMeshes[ip];
+			const dtPolyDetail* pd = &tile->detailMeshes[ip];
 
 			dd->begin(DU_DRAW_TRIS);
 			for (int i = 0; i < pd->triCount; ++i)
