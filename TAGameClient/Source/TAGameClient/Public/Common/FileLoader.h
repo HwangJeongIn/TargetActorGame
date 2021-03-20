@@ -31,6 +31,7 @@ namespace ta
 
 		// 스레드함수로 사용할 경우 rootOutput은 힙에 할당되어서 들어와야한다. filePath는 복사되서 들어오기 때문에 어떤스레드든 상관없다.
 		static bool loadXml(const fs::path filePath, XmlNode* rootOutput) noexcept;
+		static bool saveXml(const fs::path filePath, const XmlNode* rootInput) noexcept;
 		static bool loadObj(const fs::path filePath, ObjGroup* objGroupOutput) noexcept;
 
 		static bool loadFileString(const fs::path& filePath, MemoryBuffer& buffer) noexcept;

@@ -35,7 +35,7 @@ namespace ta
 	bool ServerMoveActorSystem::initialize(void) noexcept
 	{
 		Serializer slR;
-		slR.setMode(Serializer::SerializerMode::Read);
+		slR.setModeFlag(SerializerMode::Read | SerializerMode::WriteLog);
 
 		std::vector<fs::path> navigationMeshFiles;
 		FileLoader::getFilePathsFromDirectory(NavigationMeshPath, navigationMeshFiles);

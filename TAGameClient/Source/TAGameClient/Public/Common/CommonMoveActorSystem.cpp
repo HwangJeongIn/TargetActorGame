@@ -41,9 +41,8 @@ namespace ta
 #ifndef TA_CLIENT_IN_SERVER
 	bool CommonMoveActorSystem::serializeNavigationMesh(Serializer& Ar, dtNavMesh*& DetourNavMesh) noexcept
 	{
-		const Serializer::SerializerMode mode = Ar.getMode();
 		// 쓰려는데 없다? => 오류
-		if (mode == Serializer::SerializerMode::Write && DetourNavMesh == NULL)
+		if (true == Ar.hasModeFlag(SerializerMode::Write) && DetourNavMesh == NULL)
 		{
 			TA_ASSERT_DEV(false, "비정상");
 			return false;
@@ -51,7 +50,7 @@ namespace ta
 
 		// All we really need to do is read/write the data blob for each tile
 
-		if (mode == Serializer::SerializerMode::Read)
+		if (true == Ar.hasModeFlag(SerializerMode::Read))
 		{
 			// allocate the navmesh object	
 			if (DetourNavMesh != nullptr)
@@ -72,7 +71,7 @@ namespace ta
 		int32 NumTiles = 0;
 		std::vector<int32> TilesToSave;
 
-		if (Serializer::SerializerMode::Write == mode)
+		if (true == Ar.hasModeFlag(SerializerMode::Write))
 		{
 			TilesToSave.reserve(DetourNavMesh->getMaxTiles());
 
@@ -107,7 +106,7 @@ namespace ta
 		Ar << Params.maxTiles;				///< The maximum number of tiles the navigation mesh can contain.
 		Ar << Params.maxPolys;
 
-		if (Serializer::SerializerMode::Read == mode)
+		if (true == Ar.hasModeFlag(SerializerMode::Read))
 		{
 			//// at this point we can tell whether navmesh being loaded is in line
 			//// ARecastNavMesh's params. If not, just skip it.
@@ -197,7 +196,7 @@ namespace ta
 				}
 			}
 		}
-		else if (Serializer::SerializerMode::Write == mode)
+		else if (true == Ar.hasModeFlag(SerializerMode::Write))
 		{
 			//const bool bSupportsRuntimeGeneration = NavMeshOwner->SupportsRuntimeGeneration();
 			dtNavMesh const* ConstNavMesh = DetourNavMesh;
@@ -248,8 +247,7 @@ namespace ta
 		int32 offMeshSegConCount;
 		int32 clusterCount;
 
-		const Serializer::SerializerMode mode = Ar.getMode();
-		if (Serializer::SerializerMode::Write == mode)
+		if (true == Ar.hasModeFlag(SerializerMode::Write))
 		{
 			// fill in data to write
 			dtMeshHeader* const H = (dtMeshHeader*)TileData;
@@ -286,7 +284,7 @@ namespace ta
 		const int32 clusterSize = dtAlign4(sizeof(dtCluster) * clusterCount);
 		const int32 polyClustersSize = dtAlign4(sizeof(unsigned short) * polyClusterCount);
 
-		if (Serializer::SerializerMode::Read == mode)
+		if (true == Ar.hasModeFlag(SerializerMode::Read))
 		{
 			TA_ASSERT_DEV((nullptr == TileData), "비정상");
 
@@ -302,7 +300,7 @@ namespace ta
 			}
 			memset(TileData, 0, TileDataSize);
 		}
-		else if (Serializer::SerializerMode::Write == mode)
+		else if (true == Ar.hasModeFlag(SerializerMode::Write))
 		{
 			// TileData and TileDataSize should already be set, verify
 			TA_ASSERT_DEV((nullptr != TileData), "비정상");

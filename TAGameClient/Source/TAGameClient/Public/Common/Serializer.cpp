@@ -6,11 +6,14 @@
 
 namespace ta
 {
-	MemoryBuffer::MemoryBuffer(void) noexcept
-		: _data(nullptr)
+	MemoryBuffer::MemoryBuffer(Serializer* owner /*= nullptr*/) noexcept
+		: _owner(owner)
+		, _data(nullptr)
 		, _numBytes(0)
 		, _maxBytes(0)
 	{
+		// 그냥	버퍼만 필요한경우가 있을듯
+		//TA_ASSERT_DEV((nullptr != _owner), "owner must not be nullptr!")
 		allocBuffer(1024 * 1024);
 	}
 
@@ -129,6 +132,11 @@ namespace ta
 #ifdef CAN_CREATE_LOG_FILE
 	void MemoryBuffer::writeLog(void* input, int64 offset, int64 num, const TADataType& dataType, bool isWriteMode) noexcept
 	{
+		if (nullptr == _owner || false == _owner->hasModeFlag(SerializerMode::WriteLog))
+		{
+			return;
+		}
+
 		std::string log;
 		if (true == isWriteMode)
 		{
@@ -224,7 +232,6 @@ namespace ta
 
 	bool MemoryBuffer::exportToFile(const fs::path& filePath) noexcept
 	{
-		
 		std::string result;
 		if (false == FileLoader::saveFileString(filePath, *this))
 		{
@@ -296,22 +303,48 @@ namespace ta
 namespace ta
 {
 	Serializer::Serializer(void) noexcept
-		: _mode(SerializerMode::Read)
+		: _modeFlag(0)
+		, _buffer(this)
 	{
 	}
 
 	Serializer::~Serializer(void) noexcept
 	{
 	}
-	
-	void Serializer::setMode(const SerializerMode input) noexcept
+
+	void Serializer::setModeFlag(const SerializerModeFlag input) noexcept
 	{
-		_mode = input;
+		if ((SerializerMode::Read & input) && (SerializerMode::Write & input))
+		{
+			TA_ASSERT_DEV(false, "read and write mode is not supported.");
+			return;
+		}
+		_modeFlag = input;
 	}
 
-	const Serializer::SerializerMode Serializer::getMode(void) const noexcept
+	void Serializer::turnOnModeFlag(const SerializerModeFlag input) noexcept
 	{
-		return _mode;
+		_modeFlag |= input;
+	}
+
+	void Serializer::turnOffModeFlag(const SerializerModeFlag input) noexcept
+	{
+		_modeFlag &= ~input;
+	}
+
+	void Serializer::toggleModeFlag(const SerializerModeFlag input) noexcept
+	{
+		_modeFlag ^= input;
+	}
+
+	bool Serializer::hasModeFlag(const SerializerModeFlag input) const noexcept
+	{
+		return 0 != (input & _modeFlag);
+	}
+
+	const SerializerModeFlag Serializer::getModeFlag(void) const noexcept
+	{
+		return _modeFlag;
 	}
 
 	bool Serializer::exportToFile(const fs::path& filePath) noexcept
@@ -324,10 +357,12 @@ namespace ta
 		return _buffer.importFromFile(filePath);
 	}
 
+#ifdef CAN_CREATE_LOG_FILE
 	bool Serializer::exportLogData(const fs::path& filePath) noexcept
 	{
 		return _buffer.exportLogData(filePath);
 	}
+#endif
 
 	Serializer& Serializer::operator<<(uint8& value) noexcept
 	{
@@ -391,14 +426,17 @@ namespace ta
 
 	bool Serializer::serialize(void* data, int64 num, const TADataType& dataType) noexcept
 	{
-		if (SerializerMode::Read == _mode)
+		if (true == hasModeFlag(SerializerMode::Read))
 		{
 			return _buffer.read(data, num, dataType);
 		}
-		else
+		else if (true == hasModeFlag(SerializerMode::Write))
 		{
 			return _buffer.write(data, num, dataType);
 		}
+
+		TA_ASSERT_DEV(false, "read or write mode isn't set.");
+		return false;
 	}
 }
 

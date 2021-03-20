@@ -7,12 +7,19 @@ namespace fs = std::filesystem;
 
 #define CAN_CREATE_LOG_FILE
 
+
+namespace ta
+{
+	class Serializer;
+}
+
+
 namespace ta
 {
 	class MemoryBuffer
 	{
 	public:
-		MemoryBuffer(void) noexcept;
+		explicit MemoryBuffer(Serializer* owner = nullptr) noexcept;
 		virtual ~MemoryBuffer(void) noexcept;
 
 		void copyBuffer(char* input, int64 inputNum) noexcept;	// 복사할 버퍼가 실체가 있는 경우
@@ -53,6 +60,8 @@ namespace ta
 		int64 _numBytes;
 		int64 _maxBytes;
 
+		Serializer* _owner;
+
 #ifdef CAN_CREATE_LOG_FILE
 		std::string _logData;
 #endif
@@ -63,20 +72,20 @@ namespace ta
 
 namespace ta
 {
+	
+
 	class Serializer
 	{
 	public:
-		enum class SerializerMode : uint8
-		{
-			Read = 0
-			, Write
-		};
-
 		Serializer(void) noexcept;
 		virtual ~Serializer(void) noexcept;
 
-		void setMode(const SerializerMode input) noexcept;
-		const Serializer::SerializerMode getMode(void) const noexcept;
+		void setModeFlag(const SerializerModeFlag input) noexcept;
+		void turnOnModeFlag(const SerializerModeFlag input) noexcept;
+		void turnOffModeFlag(const SerializerModeFlag input) noexcept;
+		void toggleModeFlag(const SerializerModeFlag input) noexcept;
+		bool hasModeFlag(const SerializerModeFlag input) const noexcept;
+		const SerializerModeFlag getModeFlag(void) const noexcept;
 		
 		bool exportToFile(const fs::path& filePath) noexcept;
 		bool importFromFile(const fs::path& filePath) noexcept;
@@ -114,8 +123,8 @@ namespace ta
 
 	private:
 		MemoryBuffer _buffer;
-		SerializerMode _mode;
 
+		SerializerModeFlag _modeFlag;
 	};
 
 }

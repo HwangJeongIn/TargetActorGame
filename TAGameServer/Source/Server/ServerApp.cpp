@@ -1,4 +1,4 @@
-#include "Server/ServerApp.h"
+﻿#include "Server/ServerApp.h"
 #include "Server/ServerActorManager.h"
 #include "Server/ServerActorSystemManager.h"
 #include "Server/AllPacketServer.h"
@@ -264,7 +264,7 @@ namespace ta
 
 			{
 				//sl.allocBuffer(1024 * 1024);
-				slW.setMode(Serializer::SerializerMode::Write);
+				slW.setModeFlag(SerializerMode::Write);
 				int8 a = 1;
 				int16 b = 2;
 				int32 c = 3;
@@ -279,7 +279,7 @@ namespace ta
 			int32 outC = 0;
 			{
 				//sl.allocBuffer(1024 * 1024);
-				slR.setMode(Serializer::SerializerMode::Read);
+				slR.setModeFlag(SerializerMode::Read);
 				slR.importFromFile(filePath);
 				slR << outA << outB << outC;
 			}

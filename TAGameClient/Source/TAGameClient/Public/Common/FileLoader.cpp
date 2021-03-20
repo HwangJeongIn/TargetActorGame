@@ -105,6 +105,86 @@ namespace ta
 		return true;
 	}
 
+	bool FileLoader::saveXml(const fs::path filePath, const XmlNode* rootInput) noexcept
+	{
+		//if (nullptr == rootInput)
+		//{
+		//	TA_ASSERT_DEV(false, "비정상입니다.");
+		//	return false;
+		//}
+
+		//MemoryBuffer tempBuffer;
+		//if (false == FileLoader::loadFileString(filePath, tempBuffer))
+		//{
+		//	TA_ASSERT_DEV(false, "비정상입니다.");
+		//	return false;
+		//}
+
+		//std::string fileString(tempBuffer.getData());
+		//std::vector<std::string> splitedStrings;
+		//Split(fileString, "<>", splitedStrings);
+		//const uint32 splitedStringCount = splitedStrings.size();
+
+		//uint32 index = 0;
+		//std::vector<XmlNode*> elementStack;
+
+		//// 루트 노드부터 찾는다.
+		//uint32 stringCount = splitedStrings.size();
+		//while (index < stringCount)
+		//{
+		//	if (0 == splitedStrings[index].compare("Root"))
+		//	{
+		//		elementStack.push_back(rootInput);
+		//		index += 2;
+		//		break;
+		//	}
+
+		//	++index;
+		//}
+		//// 일단 루트 바깥으로 나왔다. <Root> 이후
+
+		//if (index == stringCount)
+		//{
+		//	TA_ASSERT_DEV(false, "루트노드가 없습니다.");
+		//	return false;
+		//}
+
+		//while (false == elementStack.empty())
+		//{
+		//	if (0 == splitedStrings[index].compare("<"))
+		//	{
+		//		++index;
+		//		// 닫는것일수도 있다. // </Root>
+		//		if ('/' == splitedStrings[index][0])
+		//		{
+		//			elementStack.pop_back();
+		//		}
+		//		else
+		//		{
+		//			XmlNode* childElement = new XmlNode;
+		//			// GroupGameData Key="1" MoveGameDataKey="1" ...
+		//			if (false == FileLoader::loadXmlAttributeFromString(splitedStrings[index], childElement))
+		//			{
+		//				TA_ASSERT_DEV(false, "비정상입니다.");
+		//				return false;
+		//			}
+
+		//			elementStack.back()->addChildElement(childElement);
+		//			elementStack.push_back(childElement);
+		//		}
+		//	}
+		//	else if (0 == splitedStrings[index].compare(">"))
+		//	{
+		//		elementStack.pop_back();
+		//	}
+
+		//	++index;
+		//}
+
+		//return true;
+		return true;
+	}
+
 	bool FileLoader::loadObj(const fs::path filePath, ObjGroup* objGroupOutput) noexcept
 	{
 		if (nullptr == objGroupOutput)

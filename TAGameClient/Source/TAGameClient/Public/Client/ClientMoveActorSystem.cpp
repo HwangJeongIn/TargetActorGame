@@ -81,7 +81,7 @@ namespace ta
 		}
 
 		Serializer slW;
-		slW.setMode(Serializer::SerializerMode::Write);
+		slW.setModeFlag(SerializerMode::Write | SerializerMode::WriteLog);
 		if (false == serializeNavigationMesh(slW, detourNavMesh))
 		{
 			TA_ASSERT_DEV(false, "비정상입니다.");
