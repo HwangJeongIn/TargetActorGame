@@ -64,8 +64,10 @@ namespace ta
 		,{ "Uint64", TADataType::Uint64 }
 		,{ "Bool", TADataType::Bool }
 		,{ "Float", TADataType::Float }
+		,{ "StdString", TADataType::StdString }
+		,{ "String", TADataType::String }
 	};
-	TA_COMPILE_DEV(10 == static_cast<uint8>(TADataType::Count), "여기도 확인해주세요");
+	TA_COMPILE_DEV(12 == static_cast<uint8>(TADataType::Count), "여기도 확인해주세요");
 
 
 

@@ -19,6 +19,8 @@ namespace ta
 		, Uint64
 		, Bool
 		, Float
+		, String
+		, StdString
 		, Count
 	};
 }
@@ -30,9 +32,12 @@ namespace ta
 
 	enum SerializerMode : SerializerModeFlag
 	{
-		  Read		= (1 << 0)	// 0x00000000
-		, Write		= (1 << 1)	// 0x00000001
-		, WriteLog	= (1 << 3)	// 0x00000002
+		  Read			= 0			// 0x00000000
+		, Write			= (1 << 0)	// 0x00000001
+		, WriteLog		= (1 << 1)	// 0x00000002
+		// = (1 << 2)	// 0x00000004
+		// = (1 << 3)	// 0x00000008
+		// = (1 << 4)	// 0x00000010
 	};
 }
 

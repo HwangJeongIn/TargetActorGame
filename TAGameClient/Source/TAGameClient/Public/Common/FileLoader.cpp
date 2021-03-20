@@ -41,6 +41,7 @@ namespace ta
 			return false;
 		}
 
+		// xml파일은 중간에 null문자가 없다 그냥 가지고 와도 된다.
 		std::string fileString(tempBuffer.getData());
 		std::vector<std::string> splitedStrings;
 		Split(fileString, "<>", splitedStrings);
@@ -55,12 +56,19 @@ namespace ta
 		{
 			if (0 == splitedStrings[index].compare("Root"))
 			{
+				rootOutput->setName("Root");
 				elementStack.push_back(rootOutput);
 				index += 2;
 				break;
 			}
 			
 			++index;
+		}
+
+		if (stringCount == index)
+		{
+			TA_ASSERT_DEV(false, "비정상입니다.");
+			return false;
 		}
 		// 일단 루트 바깥으로 나왔다. <Root> 이후
 
@@ -75,8 +83,8 @@ namespace ta
 			if (0 == splitedStrings[index].compare("<"))
 			{
 				++index;
-				// 닫는것일수도 있다. // </Root>
-				if ('/' == splitedStrings[index][0])
+				// element end case // ex) </ElementName>
+				if ('/' == splitedStrings[index].front())
 				{
 					elementStack.pop_back();
 				}
@@ -96,7 +104,11 @@ namespace ta
 			}
 			else if (0 == splitedStrings[index].compare(">"))
 			{
-				elementStack.pop_back();
+				// element end case // ex) /> 
+				if ('/' == splitedStrings[index - 1].back())
+				{
+					elementStack.pop_back();
+				}
 			}
 
 			++index;
@@ -107,12 +119,17 @@ namespace ta
 
 	bool FileLoader::saveXml(const fs::path filePath, const XmlNode* rootInput) noexcept
 	{
-		//if (nullptr == rootInput)
-		//{
-		//	TA_ASSERT_DEV(false, "비정상입니다.");
-		//	return false;
-		//}
+		if (nullptr == rootInput)
+		{
+			TA_ASSERT_DEV(false, "비정상입니다.");
+			return false;
+		}
 
+		Serializer slW;
+		slW.setModeFlag(SerializerMode::Write | SerializerMode::WriteLog);
+
+
+		
 		//MemoryBuffer tempBuffer;
 		//if (false == FileLoader::loadFileString(filePath, tempBuffer))
 		//{
@@ -181,7 +198,6 @@ namespace ta
 		//	++index;
 		//}
 
-		//return true;
 		return true;
 	}
 
@@ -302,6 +318,14 @@ namespace ta
 		Split(nodeString, "=\" ", attributeStrings);
 
 		const uint32 count = attributeStrings.size();
+		if (0 == count)
+		{
+			TA_ASSERT_DEV(false, "엘리먼트에 데이터가 없습니다.");
+			return false;
+		}
+
+		output->setName(attributeStrings[0]);
+
 		for (uint32 index = 0; index < count; ++index)
 		{
 			if (0 == attributeStrings[index].compare("="))
@@ -346,6 +370,21 @@ namespace ta
 		_attributes.clear();
 	}
 
+	std::string& XmlNode::getName(void) noexcept
+	{
+		return _name;
+	}
+	
+	const std::string& XmlNode::getName(void) const noexcept
+	{
+		return _name;
+	}
+
+	void XmlNode::setName(const std::string& name) noexcept
+	{
+		_name = name;
+	}
+
 	uint32 XmlNode::getChildElementCount(void) const noexcept
 	{
 		return _childElements.size();
@@ -359,6 +398,18 @@ namespace ta
 	const std::string* XmlNode::getAttribute(const std::string& attributeName) const noexcept
 	{
 		std::unordered_map<std::string, std::string>::const_iterator rv = _attributes.find(attributeName);
+
+		if (_attributes.end() == rv)
+		{
+			return nullptr;
+		}
+
+		return &(rv->second);
+	}
+
+	std::string* XmlNode::getAttribute(const std::string& attributeName) noexcept
+	{
+		std::unordered_map<std::string, std::string>::iterator rv = _attributes.find(attributeName);
 
 		if (_attributes.end() == rv)
 		{

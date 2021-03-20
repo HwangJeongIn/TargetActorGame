@@ -12,7 +12,7 @@ namespace ta
 		, _numBytes(0)
 		, _maxBytes(0)
 	{
-		// 그냥	버퍼만 필요한경우가 있을듯
+		// 그냥	버퍼만 필요한경우가 있을듯 // 파일 스트링만 읽어서 파싱할 때 굳이 Serializer가 필요없다
 		//TA_ASSERT_DEV((nullptr != _owner), "owner must not be nullptr!")
 		allocBuffer(1024 * 1024);
 	}
@@ -20,6 +20,11 @@ namespace ta
 	MemoryBuffer::~MemoryBuffer(void) noexcept
 	{
 		resetBuffer();
+	}
+
+	void MemoryBuffer::setOwner(Serializer* owner) noexcept
+	{
+		_owner = owner;
 	}
 
 	void MemoryBuffer::copyBuffer(char* input, int64 inputNum) noexcept
@@ -61,7 +66,7 @@ namespace ta
 		_currentPos = _numBytes;
 	}
 
-	bool MemoryBuffer::write(void* input, int64 num, const TADataType& dataType) noexcept
+	bool MemoryBuffer::write(const void* input, int64 num, const TADataType& dataType) noexcept
 	{
 		const bool rv = write(input, _currentPos, num, dataType);
 		if (true == rv)
@@ -72,7 +77,7 @@ namespace ta
 		return rv;
 	}
 
-	bool MemoryBuffer::write(void* input, int64 offset, int64 num, const TADataType& dataType) noexcept
+	bool MemoryBuffer::write(const void* input, int64 offset, int64 num, const TADataType& dataType) noexcept
 	{
 		if ((nullptr == _data) || (offset < 0) || (num <= 0))
 		{
@@ -130,7 +135,7 @@ namespace ta
 	}
 
 #ifdef CAN_CREATE_LOG_FILE
-	void MemoryBuffer::writeLog(void* input, int64 offset, int64 num, const TADataType& dataType, bool isWriteMode) noexcept
+	void MemoryBuffer::writeLog(const void* input, int64 offset, int64 num, const TADataType& dataType, bool isWriteMode) noexcept
 	{
 		if (nullptr == _owner || false == _owner->hasModeFlag(SerializerMode::WriteLog))
 		{
@@ -155,57 +160,63 @@ namespace ta
 		{
 		case TADataType::Int8:
 			{
-				log += std::to_string(*(int8*)(input));
+				log += std::to_string(*(const int8*)(input));
 			}
 			break;
 		case TADataType::Int16:
 			{
-				log += std::to_string(*(int16*)(input));
+				log += std::to_string(*(const int16*)(input));
 			}
 			break;
 		case TADataType::Int32:
 			{
-				log += std::to_string(*(int32*)(input));
+				log += std::to_string(*(const int32*)(input));
 			}
 			break;
 		case TADataType::Int64:
 			{
-				log += std::to_string(*(int64*)(input));
+				log += std::to_string(*(const int64*)(input));
 			}
 			break;
 		case TADataType::Uint8:
 			{
-				log += std::to_string(*(uint8*)(input));
+				log += std::to_string(*(const uint8*)(input));
 			}
 			break;
 		case TADataType::Uint16:
 			{
-				log += std::to_string(*(uint16*)(input));
+				log += std::to_string(*(const uint16*)(input));
 			}
 			break;
 		case TADataType::Uint32:
 			{
-				log += std::to_string(*(uint32*)(input));
+				log += std::to_string(*(const uint32*)(input));
 			}
 			break;
 		case TADataType::Uint64:
 			{
-				log += std::to_string(*(uint64*)(input));
+				log += std::to_string(*(const uint64*)(input));
 			}
 			break;
 		case TADataType::Bool:
 			{
-				log += std::to_string(*(bool*)(input));
+				log += std::to_string(*(const bool*)(input));
 			}
 			break;
 		case TADataType::Float:
 			{
-				log += std::to_string(*(float*)(input));
+				log += std::to_string(*(const float*)(input));
+			}
+			break;
+		case TADataType::String:
+		case TADataType::StdString:
+			{
+				log += (const char*)(input);
 			}
 			break;
 		default:
 			{
-				TA_COMPILE_DEV(10 == static_cast<uint8>(TADataType::Count), "여기도 확인해주세요");
+				TA_COMPILE_DEV(12 == static_cast<uint8>(TADataType::Count), "여기도 확인해주세요");
 				log += "unknown type";
 			}
 			break;
@@ -232,7 +243,6 @@ namespace ta
 
 	bool MemoryBuffer::exportToFile(const fs::path& filePath) noexcept
 	{
-		std::string result;
 		if (false == FileLoader::saveFileString(filePath, *this))
 		{
 			TA_ASSERT_DEV(false, "saveFileString failed");
@@ -244,8 +254,6 @@ namespace ta
 
 	bool MemoryBuffer::importFromFile(const fs::path& filePath) noexcept
 	{
-		char* result = nullptr;
-		uint32 resultSize = 0;
 		if (false == FileLoader::loadFileString(filePath, *this))
 		{
 			TA_ASSERT_DEV(false, "importFromFile failed");
@@ -302,14 +310,50 @@ namespace ta
 
 namespace ta
 {
-	Serializer::Serializer(void) noexcept
+	Serializer::Serializer(MemoryBuffer* buffer) noexcept
 		: _modeFlag(0)
-		, _buffer(this)
+		, _buffer(buffer)
+		, _mustBeDeleted(false)
 	{
+		if (nullptr == _buffer)
+		{
+			_buffer = new MemoryBuffer(this);
+			_mustBeDeleted = true;
+		}
+		else
+		{
+			_buffer->setOwner(this);
+		}
 	}
 
 	Serializer::~Serializer(void) noexcept
 	{
+		if (true == _mustBeDeleted)
+		{
+			delete _buffer;
+		}
+	}
+
+	MemoryBuffer& Serializer::getBuffer(void) noexcept
+	{
+		return *_buffer;
+	}
+
+	const MemoryBuffer& Serializer::getBuffer(void) const noexcept
+	{
+		return *_buffer;
+	}
+
+	char* Serializer::getRawBuffer(int64& numBytes) noexcept
+	{
+		numBytes = _buffer->getDataSize();
+		return _buffer->getData();
+	}
+
+	const char* Serializer::getRawBuffer(int64& numBytes) const noexcept
+	{
+		numBytes = _buffer->getDataSize();
+		return _buffer->getData();
 	}
 
 	void Serializer::setModeFlag(const SerializerModeFlag input) noexcept
@@ -349,18 +393,18 @@ namespace ta
 
 	bool Serializer::exportToFile(const fs::path& filePath) noexcept
 	{
-		return _buffer.exportToFile(filePath);
+		return _buffer->exportToFile(filePath);
 	}
 
 	bool Serializer::importFromFile(const fs::path& filePath) noexcept
 	{
-		return _buffer.importFromFile(filePath);
+		return _buffer->importFromFile(filePath);
 	}
 
 #ifdef CAN_CREATE_LOG_FILE
 	bool Serializer::exportLogData(const fs::path& filePath) noexcept
 	{
-		return _buffer.exportLogData(filePath);
+		return _buffer->exportLogData(filePath);
 	}
 #endif
 
@@ -424,15 +468,27 @@ namespace ta
 		return *this;
 	}
 
+	Serializer& Serializer::operator<<(char* value) noexcept
+	{
+		serialize(value, strlen(value), TADataType::String);
+		return *this;
+	}
+
+	Serializer& Serializer::operator<<(std::string& value) noexcept
+	{
+		serialize(value.data(), value.size(), TADataType::StdString);
+		return *this;
+	}
+
 	bool Serializer::serialize(void* data, int64 num, const TADataType& dataType) noexcept
 	{
 		if (true == hasModeFlag(SerializerMode::Read))
 		{
-			return _buffer.read(data, num, dataType);
+			return _buffer->read(data, num, dataType);
 		}
 		else if (true == hasModeFlag(SerializerMode::Write))
 		{
-			return _buffer.write(data, num, dataType);
+			return _buffer->write(data, num, dataType);
 		}
 
 		TA_ASSERT_DEV(false, "read or write mode isn't set.");

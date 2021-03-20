@@ -57,16 +57,26 @@ namespace ta
 
 		void clear(void) noexcept;
 
+
+		std::string& getName(void) noexcept;
+		const std::string& getName(void) const noexcept;
+
+		void setName(const std::string& name) noexcept;
+
 		uint32 getChildElementCount(void) const noexcept;
 		XmlNode* getChildElement(const uint32 index) const noexcept;
 		const std::string* getAttribute(const std::string& attributeName) const noexcept;
+		std::string* getAttribute(const std::string& attributeName) noexcept;
 
 		bool addChildElement(XmlNode* childElement) noexcept;
 		bool addAttribute(const std::string& name, const std::string& value) noexcept;
 
 	private:
+		std::string _name;
+
 		std::vector<XmlNode*> _childElements;
 		std::unordered_map<std::string, std::string> _attributes;
+
 	};
 }
 

@@ -22,20 +22,22 @@ namespace ta
 		explicit MemoryBuffer(Serializer* owner = nullptr) noexcept;
 		virtual ~MemoryBuffer(void) noexcept;
 
+		void setOwner(Serializer* owner) noexcept;
+
 		void copyBuffer(char* input, int64 inputNum) noexcept;	// 복사할 버퍼가 실체가 있는 경우
 		void prepareCopyBuffer(int64 inputNum) noexcept;		// 복사할 버퍼가 실체가 없는 경우, 데이터 복사는 알아서 해줘야한다. ex) 파일에서 그대로 읽어올 때
 		void resetBuffer(void) noexcept;
 		void setBeginPos(void) noexcept;
 		void setEndPos(void) noexcept;
 
-		bool write(void* input, int64 num, const TADataType& dataType) noexcept;
-		bool write(void* input, int64 offset, int64 num, const TADataType& dataType) noexcept;
+		bool write(const void* input, int64 num, const TADataType& dataType) noexcept;
+		bool write(const void* input, int64 offset, int64 num, const TADataType& dataType) noexcept;
 
 		bool read(void* input, int64 num, const TADataType& dataType) noexcept;
 		bool read(void* input, int64 offset, int64 num, const TADataType& dataType) noexcept;
 
 #ifdef CAN_CREATE_LOG_FILE
-		void writeLog(void* input, int64 offset, int64 num, const TADataType& dataType, bool isWriteMode) noexcept;
+		void writeLog(const void* input, int64 offset, int64 num, const TADataType& dataType, bool isWriteMode) noexcept;
 #endif
 
 		int64 getDataSize(void) const noexcept;
@@ -72,13 +74,18 @@ namespace ta
 
 namespace ta
 {
-	
-
 	class Serializer
 	{
 	public:
-		Serializer(void) noexcept;
+		explicit Serializer(MemoryBuffer* buffer = nullptr) noexcept;
 		virtual ~Serializer(void) noexcept;
+
+		// Serializer가 있으면 무조건 Buffer도 있다. // 생성자에서 들어오면 해당 Buffer , nullptr로 들어오면 자체적으로 Buffer를 만든다.
+		MemoryBuffer& getBuffer(void) noexcept;
+		const MemoryBuffer& getBuffer(void) const noexcept;
+
+		char* getRawBuffer(int64& numBytes) noexcept;
+		const char* getRawBuffer(int64& numBytes) const noexcept;
 
 		void setModeFlag(const SerializerModeFlag input) noexcept;
 		void turnOnModeFlag(const SerializerModeFlag input) noexcept;
@@ -105,6 +112,12 @@ namespace ta
 		Serializer& operator<<(bool& value) noexcept;
 		Serializer& operator<<(float& value) noexcept;
 
+
+		Serializer& operator<<(char* value) noexcept;
+		Serializer& operator<<(std::string& value) noexcept;
+
+
+
 	private:
 		bool serialize(void* data, int64 num, const TADataType& dataType) noexcept;
 
@@ -122,7 +135,8 @@ namespace ta
 		//}
 
 	private:
-		MemoryBuffer _buffer;
+		bool _mustBeDeleted;
+		MemoryBuffer* _buffer;
 
 		SerializerModeFlag _modeFlag;
 	};
