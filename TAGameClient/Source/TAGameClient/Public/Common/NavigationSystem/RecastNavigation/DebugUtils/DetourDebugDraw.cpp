@@ -314,7 +314,7 @@ namespace ta
 		}
 	}
 
-	void duDebugDrawNavMeshWithClosedList(struct ta::duDebugDraw* dd, const dtNavMesh& mesh, const dtNavMeshQuery& query, unsigned char flags)
+	void duDebugDrawNavMeshWithClosedList(struct ta::duDebugDraw* dd, const dtNavMesh& mesh, const class ta::dtNavMeshQuery& query, unsigned char flags)
 	{
 		if (!dd) return;
 
@@ -328,7 +328,7 @@ namespace ta
 		}
 	}
 
-	void duDebugDrawNavMeshNodes(struct ta::duDebugDraw* dd, const ta::dtNavMeshQuery& query)
+	void duDebugDrawNavMeshNodes(struct ta::duDebugDraw* dd, const class ta::dtNavMeshQuery& query)
 	{
 		if (!dd) return;
 

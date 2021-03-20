@@ -44,8 +44,8 @@ namespace ta
 	};
 
 	void duDebugDrawNavMesh(struct ta::duDebugDraw* dd, const dtNavMesh& mesh, unsigned char flags);
-	void duDebugDrawNavMeshWithClosedList(struct ta::duDebugDraw* dd, const dtNavMesh& mesh, const ta::dtNavMeshQuery& query, unsigned char flags);
-	void duDebugDrawNavMeshNodes(struct ta::duDebugDraw* dd, const ta::dtNavMeshQuery& query);
+	void duDebugDrawNavMeshWithClosedList(struct ta::duDebugDraw* dd, const dtNavMesh& mesh, const class ta::dtNavMeshQuery& query, unsigned char flags);
+	void duDebugDrawNavMeshNodes(struct ta::duDebugDraw* dd, const class ta::dtNavMeshQuery& query);
 	void duDebugDrawNavMeshBVTree(struct ta::duDebugDraw* dd, const dtNavMesh& mesh);
 	void duDebugDrawNavMeshPortals(struct ta::duDebugDraw* dd, const dtNavMesh& mesh);
 	void duDebugDrawNavMeshPolysWithFlags(struct ta::duDebugDraw* dd, const dtNavMesh& mesh, const unsigned short polyFlags, const unsigned int col);

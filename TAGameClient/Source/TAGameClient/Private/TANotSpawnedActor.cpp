@@ -3,7 +3,6 @@
 
 #include "TANotSpawnedActor.h"
 #include "Components/StaticMeshComponent.h"
-#include "Common/CommonBase.h"
 
 
 bool GetFolderName(const FString& folderPath, FString& folderName, uint8 depth/* = 1*/) noexcept
@@ -50,12 +49,27 @@ ATANotSpawnedActor::ATANotSpawnedActor()
 void ATANotSpawnedActor::BeginPlay()
 {
 	Super::BeginPlay();
-	
+	FVector actorLocation = GetActorLocation();
+	FVector staticMeshWorldLocation = actorLocation + FVector(0.0f, 0.0f, 10.0f);
+	_staticMesh->SetWorldLocation(staticMeshWorldLocation);
 }
 
 void ATANotSpawnedActor::setActorLocationAsStaticMeshBottom(const float staticMeshHeight) noexcept
 {
 	TA_LOG_DEV("StaticMeshHeight : %.1f", staticMeshHeight);
-	_staticMesh->SetWorldLocation(GetActorLocation() + FVector(0.0f, 0.0f, (0.0f == staticMeshHeight) ? 0.0f : staticMeshHeight / 2.0f));
+	
+	FVector actorLocation = GetActorLocation();
+	TA_LOG_DEV("GetActorLocation : %.1f, %.1f, %.1f", actorLocation.X, actorLocation.Y, actorLocation.Z);
+
+	;
+	FVector staticMeshWorldLocation = actorLocation + GetActorUpVector() * ((0.0f == staticMeshHeight) ? 0.0f : staticMeshHeight / 2.0f);
+	TA_LOG_DEV("StaticMeshWorldLocation : %.1f, %.1f, %.1f", staticMeshWorldLocation.X, staticMeshWorldLocation.Y, staticMeshWorldLocation.Z);
+
+	// 상대 위치 써야하는 이유
+	// 1. 절대 위치로 계산해도 어차피 내부에서 액터 좌표계로 매핑하기 때문에 상대위치로 하는게 좋다
+	// 2. 절대 위치로 계산할때 해당 액터의 Up벡터를 가지고 와서 계산해야한다.
+	_staticMesh->SetWorldLocation(staticMeshWorldLocation);
+	
+	//_staticMesh->SetRelativeLocation(FVector(0.0f, 0.0f, (0.0f == staticMeshHeight) ? 0.0f : staticMeshHeight / 2.0f));
 }
 

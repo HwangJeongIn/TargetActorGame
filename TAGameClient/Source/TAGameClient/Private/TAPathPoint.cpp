@@ -6,37 +6,6 @@
 #include "DrawDebugHelpers.h"
 #include "Common/CommonBase.h"
 
-int32 GetTargetFolderPathPoints(ULevel* level, const FString& targetFolderName, TArray<ATAPathPoint*>& output) noexcept
-{
-	int32 index = -1;
-	ATAPathPoint* currentPathPoint = nullptr;
-	FString currentPathPointFolderName;
-	for (AActor* actor : level->Actors)
-	{
-		++index;
-		currentPathPoint = Cast<ATAPathPoint>(actor);
-		if (nullptr == currentPathPoint)
-		{
-			continue;
-		}
-
-		if (false == GetFolderName(currentPathPoint->GetFolderPath().ToString(), currentPathPointFolderName))
-		{
-			continue;
-		}
-
-		//TA_LOG_DEV("%d => name : %s / folder path : %s", index, *currentPathPoint->GetName(), *currentPathPoint->GetFolderPath().ToString());
-		if (targetFolderName != currentPathPointFolderName)
-		{
-			TA_LOG_DEV("actor is in different folder name");
-			continue;
-		}
-
-		output.Add(currentPathPoint);
-	}
-
-	return output.Num();
-}
 
 // Sets default values
 ATAPathPoint::ATAPathPoint()
@@ -125,8 +94,9 @@ void ATAPathPoint::PostEditChangeProperty(FPropertyChangedEvent& PropertyChanged
 				return;
 			}
 
+
 			TArray<ATAPathPoint*> folderPathPoints;
-			const int32 folderPathPointCount = GetTargetFolderPathPoints(currentLevel, ownerFolderName, folderPathPoints);
+			const int32 folderPathPointCount = GetTargetFolderLevelActors<ATAPathPoint>(currentLevel, ownerFolderName, folderPathPoints);
 			if (0 == folderPathPointCount)
 			{
 				TA_LOG_DEV("0 == folderPathPointCount");
@@ -182,7 +152,7 @@ void ATAPathPoint::refreshPathPoint(void) noexcept
 		FVector origin = GetActorLocation();
 		FVector destination = next->GetActorLocation();
 
-		FVector directionWithScalar = next->GetActorLocation() - GetActorLocation();
+		FVector directionWithScalar = destination - origin;
 		const float distance = directionWithScalar.Size();
 		FVector directionOnly = directionWithScalar;
 		directionOnly.Normalize();

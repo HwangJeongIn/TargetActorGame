@@ -4,11 +4,46 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+#include "Common/CommonBase.h"
 #include "TANotSpawnedActor.generated.h"
 
 class UStaticMeshComponent;
 class USceneComponent;
+class ULevel;
 
+
+template <typename T>
+int32 GetTargetFolderLevelActors(ULevel* level, const FString& targetFolderName, TArray<T*>& output) noexcept
+{
+	T* current = nullptr;
+	FString currentFolderName;
+	FString currentFolderPath;
+	for (AActor* actor : level->Actors)
+	{
+		current = Cast<T>(actor);
+		if (nullptr == current)
+		{
+			continue;
+		}
+
+		currentFolderPath = current->GetFolderPath().ToString();
+		if (false == GetFolderName(currentFolderPath, currentFolderName))
+		{
+			continue;
+		}
+
+		TA_LOG_DEV("=> name : %s / folder path : %s", *current->GetName(), *currentFolderPath);
+		if (targetFolderName != currentFolderName)
+		{
+			TA_LOG_DEV("actor is in different folder name");
+			continue;
+		}
+
+		output.Add(current);
+	}
+
+	return output.Num();
+}
 
 extern bool GetFolderName(const FString& folderPath, FString& folderName, uint8 depth = 1) noexcept;
 

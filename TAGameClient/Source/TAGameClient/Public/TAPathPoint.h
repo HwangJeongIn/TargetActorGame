@@ -7,8 +7,6 @@
 #include "TAPathPoint.generated.h"
 
 
-int32 GetTargetFolderPathPoints(ULevel* level, const FString& targetFolderName, TArray<ATAPathPoint*>& output) noexcept;
-
 UCLASS()
 class TAGAMECLIENT_API ATAPathPoint : public ATANotSpawnedActor
 {
