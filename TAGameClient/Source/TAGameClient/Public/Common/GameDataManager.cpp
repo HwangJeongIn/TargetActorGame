@@ -1,4 +1,4 @@
-#include "Common/GameDataManager.h"
+﻿#include "Common/GameDataManager.h"
 #include "Common/StringUtility.h"
 #include "Common/FileLoader.h"
 #include "Common/GetComponentAndSystem.h"
@@ -150,6 +150,14 @@ namespace ta
 		{
 			TA_ASSERT_DEV(false, "XmlObject생성을 실패했습니다.");
 			return false;
+		}
+
+		// xml save test
+		if (false)
+		{
+			fs::path newFilePath = filePath;
+			newFilePath += ".test.xml";
+			FileLoader::saveXml(newFilePath, &rootNode);
 		}
 
 		std::string fileName = filePath.filename().string();

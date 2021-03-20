@@ -254,38 +254,9 @@ namespace ta
 	void ServerApp::run(void) noexcept
 	{
 		// 테스트
-
-		if(false)
 		{
-			std::string filePath("E:/GitLocal/TargetActorGame/TAGameServer/test.txt");
 
-			Serializer slW;
-			Serializer slR;
-
-			{
-				//sl.allocBuffer(1024 * 1024);
-				slW.setModeFlag(SerializerMode::Write);
-				int8 a = 1;
-				int16 b = 2;
-				int32 c = 3;
-
-				slW << a << b << c;
-				slW.exportToFile(filePath);
-				//FileLoader::saveFileString(filePath, fileString);
-			}
-
-			int8 outA = 0;
-			int16 outB = 0;
-			int32 outC = 0;
-			{
-				//sl.allocBuffer(1024 * 1024);
-				slR.setModeFlag(SerializerMode::Read);
-				slR.importFromFile(filePath);
-				slR << outA << outB << outC;
-			}
 		}
-
-
 
 		if (false == initialize())
 		{

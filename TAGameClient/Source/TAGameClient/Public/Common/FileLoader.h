@@ -28,10 +28,14 @@ namespace ta
 		static bool getFilePathsFromDirectory(const fs::path& directoryPath, std::vector<fs::path>& output) noexcept;
 
 
+		// XML =========================================================================================
 
 		// 스레드함수로 사용할 경우 rootOutput은 힙에 할당되어서 들어와야한다. filePath는 복사되서 들어오기 때문에 어떤스레드든 상관없다.
 		static bool loadXml(const fs::path filePath, XmlNode* rootOutput) noexcept;
 		static bool saveXml(const fs::path filePath, const XmlNode* rootInput) noexcept;
+
+		// =============================================================================================
+
 		static bool loadObj(const fs::path filePath, ObjGroup* objGroupOutput) noexcept;
 
 		static bool loadFileString(const fs::path& filePath, MemoryBuffer& buffer) noexcept;
@@ -40,7 +44,17 @@ namespace ta
 
 	private:
 
+		// XML =========================================================================================
+		
+		// save
+		static bool makeElementString(std::vector<const XmlNode*>& elementStack, std::string& output) noexcept;
+		static void makeDepthString(const uint32 depth, std::string& output) noexcept;
+		static void makeAttributeString(const XmlNode* input, std::string& output) noexcept;
+
+		// load
 		static bool loadXmlAttributeFromString(const std::string& nodeString, XmlNode* output) noexcept;
+
+		// =============================================================================================
 
 
 	};
@@ -64,9 +78,15 @@ namespace ta
 		void setName(const std::string& name) noexcept;
 
 		uint32 getChildElementCount(void) const noexcept;
-		XmlNode* getChildElement(const uint32 index) const noexcept;
+
+		const XmlNode* getChildElement(const uint32 index) const noexcept;
+		XmlNode* getChildElement(const uint32 index) noexcept;
+
 		const std::string* getAttribute(const std::string& attributeName) const noexcept;
 		std::string* getAttribute(const std::string& attributeName) noexcept;
+
+		std::unordered_map<std::string, std::string>& getAttributes(void) noexcept;
+		const std::unordered_map<std::string, std::string>& getAttributes(void) const noexcept;
 
 		bool addChildElement(XmlNode* childElement) noexcept;
 		bool addAttribute(const std::string& name, const std::string& value) noexcept;

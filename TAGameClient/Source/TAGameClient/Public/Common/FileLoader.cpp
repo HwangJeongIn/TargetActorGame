@@ -125,78 +125,30 @@ namespace ta
 			return false;
 		}
 
-		Serializer slW;
-		slW.setModeFlag(SerializerMode::Write | SerializerMode::WriteLog);
+		if (0 != rootInput->getName().compare("Root"))
+		{
+			TA_ASSERT_DEV(false, "root xml node's name is must be 'Root'");
+			return false;
+		}
 
-
+		std::string xmlString("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>");
 		
-		//MemoryBuffer tempBuffer;
-		//if (false == FileLoader::loadFileString(filePath, tempBuffer))
-		//{
-		//	TA_ASSERT_DEV(false, "비정상입니다.");
-		//	return false;
-		//}
+		std::vector<const XmlNode*> elementStack;
+		elementStack.push_back(rootInput);
 
-		//std::string fileString(tempBuffer.getData());
-		//std::vector<std::string> splitedStrings;
-		//Split(fileString, "<>", splitedStrings);
-		//const uint32 splitedStringCount = splitedStrings.size();
+		if (false == FileLoader::makeElementString(elementStack, xmlString))
+		{
+			TA_ASSERT_DEV(false, "비정상입니다.");
+			return false;
+		}
 
-		//uint32 index = 0;
-		//std::vector<XmlNode*> elementStack;
-
-		//// 루트 노드부터 찾는다.
-		//uint32 stringCount = splitedStrings.size();
-		//while (index < stringCount)
-		//{
-		//	if (0 == splitedStrings[index].compare("Root"))
-		//	{
-		//		elementStack.push_back(rootInput);
-		//		index += 2;
-		//		break;
-		//	}
-
-		//	++index;
-		//}
-		//// 일단 루트 바깥으로 나왔다. <Root> 이후
-
-		//if (index == stringCount)
-		//{
-		//	TA_ASSERT_DEV(false, "루트노드가 없습니다.");
-		//	return false;
-		//}
-
-		//while (false == elementStack.empty())
-		//{
-		//	if (0 == splitedStrings[index].compare("<"))
-		//	{
-		//		++index;
-		//		// 닫는것일수도 있다. // </Root>
-		//		if ('/' == splitedStrings[index][0])
-		//		{
-		//			elementStack.pop_back();
-		//		}
-		//		else
-		//		{
-		//			XmlNode* childElement = new XmlNode;
-		//			// GroupGameData Key="1" MoveGameDataKey="1" ...
-		//			if (false == FileLoader::loadXmlAttributeFromString(splitedStrings[index], childElement))
-		//			{
-		//				TA_ASSERT_DEV(false, "비정상입니다.");
-		//				return false;
-		//			}
-
-		//			elementStack.back()->addChildElement(childElement);
-		//			elementStack.push_back(childElement);
-		//		}
-		//	}
-		//	else if (0 == splitedStrings[index].compare(">"))
-		//	{
-		//		elementStack.pop_back();
-		//	}
-
-		//	++index;
-		//}
+		MemoryBuffer tempBuffer;
+		tempBuffer.write(xmlString.c_str(), xmlString.size(), TADataType::StdString);
+		if (false == FileLoader::saveFileString(filePath, tempBuffer))
+		{
+			TA_ASSERT_DEV(false, "비정상입니다.");
+			return false;
+		}
 
 		return true;
 	}
@@ -305,6 +257,77 @@ namespace ta
 		return true;
 	}
 
+	bool FileLoader::makeElementString(std::vector<const XmlNode*>& elementStack, std::string& output) noexcept
+	{
+		const uint32 elementStackSize = elementStack.size();
+		if (0 == elementStackSize)
+		{
+			TA_ASSERT_DEV(false, "비정상입니다.");
+			return false;
+		}
+
+		std::string depthString;
+		FileLoader::makeDepthString(elementStackSize, depthString);
+		output.append(depthString);
+
+		const XmlNode* currentElement = elementStack.back();
+		FileLoader::makeAttributeString(currentElement, output);
+
+		const XmlNode* childElement = nullptr;
+		const uint32 childElementCount = currentElement->getChildElementCount();
+		for (uint32 childElementIndex = 0; childElementIndex < childElementCount; ++childElementIndex)
+		{
+			childElement = currentElement->getChildElement(childElementIndex);
+			elementStack.push_back(childElement);
+			if (false == FileLoader::makeElementString(elementStack, output))
+			{
+				TA_ASSERT_DEV(false, "비정상입니다.");
+				return false;
+			}
+		}
+
+		// 자식 엘리먼트가 있는 경우 무조건 </Name>으로 끝나게 된다.
+		if (0 != childElementCount)
+		{
+			output.append(depthString + "</" + currentElement->getName() + ">");
+		}
+
+		elementStack.pop_back();
+
+		return true;
+	}
+
+	void FileLoader::makeDepthString(const uint32 depth, std::string& output) noexcept
+	{
+		output = "\n";
+		for (uint32 depthIndex = 1; depthIndex < depth; ++depthIndex)
+		{
+			output.append("\t");
+		}
+	}
+
+	void FileLoader::makeAttributeString(const XmlNode* input, std::string& output) noexcept
+	{
+		// <Name Att1="Value1" Att1="Value2" Att1="Value3"> or <Name Att1="Value1" Att1="Value2" Att1="Value3"/>
+		TA_ASSERT_DEV((nullptr != input), "비정상");
+		output.append("<" + input->getName());
+		const bool hasChildElement = (0 != input->getChildElementCount());
+		const std::unordered_map<std::string, std::string>& attributes = input->getAttributes();
+
+		std::unordered_map<std::string, std::string>::const_iterator it = attributes.begin();
+		const std::unordered_map<std::string, std::string>::const_iterator end = attributes.end();
+		for (; it != end; ++it)
+		{
+			output.append(" ");
+			output.append(it->first);
+			output.append("=\"");
+			output.append(it->second);
+			output.append("\"");
+		}
+
+		((true == hasChildElement) ? output.append(">") : output.append("/>"));
+	}
+
 	bool FileLoader::loadXmlAttributeFromString(const std::string& nodeString, XmlNode* output) noexcept
 	{
 		if (nullptr == output)
@@ -390,7 +413,12 @@ namespace ta
 		return _childElements.size();
 	}
 
-	XmlNode* XmlNode::getChildElement(const uint32 index) const noexcept
+	const XmlNode* XmlNode::getChildElement(const uint32 index) const noexcept
+	{
+		return _childElements[index];
+	}
+
+	XmlNode* XmlNode::getChildElement(const uint32 index) noexcept
 	{
 		return _childElements[index];
 	}
@@ -417,6 +445,16 @@ namespace ta
 		}
 
 		return &(rv->second);
+	}
+
+	std::unordered_map<std::string, std::string>& XmlNode::getAttributes(void) noexcept
+	{
+		return _attributes;
+	}
+
+	const std::unordered_map<std::string, std::string>& XmlNode::getAttributes(void) const noexcept
+	{
+		return _attributes;
 	}
 
 	bool XmlNode::addChildElement(XmlNode* childElement) noexcept
