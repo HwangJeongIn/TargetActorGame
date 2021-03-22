@@ -18,20 +18,17 @@ namespace ta
 #if defined(TA_SERVER) && !defined(TA_CLIENT_IN_SERVER)
 	class dtNavMesh;
 	extern const fs::path NavigationMeshPath;
+	extern const fs::path PathPointPath;
 #elif !defined(TA_SERVER)
 	extern fs::path NavigationMeshPath;
+	extern fs::path PathPointPath;
 #endif
 
 	class CommonActor;
 	class Vector;
 	class CommonMoveActorComponent;
 	class Serializer;
-
-
-
 }
-
-
 
 
 namespace ta

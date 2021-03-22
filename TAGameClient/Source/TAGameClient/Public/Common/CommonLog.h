@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 
 #ifndef TA_SERVER
@@ -38,27 +38,70 @@
 
 //#define	ToTString(raw) TString(raw)
 
-typedef std::basic_string<TCHAR> tstring;
+
 
 //#endif
 
 namespace ta
 {
-	static bool CharToTChar(const char* origin, TCHAR* output)
+	typedef std::basic_string<TCHAR> tstring;
+
+	static bool CharToTChar(const char* origin, TCHAR* output, const int outputMaxLen)
 	{
 #ifdef UNICODE
 		if (nullptr != origin && nullptr != output)
 		{
 			const int originLen = (int)strlen(origin);
-			const int outputLen = MultiByteToWideChar(CP_ACP, 0, origin, originLen, NULL, NULL);
-			const bool isSucceeded = (0 != MultiByteToWideChar(CP_ACP, 0, origin, originLen, output, outputLen));
+			// lpWideCharStr.If this value is 0, the function returns the required buffer size,
+			const int outputLen = MultiByteToWideChar(CP_ACP, 0, origin, -1, NULL, 0);
+			if (outputMaxLen < outputLen)
+			{
+				DebugBreak();
+				return false;
+			}
+
+			const bool isSucceeded = (0 != MultiByteToWideChar(CP_ACP, 0, origin, originLen + 1, output, outputLen));
 
 			return isSucceeded;
 		}
+
+		return false;
+#else
+		return (0 == strcpy_s(output, outputMaxLen, origin));
 #endif
-		return true;
+	}
+
+	static bool TCharToChar(const TCHAR* origin, char* output, const int outputMaxLen)
+	{
+#ifdef UNICODE
+		if (nullptr != origin && nullptr != output)
+		{
+			// If the function succeeds and cbMultiByte is 0, the return value is the required size
+			const int outputLen = WideCharToMultiByte(CP_ACP, 0, origin, -1, NULL, 0, NULL, NULL);
+			if (outputMaxLen < outputLen)
+			{
+				DebugBreak();
+				return false;
+			}
+
+			const bool isSucceeded = (0 != WideCharToMultiByte(CP_ACP, 0, origin, -1, output, outputLen, NULL, NULL));
+
+			return isSucceeded;
+		}
+
+		return false;
+#else
+		return (0 == strcpy_s(output, outputMaxLen, origin));
+#endif
 	}
 }
+
+#define FormatString(Output, Format, ...)\
+{\
+	TCHAR data[MAX_LOG_SIZE]{ 0, }; \
+	Sprint(data, MAX_LOG_SIZE, TEXT(Format), ##__VA_ARGS__); \
+	Output = data;\
+}\
 
 // 주석치고 구현해야하는 것들 확인
 #define TA_TEMP_DEV(Message);
@@ -66,15 +109,15 @@ namespace ta
 #ifdef TA_SERVER
 
 // 가변인자 매크로 ... <=> __VA_ARGS__와 대응 // __VA_ARGS__앞에 ##를 붙이면 불필요한 쉼표가 자동으로 삭제 
-#define TA_LOG_BASE(head, Format, ...)\
+#define TA_LOG_BASE(Head, Format, ...)\
 {\
 	TCHAR logData[MAX_LOG_SIZE]{0,};\
 	TCHAR functionName[MAX_LOG_SIZE]{0,};\
-	const bool isSucceeded = ta::CharToTChar(__FUNCTION__, functionName);\
+	const bool isSucceeded = ta::CharToTChar(__FUNCTION__, functionName, MAX_LOG_SIZE);\
 	if(true == isSucceeded)\
 	{\
 		Sprint(logData, MAX_LOG_SIZE, TEXT(Format), ##__VA_ARGS__); \
-		PrintLog(TEXT("%s (%d) => %s => %s \n"), functionName, __LINE__, TEXT(head), logData);\
+		PrintLog(TEXT("%s (%d) => %s => %s \n"), functionName, __LINE__, TEXT(Head), logData);\
 	}\
 }
 

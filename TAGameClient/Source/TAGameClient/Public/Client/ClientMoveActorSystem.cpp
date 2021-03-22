@@ -3,6 +3,8 @@
 #include "Common/CommonActor.h"
 #include "Common/CommonMoveActorComponent.h"
 #include "Common/ScopedLock.h"
+#include "Common/FileLoader.h"
+#include "Common/StringUtility.h"
 
 #ifndef TA_SERVER
 
@@ -10,6 +12,7 @@
 #include "NavigationSystem.h"
 #include "TAGameInstance.h"
 #include "TAPlayerController.h"
+#include "TAPathPoint.h"
 #include "NavMesh/RecastNavMesh.h"
 
 #endif
@@ -104,6 +107,48 @@ namespace ta
 #endif 
 
 		return true;
+	}
+	
+	bool ClientMoveActorSystem::exportPathPointFolders(void) noexcept
+	{
+		ULevel* pathPointLevel;
+		TMap<FString, TArray<ATAPathPoint*>> allPathPointFolders;
+		GetTargetLevelActorsByFolder(pathPointLevel, allPathPointFolders);
+
+		std::string currentFolderName;
+		for (TPair<FString, TArray<ATAPathPoint*>>& currentPathPointFolder : allPathPointFolders)
+		{
+			currentFolderName = TCHAR_TO_ANSI(*currentPathPointFolder.Key);
+			TArray<ATAPathPoint*>& currentPathPointGroup = currentPathPointFolder.Value;
+
+			const int32 count = currentPathPointGroup.Num();
+			XmlNode tempRoot;
+			tempRoot.setName("Root");
+
+			XmlNode* child = nullptr;
+			tstring positionValue;
+			for (int32 index = 0; index < count; ++index)
+			{
+				child = new XmlNode;
+				child->setName(currentFolderName);
+
+				FVector pathPointLocation = currentPathPointGroup[index]->GetActorLocation();
+				
+				FormatString(positionValue, "(%.1f,%.1f,%.1f)", pathPointLocation.X, pathPointLocation.Y, pathPointLocation.Z);
+
+				child->addAttribute("Position", ToString(positionValue));
+
+				tempRoot.addChildElement(child);
+			}
+
+			if (false == FileLoader::saveXml( (PathPointPath / currentFolderName) += ".xml" , &tempRoot))
+			{
+				TA_ASSERT_DEV(false, "save xml failed : %s", currentFolderName.c_str());
+				return false;
+			}
+		}
+
+		return false;
 	}
 #endif
 

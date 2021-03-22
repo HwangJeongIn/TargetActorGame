@@ -32,8 +32,15 @@ namespace ta
 									  , std::string& output
 									  , const BracketType bracketType = BracketType::Curly) noexcept;
 
+	extern std::wstring StringToWstring(const std::string& input) noexcept;
+	extern std::string WstringToString(const std::wstring& input) noexcept;
+
+
 	extern tstring ToTstring(const std::string& input) noexcept;
 	extern tstring ToTstring(const std::wstring& input) noexcept;
+
+	extern std::string ToString(const tstring& input) noexcept;
+	extern std::wstring ToWstring(const tstring& input) noexcept;
 
 	extern bool StringWithBracketToVector(const std::string& input, Vector& output) noexcept;
 	extern bool StringToVector(const std::string& input, Vector& output) noexcept;
@@ -51,4 +58,7 @@ namespace ta
 	extern bool Atob(const std::string& input) noexcept; // "1" / "0" 구분
 	extern bool Atobs(const std::string& input) noexcept; // "true" / "false" 구분 // string ver
 
+	extern bool Atobs(const std::string& input) noexcept; // "true" / "false" 구분 // string ver
+
+	//extern std::string FormatString(const char* format, ...) noexcept;
 }

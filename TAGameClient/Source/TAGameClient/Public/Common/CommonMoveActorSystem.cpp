@@ -21,9 +21,11 @@
 namespace ta
 {
 #ifdef TA_SERVER
-	const fs::path NavigationMeshPath = fs::absolute(L"./../../TAGameClient/NavigationMesh");
+	const fs::path NavigationMeshPath = fs::absolute(L"./../NavigationMesh");
+	const fs::path PathPointPath = fs::absolute(L"./../PathPoint");
 #else
 	fs::path NavigationMeshPath = "";
+	fs::path PathPointPath = "";
 #endif
 }
 

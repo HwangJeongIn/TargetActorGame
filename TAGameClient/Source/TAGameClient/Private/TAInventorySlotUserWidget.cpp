@@ -1,4 +1,4 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+﻿// Fill out your copyright notice in the Description page of Project Settings.
 
 
 #include "TAInventorySlotUserWidget.h"
@@ -57,11 +57,8 @@ void UTAInventorySlotUserWidget::refresh_(ta::ClientInventoryActorComponent* inv
 
 		_slotStackCount->SetText(FText::FromString(FString::FromInt(item->getStackCount_())));
 
-		TCHAR data[ta::MaxStringPathBufferLength]{ NULL, };
-		ta::CharToTChar(item->getBase_()->_iconPath.c_str(), data);
-
 		//FString Path = FString("/Game/UI/Texture/TestItem1");
-		UTexture2D* texture = Cast<UTexture2D>(StaticLoadObject(UTexture2D::StaticClass(), NULL, data));
+		UTexture2D* texture = Cast<UTexture2D>(StaticLoadObject(UTexture2D::StaticClass(), NULL, ANSI_TO_TCHAR(item->getBase_()->_iconPath.c_str())));
 		_slotImage->SetBrushFromTexture(texture);
 	}
 }

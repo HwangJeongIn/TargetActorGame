@@ -293,7 +293,7 @@ namespace ta
 	{
 		if (size <= _maxBytes)
 		{
-			TA_LOG_DEV("current size is bigger");
+			//TA_LOG_DEV("current size is bigger");
 			return;
 		}
 

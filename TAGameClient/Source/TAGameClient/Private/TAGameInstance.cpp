@@ -106,14 +106,17 @@ UTAGameInstance::UTAGameInstance()
 		ta::GameDataXmlPath /= "../GameData/Xml";
 		TA_LOG_DEV("%s", ta::GameDataXmlPath.c_str());
 
-
 		ta::SpawnDataPath = *FPaths::GetProjectFilePath();
-		ta::SpawnDataPath /= "../SpawnData";
+		ta::SpawnDataPath /= "../../TAGameServer/SpawnData";
 		TA_LOG_DEV("%s", ta::SpawnDataPath.c_str());
 
 		ta::NavigationMeshPath = *FPaths::GetProjectFilePath();
-		ta::NavigationMeshPath /= "../NavigationMesh";
+		ta::NavigationMeshPath /= "../../TAGameServer/NavigationMesh";
 		TA_LOG_DEV("%s", ta::NavigationMeshPath.c_str());
+
+		ta::PathPointPath = *FPaths::GetProjectFilePath();
+		ta::PathPointPath /= "../../TAGameServer/PathPoint";
+		TA_LOG_DEV("%s", ta::PathPointPath.c_str());
 	}
 }
 

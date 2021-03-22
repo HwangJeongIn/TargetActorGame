@@ -1,4 +1,4 @@
-#include "Common/MessagePack.h"
+﻿#include "Common/MessagePack.h"
 #include "Common/CommonApp.h"
 #include "Common/CommonActorManager.h"
 #include "Common/KeyDefinition.h"
@@ -41,7 +41,7 @@ namespace ta
 	{
 		TCHAR data[MaxStringPackBufferLength]{NULL,};
 
-		CharToTChar(_data, data);
+		CharToTChar(_data, data, MaxStringPackBufferLength);
 		return tstring(data);
 	}
 

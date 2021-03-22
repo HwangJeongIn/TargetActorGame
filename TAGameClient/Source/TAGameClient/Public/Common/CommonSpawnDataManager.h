@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include "Common/CommonBase.h"
 #include "Common/Uncopyable.h"
 #include "Common/KeyDefinition.h"

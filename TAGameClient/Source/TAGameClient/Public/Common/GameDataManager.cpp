@@ -5,6 +5,7 @@
 #include "Common/EnumUtility.h"
 #include "Common/ThreadLoadTaskManager.h"
 #include <thread>
+#include <sstream>
 
 
 namespace ta
@@ -178,8 +179,15 @@ namespace ta
 				return false;
 			}
 
-			std::thread::id this_id = std::this_thread::get_id();
-			std::cout << "GameDataType : " << static_cast<uint32>(gameDataType) << ", Thread id : " << this_id << std::endl;
+			std::wstringstream ss;
+			ss << std::this_thread::get_id();
+			//std::thread::id this_id = std::this_thread::get_id();
+			//size_t threadId = std::hash<std::thread::id>{}(std::this_thread::get_id());
+			
+
+			TA_LOG_DEV("GameDataType : %d, Thread id : %s", static_cast<uint32>(gameDataType), ss.str().c_str());
+			
+			//std::cout << "GameDataType : " << static_cast<uint32>(gameDataType) << ", Thread id : " << this_id << std::endl;
 			switch (gameDataType)
 			{
 				
@@ -187,7 +195,7 @@ namespace ta
 #define LOADXML(GameDataName)																				\
 			case GameDataType::GameDataName:																\
 				{																							\
-					std::cout << "switch GameDataType : " << static_cast<uint32>(GameDataType::GameDataName) << ", Thread id : " << this_id << std::endl;\
+					TA_LOG_DEV("Switch GameDataType : %d, Thread id : %s", static_cast<uint32>(GameDataType::GameDataName), ss.str().c_str());\
 					const GameDataName##Key key(Atoi(*keyString));											\
 					GameDataName* gameData = new GameDataName;												\
 					gameData->clear();																		\

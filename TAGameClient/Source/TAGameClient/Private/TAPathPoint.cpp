@@ -96,7 +96,7 @@ void ATAPathPoint::PostEditChangeProperty(FPropertyChangedEvent& PropertyChanged
 
 
 			TArray<ATAPathPoint*> folderPathPoints;
-			const int32 folderPathPointCount = GetTargetFolderLevelActors<ATAPathPoint>(currentLevel, ownerFolderName, folderPathPoints);
+			const int32 folderPathPointCount = GetTargetLevelActorsInFolder<ATAPathPoint>(currentLevel, ownerFolderName, folderPathPoints);
 			if (0 == folderPathPointCount)
 			{
 				TA_LOG_DEV("0 == folderPathPointCount");

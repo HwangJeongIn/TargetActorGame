@@ -23,6 +23,7 @@ namespace ta
 
 #ifndef TA_SERVER
 		bool exportRecastNavMesh(void) noexcept;
+		bool exportPathPointFolders(void) noexcept;
 #endif
 
 		virtual bool processMoveActor(CommonActor* target

@@ -3,6 +3,8 @@
 #include <cstdlib>
 #include <sstream>
 #include <unordered_map>
+#include <locale>
+#include <codecvt>
 
 
 namespace ta
@@ -206,25 +208,55 @@ namespace ta
 		output += bracket[1];
 	}
 
+	
+
+	std::wstring StringToWstring(const std::string& input) noexcept
+	{
+		std::wstring_convert<std::codecvt_utf8<wchar_t>, wchar_t> converterX;
+
+		return converterX.from_bytes(input);
+	}
+
+	std::string WstringToString(const std::wstring& input) noexcept
+	{
+		std::wstring_convert<std::codecvt_utf8<wchar_t>, wchar_t> converterX;
+
+		return converterX.to_bytes(input);
+	}
+
 	tstring ToTstring(const std::string& input) noexcept
 	{
-#ifdef UNICODE
-		tstring output;
-		output.assign(input.begin(), input.end());
-		return output;
-#else
+#ifdef UNICODE // string => wstring
+		return StringToWstring(input);
+#else // string => string
 		return input;
 #endif
 	}
 
 	tstring ToTstring(const std::wstring& input) noexcept
 	{
-#ifdef UNICODE
+#ifdef UNICODE // wstring => wstring
 		return input;
-#else
-		tstring output;
-		output.assign(input.begin(), input.end());
-		return output;
+#else // wstring => string
+		return WstringToString(input);
+#endif
+	}
+
+	std::string ToString(const tstring& input) noexcept
+	{
+#ifdef UNICODE // wstring => string 
+		return WstringToString(input);
+#else // string => string
+		return input;
+#endif
+	}
+
+	std::wstring ToWstring(const tstring& input) noexcept
+	{
+#ifdef UNICODE // wstring => wstring 
+		return input;
+#else // string => wstring
+		return StringToWstring(input);
 #endif
 	}
 
@@ -326,4 +358,15 @@ namespace ta
 		std::istringstream(input.c_str()) >> std::boolalpha >> rv;
 		return rv;
 	}
+
+	//std::string FormatString(const char* format, ...) noexcept
+	//{
+	//	va_list list;
+	//
+	//	char data[256];
+	//
+	//	va_start(list, format);
+	//	sprintf_s(data, 256, format, list);
+	//	va_end(list);
+	//}
 }

@@ -1,4 +1,4 @@
-
+﻿
 #pragma comment( lib, "ws2_32.lib")
 
 #include "Common/Endpoint.h"
@@ -50,7 +50,7 @@ namespace ta
 	{
 		TCHAR data[MaxStringPackBufferLength]{ NULL, };
 
-		CharToTChar(toString().data(), data);
+		CharToTChar(toString().data(), data, MaxStringPackBufferLength);
 		return tstring(data);
 	}
 }

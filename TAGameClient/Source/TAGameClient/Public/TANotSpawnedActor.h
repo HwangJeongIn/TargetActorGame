@@ -7,13 +7,14 @@
 #include "Common/CommonBase.h"
 #include "TANotSpawnedActor.generated.h"
 
+
 class UStaticMeshComponent;
 class USceneComponent;
 class ULevel;
 
 
 template <typename T>
-int32 GetTargetFolderLevelActors(ULevel* level, const FString& targetFolderName, TArray<T*>& output) noexcept
+int32 GetTargetLevelActorsInFolder(ULevel* level, const FString& targetFolderName, TArray<T*>& output) noexcept
 {
 	T* current = nullptr;
 	FString currentFolderName;
@@ -43,6 +44,45 @@ int32 GetTargetFolderLevelActors(ULevel* level, const FString& targetFolderName,
 	}
 
 	return output.Num();
+}
+
+template <typename T>
+void GetTargetLevelActorsByFolder(ULevel* level, TMap<FString, TArray<T*>>& output) noexcept
+{
+	// FString은 operator==지원 / GetTypeHash지원하기 때문에 TMap에서 키타입으로 그대로 사용가능
+	// 2번조회하는 Contain -> []보다  Find으로 찾자
+
+	T* current = nullptr;
+	FString currentFolderName;
+	FString currentFolderPath;
+	TArray<T*>* currentFolderActors = nullptr;
+	for (AActor* actor : level->Actors)
+	{
+		current = Cast<T>(actor);
+		if (nullptr == current)
+		{
+			continue;
+		}
+
+		currentFolderPath = current->GetFolderPath().ToString();
+		if (false == GetFolderName(currentFolderPath, currentFolderName))
+		{
+			continue;
+		}
+
+		TA_LOG_DEV("=> name : %s / folder path : %s", *current->GetName(), *currentFolderPath);
+
+		currentFolderActors = output.Find(currentFolderName);
+		if (nullptr == currentFolderActors)
+		{
+			output.Add(currentFolderName, TArray<T*>{ current });
+		}
+		else
+		{
+			currentFolderActors->Add(current);
+		}
+	}
+
 }
 
 extern bool GetFolderName(const FString& folderPath, FString& folderName, uint8 depth = 1) noexcept;
