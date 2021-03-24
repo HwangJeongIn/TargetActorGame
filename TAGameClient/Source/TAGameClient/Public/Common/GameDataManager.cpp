@@ -170,13 +170,13 @@ namespace ta
 		XmlNode* childElement = nullptr;
 		const std::string* keyString = nullptr;
 
-		const std::unordered_map<std::string, XmlNode*>& childElements = rootNode.getChildElements();
-		std::unordered_map<std::string, XmlNode*>::const_iterator it = childElements.begin();
-		const std::unordered_map<std::string, XmlNode*>::const_iterator end = childElements.end();
+		//const std::unordered_map<std::string, XmlNode*>& childElements = rootNode.getChildElements();
+		//std::unordered_map<std::string, XmlNode*>::const_iterator it = childElements.begin();
+		//const std::unordered_map<std::string, XmlNode*>::const_iterator end = childElements.end();
 
-		while (end != it)
+		for(uint32 index =0; index <count; ++index)
 		{
-			childElement = it->second;
+			childElement = rootNode.getChildElement(index);
 			keyString = childElement->getAttribute("Key");
 			if (nullptr == keyString)
 			{
@@ -245,8 +245,6 @@ namespace ta
 				}
 				break;
 			}
-
-			++it;
 		}
 		return true;
 	}

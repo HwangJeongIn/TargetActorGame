@@ -108,13 +108,14 @@ namespace ta
 		Vector position;
 		Vector rotation;
 
-		const std::unordered_map<std::string, XmlNode*>& childElements = rootNode.getChildElements();
-		std::unordered_map<std::string, XmlNode*>::const_iterator it = childElements.begin();
-		const std::unordered_map<std::string, XmlNode*>::const_iterator end = childElements.end();
+		//const std::unordered_map<std::string, XmlNode*>& childElements = rootNode.getChildElements();
+		//std::unordered_map<std::string, XmlNode*>::const_iterator it = childElements.begin();
+		//const std::unordered_map<std::string, XmlNode*>::const_iterator end = childElements.end();
 
-		while (end != it)
+		const uint32 childElementCount = rootNode.getChildElementCount();
+		for(uint32 index = 0; index < childElementCount; ++index)
 		{
-			childElement = it->second;
+			childElement = rootNode.getChildElement(index);
 
 			{
 				dataString = childElement->getAttribute("GroupGameDataKey");
@@ -158,6 +159,7 @@ namespace ta
 
 			CommonActorDetailSpawnData* spawnData = new CommonActorDetailSpawnData(position, rotation, groupGameDataKey);
 			dataSet.first->second.push_back(spawnData);
+
 		}
 
 		return true;

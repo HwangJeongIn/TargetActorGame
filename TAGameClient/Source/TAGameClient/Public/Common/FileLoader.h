@@ -77,6 +77,7 @@ namespace ta
 
 		void setName(const std::string& name) noexcept;
 
+		const bool hasValue(void) const noexcept;
 		std::string& getValue(void) noexcept;
 		const std::string& getValue(void) const noexcept;
 
@@ -84,14 +85,14 @@ namespace ta
 
 		uint32 getChildElementCount(void) const noexcept;
 
-		//const XmlNode* getChildElement(const uint32 index) const noexcept;
-		//XmlNode* getChildElement(const uint32 index) noexcept;
+		const XmlNode* getChildElement(const uint32 index) const noexcept;
+		XmlNode* getChildElement(const uint32 index) noexcept;
 
-		const std::unordered_map<std::string, XmlNode*>& getChildElements(void) const noexcept;
-		std::unordered_map<std::string, XmlNode*>& getChildElements(void) noexcept;
+		//const std::unordered_map<std::string, XmlNode*>& getChildElements(void) const noexcept;
+		//std::unordered_map<std::string, XmlNode*>& getChildElements(void) noexcept;
 
-		const XmlNode* getChildElement(const std::string& childName) const noexcept;
-		XmlNode* getChildElement(const std::string& childName) noexcept;
+		//const XmlNode* getChildElement(const std::string& childName) const noexcept;
+		//XmlNode* getChildElement(const std::string& childName) noexcept;
 
 		const std::string* getAttribute(const std::string& attributeName) const noexcept;
 		std::string* getAttribute(const std::string& attributeName) noexcept;
@@ -106,7 +107,8 @@ namespace ta
 		std::string _name;
 		std::string _value;
 
-		std::unordered_map<std::string, XmlNode*> _childElements;
+		//std::unordered_map<std::string, XmlNode*> _childElements;
+		std::vector<XmlNode*> _childElements;
 		std::unordered_map<std::string, std::string> _attributes;
 
 	};
