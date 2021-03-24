@@ -6,16 +6,6 @@
 #include "Common/FileLoader.h"
 #include "Common/StringUtility.h"
 
-#ifndef TA_SERVER
-
-#include "Common/Serializer.h"
-#include "NavigationSystem.h"
-#include "TAGameInstance.h"
-#include "TAPlayerController.h"
-#include "TAPathPoint.h"
-#include "NavMesh/RecastNavMesh.h"
-
-#endif
 
 
 namespace ta
@@ -37,120 +27,6 @@ namespace ta
 	{
 	}
 
-#ifndef TA_SERVER
-	bool ClientMoveActorSystem::exportRecastNavMesh(void) noexcept
-	{
-		UNavigationSystemV1* navSys = FNavigationSystem::GetCurrent<UNavigationSystemV1>(GetTAGameWorld());
-		if (nullptr == navSys)
-		{
-			TA_ASSERT_DEV(false, "비정상입니다.");
-			return false;
-		}
-
-		ATAPlayerController* playerController = GetFirstTAPlayerController();
-		if (nullptr == playerController)
-		{
-			TA_ASSERT_DEV(false, "비정상입니다.");
-			return false;
-		}
-
-		//FNavAgentProperties nagAgentProperties;
-		//nagAgentProperties.bCanCrouch = 0;
-		//nagAgentProperties.bCanJump = 1;
-		//nagAgentProperties.bCanWalk = 1;
-		//nagAgentProperties.bCanSwim = 1;
-		//nagAgentProperties.bCanFly = 0;
-		//
-		//nagAgentProperties.AgentRadius = 34.0f;
-		//nagAgentProperties.AgentHeight = 142.0f;
-		//nagAgentProperties.AgentStepHeight = -1.0f;
-		//nagAgentProperties.NavWalkingSearchHeightScale = 0.5f;
-
-		ANavigationData* navData = (navSys == nullptr) ? nullptr : navSys->GetNavDataForProps(playerController->GetNavAgentPropertiesRef()
-																							  , FVector::ZeroVector);
-
-		ARecastNavMesh* recastNavMesh = Cast<ARecastNavMesh>(navData);
-		if (nullptr == recastNavMesh)
-		{
-			TA_ASSERT_DEV(false, "비정상입니다.");
-			return false;
-		}
-
-		dtNavMesh* detourNavMesh = recastNavMesh->GetRecastMesh();
-		if (nullptr == detourNavMesh)
-		{
-			TA_ASSERT_DEV(false, "비정상입니다.");
-			return false;
-		}
-
-		Serializer slW;
-		slW.setModeFlag(SerializerMode::Write | SerializerMode::WriteLog);
-		if (false == serializeNavigationMesh(slW, detourNavMesh))
-		{
-			TA_ASSERT_DEV(false, "비정상입니다.");
-			return false;
-		}
-
-		fs::path finalPath = NavigationMeshPath / "RecastNavigationMesh.rnm";
-		if (false == slW.exportToFile(finalPath))
-		{
-			TA_ASSERT_DEV(false, "비정상입니다.");
-			return false;
-		}
-
-#ifdef CAN_CREATE_LOG_FILE
-		if (false == slW.exportLogData(finalPath += "Write"))
-		{
-			TA_ASSERT_DEV(false, "비정상");
-			return false;
-		}
-#endif 
-
-		return true;
-	}
-	
-	bool ClientMoveActorSystem::exportPathPointFolders(void) noexcept
-	{
-		ULevel* pathPointLevel;
-		TMap<FString, TArray<ATAPathPoint*>> allPathPointFolders;
-		GetTargetLevelActorsByFolder(pathPointLevel, allPathPointFolders);
-
-		std::string currentFolderName;
-		for (TPair<FString, TArray<ATAPathPoint*>>& currentPathPointFolder : allPathPointFolders)
-		{
-			currentFolderName = TCHAR_TO_ANSI(*currentPathPointFolder.Key);
-			TArray<ATAPathPoint*>& currentPathPointGroup = currentPathPointFolder.Value;
-
-			const int32 count = currentPathPointGroup.Num();
-			XmlNode tempRoot;
-			tempRoot.setName("Root");
-
-			XmlNode* child = nullptr;
-			tstring positionValue;
-			for (int32 index = 0; index < count; ++index)
-			{
-				child = new XmlNode;
-				child->setName(currentFolderName);
-
-				FVector pathPointLocation = currentPathPointGroup[index]->GetActorLocation();
-				
-				FormatString(positionValue, "(%.1f,%.1f,%.1f)", pathPointLocation.X, pathPointLocation.Y, pathPointLocation.Z);
-
-				child->addAttribute("Position", ToString(positionValue));
-
-				tempRoot.addChildElement(child);
-			}
-
-			if (false == FileLoader::saveXml( (PathPointPath / currentFolderName) += ".xml" , &tempRoot))
-			{
-				TA_ASSERT_DEV(false, "save xml failed : %s", currentFolderName.c_str());
-				return false;
-			}
-		}
-
-		return false;
-	}
-#endif
 
 	bool ClientMoveActorSystem::processMoveActor(CommonActor* target, const Vector& newPos, const bool isForced) const noexcept
 	{

@@ -88,7 +88,7 @@ void ATAPathPoint::PostEditChangeProperty(FPropertyChangedEvent& PropertyChanged
 			}
 
 			FString ownerFolderName;
-			if (false == GetFolderName(GetFolderPath().ToString(), ownerFolderName))
+			if (false == TAGetFolderName(GetFolderPath().ToString(), ownerFolderName, 1))
 			{
 				TA_ASSERT_DEV(false, "비정상");
 				return;
@@ -96,7 +96,7 @@ void ATAPathPoint::PostEditChangeProperty(FPropertyChangedEvent& PropertyChanged
 
 
 			TArray<ATAPathPoint*> folderPathPoints;
-			const int32 folderPathPointCount = GetTargetLevelActorsInFolder<ATAPathPoint>(currentLevel, ownerFolderName, folderPathPoints);
+			const int32 folderPathPointCount = TAGetTargetLevelActorsInFolder<ATAPathPoint>(currentLevel, ownerFolderName, folderPathPoints);
 			if (0 == folderPathPointCount)
 			{
 				TA_LOG_DEV("0 == folderPathPointCount");

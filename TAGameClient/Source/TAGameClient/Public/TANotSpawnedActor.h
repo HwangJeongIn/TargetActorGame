@@ -14,7 +14,7 @@ class ULevel;
 
 
 template <typename T>
-int32 GetTargetLevelActorsInFolder(ULevel* level, const FString& targetFolderName, TArray<T*>& output) noexcept
+int32 TAGetTargetLevelActorsInFolder(ULevel* level, const FString& targetFolderName, TArray<T*>& output) noexcept
 {
 	T* current = nullptr;
 	FString currentFolderName;
@@ -28,7 +28,7 @@ int32 GetTargetLevelActorsInFolder(ULevel* level, const FString& targetFolderNam
 		}
 
 		currentFolderPath = current->GetFolderPath().ToString();
-		if (false == GetFolderName(currentFolderPath, currentFolderName))
+		if (false == TAGetFolderName(currentFolderPath, currentFolderName))
 		{
 			continue;
 		}
@@ -47,7 +47,7 @@ int32 GetTargetLevelActorsInFolder(ULevel* level, const FString& targetFolderNam
 }
 
 template <typename T>
-void GetTargetLevelActorsByFolder(ULevel* level, TMap<FString, TArray<T*>>& output) noexcept
+void TAGetTargetLevelActorsByFolder(ULevel* level, TMap<FString, TArray<T*>>& output) noexcept
 {
 	// FString은 operator==지원 / GetTypeHash지원하기 때문에 TMap에서 키타입으로 그대로 사용가능
 	// 2번조회하는 Contain -> []보다  Find으로 찾자
@@ -65,7 +65,7 @@ void GetTargetLevelActorsByFolder(ULevel* level, TMap<FString, TArray<T*>>& outp
 		}
 
 		currentFolderPath = current->GetFolderPath().ToString();
-		if (false == GetFolderName(currentFolderPath, currentFolderName))
+		if (false == TAGetFolderName(currentFolderPath, currentFolderName))
 		{
 			continue;
 		}
@@ -85,7 +85,7 @@ void GetTargetLevelActorsByFolder(ULevel* level, TMap<FString, TArray<T*>>& outp
 
 }
 
-extern bool GetFolderName(const FString& folderPath, FString& folderName, uint8 depth = 1) noexcept;
+extern bool TAGetFolderName(const FString& folderPath, FString& folderName, uint8 depth = 0) noexcept;
 
 
 UCLASS()

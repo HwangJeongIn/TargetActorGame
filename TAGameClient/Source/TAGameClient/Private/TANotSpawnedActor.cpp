@@ -5,16 +5,19 @@
 #include "Components/StaticMeshComponent.h"
 
 
-bool GetFolderName(const FString& folderPath, FString& folderName, uint8 depth/* = 1*/) noexcept
+bool TAGetFolderName(const FString& folderPath, FString& folderName, uint8 depth/* = 0*/) noexcept
 {
 	TA_LOG_DEV("GetFolderName => folderPath : %s", *folderPath);
 	TArray<FString> splitedStrings;
 	const int32 num = folderPath.ParseIntoArray(splitedStrings, TEXT("/"), true);
 
-	if (num != (depth + 1))
+	if (0 != depth)
 	{
-		TA_LOG_DEV("depth에 맞지않음 num : %d, depth : %d", num, depth);
-		return false;
+		if (num != (depth + 1))
+		{
+			TA_LOG_DEV("depth에 맞지않음 num : %d, depth : %d", num, depth);
+			return false;
+		}
 	}
 
 	folderName = splitedStrings[num - 1];

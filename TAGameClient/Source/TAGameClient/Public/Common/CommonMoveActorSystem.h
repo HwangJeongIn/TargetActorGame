@@ -40,9 +40,9 @@ namespace ta
 		static const ActorSystemType getActorSystemType(void) noexcept;
 
 #ifndef TA_CLIENT_IN_SERVER
-		bool serializeNavigationMesh(Serializer& Ar, dtNavMesh*& DetourNavMesh) noexcept;
-		void serializeRecastMeshTile(Serializer& Ar, int32 NavMeshVersion, unsigned char*& TileData, int32& TileDataSize) noexcept;
-		void serializeCompressedTileCacheData(Serializer& Ar, int32 NavMeshVersion, unsigned char*& CompressedData, int32& CompressedDataSize) noexcept;
+		static bool serializeNavigationMesh(Serializer& Ar, dtNavMesh*& DetourNavMesh) noexcept;
+		static void serializeRecastMeshTile(Serializer& Ar, int32 NavMeshVersion, unsigned char*& TileData, int32& TileDataSize) noexcept;
+		static void serializeCompressedTileCacheData(Serializer& Ar, int32 NavMeshVersion, unsigned char*& CompressedData, int32& CompressedDataSize) noexcept;
 #endif
 
 		// process붙은 함수류는 서버에서 돌리는 Ai와 유저가 돌리는 Ai를 둘다 돌리기 위해서 만들었다.

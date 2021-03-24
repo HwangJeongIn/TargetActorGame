@@ -83,7 +83,7 @@ ATAPlayer::ATAPlayer()
 void ATAPlayer::BeginPlay()
 {
 	Super::BeginPlay();
-	//GetTAGameInstance()->exportNavMesh();
+	//TAGetGameInstance()->exportNavMesh();
 }
 
 // Called every frame
@@ -499,8 +499,7 @@ void ATAPlayer::toggleMousePoint(void) noexcept
 
 void ATAPlayer::exportRecastNavMesh(void) noexcept
 {
-	ta::ClientMoveActorSystem* clientMoveActorSystem = ta::GetActorSystem<ta::ClientMoveActorSystem>();
-	const bool result = clientMoveActorSystem->exportRecastNavMesh();
+	const bool result = TAExportRecastNavMesh();
 	TA_LOG_DEV("ExportRecastNavMesh result : %d", result);
 }
 

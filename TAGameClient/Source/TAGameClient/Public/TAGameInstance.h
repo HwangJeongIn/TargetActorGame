@@ -1,4 +1,4 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+﻿// Fill out your copyright notice in the Description page of Project Settings.
 
 #pragma once
 
@@ -13,12 +13,26 @@ class UTAGameInstance;
 class UWorld;
 class ATAPlayer;
 class ATAPlayerController;
+class ULevel;
 
 
-extern UTAGameInstance* GetTAGameInstance(void) noexcept;
-extern UWorld* GetTAGameWorld(void) noexcept;
-extern ATAPlayerController* GetFirstTAPlayerController(void) noexcept;
-extern ATAPlayer* GetFirstTAPlayer(void) noexcept;
+extern UTAGameInstance* TAGetGameInstance(void) noexcept;
+extern UWorld* TAGetGameWorld(void) noexcept;
+
+extern ULevel* TAGetStreamingLevelByName(const FString& levelName) noexcept;
+extern int32 TAGetStreamingLevelByTag(const FString& tag, TArray<ULevel*>& output) noexcept;
+extern void TAPrintAllStreamingLevelName(void) noexcept; // test
+
+extern ATAPlayerController* TAGetFirstPlayerController(void) noexcept;
+extern ATAPlayer* TAGetFirstPlayer(void) noexcept;
+
+extern bool TAExportRecastNavMesh(void) noexcept;
+
+extern bool TAExportPathPoint(void) noexcept;
+extern bool TAExportLevelPathPoint(ULevel* level) noexcept;
+
+extern bool TAExportSpawnData(void) noexcept;
+
 
 /**
  * 

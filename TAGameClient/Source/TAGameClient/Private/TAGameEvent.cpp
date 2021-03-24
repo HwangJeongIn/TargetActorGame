@@ -1,4 +1,4 @@
-#include "TAGameEvent.h"
+﻿#include "TAGameEvent.h"
 #include "TAGameInstance.h"
 #include "TAPlayer.h"
 #include "TACharacter.h"
@@ -23,7 +23,7 @@ bool RegisterTAGameEvent(TAGameEvent* gameEvent) noexcept
 		return false;
 	}
 
-	UTAGameInstance* gameInstance = GetTAGameInstance();
+	UTAGameInstance* gameInstance = TAGetGameInstance();
 	if (nullptr == gameInstance)
 	{
 		TA_ASSERT_DEV(false, "비정상입니다.");
@@ -152,7 +152,7 @@ bool TAGameEventSpawnActor::processEvent(TAGameEventProcessParameter& parameter)
 	}
 	else
 	{
-		character = Cast<ATACharacter>(GetFirstTAPlayer());
+		character = Cast<ATACharacter>(TAGetFirstPlayer());
 		if (nullptr == character)
 		{
 			TA_ASSERT_DEV(false, "비정상입니다.");
@@ -241,7 +241,7 @@ bool TAGameEventInitializeInventory::processEvent(TAGameEventProcessParameter& p
 		return false;
 	}
 	
-	ATAPlayerController* playerController = GetFirstTAPlayerController();
+	ATAPlayerController* playerController = TAGetFirstPlayerController();
 	if (nullptr == playerController)
 	{
 		TA_ASSERT_DEV(false, "비정상입니다.");
@@ -298,7 +298,7 @@ bool TAGameEventRefreshInventory::processEvent(TAGameEventProcessParameter& para
 		return false;
 	}
 
-	ATAPlayerController* playerController = GetFirstTAPlayerController();
+	ATAPlayerController* playerController = TAGetFirstPlayerController();
 	if (nullptr == playerController)
 	{
 		TA_ASSERT_DEV(false, "비정상입니다.");

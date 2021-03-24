@@ -1,4 +1,4 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+﻿// Fill out your copyright notice in the Description page of Project Settings.
 
 using UnrealBuildTool;
 
@@ -8,7 +8,9 @@ public class TAGameClient : ModuleRules
 	{
 		//PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
 	
-		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore", "UMG", "SlateCore", "NavigationSystem", "Navmesh"});
+		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore", "UMG", "SlateCore", "NavigationSystem", "Navmesh", "UnrealEd" });
+
+		//"LevelEditor", "EditorStyle", "EditorWidgets",
 
 		PCHUsage = PCHUsageMode.NoSharedPCHs;
 		PrivatePCHHeaderFile = "PCH.h";

@@ -332,16 +332,16 @@ namespace ta
 	{
 		if (!dd) return;
 
-		const ta::dtNodePool* pool = query.getNodePool();
+		const dtNodePool* pool = query.getNodePool();
 		if (pool)
 		{
 			const float off = 0.5f;
 			dd->begin(DU_DRAW_POINTS, 4.0f);
 			for (int i = 0; i < pool->getHashSize(); ++i)
 			{
-				for (ta::dtNodeIndex j = pool->getFirst(i); j != DT_NULL_IDX; j = pool->getNext(j))
+				for (dtNodeIndex j = pool->getFirst(i); j != DT_NULL_IDX; j = pool->getNext(j))
 				{
-					const ta::dtNode* node = pool->getNodeAtIdx(j + 1);
+					const dtNode* node = pool->getNodeAtIdx(j + 1);
 					if (!node) continue;
 					dd->vertex(node->pos[0], node->pos[1] + off, node->pos[2], duRGBA(255, 192, 0, 255));
 				}
@@ -351,12 +351,12 @@ namespace ta
 			dd->begin(DU_DRAW_LINES, 2.0f);
 			for (int i = 0; i < pool->getHashSize(); ++i)
 			{
-				for (ta::dtNodeIndex j = pool->getFirst(i); j != DT_NULL_IDX; j = pool->getNext(j))
+				for (dtNodeIndex j = pool->getFirst(i); j != DT_NULL_IDX; j = pool->getNext(j))
 				{
-					const ta::dtNode* node = pool->getNodeAtIdx(j + 1);
+					const dtNode* node = pool->getNodeAtIdx(j + 1);
 					if (!node) continue;
 					if (!node->pidx) continue;
-					const ta::dtNode* parent = pool->getNodeAtIdx(node->pidx);
+					const dtNode* parent = pool->getNodeAtIdx(node->pidx);
 					if (!parent) continue;
 					dd->vertex(node->pos[0], node->pos[1] + off, node->pos[2], duRGBA(255, 192, 0, 128));
 					dd->vertex(parent->pos[0], parent->pos[1] + off, parent->pos[2], duRGBA(255, 192, 0, 128));

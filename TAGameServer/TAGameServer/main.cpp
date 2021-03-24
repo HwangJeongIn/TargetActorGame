@@ -4,6 +4,8 @@
 #include <vector>
 #include "Common/CommonBase.h"
 
+#include <string>
+
 //#pragma comment(lib, "CommonLibrary.lib")
 
 using namespace std;
@@ -13,6 +15,12 @@ using namespace std;
 int main(void)
 {
 	_wsetlocale(LC_ALL, L"Korean");
+
+	char test[] = "ab";
+	wchar_t wtest[] = L"ab";
+	std::cout << test <<" , "<< strlen(test) <<std::endl;
+	std::cout << wtest << " , " << lstrlenW(wtest) <<std::endl;
+
 
 	//TA_LOG_DEV("33 hello 테스트 %d", 3);
 

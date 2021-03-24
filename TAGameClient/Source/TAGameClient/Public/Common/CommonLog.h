@@ -46,50 +46,67 @@ namespace ta
 {
 	typedef std::basic_string<TCHAR> tstring;
 
-	static bool CharToTChar(const char* origin, TCHAR* output, const int outputMaxLen)
+	// UTF16 => ASCII / UTF-8
+	static bool WcharToChar(const wchar_t* origin, char* output, const int outputMaxLen)
 	{
-#ifdef UNICODE
-		if (nullptr != origin && nullptr != output)
+		if (nullptr == origin
+			|| nullptr == output)
 		{
-			const int originLen = (int)strlen(origin);
-			// lpWideCharStr.If this value is 0, the function returns the required buffer size,
-			const int outputLen = MultiByteToWideChar(CP_ACP, 0, origin, -1, NULL, 0);
-			if (outputMaxLen < outputLen)
-			{
-				DebugBreak();
-				return false;
-			}
-
-			const bool isSucceeded = (0 != MultiByteToWideChar(CP_ACP, 0, origin, originLen + 1, output, outputLen));
-
-			return isSucceeded;
+			DebugBreak();
+			return false;
 		}
 
-		return false;
+		// If the function succeeds and cbMultiByte is 0, the return value is the required size
+		const int outputLen = WideCharToMultiByte(CP_ACP, 0, origin, -1, NULL, 0, NULL, NULL);
+		if (outputMaxLen < outputLen)
+		{
+			DebugBreak();
+			return false;
+		}
+
+		const bool isSucceeded = (0 != WideCharToMultiByte(CP_ACP, 0, origin, -1, output, outputLen, NULL, NULL));
+
+		return isSucceeded;
+	}
+	
+	// ASCII / UTF-8 => UTF16
+	static bool CharToWchar(const char* origin, wchar_t* output, const int outputMaxLen)
+	{
+		if (nullptr == origin
+			|| nullptr == output)
+		{
+			DebugBreak();
+			return false;
+		}
+
+		// const int originLen = (int)strlen(origin);
+		// lpWideCharStr.If this value is 0, the function returns the required buffer size,
+		const int outputLen = MultiByteToWideChar(CP_ACP, 0, origin, -1, NULL, 0);
+		if (outputMaxLen < outputLen)
+		{
+			DebugBreak();
+			return false;
+		}
+
+		const bool isSucceeded = (0 != MultiByteToWideChar(CP_ACP, 0, origin, -1, output, outputLen));
+
+		return isSucceeded;
+	}
+
+
+	static bool CharToTchar(const char* origin, TCHAR* output, const int outputMaxLen)
+	{
+#ifdef UNICODE
+		return CharToWchar(origin, output, outputMaxLen);
 #else
 		return (0 == strcpy_s(output, outputMaxLen, origin));
 #endif
 	}
 
-	static bool TCharToChar(const TCHAR* origin, char* output, const int outputMaxLen)
+	static bool TcharToChar(const TCHAR* origin, char* output, const int outputMaxLen)
 	{
 #ifdef UNICODE
-		if (nullptr != origin && nullptr != output)
-		{
-			// If the function succeeds and cbMultiByte is 0, the return value is the required size
-			const int outputLen = WideCharToMultiByte(CP_ACP, 0, origin, -1, NULL, 0, NULL, NULL);
-			if (outputMaxLen < outputLen)
-			{
-				DebugBreak();
-				return false;
-			}
-
-			const bool isSucceeded = (0 != WideCharToMultiByte(CP_ACP, 0, origin, -1, output, outputLen, NULL, NULL));
-
-			return isSucceeded;
-		}
-
-		return false;
+		return WcharToChar(origin, output, outputMaxLen);
 #else
 		return (0 == strcpy_s(output, outputMaxLen, origin));
 #endif
@@ -113,7 +130,7 @@ namespace ta
 {\
 	TCHAR logData[MAX_LOG_SIZE]{0,};\
 	TCHAR functionName[MAX_LOG_SIZE]{0,};\
-	const bool isSucceeded = ta::CharToTChar(__FUNCTION__, functionName, MAX_LOG_SIZE);\
+	const bool isSucceeded = ta::CharToTchar(__FUNCTION__, functionName, MAX_LOG_SIZE);\
 	if(true == isSucceeded)\
 	{\
 		Sprint(logData, MAX_LOG_SIZE, TEXT(Format), ##__VA_ARGS__); \

@@ -41,7 +41,7 @@ namespace ta
 	{
 		TCHAR data[MaxStringPackBufferLength]{NULL,};
 
-		CharToTChar(_data, data, MaxStringPackBufferLength);
+		CharToTchar(_data, data, MaxStringPackBufferLength);
 		return tstring(data);
 	}
 

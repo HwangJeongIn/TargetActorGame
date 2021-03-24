@@ -50,7 +50,7 @@ namespace ta
 	{
 		TCHAR data[MaxStringPackBufferLength]{ NULL, };
 
-		CharToTChar(toString().data(), data, MaxStringPackBufferLength);
+		CharToTchar(toString().data(), data, MaxStringPackBufferLength);
 		return tstring(data);
 	}
 }

@@ -212,16 +212,24 @@ namespace ta
 
 	std::wstring StringToWstring(const std::string& input) noexcept
 	{
-		std::wstring_convert<std::codecvt_utf8<wchar_t>, wchar_t> converterX;
+		wchar_t outputTemp[256]{ 0, };
+		if (false == CharToWchar(input.c_str(), outputTemp, 256))
+		{
+			return std::wstring();
+		}
 
-		return converterX.from_bytes(input);
+		return std::wstring(outputTemp);
 	}
 
 	std::string WstringToString(const std::wstring& input) noexcept
 	{
-		std::wstring_convert<std::codecvt_utf8<wchar_t>, wchar_t> converterX;
+		char outputTemp[256]{ 0, };
+		if (false == WcharToChar(input.c_str(), outputTemp, 256))
+		{
+			return std::string();
+		}
 
-		return converterX.to_bytes(input);
+		return std::string(outputTemp);
 	}
 
 	tstring ToTstring(const std::string& input) noexcept

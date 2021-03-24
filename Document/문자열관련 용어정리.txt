@@ -98,3 +98,4 @@
 		MS에 T를 붙인 ANSI(MBCS) / UNICODE(UTF-16 = WBCS)를 지원하는 여러가지 형식의 것들(TCHAR 등)이 존재하는데, 명시적으로 쓰는게 좋을 것같다.
 		// https://stackoverflow.com/questions/234365/is-tchar-still-relevant/3002494#3002494
 	
+UTF8TO

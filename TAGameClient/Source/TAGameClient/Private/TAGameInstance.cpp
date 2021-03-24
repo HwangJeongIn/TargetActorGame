@@ -10,16 +10,26 @@
 #include "TACharacter.h"
 #include "TAPlayer.h"
 #include "TAPlayerController.h"
+#include "TAPathPoint.h"
 #include "TimerManager.h"
 #include "NavigationSystem.h"
 #include "NavMesh/RecastNavMesh.h"
 #include "Runtime/Engine/Public/EngineUtils.h"
+#include "NavigationSystem.h"
+#include "LevelEditor.h"
+#include "Editor.h"
+#include "Engine/LevelStreaming.h"
+
 #include "Common/GameDataManager.h"
 #include "Common/CommonSpawnDataManager.h"
 #include "Common/CommonMoveActorSystem.h"
+#include "Common/Serializer.h"
+#include "Common/FileLoader.h"
+#include "Common/GetComponentAndSystem.h"
+#include "Common/StringUtility.h"
 
 
-UTAGameInstance* GetTAGameInstance(void) noexcept
+UTAGameInstance* TAGetGameInstance(void) noexcept
 {
 	if (nullptr != GEngine
 		&& nullptr != GEngine->GameViewport)
@@ -40,20 +50,130 @@ UTAGameInstance* GetTAGameInstance(void) noexcept
 	return nullptr;
 }
 
-UWorld* GetTAGameWorld(void) noexcept
+UWorld* TAGetGameWorld(void) noexcept
 {
-	if (nullptr != GEngine
-		&& nullptr != GEngine->GameViewport)
+	if(nullptr == GEngine
+	   || nullptr == GEngine->GameViewport)
 	{
-		return GEngine->GameViewport->GetWorld();
+		TA_LOG_DEV("에디터에서 월드를 찾습니다.");
+		if (nullptr == GEditor)
+		{
+			TA_ASSERT_DEV(false, "월드가 존재하지 않습니다.");
+			return nullptr;
+		}
+
+		if (nullptr == GEditor->PlayWorld)
+		{
+			TA_LOG_DEV("GEditor->PlayWorld가 nullptr입니다.");
+			UWorld* world = GEditor->GetEditorWorldContext().World();
+			TA_ASSERT_DEV(nullptr != world, "비정상입니다.");
+			return world;
+		}
+
+		return GEditor->PlayWorld;
+	}
+
+	UWorld* world = GEngine->GameViewport->GetWorld();
+	TA_ASSERT_DEV(nullptr != world, "비정상입니다.");
+	return world;
+}
+
+ULevel* TAGetStreamingLevelByName(const FString& levelName) noexcept
+{
+	const TArray<ULevelStreaming*>& streamingLevels = TAGetGameWorld()->GetStreamingLevels();
+
+	for (const ULevelStreaming* streamingLevel: streamingLevels)
+	{
+		if (nullptr == streamingLevel)
+		{
+			continue;
+		}
+
+		ULevel* level = streamingLevel->GetLoadedLevel();
+
+		if (nullptr == level
+			|| false == level->bIsVisible)
+		{
+			continue;
+		}
+
+		if (levelName == (level->GetOuter()->GetName()))
+		{
+			return level;
+		}
 	}
 
 	return nullptr;
 }
 
-ATAPlayerController* GetFirstTAPlayerController(void) noexcept
+int32 TAGetStreamingLevelByTag(const FString& tag, TArray<ULevel*>& output) noexcept
 {
-	UWorld* world = GetTAGameWorld();
+	output.Empty();
+
+	const TArray<ULevelStreaming*>& streamingLevels = TAGetGameWorld()->GetStreamingLevels();
+
+	for (const ULevelStreaming* streamingLevel: streamingLevels)
+	{
+		if (nullptr == streamingLevel)
+		{
+			continue;
+		}
+
+		ULevel* level = streamingLevel->GetLoadedLevel();
+
+		if (nullptr == level
+			|| false == level->bIsVisible)
+		{
+			continue;
+		}
+
+		TArray<FString> splitedString;
+		FString levelName = (level->GetOuter()->GetName());
+		levelName.ParseIntoArray(splitedString, TEXT("_"));
+
+		if (tag == splitedString.Last())
+		{
+			TA_LOG_DEV("tag : %s, level name : %s", *tag, *levelName);
+			output.Add(level);
+		}
+	}
+
+	return output.Num();
+}
+
+void TAPrintAllStreamingLevelName(void) noexcept
+{
+	const TArray<ULevelStreaming*>& streamingLevels = TAGetGameWorld()->GetStreamingLevels();
+
+	TA_LOG_DEV("StreamedLevels : %d", streamingLevels.Num());
+	for (const ULevelStreaming* streamingLevel : streamingLevels)
+	{
+		if (nullptr == streamingLevel)
+		{
+			continue;
+		}
+
+		ULevel* level = streamingLevel->GetLoadedLevel();
+
+		//Is This Level Valid and Visible?
+		if (nullptr == level)
+		{
+			continue;
+		}
+
+		if (false == level->bIsVisible)
+		{
+			TA_LOG_DEV("Level Name InVisible : %s", *(level->GetOuter()->GetName()));
+			continue;
+		}
+
+		TA_LOG_DEV("Level Name Visible : %s", *(level->GetOuter()->GetName()));
+	}
+}
+
+ATAPlayerController* TAGetFirstPlayerController(void) noexcept
+{
+	UWorld* world = TAGetGameWorld();
 	if (nullptr == world)
 	{
 		TA_ASSERT_DEV(false, "비정상입니다.");
@@ -71,9 +191,9 @@ ATAPlayerController* GetFirstTAPlayerController(void) noexcept
 	return playerController;
 }
 
-ATAPlayer* GetFirstTAPlayer(void) noexcept
+ATAPlayer* TAGetFirstPlayer(void) noexcept
 {
-	ATAPlayerController* playerController = GetFirstTAPlayerController();
+	ATAPlayerController* playerController = TAGetFirstPlayerController();
 	if (nullptr == playerController)
 	{
 		TA_ASSERT_DEV(false, "비정상입니다.");
@@ -88,6 +208,167 @@ ATAPlayer* GetFirstTAPlayer(void) noexcept
 	}
 
 	return player;
+}
+
+bool TAExportRecastNavMesh(void) noexcept
+{
+	UNavigationSystemV1* navSys = FNavigationSystem::GetCurrent<UNavigationSystemV1>(TAGetGameWorld());
+	if (nullptr == navSys)
+	{
+		TA_ASSERT_DEV(false, "월드가 존재하지 않습니다.");
+		return false;
+	}
+
+
+	// 결국 UNavigationSystemV1.SupportedAgent가 1이기 때문에 무조건 굳이 AgentProperty로 맵에서 찾을 필요가 없다.
+	// 지금은 무조건 UNavigationSystemV1.MainNavData가 나온다.
+//#define SupportOtherAgent
+#ifdef SupportOtherAgent
+
+	ATAPlayerController* playerController = TAGetFirstPlayerController();
+	if (nullptr == playerController)
+	{
+		TA_ASSERT_DEV(false, "비정상입니다.");
+		return false;
+	}
+
+	//FNavAgentProperties nagAgentProperties;
+	//nagAgentProperties.bCanCrouch = 0;
+	//nagAgentProperties.bCanJump = 1;
+	//nagAgentProperties.bCanWalk = 1;
+	//nagAgentProperties.bCanSwim = 1;
+	//nagAgentProperties.bCanFly = 0;
+	//
+	//nagAgentProperties.AgentRadius = 34.0f;
+	//nagAgentProperties.AgentHeight = 142.0f;
+	//nagAgentProperties.AgentStepHeight = -1.0f;
+	//nagAgentProperties.NavWalkingSearchHeightScale = 0.5f;
+
+	ANavigationData* navData = (navSys == nullptr) ? nullptr : navSys->GetNavDataForProps(playerController->GetNavAgentPropertiesRef()
+						
+#endif
+
+	ARecastNavMesh* recastNavMesh = Cast<ARecastNavMesh>(navSys->MainNavData);
+	if (nullptr == recastNavMesh)
+	{
+		TA_ASSERT_DEV(false, "비정상입니다.");
+		return false;
+	}
+
+	dtNavMesh* detourNavMesh = recastNavMesh->GetRecastMesh();
+	if (nullptr == detourNavMesh)
+	{
+		TA_ASSERT_DEV(false, "비정상입니다.");
+		return false;
+	}
+
+	ta::Serializer slW;
+	slW.setModeFlag(ta::SerializerMode::Write | ta::SerializerMode::WriteLog);
+	if (false == ta::CommonMoveActorSystem::serializeNavigationMesh(slW, detourNavMesh))
+	{
+		TA_ASSERT_DEV(false, "비정상입니다.");
+		return false;
+	}
+
+	fs::path finalPath = ta::NavigationMeshPath / "RecastNavigationMesh.rnm";
+	if (false == slW.exportToFile(finalPath))
+	{
+		TA_ASSERT_DEV(false, "비정상입니다.");
+		return false;
+	}
+
+#ifdef CAN_CREATE_LOG_FILE
+	if (false == slW.exportLogData(finalPath += "Write"))
+	{
+		TA_ASSERT_DEV(false, "비정상");
+		return false;
+	}
+#endif 
+
+	return true;
+}
+
+bool TAExportPathPoint(void) noexcept
+{
+	TArray<ULevel*> pathPointLevels;
+	const int32 levelCount = TAGetStreamingLevelByTag("pathpoint", pathPointLevels);
+
+	if (0 == levelCount)
+	{
+		TA_LOG_DEV("path point level이 없습니다.");
+		return true;
+	}
+	
+	for (int32 levelIndex = 0; levelIndex < levelCount; ++levelIndex)
+	{
+		if (false == TAExportLevelPathPoint(pathPointLevels[levelIndex]))
+		{
+			TA_LOG_DEV("비정상입니다.");
+			return false;
+		}
+	}
+
+
+	return true;
+}
+
+bool TAExportLevelPathPoint(ULevel* level) noexcept
+{
+	TMap<FString, TArray<ATAPathPoint*>> allPathPointFolders;
+	TAGetTargetLevelActorsByFolder(level, allPathPointFolders);
+
+	std::string currentFolderName;
+	for (TPair<FString, TArray<ATAPathPoint*>>& currentPathPointFolder : allPathPointFolders)
+	{
+		// 사실상 wchar -> char(ASCII)
+		currentFolderName = TCHAR_TO_ANSI(*currentPathPointFolder.Key);
+		TArray<ATAPathPoint*>& currentPathPointGroup = currentPathPointFolder.Value;
+
+		const int32 count = currentPathPointGroup.Num();
+		ta::XmlNode tempRoot;
+		tempRoot.setName("Root");
+
+		ta::XmlNode* child = nullptr;
+		ta::XmlNode* childPositionNode = nullptr;
+		ta::tstring positionValue;
+		for (int32 index = 0; index < count; ++index)
+		{
+			child = new ta::XmlNode;
+			child->setName(currentFolderName);
+
+			childPositionNode = new ta::XmlNode;
+			FVector pathPointLocation = currentPathPointGroup[index]->GetActorLocation();
+			
+			ta::ToString(*FString::Printf(TEXT("%.1f", pathPointLocation.X)))
+
+
+			FormatString(positionValue, "(%.1f,%.1f,%.1f)", pathPointLocation.X, pathPointLocation.Y, pathPointLocation.Z);
+
+			child->addAttribute("Position", ta::ToString(positionValue));
+
+			tempRoot.addChildElement(child);
+		}
+
+		if (false == ta::FileLoader::saveXml((ta::PathPointPath / currentFolderName) += ".xml", &tempRoot))
+		{
+			TA_ASSERT_DEV(false, "save xml failed : %s", currentFolderName.c_str());
+			return false;
+		}
+	}
+}
+
+bool TAExportSpawnData(void) noexcept
+{
+	TArray<ULevel*> spawnDataLevels;
+	const int32 levelCount = TAGetStreamingLevelByTag("spawndata", spawnDataLevels);
+
+	if (0 == levelCount)
+	{
+		TA_LOG_DEV("spawn data level이 없습니다.");
+		return true;
+	}
+
+	return true;
 }
 
 
