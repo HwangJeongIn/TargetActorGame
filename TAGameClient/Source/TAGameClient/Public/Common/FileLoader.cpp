@@ -90,9 +90,9 @@ namespace ta
 				}
 				else
 				{
-					XmlNode* childElement = new XmlNode;
+					XmlNode* childElement = nullptr;
 					// GroupGameData Key="1" MoveGameDataKey="1" ...
-					if (false == FileLoader::loadXmlAttributeFromString(splitedStrings[index], childElement))
+					if (false == FileLoader::loadXmlNodeFromString(splitedStrings[index], childElement))
 					{
 						TA_ASSERT_DEV(false, "비정상입니다.");
 						return false;
@@ -274,20 +274,24 @@ namespace ta
 		FileLoader::makeAttributeString(currentElement, output);
 
 		const XmlNode* childElement = nullptr;
-		const uint32 childElementCount = currentElement->getChildElementCount();
-		for (uint32 childElementIndex = 0; childElementIndex < childElementCount; ++childElementIndex)
+		const std::unordered_map<std::string, XmlNode*>&  childElements = currentElement->getChildElements();
+		std::unordered_map<std::string, XmlNode*>::const_iterator it = childElements.begin();
+		const std::unordered_map<std::string, XmlNode*>::const_iterator end = childElements.end();
+
+		while (end != it)
 		{
-			childElement = currentElement->getChildElement(childElementIndex);
+			childElement = it->second;
 			elementStack.push_back(childElement);
 			if (false == FileLoader::makeElementString(elementStack, output))
 			{
 				TA_ASSERT_DEV(false, "비정상입니다.");
 				return false;
 			}
+			++it;
 		}
 
 		// 자식 엘리먼트가 있는 경우 무조건 </Name>으로 끝나게 된다.
-		if (0 != childElementCount)
+		if (0 != currentElement->getChildElementCount())
 		{
 			output.append(depthString + "</" + currentElement->getName() + ">");
 		}
@@ -328,9 +332,9 @@ namespace ta
 		((true == hasChildElement) ? output.append(">") : output.append("/>"));
 	}
 
-	bool FileLoader::loadXmlAttributeFromString(const std::string& nodeString, XmlNode* output) noexcept
+	bool FileLoader::loadXmlNodeFromString(const std::string& nodeString, XmlNode*& output) noexcept
 	{
-		if (nullptr == output)
+		if (nullptr != output)
 		{
 			TA_ASSERT_DEV(false, "비정상입니다.");
 			return false;
@@ -347,7 +351,7 @@ namespace ta
 			return false;
 		}
 
-		output->setName(attributeStrings[0]);
+		output = new XmlNode(attributeStrings[0]);
 
 		for (uint32 index = 0; index < count; ++index)
 		{
@@ -372,7 +376,8 @@ namespace ta
 
 namespace ta
 {
-	XmlNode::XmlNode(void) noexcept
+	XmlNode::XmlNode(const std::string& name) noexcept
+		: _name(name)
 	{
 	}
 
@@ -383,14 +388,15 @@ namespace ta
 
 	void XmlNode::clear(void) noexcept
 	{
-		const uint32 count = _childElements.size();
-		for (uint32 index = 0; index < count; ++index)
+		std::unordered_map<std::string, XmlNode*>::iterator it = _childElements.begin();
+		const std::unordered_map<std::string, XmlNode*>::const_iterator end = _childElements.end();
+		while (end != it)
 		{
-			delete _childElements[index];
+			delete it->second;
+			it->second = nullptr;
 		}
 
 		_childElements.clear();
-		_attributes.clear();
 	}
 
 	std::string& XmlNode::getName(void) noexcept
@@ -408,19 +414,68 @@ namespace ta
 		_name = name;
 	}
 
+	std::string& XmlNode::getValue(void) noexcept
+	{
+		return _value;
+	}
+
+	const std::string& XmlNode::getValue(void) const noexcept
+	{
+		return _value;
+	}
+
+	void XmlNode::setValue(const std::string& value) noexcept
+	{
+		_value = value;
+	}
+
 	uint32 XmlNode::getChildElementCount(void) const noexcept
 	{
 		return _childElements.size();
 	}
 
-	const XmlNode* XmlNode::getChildElement(const uint32 index) const noexcept
+	//const XmlNode* XmlNode::getChildElement(const uint32 index) const noexcept
+	//{
+	//	return _childElements[index];
+	//}
+	//
+	//XmlNode* XmlNode::getChildElement(const uint32 index) noexcept
+	//{
+	//	return _childElements[index];
+	//}
+
+	const std::unordered_map<std::string, XmlNode*>& XmlNode::getChildElements(void) const noexcept
 	{
-		return _childElements[index];
+		return _childElements;
 	}
 
-	XmlNode* XmlNode::getChildElement(const uint32 index) noexcept
+	std::unordered_map<std::string, XmlNode*>& XmlNode::getChildElements(void) noexcept
 	{
-		return _childElements[index];
+		return _childElements;
+	}
+
+	const XmlNode* XmlNode::getChildElement(const std::string& childName) const noexcept
+	{
+		const std::unordered_map<std::string, XmlNode*>::const_iterator rv = _childElements.find(childName);
+
+		if (_childElements.end() == rv)
+		{
+			return nullptr;
+		}
+
+		return (rv->second);
+	}
+
+	XmlNode* XmlNode::getChildElement(const std::string& childName) noexcept
+	{
+		const std::unordered_map<std::string, XmlNode*>::iterator rv = _childElements.find(childName);
+
+		if (_childElements.end() == rv)
+		{
+			return nullptr;
+		}
+
+		return (rv->second);
 	}
 
 	const std::string* XmlNode::getAttribute(const std::string& attributeName) const noexcept
@@ -459,13 +514,15 @@ namespace ta
 
 	bool XmlNode::addChildElement(XmlNode* childElement) noexcept
 	{
-		if (nullptr == childElement)
+		std::pair<std::unordered_map<std::string, XmlNode*>::iterator, bool> rv
+			= _childElements.insert(std::pair<std::string, XmlNode*>(childElement->getName(), childElement));
+
+		if (false == rv.second)
 		{
-			TA_ASSERT_DEV(false, "비정상입니다.");
+			TA_ASSERT_DEV(false, "같은 Element가 삽입되었습니다. name : %s", ToTstring(childElement->getName()).c_str());
 			return false;
 		}
 
-		_childElements.push_back(childElement);
 		return true;
 	}
 

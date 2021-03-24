@@ -80,7 +80,7 @@ namespace ta
 	
 	bool CommonSpawnDataManager::loadSpawnDataFromXml(CommonSpawnDataManager* spawnDataManager, const fs::path filePath) noexcept
 	{
-		XmlNode rootNode;
+		XmlNode rootNode("Root");
 		if (false == FileLoader::loadXml(filePath, &rootNode))
 		{
 			TA_ASSERT_DEV(false, "XmlObject생성을 실패했습니다.");
@@ -108,9 +108,13 @@ namespace ta
 		Vector position;
 		Vector rotation;
 
-		for (uint32 index = 0; index < count; ++index)
+		const std::unordered_map<std::string, XmlNode*>& childElements = rootNode.getChildElements();
+		std::unordered_map<std::string, XmlNode*>::const_iterator it = childElements.begin();
+		const std::unordered_map<std::string, XmlNode*>::const_iterator end = childElements.end();
+
+		while (end != it)
 		{
-			childElement = rootNode.getChildElement(index);
+			childElement = it->second;
 
 			{
 				dataString = childElement->getAttribute("GroupGameDataKey");

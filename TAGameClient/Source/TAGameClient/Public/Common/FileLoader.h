@@ -52,7 +52,7 @@ namespace ta
 		static void makeAttributeString(const XmlNode* input, std::string& output) noexcept;
 
 		// load
-		static bool loadXmlAttributeFromString(const std::string& nodeString, XmlNode* output) noexcept;
+		static bool loadXmlNodeFromString(const std::string& nodeString, XmlNode*& output) noexcept;
 
 		// =============================================================================================
 
@@ -66,7 +66,7 @@ namespace ta
 	class XmlNode
 	{
 	public:
-		XmlNode(void) noexcept;
+		explicit XmlNode(const std::string& name) noexcept;
 		~XmlNode(void) noexcept;
 
 		void clear(void) noexcept;
@@ -77,10 +77,21 @@ namespace ta
 
 		void setName(const std::string& name) noexcept;
 
+		std::string& getValue(void) noexcept;
+		const std::string& getValue(void) const noexcept;
+
+		void setValue(const std::string& value) noexcept;
+
 		uint32 getChildElementCount(void) const noexcept;
 
-		const XmlNode* getChildElement(const uint32 index) const noexcept;
-		XmlNode* getChildElement(const uint32 index) noexcept;
+		//const XmlNode* getChildElement(const uint32 index) const noexcept;
+		//XmlNode* getChildElement(const uint32 index) noexcept;
+
+		const std::unordered_map<std::string, XmlNode*>& getChildElements(void) const noexcept;
+		std::unordered_map<std::string, XmlNode*>& getChildElements(void) noexcept;
+
+		const XmlNode* getChildElement(const std::string& childName) const noexcept;
+		XmlNode* getChildElement(const std::string& childName) noexcept;
 
 		const std::string* getAttribute(const std::string& attributeName) const noexcept;
 		std::string* getAttribute(const std::string& attributeName) noexcept;
@@ -93,8 +104,9 @@ namespace ta
 
 	private:
 		std::string _name;
+		std::string _value;
 
-		std::vector<XmlNode*> _childElements;
+		std::unordered_map<std::string, XmlNode*> _childElements;
 		std::unordered_map<std::string, std::string> _attributes;
 
 	};
