@@ -11,7 +11,7 @@ namespace fs = std::filesystem;
 #ifndef TA_SERVER
 namespace ta
 {
-	extern fs::path SpawnDataPath;
+	extern fs::path SpawnDataFilePath;
 }
 #endif
 
@@ -34,7 +34,7 @@ namespace ta
 		virtual bool open(void) noexcept;
 		virtual void close(void) noexcept;
 
-		static bool loadSpawnDataFromXml(CommonSpawnDataManager* spawnDataManager, const fs::path filePath) noexcept;
+		bool loadSpawnDataFromXml(const fs::path filePath) noexcept;
 
 
 	protected:

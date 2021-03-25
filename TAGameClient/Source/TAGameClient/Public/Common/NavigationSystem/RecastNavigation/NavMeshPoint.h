@@ -1,8 +1,8 @@
-#pragma once
+﻿#pragma once
 
-#include "RecastNavigation/RecastNavigationSystemInclude.h"
 #include "Common/CommonBase.h"
 #include "Common/Vector.h"
+#include "RecastNavigation/RecastNavigationSystemInclude.h"
 #include "RecastNavigation/Detour/DetourNavMesh.h"
 
 

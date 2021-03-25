@@ -257,3 +257,9 @@ namespace ta
 	typedef int		ItemSlotNo;
 	constexpr uint8 MaxInventoryCapacity = 30;
 }
+
+
+namespace ta
+{
+	constexpr float MaxDistanceFromActorToPathPoint = 300.0f;
+}

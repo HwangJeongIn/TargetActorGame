@@ -12,6 +12,8 @@
 #include "Common/Serializer.h"
 #include "Common/FileLoader.h"
 #include "Common/StringUtility.h"
+#include "Common/PathPointPath.h"
+#include "Common/ThreadLoadTaskManager.h"
 #include "RecastNavigation/RecastNavigationSystemUtility.h"
 #include "RecastNavigation/NavMeshPoint.h"
 #include "RecastNavigation/NavMeshPath.h"
@@ -34,55 +36,35 @@ namespace ta
 
 	bool ServerMoveActorSystem::initialize(void) noexcept
 	{
-		Serializer slR;
-		slR.setModeFlag(SerializerMode::Read | SerializerMode::WriteLog);
-
-		std::vector<fs::path> navigationMeshFiles;
-		FileLoader::getFilePathsFromDirectory(NavigationMeshPath, navigationMeshFiles);
-		if (0 == navigationMeshFiles.size())
+		if (false == loadNavigationMeshFromBinary())
 		{
-			TA_ASSERT_DEV(false, "비정상");
+			TA_ASSERT_DEV(false, "비정상입니다.");
+			return false;
+		}
+		
+
+		std::vector<fs::path> pathPointFilePaths;
+		if (false == FileLoader::getFilePathsFromDirectory(PathPointFilePath, pathPointFilePaths))
+		{
+			TA_ASSERT_DEV(false, "비정상입니다.");
 			return false;
 		}
 
-		const uint32 count = navigationMeshFiles.size();
-		std::string extention;
+		const uint32 count = pathPointFilePaths.size();
 		for (uint32 index = 0; index < count; ++index)
 		{
-			Extension(navigationMeshFiles[index].string(), extention);
-			if (0 != extention.compare("rnm"))
-			{
-				continue;
-			}
-			if (false == slR.importBinaryFromFile(navigationMeshFiles[index]))
-			{
-				TA_ASSERT_DEV(false, "비정상");
-				return false;
-			}
+			ThreadLoadTaskPathPoint* loadTaskPathPoint = new ThreadLoadTaskPathPoint;
+			loadTaskPathPoint->_moveActorSystem = this;
+			loadTaskPathPoint->_filePath = pathPointFilePaths[index];
 
-			// 일단 하나밖에 없다 , 추가하려면 하자
-			if (false == serializeNavigationMesh(slR, _detourNavMesh))
+			if (false == RegisterThreadLoadTask(loadTaskPathPoint))
 			{
-				TA_ASSERT_DEV(false, "비정상");
+				TA_ASSERT_DEV(false, "비정상입니다.");
 				return false;
 			}
+		}
 
-#ifdef CAN_CREATE_LOG_FILE
-			if (false == slR.exportLogData(navigationMeshFiles[index] += "Read"))
-			{
-				TA_ASSERT_DEV(false, "비정상");
-				return false;
-			}
-#endif 
-		}
-		
-		// test
-		
-		if(true)
-		{
-			NavMeshPath path;
-			findPath(ActorKey(), Vector(-60, 260, 73), Vector(540, 260, 73), path);
-		}
+		StartRegisteredThreadLoadTasksAndWait();
 
 		return true;
 	}
@@ -730,6 +712,60 @@ namespace ta
 		return rv;
 	}
 
+	bool ServerMoveActorSystem::loadNavigationMeshFromBinary(void) noexcept
+	{
+		Serializer slR;
+		slR.setModeFlag(SerializerMode::Read | SerializerMode::WriteLog);
+
+		std::vector<fs::path> navigationMeshFiles;
+		FileLoader::getFilePathsFromDirectory(NavigationMeshFilePath, navigationMeshFiles);
+		if (0 == navigationMeshFiles.size())
+		{
+			TA_ASSERT_DEV(false, "비정상");
+			return false;
+		}
+
+		const uint32 count = navigationMeshFiles.size();
+		std::string extention;
+		for (uint32 index = 0; index < count; ++index)
+		{
+			Extension(navigationMeshFiles[index].string(), extention);
+			if (0 != extention.compare("rnm"))
+			{
+				continue;
+			}
+			if (false == slR.importBinaryFromFile(navigationMeshFiles[index]))
+			{
+				TA_ASSERT_DEV(false, "비정상");
+				return false;
+			}
+
+			// 일단 하나밖에 없다 , 추가하려면 하자
+			if (false == serializeNavigationMesh(slR, _detourNavMesh))
+			{
+				TA_ASSERT_DEV(false, "비정상");
+				return false;
+			}
+
+#ifdef CAN_CREATE_LOG_FILE
+			if (false == slR.exportLogData(navigationMeshFiles[index] += "Read"))
+			{
+				TA_ASSERT_DEV(false, "비정상");
+				return false;
+			}
+#endif 
+		}
+
+		// test
+		if (true)
+		{
+			NavMeshPath path;
+			findPath(ActorKey(), Vector(-60, 260, 73), Vector(540, 260, 73), path);
+		}
+
+		return true;
+	}
+
 	bool ServerMoveActorSystem::preparePathFinding(const Vector& startPos, const Vector& endPos,
 												   const dtNavMeshQuery& query, const dtQueryFilter& queryFilter,
 												   Vector& recastStartPos, dtPolyRef& startPoly,
@@ -978,5 +1014,61 @@ namespace ta
 
 		const float areaTravelCost = queryFilter->getAreaCost(areaID);
 		return areaTravelCost * (endPos - startPos).size();
+	}
+
+	bool ServerMoveActorSystem::loadPathPointPathSetFromXml(const fs::path filePath) noexcept
+	{
+		XmlNode rootNode("Root");
+		if (false == FileLoader::loadXml(filePath, &rootNode))
+		{
+			TA_ASSERT_DEV(false, "XmlObject생성을 실패했습니다.");
+			return false;
+		}
+
+		std::string fileName = filePath.filename().string();
+		TrimExtension(fileName);
+		
+		// 파일이름 해싱해서 키값을 만든다.
+		PathPointPathKey pathPointPathKey(ComputeHash(fileName));
+
+		std::wstringstream ss;
+		ss << std::this_thread::get_id();
+		TA_LOG_DEV("PathPointPath FileName : %s, PathPointPathKey(HashKey) : %lld, Thread id : %s", ToTstring(fileName).c_str(), pathPointPathKey.getKeyValue(), ss.str().c_str());
+
+		std::pair<std::unordered_map<PathPointPathKey, PathPointPath*>::iterator, bool> dataSet =
+		_pathPointPathSet.insert(std::pair(pathPointPathKey, new PathPointPath));
+		
+		if (false == dataSet.second)
+		{
+			TA_ASSERT_DEV(false, "중복되는 파일이 있을 수 없는데..");
+			return false;
+		}
+
+		const uint32 childElementCount = rootNode.getChildElementCount();
+		XmlNode* childElement = nullptr;
+		XmlNode* positionElement = nullptr;
+		Vector position;
+		
+		for (uint32 index = 0; index < childElementCount; ++index)
+		{
+			childElement = rootNode.getChildElement(index);
+		
+			const uint32 childChildElementCount = childElement->getChildElementCount();
+			if (1 != childChildElementCount) // child element 로 position 만 존재
+			{
+				TA_ASSERT_DEV(false, "비정상입니다.");
+				return false;
+			}
+
+			positionElement = childElement->getChildElement(0);
+
+			position._x = FromStringCast<float>(*(positionElement->getAttribute("X")));
+			position._y = FromStringCast<float>(*(positionElement->getAttribute("Y")));
+			position._z = FromStringCast<float>(*(positionElement->getAttribute("Z")));
+
+			dataSet.first->second->addPathPoint(position);
+		}
+
+		return true;
 	}
 }

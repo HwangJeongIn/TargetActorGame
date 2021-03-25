@@ -1,4 +1,4 @@
-#include "Common/KeyDefinition.h"
+﻿#include "Common/KeyDefinition.h"
 
 
 
@@ -64,7 +64,7 @@ namespace ta																	\
 KEY_DEFINITION(ActorKey, uint32, 0)
 KEY_DEFINITION(CharacterDBNo, int32, -1) // DB에 저장되는 값
 KEY_DEFINITION(SectorKey, int32, -1)
-
+KEY_DEFINITION(PathPointPathKey, hash_value, 0)
 
 // GameData Key
 KEY_DEFINITION(GroupGameDataKey, int32, -1)

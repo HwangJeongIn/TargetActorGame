@@ -11,10 +11,10 @@
 namespace ta
 {
 #ifdef TA_SERVER
-	const fs::path SpawnDataPath = fs::absolute(L"./../SpawnData");
-	//const fs::path SpawnDataPathForClientInServer = fs::absolute(L"./../SpawnData");
+	const fs::path SpawnDataFilePath = fs::absolute(L"./../SpawnData");
+	//const fs::path SpawnDataFilePathForClientInServer = fs::absolute(L"./../SpawnData");
 #else
-	fs::path SpawnDataPath = "";
+	fs::path SpawnDataFilePath = "";
 #endif
 }
 
@@ -31,7 +31,7 @@ namespace ta
 	bool CommonSpawnDataManager::initialize(void) noexcept
 	{
 		std::vector<fs::path> spawnDataFilePaths;
-		if (false == FileLoader::getFilePathsFromDirectory(SpawnDataPath, spawnDataFilePaths))
+		if (false == FileLoader::getFilePathsFromDirectory(SpawnDataFilePath, spawnDataFilePaths))
 		{
 			TA_ASSERT_DEV(false, "비정상입니다.");
 			return false;
@@ -78,7 +78,7 @@ namespace ta
 		_spawnDataSet.clear();
 	}
 	
-	bool CommonSpawnDataManager::loadSpawnDataFromXml(CommonSpawnDataManager* spawnDataManager, const fs::path filePath) noexcept
+	bool CommonSpawnDataManager::loadSpawnDataFromXml(const fs::path filePath) noexcept
 	{
 		XmlNode rootNode("Root");
 		if (false == FileLoader::loadXml(filePath, &rootNode))
@@ -92,7 +92,7 @@ namespace ta
 		// 파일이름으로 어떤타입인지 알아낸다.
 		const GameWorldType gameWorldType = ConvertStringToEnum<GameWorldType>(fileName);
 		std::pair<std::unordered_map<GameWorldType, std::vector<CommonActorDetailSpawnData*>>::iterator, bool> dataSet = 
-			spawnDataManager->_spawnDataSet.insert(std::pair(gameWorldType, std::vector<CommonActorDetailSpawnData*>()));
+			_spawnDataSet.insert(std::pair(gameWorldType, std::vector<CommonActorDetailSpawnData*>()));
 		
 		if (false == dataSet.second)
 		{

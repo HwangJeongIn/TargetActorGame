@@ -11,9 +11,9 @@
 namespace ta
 {
 #ifdef TA_SERVER
-	const fs::path GameDataXmlPath = fs::absolute(L"./../../TAGameClient/GameData/Xml");
+	const fs::path GameDataXmlFilePath = fs::absolute(L"./../../TAGameClient/GameData/Xml");
 #else
-	fs::path GameDataXmlPath = "";
+	fs::path GameDataXmlFilePath = "";
 #endif
 }
 
@@ -34,7 +34,7 @@ namespace ta
 		std::vector<fs::path> xmlFiles;
 
 //#ifdef TA_SERVER
-		if (false == FileLoader::getFilePathsFromDirectory(GameDataXmlPath, xmlFiles))
+		if (false == FileLoader::getFilePathsFromDirectory(GameDataXmlFilePath, xmlFiles))
 //#else
 //		if (false == FileLoader::getFilePathsFromDirectory(*FPaths::GetProjectFilePath(), xmlFiles))
 //#endif
@@ -144,7 +144,7 @@ namespace ta
 		return nullptr;
 	}
 
-	bool GameDataManager::loadGameDataFromXml(GameDataManager* gameDataManager, const fs::path filePath) noexcept
+	bool GameDataManager::loadGameDataFromXml(const fs::path filePath) noexcept
 	{
 		XmlNode rootNode("Root");
 		if (false == FileLoader::loadXml(filePath, &rootNode))
@@ -216,7 +216,7 @@ namespace ta
 					gameData->setIsValid(true);																\
 																											\
 					std::pair<std::unordered_map<GameDataName##Key, GameDataName *>::iterator, bool> rv		\
-						= gameDataManager->_setOf##GameDataName.insert(std::make_pair(key, gameData));		\
+						= _setOf##GameDataName.insert(std::make_pair(key, gameData));					    \
 																											\
 					if (false == rv.second)																	\
 					{																						\

@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 #include "Common/CommonBase.h"
 #include "Common/Uncopyable.h"
@@ -13,7 +13,7 @@ namespace fs = std::filesystem;
 #ifndef TA_SERVER
 namespace ta
 {
-	extern fs::path GameDataXmlPath;
+	extern fs::path GameDataXmlFilePath;
 }
 #endif
 
@@ -37,7 +37,7 @@ namespace ta
 
 		const GameData* getGameData(const int32 key, const GameDataType& gameDataType) const noexcept;
 
-		static bool loadGameDataFromXml(GameDataManager* gameDataManager, const fs::path filePath) noexcept;
+		bool loadGameDataFromXml(const fs::path filePath) noexcept;
 		//bool makeDataSetWithXmlNode(const std::string)
 
 	private:

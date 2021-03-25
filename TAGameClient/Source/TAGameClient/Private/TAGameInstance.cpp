@@ -270,7 +270,7 @@ bool TAExportRecastNavMesh(void) noexcept
 		return false;
 	}
 
-	fs::path finalPath = ta::NavigationMeshPath / "RecastNavigationMesh.rnm";
+	fs::path finalPath = ta::NavigationMeshFilePath / "RecastNavigationMesh.rnm";
 	if (false == slW.exportBinaryToFile(finalPath))
 	{
 		TA_ASSERT_DEV(false, "비정상입니다.");
@@ -349,7 +349,7 @@ bool TAExportLevelPathPoint(ULevel* level) noexcept
 			tempRoot.addChildElement(child);
 		}
 
-		if (false == ta::FileLoader::saveXml((ta::PathPointPath / currentFolderName) += ".xml", &tempRoot))
+		if (false == ta::FileLoader::saveXml((ta::PathPointFilePath / currentFolderName) += ".xml", &tempRoot))
 		{
 			TA_ASSERT_DEV(false, "save xml failed : %s", currentFolderName.c_str());
 			return false;
@@ -385,21 +385,21 @@ UTAGameInstance::UTAGameInstance()
 		// 스트링 에러남
 		//const TCHAR* projectFilePath = *FPaths::GetProjectFilePath();
 
-		ta::GameDataXmlPath = *FPaths::GetProjectFilePath();
-		ta::GameDataXmlPath /= "../GameData/Xml";
-		TA_LOG_DEV("%s", ta::GameDataXmlPath.c_str());
+		ta::GameDataXmlFilePath = *FPaths::GetProjectFilePath();
+		ta::GameDataXmlFilePath /= "../GameData/Xml";
+		TA_LOG_DEV("%s", ta::GameDataXmlFilePath.c_str());
 
-		ta::SpawnDataPath = *FPaths::GetProjectFilePath();
-		ta::SpawnDataPath /= "../../TAGameServer/SpawnData";
-		TA_LOG_DEV("%s", ta::SpawnDataPath.c_str());
+		ta::SpawnDataFilePath = *FPaths::GetProjectFilePath();
+		ta::SpawnDataFilePath /= "../../TAGameServer/SpawnData";
+		TA_LOG_DEV("%s", ta::SpawnDataFilePath.c_str());
 
-		ta::NavigationMeshPath = *FPaths::GetProjectFilePath();
-		ta::NavigationMeshPath /= "../../TAGameServer/NavigationMesh";
-		TA_LOG_DEV("%s", ta::NavigationMeshPath.c_str());
+		ta::NavigationMeshFilePath = *FPaths::GetProjectFilePath();
+		ta::NavigationMeshFilePath /= "../../TAGameServer/NavigationMesh";
+		TA_LOG_DEV("%s", ta::NavigationMeshFilePath.c_str());
 
-		ta::PathPointPath = *FPaths::GetProjectFilePath();
-		ta::PathPointPath /= "../../TAGameServer/PathPoint";
-		TA_LOG_DEV("%s", ta::PathPointPath.c_str());
+		ta::PathPointFilePath = *FPaths::GetProjectFilePath();
+		ta::PathPointFilePath /= "../../TAGameServer/PathPoint";
+		TA_LOG_DEV("%s", ta::PathPointFilePath.c_str());
 	}
 }
 

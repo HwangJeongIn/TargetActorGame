@@ -37,7 +37,7 @@ private:
 	void setNext(ATAPathPoint* input) noexcept;
 	void setPrev(ATAPathPoint* input) noexcept;
 
-public:
+private:
 	UPROPERTY(EditAnyWhere, Category = ATAPathPoint)
 	bool _refreshCurrentPath;
 

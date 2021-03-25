@@ -246,6 +246,8 @@
     <ClCompile Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\NavigationSystem\RecastNavigation\Recast\RecastMeshDetail.cpp" />
     <ClCompile Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\NavigationSystem\RecastNavigation\Recast\RecastRasterization.cpp" />
     <ClCompile Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\NavigationSystem\RecastNavigation\Recast\RecastRegion.cpp" />
+    <ClCompile Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\PathPoint.cpp" />
+    <ClCompile Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\PathPointPath.cpp" />
     <ClCompile Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\ScopedLock.cpp" />
     <ClCompile Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\Sector.cpp" />
     <ClCompile Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\Serializer.cpp" />
@@ -352,6 +354,8 @@
     <ClInclude Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\NavigationSystem\RecastNavigation\Recast\Recast.h" />
     <ClInclude Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\NavigationSystem\RecastNavigation\Recast\RecastAlloc.h" />
     <ClInclude Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\NavigationSystem\RecastNavigation\Recast\RecastAssert.h" />
+    <ClInclude Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\PathPoint.h" />
+    <ClInclude Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\PathPointPath.h" />
     <ClInclude Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\ScopedLock.h" />
     <ClInclude Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\Sector.h" />
     <ClInclude Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\Serializer.h" />

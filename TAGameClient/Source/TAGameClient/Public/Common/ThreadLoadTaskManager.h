@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include "Common/CommonBase.h"
 #include "Common/Lockable.h"
 #include "Common/Uncopyable.h"
@@ -15,6 +15,7 @@ namespace ta
 	class ThreadLoadTask;
 	class GameDataManager;
 	class CommonSpawnDataManager;
+	class CommonMoveActorSystem;
 }
 
 
@@ -90,6 +91,23 @@ namespace ta
 
 	public:
 		CommonSpawnDataManager* _spawnDataManager;
+		fs::path _filePath;
+	};
+}
+
+
+namespace ta
+{
+	class ThreadLoadTaskPathPoint : public ThreadLoadTask
+	{
+	public:
+		ThreadLoadTaskPathPoint(void) noexcept;
+		virtual ~ThreadLoadTaskPathPoint(void) noexcept;
+
+		virtual void processLoadTaskInNewThread(std::vector<std::thread>& output) noexcept override final;
+
+	public:
+		CommonMoveActorSystem* _moveActorSystem;
 		fs::path _filePath;
 	};
 }

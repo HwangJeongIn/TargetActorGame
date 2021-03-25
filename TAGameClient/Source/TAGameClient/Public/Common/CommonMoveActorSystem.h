@@ -17,11 +17,11 @@ namespace ta
 {
 #if defined(TA_SERVER) && !defined(TA_CLIENT_IN_SERVER)
 	class dtNavMesh;
-	extern const fs::path NavigationMeshPath;
-	extern const fs::path PathPointPath;
+	extern const fs::path NavigationMeshFilePath;
+	extern const fs::path PathPointFilePath;
 #elif !defined(TA_SERVER)
-	extern fs::path NavigationMeshPath;
-	extern fs::path PathPointPath;
+	extern fs::path NavigationMeshFilePath;
+	extern fs::path PathPointFilePath;
 #endif
 
 	class CommonActor;
@@ -44,6 +44,8 @@ namespace ta
 		static void serializeRecastMeshTile(Serializer& Ar, int32 NavMeshVersion, unsigned char*& TileData, int32& TileDataSize) noexcept;
 		static void serializeCompressedTileCacheData(Serializer& Ar, int32 NavMeshVersion, unsigned char*& CompressedData, int32& CompressedDataSize) noexcept;
 #endif
+
+		virtual bool loadPathPointPathSetFromXml(const fs::path filePath) noexcept;
 
 		// process붙은 함수류는 서버에서 돌리는 Ai와 유저가 돌리는 Ai를 둘다 돌리기 위해서 만들었다.
 		virtual bool processMoveActor(CommonActor* target

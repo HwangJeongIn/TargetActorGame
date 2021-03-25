@@ -21,11 +21,11 @@
 namespace ta
 {
 #ifdef TA_SERVER
-	const fs::path NavigationMeshPath = fs::absolute(L"./../NavigationMesh");
-	const fs::path PathPointPath = fs::absolute(L"./../PathPoint");
+	const fs::path NavigationMeshFilePath = fs::absolute(L"./../NavigationMesh");
+	const fs::path PathPointFilePath = fs::absolute(L"./../PathPoint");
 #else
-	fs::path NavigationMeshPath = "";
-	fs::path PathPointPath = "";
+	fs::path NavigationMeshFilePath = "";
+	fs::path PathPointFilePath = "";
 #endif
 }
 
@@ -473,6 +473,11 @@ namespace ta
 		//}
 	}
 #endif
+
+	bool CommonMoveActorSystem::loadPathPointPathSetFromXml(const fs::path filePath) noexcept
+	{
+		return true;
+	}
 
 	bool CommonMoveActorSystem::processMoveActor(CommonActor* target, const Vector& newPos, const bool isForced) const noexcept
 	{

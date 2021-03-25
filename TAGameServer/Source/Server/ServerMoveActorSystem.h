@@ -2,6 +2,7 @@
 
 #include "Common/CommonMoveActorSystem.h"
 #include "Common/Vector.h"
+#include "Common/KeyDefinition.h"
 #include "RecastNavigation/Detour/DetourNavMesh.h"
 #include "RecastNavigation/Detour/DetourNavMeshQuery.h"
 #include <vector>
@@ -16,6 +17,7 @@ namespace ta
 	class ServerMoveActorComponent;
 	class NavMeshPath;
 	class NavMeshPoint;
+	class PathPointPath;
 }
 
 
@@ -65,18 +67,18 @@ namespace ta
 		bool deactivateAiIfNotDisabled(const ActorKey& targetActorKey) const noexcept;
 
 
-	public:
 		// Navigation =========================================================================================================================================
+	public:
 		bool findPath(const ActorKey& targetActorKey, const Vector& startPos, const Vector& endPos, NavMeshPath& path) noexcept;
 		bool projectPointToNavMesh(const Vector& point, Vector& result) const noexcept;
 		
-
 	private:
+		bool loadNavigationMeshFromBinary(void) noexcept;
+
 		bool preparePathFinding(const Vector& startPos, const Vector& endPos,
 								const dtNavMeshQuery& query, const dtQueryFilter& queryFilter,
 								Vector& recastStartPos, dtPolyRef& startPoly,
 								Vector& recastEndPos, dtPolyRef& endPoly) const noexcept;
-
 
 		bool generatePath(dtStatus findPathStatus, NavMeshPath& path,
 						  const dtNavMeshQuery& query, const dtQueryFilter* queryFilter,
@@ -88,10 +90,7 @@ namespace ta
 		bool findStraightPathFromCorridor(const Vector& startPos, const Vector& endPos, 
 										  const std::vector<dtPolyRef>& pathCorridor, std::vector<NavMeshPoint*>& pathPoints, std::vector<uint32>* customLinks) const noexcept;
 
-
 		float calcSegmentCostOnPoly(const dtPolyRef& PolyID, const dtQueryFilter* queryFilter, const Vector& startPos, const Vector& endPos) const noexcept;
-
-		// Navigation =========================================================================================================================================
 
 	private:
 		
@@ -103,6 +102,17 @@ namespace ta
 		const Vector _defaultExtent;
 		const int32 _defaultMaxNodes;
 		const float _defaultCostLimit;
-		// Navigation =========================================================================================================================================
+		// ====================================================================================================================================================
+
+		// PathPoint ==========================================================================================================================================
+	public:
+		virtual bool loadPathPointPathSetFromXml(const fs::path filePath) noexcept override final;
+
+	private:
+
+	private:
+		std::unordered_map<PathPointPathKey, PathPointPath*> _pathPointPathSet;
+
+		// ====================================================================================================================================================
 	};
 }

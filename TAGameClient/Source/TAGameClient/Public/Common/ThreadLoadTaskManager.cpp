@@ -1,7 +1,9 @@
-#include "Common/ThreadLoadTaskManager.h"
+﻿#include "Common/ThreadLoadTaskManager.h"
 #include "Common/ScopedLock.h"
 #include "Common/GameDataManager.h"
 #include "Common/CommonSpawnDataManager.h"
+#include "Common/CommonMoveActorSystem.h"
+
 
 namespace ta
 {
@@ -122,7 +124,7 @@ namespace ta
 	
 	void ThreadLoadTaskGameData::processLoadTaskInNewThread(std::vector<std::thread>& output) noexcept
 	{
-		output.emplace_back(GameDataManager::loadGameDataFromXml, _gameDataManager, _filePath);
+		output.emplace_back(&GameDataManager::loadGameDataFromXml, _gameDataManager, _filePath);
 	}
 }
 
@@ -139,6 +141,24 @@ namespace ta
 
 	void ThreadLoadTaskSpawnData::processLoadTaskInNewThread(std::vector<std::thread>& output) noexcept
 	{
-		output.emplace_back(CommonSpawnDataManager::loadSpawnDataFromXml, _spawnDataManager, _filePath);
+		output.emplace_back(&CommonSpawnDataManager::loadSpawnDataFromXml, _spawnDataManager, _filePath);
 	}
 }
+
+
+namespace ta
+{
+	ThreadLoadTaskPathPoint::ThreadLoadTaskPathPoint(void) noexcept
+	{
+	}
+
+	ThreadLoadTaskPathPoint::~ThreadLoadTaskPathPoint(void) noexcept
+	{
+	}
+
+	void ThreadLoadTaskPathPoint::processLoadTaskInNewThread(std::vector<std::thread>& output) noexcept
+	{
+		output.emplace_back(&CommonMoveActorSystem::loadPathPointPathSetFromXml, _moveActorSystem, _filePath);
+	}
+}
+
