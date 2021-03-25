@@ -124,7 +124,7 @@ namespace ta
 					TA_ASSERT_DEV(false, "GroupGameDataKey값이 로드되지 않았습니다. type : %d", static_cast<uint8>(gameWorldType));
 					return false;
 				}
-				groupGameDataKey = Atoi(*dataString);
+				groupGameDataKey = FromStringCast<int32>(*dataString);
 			}
 
 			{

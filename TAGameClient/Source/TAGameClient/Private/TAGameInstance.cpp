@@ -271,7 +271,7 @@ bool TAExportRecastNavMesh(void) noexcept
 	}
 
 	fs::path finalPath = ta::NavigationMeshPath / "RecastNavigationMesh.rnm";
-	if (false == slW.exportToFile(finalPath))
+	if (false == slW.exportBinaryToFile(finalPath))
 	{
 		TA_ASSERT_DEV(false, "비정상입니다.");
 		return false;
@@ -325,26 +325,26 @@ bool TAExportLevelPathPoint(ULevel* level) noexcept
 		TArray<ATAPathPoint*>& currentPathPointGroup = currentPathPointFolder.Value;
 
 		const int32 count = currentPathPointGroup.Num();
-		ta::XmlNode tempRoot;
-		tempRoot.setName("Root");
+		ta::XmlNode tempRoot("Root");
 
 		ta::XmlNode* child = nullptr;
 		ta::XmlNode* childPositionNode = nullptr;
 		ta::tstring positionValue;
 		for (int32 index = 0; index < count; ++index)
 		{
-			child = new ta::XmlNode;
-			child->setName(currentFolderName);
+			child = new ta::XmlNode(currentFolderName.c_str());
 
-			childPositionNode = new ta::XmlNode;
+			childPositionNode = new ta::XmlNode("Position");
+			child->addChildElement(childPositionNode);
+
 			FVector pathPointLocation = currentPathPointGroup[index]->GetActorLocation();
 			
-			ta::ToString(*FString::Printf(TEXT("%.1f", pathPointLocation.X)))
-
-
-			FormatString(positionValue, "(%.1f,%.1f,%.1f)", pathPointLocation.X, pathPointLocation.Y, pathPointLocation.Z);
-
-			child->addAttribute("Position", ta::ToString(positionValue));
+			childPositionNode->addAttribute("X", ta::ToStringCast<float>(pathPointLocation.X));
+			childPositionNode->addAttribute("Y", ta::ToStringCast<float>(pathPointLocation.Y));
+			childPositionNode->addAttribute("Z", ta::ToStringCast<float>(pathPointLocation.Z));
+			
+			//FormatString(positionValue, "(%.1f,%.1f,%.1f)", pathPointLocation.X, pathPointLocation.Y, pathPointLocation.Z);
+			//child->addAttribute("Position", ta::ToString(positionValue));
 
 			tempRoot.addChildElement(child);
 		}
@@ -355,6 +355,8 @@ bool TAExportLevelPathPoint(ULevel* level) noexcept
 			return false;
 		}
 	}
+
+	return true;
 }
 
 bool TAExportSpawnData(void) noexcept

@@ -42,6 +42,9 @@ namespace ta
 		static bool saveFileString(const fs::path& filePath, const MemoryBuffer& buffer) noexcept;
 		static bool saveFileString(const fs::path& filePath, const std::string& buffer) noexcept;
 
+		static bool loadBinaryFile(const fs::path& filePath, MemoryBuffer& buffer) noexcept;
+		static bool saveBinaryFile(const fs::path& filePath, const MemoryBuffer& buffer) noexcept;
+
 	private:
 
 		// XML =========================================================================================

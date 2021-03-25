@@ -54,7 +54,7 @@ namespace ta
 			{
 				continue;
 			}
-			if (false == slR.importFromFile(navigationMeshFiles[index]))
+			if (false == slR.importBinaryFromFile(navigationMeshFiles[index]))
 			{
 				TA_ASSERT_DEV(false, "비정상");
 				return false;

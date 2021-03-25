@@ -1,4 +1,4 @@
-#include "Common/GameData.h"
+﻿#include "Common/GameData.h"
 #include "Common/StringUtility.h"
 #include "Common/FileLoader.h"
 #include "Common/EnumUtility.h"
@@ -66,14 +66,14 @@ namespace ta
 				return false;
 			}
 
-			_moveGameDataKey = Atoi(*value);
+			_moveGameDataKey = FromStringCast<int32>(*value);
 		}
 
 		{
 			const std::string* value = xmlNode->getAttribute("AiGameDataKey");
 			if (nullptr != value) // 플레이어인 경우 없을 수 있다.
 			{
-				_aiGameDataKey = Atoi(*value);
+				_aiGameDataKey = FromStringCast<int32>(*value);
 			}
 		}
 
@@ -85,7 +85,7 @@ namespace ta
 				return false;
 			}
 
-			_characterGameDataKey = Atoi(*value);
+			_characterGameDataKey = FromStringCast<int32>(*value);
 		}
 
 		return true;
@@ -123,7 +123,7 @@ namespace ta
 				return false;
 			}
 
-			_speed = Atof(*value);
+			_speed = FromStringCast<float>(*value);
 		}
 
 		return true;
@@ -162,7 +162,7 @@ namespace ta
 				return false;
 			}
 
-			_attackRange = Atof(*value);
+			_attackRange = FromStringCast<float>(*value);
 		}
 
 		{
@@ -225,7 +225,7 @@ namespace ta
 				return false;
 			}
 
-			_strength = Atof(*value);
+			_strength = FromStringCast<float>(*value);
 		}
 
 		{
@@ -236,7 +236,7 @@ namespace ta
 				return false;
 			}
 
-			_agility = Atof(*value);
+			_agility = FromStringCast<float>(*value);
 		}
 
 		{
@@ -247,7 +247,7 @@ namespace ta
 				return false;
 			}
 
-			_maxHp = Atof(*value);
+			_maxHp = FromStringCast<float>(*value);
 		}
 
 		return true;

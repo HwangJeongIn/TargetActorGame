@@ -1,7 +1,6 @@
 ﻿#include "Common/StringUtility.h"
 #include "Common/Vector.h"
 #include <cstdlib>
-#include <sstream>
 #include <unordered_map>
 #include <locale>
 #include <codecvt>
@@ -279,9 +278,9 @@ namespace ta
 			return false;
 		}
 
-		output._x = Atof(splitedStrings[1]);
-		output._y = Atof(splitedStrings[3]);
-		output._z = Atof(splitedStrings[5]);
+		output._x = FromStringCast<float>(splitedStrings[1]);
+		output._y = FromStringCast<float>(splitedStrings[3]);
+		output._z = FromStringCast<float>(splitedStrings[5]);
 
 		return true;
 	}
@@ -297,75 +296,90 @@ namespace ta
 			return false;
 		}
 
-		output._x = Atof(splitedStrings[0]);
-		output._y = Atof(splitedStrings[2]);
-		output._z = Atof(splitedStrings[4]);
+		output._x = FromStringCast<float>(splitedStrings[0]);
+		output._y = FromStringCast<float>(splitedStrings[2]);
+		output._z = FromStringCast<float>(splitedStrings[4]);
 
 		return true;
 	}
-	
-	int8 Atoi8(const std::string& input) noexcept
-	{
-		int8 rv = 0;
-		std::istringstream(input.c_str()) >> rv;
-		return rv;
-	}
 
-	int32 Atoi(const std::string& input) noexcept
+	template<> bool FromStringCast(const std::string& input) noexcept
 	{
-		int32 rv = 0;
-		std::istringstream(input.c_str()) >> rv;
-		return rv;
-	}
-
-	int64 Atoi64(const std::string& input) noexcept
-	{
-		int64 rv = 0;
-		std::istringstream(input.c_str()) >> rv;
-		return rv;
-	}
-
-	uint8 Atoui8(const std::string& input) noexcept
-	{
-		uint8 rv = 0;
-		std::istringstream(input.c_str()) >> rv;
-		return rv;
-	}
-
-	uint32 Atoui(const std::string& input) noexcept
-	{
-		uint32 rv = 0;
-		std::istringstream(input.c_str()) >> rv;
-		return rv;
-	}
-
-	uint64 Atoui64(const std::string& input) noexcept
-	{
-		uint64 rv = 0;
-		std::istringstream(input.c_str()) >> rv;
+		bool rv = false;
+		if (1 < input.size())
+		{
+			std::istringstream(input.c_str()) >> std::boolalpha >> rv;
+		}
+		else
+		{
+			std::istringstream(input.c_str()) >> rv;
+		}
+		
 		return rv;
 	}
 	
-	float Atof(const std::string& input) noexcept
-	{
-		float rv = 0;
-		std::istringstream(input.c_str()) >> rv;
-		return rv;
-	}
+	//int8 Atoi8(const std::string& input) noexcept
+	//{
+	//	int8 rv = 0;
+	//	std::istringstream(input.c_str()) >> rv;
+	//	return rv;
+	//}
 
-	bool Atob(const std::string& input) noexcept
-	{
-		bool rv = false;
-		std::istringstream(input.c_str()) >> rv;
-		return rv;
-	}
+	//int32 Atoi(const std::string& input) noexcept
+	//{
+	//	int32 rv = 0;
+	//	std::istringstream(input.c_str()) >> rv;
+	//	return rv;
+	//}
 
-	bool Atobs(const std::string& input) noexcept
-	{
-		bool rv = false;
-		std::istringstream(input.c_str()) >> std::boolalpha >> rv;
-		return rv;
-	}
+	//int64 Atoi64(const std::string& input) noexcept
+	//{
+	//	int64 rv = 0;
+	//	std::istringstream(input.c_str()) >> rv;
+	//	return rv;
+	//}
+
+	//uint8 Atoui8(const std::string& input) noexcept
+	//{
+	//	uint8 rv = 0;
+	//	std::istringstream(input.c_str()) >> rv;
+	//	return rv;
+	//}
+
+	//uint32 Atoui(const std::string& input) noexcept
+	//{
+	//	uint32 rv = 0;
+	//	std::istringstream(input.c_str()) >> rv;
+	//	return rv;
+	//}
+
+	//uint64 Atoui64(const std::string& input) noexcept
+	//{
+	//	uint64 rv = 0;
+	//	std::istringstream(input.c_str()) >> rv;
+	//	return rv;
+	//}
+	//
+	//float Atof(const std::string& input) noexcept
+	//{
+	//	float rv = 0;
+	//	std::istringstream(input.c_str()) >> rv;
+	//	return rv;
+	//}
+
+	//bool Atob(const std::string& input) noexcept
+	//{
+	//	bool rv = false;
+	//	std::istringstream(input.c_str()) >> rv;
+	//	return rv;
+	//}
+
+	//bool Atobs(const std::string& input) noexcept
+	//{
+	//	bool rv = false;
+	//	std::istringstream(input.c_str()) >> std::boolalpha >> rv;
+	//	return rv;
+	//}
 
 	//std::string FormatString(const char* format, ...) noexcept
 	//{

@@ -44,9 +44,6 @@
     <ClCompile Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\CommonMoveActorSystem.cpp">
       <Filter>Common</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\CommonNetwork.cpp">
-      <Filter>Common</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\ComponentData.cpp">
       <Filter>Common</Filter>
     </ClCompile>
@@ -69,12 +66,6 @@
       <Filter>Common</Filter>
     </ClCompile>
     <ClCompile Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\MessagePack.cpp">
-      <Filter>Common</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\NetworkMessageManager.cpp">
-      <Filter>Common</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\NetworkMessageQueue.cpp">
       <Filter>Common</Filter>
     </ClCompile>
     <ClCompile Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\ScopedLock.cpp">
@@ -186,9 +177,6 @@
       <Filter>Client</Filter>
     </ClCompile>
     <ClCompile Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\ThreadLoadTaskManager.cpp">
-      <Filter>Common</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\MemoryStream.cpp">
       <Filter>Common</Filter>
     </ClCompile>
     <ClCompile Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\CommonInventoryActorComponent.cpp">
@@ -411,9 +399,6 @@
     <ClInclude Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\CommonMoveActorSystem.h">
       <Filter>Common</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\CommonNetwork.h">
-      <Filter>Common</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\ComponentData.h">
       <Filter>Common</Filter>
     </ClInclude>
@@ -442,12 +427,6 @@
       <Filter>Common</Filter>
     </ClInclude>
     <ClInclude Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\MessageTypeSwtichCaseSet.h">
-      <Filter>Common</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\NetworkMessageManager.h">
-      <Filter>Common</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\NetworkMessageQueue.h">
       <Filter>Common</Filter>
     </ClInclude>
     <ClInclude Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\ScopedLock.h">
@@ -562,9 +541,6 @@
       <Filter>Client</Filter>
     </ClInclude>
     <ClInclude Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\ThreadLoadTaskManager.h">
-      <Filter>Common</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\MemoryStream.h">
       <Filter>Common</Filter>
     </ClInclude>
     <ClInclude Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\CommonInventoryActorComponent.h">

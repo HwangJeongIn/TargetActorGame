@@ -262,6 +262,43 @@ namespace ta
 		return true;
 	}
 
+
+	bool FileLoader::loadBinaryFile(const fs::path& filePath, MemoryBuffer& buffer) noexcept
+	{
+		std::ifstream in(filePath, std::ifstream::binary);
+		if (false == in.is_open())
+		{
+			TA_ASSERT_DEV(false, "비정상입니다. %s", filePath.c_str());
+			return false;
+		}
+
+		in.seekg(0, std::ios::end); // end에서 0떨어진곳으로 이동
+		int64 stringSize = static_cast<int64>(in.tellg());
+		in.seekg(0, std::ios::beg); // begin에서 0떨어진곳으로 이동
+
+		buffer.prepareCopyBuffer(stringSize);
+		in.read(buffer.getData(), stringSize);
+
+		in.close();
+		return true;
+	}
+
+	bool FileLoader::saveBinaryFile(const fs::path& filePath, const MemoryBuffer& buffer) noexcept
+	{
+		std::ofstream out(filePath, std::ios::out | std::ios::binary);
+		if (false == out.is_open())
+		{
+			TA_ASSERT_DEV(false, "비정상입니다. %s", filePath.c_str());
+			return false;
+		}
+
+		out.write(buffer.getData(), buffer.getDataSize());
+		//out.flush();
+		out.close();
+
+		return true;
+	}
+
 	bool FileLoader::makeElementString(std::vector<const XmlNode*>& elementStack, std::string& output) noexcept
 	{
 		const uint32 elementStackSize = elementStack.size();

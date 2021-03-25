@@ -50,7 +50,6 @@
     <ClCompile Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\CommonInventoryActorSystem.cpp" />
     <ClCompile Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\CommonMoveActorComponent.cpp" />
     <ClCompile Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\CommonMoveActorSystem.cpp" />
-    <ClCompile Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\CommonNetwork.cpp" />
     <ClCompile Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\CommonSpawnDataManager.cpp" />
     <ClCompile Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\ComponentData.cpp" />
     <ClCompile Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\EndPoint.cpp" />
@@ -65,7 +64,6 @@
     <ClCompile Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\ItemSet.cpp" />
     <ClCompile Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\KeyDefinition.cpp" />
     <ClCompile Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\Lockable.cpp" />
-    <ClCompile Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\MemoryStream.cpp" />
     <ClCompile Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\MessagePack.cpp" />
     <ClCompile Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\NavigationSystem\RecastNavigation\DebugUtils\DebugDraw.cpp" />
     <ClCompile Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\NavigationSystem\RecastNavigation\DebugUtils\DetourDebugDraw.cpp" />
@@ -103,8 +101,6 @@
     <ClCompile Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\NavigationSystem\RecastNavigation\Recast\RecastMeshDetail.cpp" />
     <ClCompile Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\NavigationSystem\RecastNavigation\Recast\RecastRasterization.cpp" />
     <ClCompile Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\NavigationSystem\RecastNavigation\Recast\RecastRegion.cpp" />
-    <ClCompile Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\NetworkMessageManager.cpp" />
-    <ClCompile Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\NetworkMessageQueue.cpp" />
     <ClCompile Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\NonBlockingQueue.cpp" />
     <ClCompile Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\ScopedLock.cpp" />
     <ClCompile Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\Sector.cpp" />
@@ -166,7 +162,6 @@
     <ClInclude Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\CommonLog.h" />
     <ClInclude Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\CommonMoveActorComponent.h" />
     <ClInclude Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\CommonMoveActorSystem.h" />
-    <ClInclude Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\CommonNetwork.h" />
     <ClInclude Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\CommonSpawnDataManager.h" />
     <ClInclude Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\CommonTypeDefinition.h" />
     <ClInclude Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\ComponentData.h" />
@@ -183,7 +178,6 @@
     <ClInclude Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\ItemSet.h" />
     <ClInclude Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\KeyDefinition.h" />
     <ClInclude Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\Lockable.h" />
-    <ClInclude Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\MemoryStream.h" />
     <ClInclude Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\MessagePack.h" />
     <ClInclude Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\MessageTypeDefinition.h" />
     <ClInclude Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\MessageTypeSwtichCaseSet.h" />
@@ -215,8 +209,6 @@
     <ClInclude Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\NavigationSystem\RecastNavigation\Recast\Recast.h" />
     <ClInclude Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\NavigationSystem\RecastNavigation\Recast\RecastAlloc.h" />
     <ClInclude Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\NavigationSystem\RecastNavigation\Recast\RecastAssert.h" />
-    <ClInclude Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\NetworkMessageManager.h" />
-    <ClInclude Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\NetworkMessageQueue.h" />
     <ClInclude Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\NonBlockingQueue.h" />
     <ClInclude Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\ScopedLock.h" />
     <ClInclude Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\Sector.h" />
@@ -244,7 +236,6 @@
     <ClInclude Include="..\Source\Server\ServerInventoryActorSystem.h" />
     <ClInclude Include="..\Source\Server\ServerMoveActorComponent.h" />
     <ClInclude Include="..\Source\Server\ServerMoveActorSystem.h" />
-    <ClInclude Include="..\Source\Server\ServerNetwork.h" />
     <ClInclude Include="..\Source\Server\ServerSector.h" />
     <ClInclude Include="..\Source\Server\ServerSpawnDataManager.h" />
   </ItemGroup>

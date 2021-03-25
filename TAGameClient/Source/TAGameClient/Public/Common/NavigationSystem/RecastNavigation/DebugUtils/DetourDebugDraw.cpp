@@ -133,7 +133,7 @@ namespace ta
 		dd->end();
 	}
 
-	static void drawMeshTile(ta::duDebugDraw* dd, const dtNavMesh& mesh, const dtNavMeshQuery* query,
+	static void drawMeshTile(ta::duDebugDraw* dd, const dtNavMesh& mesh, const ta::dtNavMeshQuery* query,
 							 const dtMeshTile* tile, unsigned char flags)
 	{
 		dtPolyRef base = mesh.getPolyRefBase(tile);

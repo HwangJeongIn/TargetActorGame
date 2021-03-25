@@ -81,7 +81,9 @@ void ATAPathPoint::PostEditChangeProperty(FPropertyChangedEvent& PropertyChanged
 				return;
 			}
 
-			if ("PathPointLevel" != currentLevel->GetOuter()->GetName())
+			TArray<FString> splitedString;
+			(currentLevel->GetOuter()->GetName()).ParseIntoArray(splitedString, TEXT("_"));
+			if ("pathpoint" != splitedString.Last())
 			{
 				TA_ASSERT_DEV(false, "current level is not PathPointLevel");
 				return;

@@ -1,7 +1,6 @@
-
+﻿
 #include "Common/Socket.h"
 #include "Common/Endpoint.h"
-#include "Common/NetworkMessageQueue.h"
 #include "Common/Iocp.h"
 #include "Common/CommonApp.h"
 #include "Common/CommonActorManager.h"

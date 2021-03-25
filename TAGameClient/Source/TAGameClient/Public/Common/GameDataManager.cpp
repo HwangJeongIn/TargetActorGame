@@ -201,7 +201,7 @@ namespace ta
 			case GameDataType::GameDataName:																\
 				{																							\
 					TA_LOG_DEV("Switch GameDataType : %d, Thread id : %s", static_cast<uint32>(GameDataType::GameDataName), ss.str().c_str());\
-					const GameDataName##Key key(Atoi(*keyString));											\
+					const GameDataName##Key key(FromStringCast<int32>(*keyString));							\
 					GameDataName* gameData = new GameDataName;												\
 					gameData->clear();																		\
 					gameData->_key = key;																	\

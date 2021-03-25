@@ -1,6 +1,7 @@
 ﻿#include "Common/Serializer.h"
 #include "Common/FileLoader.h"
 #include "Common/EnumUtility.h"
+#include "Common/StringUtility.h"
 #include <string>
 
 
@@ -142,14 +143,14 @@ namespace ta
 			return;
 		}
 
-		std::string log;
+		std::string log = "\n(" + ToStringCast<int64>(_currentPos) + ")";
 		if (true == isWriteMode)
 		{
-			log = "\n /Write => " ;
+			log += "/Write => ";
 		}
 		else
 		{
-			log = "\n /Read => " ;
+			log += "/Read => " ;
 		}
 		
 		std::string dataTypeString;
@@ -160,52 +161,54 @@ namespace ta
 		{
 		case TADataType::Int8:
 			{
-				log += std::to_string(*(const int8*)(input));
+				// 로그 잘보이게하기 위해서
+				log += ToStringCast<int16>(*(const int8*)(input));
 			}
 			break;
 		case TADataType::Int16:
 			{
-				log += std::to_string(*(const int16*)(input));
+				log += ToStringCast<int16>(*(const int16*)(input));
 			}
 			break;
 		case TADataType::Int32:
 			{
-				log += std::to_string(*(const int32*)(input));
+				log += ToStringCast<int32>(*(const int32*)(input));
 			}
 			break;
 		case TADataType::Int64:
 			{
-				log += std::to_string(*(const int64*)(input));
+				log += ToStringCast<int64>(*(const int64*)(input));
 			}
 			break;
 		case TADataType::Uint8:
 			{
-				log += std::to_string(*(const uint8*)(input));
+				// 로그 잘보이게하기 위해서
+				log += ToStringCast<uint16>(*(const uint8*)(input));
 			}
 			break;
 		case TADataType::Uint16:
 			{
-				log += std::to_string(*(const uint16*)(input));
+				log += ToStringCast<uint16>(*(const uint16*)(input));
 			}
 			break;
 		case TADataType::Uint32:
 			{
-				log += std::to_string(*(const uint32*)(input));
+				log += ToStringCast<uint32>(*(const uint32*)(input));
 			}
 			break;
 		case TADataType::Uint64:
 			{
-				log += std::to_string(*(const uint64*)(input));
+				log += ToStringCast<uint64>(*(const uint64*)(input));
 			}
 			break;
 		case TADataType::Bool:
 			{
-				log += std::to_string(*(const bool*)(input));
+				log += ToStringCast<bool>(*(const bool*)(input));
 			}
 			break;
 		case TADataType::Float:
 			{
-				log += std::to_string(*(const float*)(input));
+				log += ToStringCast<float>(*(const float*)(input));
 			}
 			break;
 		case TADataType::String:
@@ -241,7 +244,29 @@ namespace ta
 		return _data;
 	}
 
-	bool MemoryBuffer::exportToFile(const fs::path& filePath) noexcept
+	bool MemoryBuffer::exportBinaryToFile(const fs::path& filePath) noexcept
+	{
+		if (false == FileLoader::saveBinaryFile(filePath, *this))
+		{
+			TA_ASSERT_DEV(false, "saveFileString failed");
+			return false;
+		}
+
+		return true;
+	}
+
+	bool MemoryBuffer::importBinaryFromFile(const fs::path& filePath) noexcept
+	{
+		if (false == FileLoader::loadBinaryFile(filePath, *this))
+		{
+			TA_ASSERT_DEV(false, "importStringFromFile failed");
+			return false;
+		}
+
+		return true;
+	}
+
+	bool MemoryBuffer::exportStringToFile(const fs::path& filePath) noexcept
 	{
 		if (false == FileLoader::saveFileString(filePath, *this))
 		{
@@ -252,11 +277,11 @@ namespace ta
 		return true;
 	}
 
-	bool MemoryBuffer::importFromFile(const fs::path& filePath) noexcept
+	bool MemoryBuffer::importStringFromFile(const fs::path& filePath) noexcept
 	{
 		if (false == FileLoader::loadFileString(filePath, *this))
 		{
-			TA_ASSERT_DEV(false, "importFromFile failed");
+			TA_ASSERT_DEV(false, "importStringFromFile failed");
 			return false;
 		}
 
@@ -269,7 +294,10 @@ namespace ta
 		fs::path logPath = filePath;
 		logPath += ".log";
 
-		if (false == FileLoader::saveFileString(logPath, _logData))
+		std::string sizeString("\nFileSize : ");
+		sizeString += ToStringCast<int64>(_numBytes);
+		
+		if (false == FileLoader::saveFileString(logPath, _logData + sizeString))
 		{
 			TA_ASSERT_DEV(false, "exportLogData failed");
 			return false;
@@ -391,14 +419,24 @@ namespace ta
 		return _modeFlag;
 	}
 
-	bool Serializer::exportToFile(const fs::path& filePath) noexcept
+	bool Serializer::exportBinaryToFile(const fs::path& filePath) noexcept
 	{
-		return _buffer->exportToFile(filePath);
+		return _buffer->exportBinaryToFile(filePath);
 	}
 
-	bool Serializer::importFromFile(const fs::path& filePath) noexcept
+	bool Serializer::importBinaryFromFile(const fs::path& filePath) noexcept
 	{
-		return _buffer->importFromFile(filePath);
+		return _buffer->importBinaryFromFile(filePath);
+	}
+
+	bool Serializer::exportStringToFile(const fs::path& filePath) noexcept
+	{
+		return _buffer->exportStringToFile(filePath);
+	}
+
+	bool Serializer::importStringFromFile(const fs::path& filePath) noexcept
+	{
+		return _buffer->importStringFromFile(filePath);
 	}
 
 #ifdef CAN_CREATE_LOG_FILE

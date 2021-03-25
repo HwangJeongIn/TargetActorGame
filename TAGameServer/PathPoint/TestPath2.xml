@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<Root>
+	<TestPath2>
+		<Position X="-4050" Y="-200" Z="0"/>
+	</TestPath2>
+	<TestPath2>
+		<Position X="-4330" Y="170" Z="0"/>
+	</TestPath2>
+	<TestPath2>
+		<Position X="-4820" Y="340" Z="0"/>
+	</TestPath2>
+	<TestPath2>
+		<Position X="-5400" Y="0" Z="0"/>
+	</TestPath2>
+	<TestPath2>
+		<Position X="-6060" Y="150" Z="0"/>
+	</TestPath2>
+	<TestPath2>
+		<Position X="-6110" Y="680" Z="0"/>
+	</TestPath2>
+</Root>

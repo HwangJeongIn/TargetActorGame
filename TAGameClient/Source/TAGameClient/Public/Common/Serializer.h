@@ -44,8 +44,11 @@ namespace ta
 		char* getData(void) noexcept;
 		const char* getData(void) const noexcept;
 
-		bool exportToFile(const fs::path& filePath) noexcept;
-		bool importFromFile(const fs::path& filePath) noexcept;
+		bool exportBinaryToFile(const fs::path& filePath) noexcept;
+		bool importBinaryFromFile(const fs::path& filePath) noexcept;
+
+		bool exportStringToFile(const fs::path& filePath) noexcept;
+		bool importStringFromFile(const fs::path& filePath) noexcept;
 
 #ifdef CAN_CREATE_LOG_FILE
 		bool exportLogData(const fs::path& filePath) noexcept;
@@ -94,8 +97,11 @@ namespace ta
 		bool hasModeFlag(const SerializerModeFlag input) const noexcept;
 		const SerializerModeFlag getModeFlag(void) const noexcept;
 		
-		bool exportToFile(const fs::path& filePath) noexcept;
-		bool importFromFile(const fs::path& filePath) noexcept;
+		bool exportBinaryToFile(const fs::path& filePath) noexcept;
+		bool importBinaryFromFile(const fs::path& filePath) noexcept;
+
+		bool exportStringToFile(const fs::path& filePath) noexcept;
+		bool importStringFromFile(const fs::path& filePath) noexcept;
 
 #ifdef CAN_CREATE_LOG_FILE
 		bool exportLogData(const fs::path& filePath) noexcept;
