@@ -1,4 +1,4 @@
-#include "Common/CommonAiActorComponent.h"
+﻿#include "Common/CommonAiActorComponent.h"
 #include "Common/GetComponentAndSystem.h"
 #include "Common/CommonAiActorSystem.h"
 
@@ -28,6 +28,12 @@ namespace ta
 	const ActorComponentType CommonAiActorComponent::getActorComponentType(void) noexcept
 	{
 		return ActorComponentType::Ai;
+	}
+
+	bool CommonAiActorComponent::hasPathPointPath_(void) const noexcept
+	{
+		TA_ASSERT_DEV(false, "비정상")
+		return false;
 	}
 
 	CommonAiActorComponent::CommonAiActorComponent(void) noexcept

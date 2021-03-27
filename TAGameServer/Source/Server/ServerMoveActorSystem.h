@@ -3,6 +3,7 @@
 #include "Common/CommonMoveActorSystem.h"
 #include "Common/Vector.h"
 #include "Common/KeyDefinition.h"
+#include "Common/Lockable.h"
 #include "RecastNavigation/Detour/DetourNavMesh.h"
 #include "RecastNavigation/Detour/DetourNavMeshQuery.h"
 #include <vector>
@@ -69,8 +70,8 @@ namespace ta
 
 		// Navigation =========================================================================================================================================
 	public:
-		bool findPath(const ActorKey& targetActorKey, const Vector& startPos, const Vector& endPos, NavMeshPath& path) noexcept;
-		bool projectPointToNavMesh(const Vector& point, Vector& result) const noexcept;
+		virtual bool findPath(const ActorKey& targetActorKey, const Vector& startPos, const Vector& endPos, NavMeshPath& path) noexcept override final;
+		virtual bool projectPointToNavMesh(const Vector& point, Vector& result) const noexcept override final;
 		
 	private:
 		bool loadNavigationMeshFromBinary(void) noexcept;
@@ -108,9 +109,12 @@ namespace ta
 	public:
 		virtual bool loadPathPointPathSetFromXml(const fs::path filePath) noexcept override final;
 
+		const PathPointPath* getPathPointPath(const PathPointPathKey& pathPointPathKey) const noexcept;
 	private:
 
 	private:
+		// 로드시에만 사용하는 락 // 로드후에는 변경안되기 떄문에 락안건다.
+		LockableObject _pathPointPathSetLoadLock;
 		std::unordered_map<PathPointPathKey, PathPointPath*> _pathPointPathSet;
 
 		// ====================================================================================================================================================

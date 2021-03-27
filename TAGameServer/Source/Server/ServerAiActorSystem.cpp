@@ -1,11 +1,13 @@
-#include "Server/ServerAiActorSystem.h"
+﻿#include "Server/ServerAiActorSystem.h"
 #include "Server/ServerAiActorComponent.h"
 #include "Server/AllPacketServer.h"
-#include "Common/CommonMoveActorSystem.h"
+#include "Server/ServerMoveActorSystem.h"
+#include "Common/CommonMoveActorComponent.h"
 #include "Common/GetComponentAndSystem.h"
 #include "Common/ScopedLock.h"
 #include "Common/CommonApp.h"
 #include "Common/ActorEvent.h"
+#include "Common/AiPathPointPath.h"
 
 
 namespace ta
@@ -61,7 +63,7 @@ namespace ta
 		aiEvent->_aiCommandType = AiCommandType::TickAi;
 		aiEvent->_myActorKey = targetActorKey;
 
-		if (false == RegisterActorEvent(aiEvent, AiTickInterval))
+		if (false == RegisterActorEvent(aiEvent, AiTickIntervalMilliSec))
 		{
 			TA_ASSERT_DEV(false, "이벤트 등록에 실패했습니다.");
 			return false;
@@ -78,6 +80,47 @@ namespace ta
 	bool ServerAiActorSystem::processDetectTargetMonster(CommonAiActorComponent* myAi, CommonMoveActorComponent* myMove) const noexcept
 	{
 		return detectTarget(myAi, myMove, ActorType::Monster);
+	}
+
+	bool ServerAiActorSystem::processMoveToPathPoint(CommonAiActorComponent* myAi, CommonMoveActorComponent* myMove, const float deltaTime) const noexcept
+	{
+		ServerAiActorComponent* serverAi = static_cast<ServerAiActorComponent*>(myAi);
+
+		Vector nextDirectionWithScalar;
+		Vector currentPos;
+		{
+			ScopedLock aiLock(serverAi);
+			AiPathPointPath* aiPathPointPath = serverAi->getAiPathPointPath_();
+			if (nullptr == aiPathPointPath)
+			{
+				return true; // 없을 수 있다.
+			}
+
+			float speed = 0.0f;
+			{
+				ScopedLock moveLock(myMove, true);
+				currentPos = myMove->getCurrentPosition_();
+				speed = myMove->getSpeed_();
+			}
+			
+			if (false == aiPathPointPath->findNextPoint(currentPos, speed, deltaTime, nextDirectionWithScalar))
+			{
+				TA_ASSERT_DEV(false, "경로를 찾지 못했습니다.");
+				return false;
+			}
+		}
+
+		ServerMoveActorSystem* moveSystem = GetActorSystem<ServerMoveActorSystem>();
+		Vector finalPos = currentPos + nextDirectionWithScalar;
+		if (false == moveSystem->moveActorAndNotify(serverAi->getOwner(), currentPos + nextDirectionWithScalar))
+		{
+			TA_ASSERT_DEV(false, "이동하지 못했습니다.");
+			return false;
+		}
+
+		TA_LOG_DEV("Actor<%d> => MoveToPathPoint (%.1f,%.1f,%.1f)", serverAi->getOwnerActorKey().getKeyValue(), finalPos._x, finalPos._y, finalPos._z);
+
+		return true;
 	}
 	
 	bool ServerAiActorSystem::detectTarget(CommonAiActorComponent* myAi, CommonMoveActorComponent* myMove, const ActorType& actorType) const noexcept
@@ -126,7 +169,7 @@ namespace ta
 
 		TA_LOG_DEV("Activate Ai , OwnerActorKey : %d", aiEvent->_myActorKey.getKeyValue());
 
-		if (false == RegisterActorEvent(aiEvent, AiTickInterval))
+		if (false == RegisterActorEvent(aiEvent, AiTickIntervalMilliSec))
 		{
 			TA_ASSERT_DEV(false, "이벤트 등록에 실패했습니다.");
 			return false;

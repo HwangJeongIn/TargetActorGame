@@ -3,6 +3,7 @@
 
 #include "TASpawnData.h"
 #include "DrawDebugHelpers.h"
+#include "Engine/World.h"
 #include "Common/CommonBase.h"
 
 
@@ -14,7 +15,7 @@ ATASpawnData::ATASpawnData()
 	// 크기에 대한 정보는 GameData에서 찾자 // 일단 배치할때는 발위치 기준으로
 	_staticMesh->SetRelativeLocationAndRotation(FVector(0.f, 0.f, 0.f), FRotator(0.f, -90.f, 0.f));
 
-	static ConstructorHelpers::FObjectFinder<UStaticMesh>BoxMan(TEXT("/Game/StaticMesh/BoxMan.BoxMan"));
+	static ConstructorHelpers::FObjectFinder<UStaticMesh>BoxMan(TEXT("/Game/_Dev/_Characters/InfinityBladeWarriors/Character/CompleteCharacters/BoxMan.BoxMan"));
 	if (true == BoxMan.Succeeded())
 	{
 		_staticMesh->SetStaticMesh(BoxMan.Object);
@@ -34,21 +35,47 @@ void ATASpawnData::PostEditChangeProperty(FPropertyChangedEvent& PropertyChanged
 
 		_attachToTheGround = false;
 
-		FHitResult OutHit;
-		FVector Start = GetActorLocation();
+		// ActorLineTraceSingle vs GetWorld()->LineTraceSingle
+		// ActorLineTraceSingle : 액터컴포넌트를 호출하는 경우 작동
+		// GetWorld()->LineTraceSingle : 전체월드
 
-		Start.Z += 50.f;
-		Start.X += 200.f;
-
-		FVector ForwardVector = GetActorForwardVector();
-		FVector End = ((ForwardVector * 500.f) + Start);
-		FCollisionQueryParams CollisionParams;
-
-		DrawDebugLine(GetWorld(), Start, End, FColor::Green, false, 1, 0, 5);
-
-		if (ActorLineTraceSingle(OutHit, Start, End, ECC_WorldStatic, CollisionParams))
+		UWorld* world = GetWorld();
+		if (nullptr == world)
 		{
-			//GEngine->AddOnScreenDebugMessage(-1, 1.f, FColor::Green, FString::Printf(TEXT("The Component Being Hit is: %s"), *OutHit.GetComponent()->GetName()));
+			TA_ASSERT_DEV(false, "비정상입니다.");
+			return;
 		}
+
+		const FVector startPos = GetActorLocation();
+		const FVector endPos = startPos - (GetActorUpVector() * 1000);
+		DrawDebugLine(world, startPos, endPos, FColor::Red, false, 1, 0, 5);
+		
+		FCollisionQueryParams traceParams(FName(TEXT("ToGroundTrace")), false, this);
+		FHitResult hitResult;
+		const bool rv = world->LineTraceSingleByChannel(hitResult
+														, startPos
+														, endPos
+														, ECollisionChannel::ECC_WorldStatic
+														, traceParams);
+
+		if (false == rv)
+		{
+			TA_LOG_DEV("LineTraceSingleByChannel 실패");
+			return;
+		}
+
+		if (false == hitResult.Actor.IsValid())
+		{
+			TA_LOG_DEV("LineTraceSingleByChannel 실패");
+			return;
+		}
+		
+
+		SetActorLocation(hitResult.Location);
 	}
+}
+
+const int ATASpawnData::getGroupGameDataKey(void) const noexcept
+{
+	return _groupGameDataKey;
 }

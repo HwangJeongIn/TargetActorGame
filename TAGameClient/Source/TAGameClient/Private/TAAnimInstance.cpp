@@ -1,4 +1,4 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+﻿// Fill out your copyright notice in the Description page of Project Settings.
 
 
 #include "TAAnimInstance.h"
@@ -9,7 +9,7 @@ UTAAnimInstance::UTAAnimInstance()
 	_isInAir = false;
 	_isDead = false;
 
-	static ConstructorHelpers::FObjectFinder<UAnimMontage> ATTACK_MONTAGE(TEXT("/Game/Animations/SK_Mannequin_Skeleton_Montage.SK_Mannequin_Skeleton_Montage"));
+	static ConstructorHelpers::FObjectFinder<UAnimMontage> ATTACK_MONTAGE(TEXT("/Game/_Dev/_Characters/Animations/SK_Mannequin_Skeleton_Montage.SK_Mannequin_Skeleton_Montage"));
 	if (true == ATTACK_MONTAGE.Succeeded())
 	{
 		_attackMontage = ATTACK_MONTAGE.Object;

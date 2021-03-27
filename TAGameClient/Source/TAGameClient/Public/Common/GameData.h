@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 #include "Common/CommonBase.h"
 #include "Common/KeyDefinition.h"
@@ -57,7 +57,6 @@ namespace ta
 		GroupGameDataKey _key;
 
 		MoveGameDataKey _moveGameDataKey;
-		AiGameDataKey _aiGameDataKey;
 		CharacterGameDataKey _characterGameDataKey;
 	};
 } 
@@ -104,8 +103,9 @@ namespace ta
 	public:
 		AiGameDataKey _key;
 
-		float _attackRange;
 		AiClassType _aiClassType;
+		PathPointPathKey _pathPointPathKey;
+		float _attackRange;
 	};
 }
 
@@ -129,6 +129,7 @@ namespace ta
 		CharacterGameDataKey _key;
 
 		ActorType _actorType;
+		AiGameDataKey _aiGameDataKey;
 		float _strength;
 		float _agility;
 		float _maxHp;

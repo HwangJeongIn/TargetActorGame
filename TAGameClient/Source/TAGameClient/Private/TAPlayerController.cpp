@@ -1,4 +1,4 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+﻿// Fill out your copyright notice in the Description page of Project Settings.
 
 
 #include "TAPlayerController.h"
@@ -18,14 +18,14 @@
 
 ATAPlayerController::ATAPlayerController()
 {
-	static ConstructorHelpers::FClassFinder<UTAHudUserWidget> GameHud_C(TEXT("/Game/UI/GameHud.GameHud_C"));
+	static ConstructorHelpers::FClassFinder<UTAHudUserWidget> GameHud_C(TEXT("/Game/_UI/GameHud.GameHud_C"));
 	TA_ASSERT_DEV(true == GameHud_C.Succeeded(), "비정상");
 	if (true == GameHud_C.Succeeded())
 	{
 		_hudUserWidgetClass = GameHud_C.Class;
 	}
 
-	static ConstructorHelpers::FClassFinder<UTAInventoryUserWidget> Inventory_C(TEXT("/Game/UI/Inventory.Inventory_C"));
+	static ConstructorHelpers::FClassFinder<UTAInventoryUserWidget> Inventory_C(TEXT("/Game/_UI/Inventory.Inventory_C"));
 	TA_ASSERT_DEV(true == Inventory_C.Succeeded(), "비정상");
 	if (true == Inventory_C.Succeeded())
 	{
@@ -33,7 +33,7 @@ ATAPlayerController::ATAPlayerController()
 	}
 
 
-	static ConstructorHelpers::FClassFinder<UTAInteractionMenuUserWidget> InteractionMenu_C(TEXT("/Game/UI/InteractionMenu.InteractionMenu_C"));
+	static ConstructorHelpers::FClassFinder<UTAInteractionMenuUserWidget> InteractionMenu_C(TEXT("/Game/_UI/InteractionMenu.InteractionMenu_C"));
 	TA_ASSERT_DEV(true == InteractionMenu_C.Succeeded(), "비정상");
 	if (true == InteractionMenu_C.Succeeded())
 	{

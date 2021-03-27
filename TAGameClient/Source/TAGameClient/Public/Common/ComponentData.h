@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 #include "Common/CommonBase.h"
 #include "Common/Vector.h"
@@ -77,6 +77,7 @@ namespace ta
 		void clear(void) noexcept;
 	public:
 		AiClassType _aiClassType;
+		PathPointPathKey _pathPointPathKey;
 	};
 }
 

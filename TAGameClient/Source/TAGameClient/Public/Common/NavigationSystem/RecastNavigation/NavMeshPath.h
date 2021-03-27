@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 #include "Common/CommonBase.h"
 #include "RecastNavigation/NavMeshPoint.h"
@@ -23,11 +23,14 @@ namespace ta
 
 		void clearPath(void) noexcept;
 
+		const NavMeshPoint* getPathPoint(const uint32 index) const noexcept;
+		const uint32 getPathPointCount(void) const noexcept;
+
 		void addPathPoint(NavMeshPoint* point) noexcept;
 		void addPathPoint(const Vector& position, const dtPolyRef& polyRef = INVALID_NAVNODEREF) noexcept;
 
-		NavMeshPoint* popLastPathPoint(void) noexcept;
-		NavMeshPoint* popFristPathPoint(void) noexcept;
+		//NavMeshPoint* popLastPathPoint(void) noexcept;
+		//NavMeshPoint* popFristPathPoint(void) noexcept;
 
 
 		void addPathCorridor(const dtPolyRef& corridor) noexcept;

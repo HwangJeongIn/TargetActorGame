@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<Root>
+	<SpawnData>
+		<GroupGameData Key="1000"/>
+		<Position X="-2490" Y="530" Z="410"/>
+		<Rotation X="0" Y="0" Z="-79.9999"/>
+	</SpawnData>
+	<SpawnData>
+		<GroupGameData Key="1000"/>
+		<Position X="-2810" Y="540" Z="410"/>
+		<Rotation X="0" Y="0" Z="-130"/>
+	</SpawnData>
+</Root>

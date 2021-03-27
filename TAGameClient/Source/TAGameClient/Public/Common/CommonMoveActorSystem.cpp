@@ -20,10 +20,10 @@
 
 namespace ta
 {
-#ifdef TA_SERVER
+#if defined(TA_SERVER) && !defined(TA_CLIENT_IN_SERVER)
 	const fs::path NavigationMeshFilePath = fs::absolute(L"./../NavigationMesh");
 	const fs::path PathPointFilePath = fs::absolute(L"./../PathPoint");
-#else
+#elif !defined(TA_SERVER)
 	fs::path NavigationMeshFilePath = "";
 	fs::path PathPointFilePath = "";
 #endif
@@ -669,6 +669,18 @@ namespace ta
 				sector->getTargetActorsFromSector(actorTypes, output);
 			}
 		}
+	}
+
+	bool CommonMoveActorSystem::findPath(const ActorKey& targetActorKey, const Vector& startPos, const Vector& endPos, NavMeshPath& path) noexcept
+	{
+		TA_ASSERT_DEV(false, "서버에서만 가능");
+		return false;
+	}
+
+	bool CommonMoveActorSystem::projectPointToNavMesh(const Vector& point, Vector& result) const noexcept
+	{
+		TA_ASSERT_DEV(false, "서버에서만 가능");
+		return false;
 	}
 
 	bool CommonMoveActorSystem::move_(CommonMoveActorComponent* target

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <Root>
-	<AiGameData Key="1" AttackRange="5" AiClassType="Npc"/>
-	<AiGameData Key="2" AttackRange="10" AiClassType="Monster"/>
-	<AiGameData Key="3" AttackRange="15" AiClassType="Monster"/>
+	<AiGameData Key="100" AiClassType="Monster" AttackRange="10"/>
+	<AiGameData Key="101" AiClassType="Monster" AttackRange="15"/>
+	<AiGameData Key="1000" AiClassType="Npc" PathPointPathKey="TestPath1" AttackRange="5"/>
+	<AiGameData Key="1001" AiClassType="Npc" PathPointPathKey="TestPath2" AttackRange="10"/>
 </Root>

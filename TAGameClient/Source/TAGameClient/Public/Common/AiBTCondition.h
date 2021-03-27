@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 
 namespace ta
@@ -46,6 +46,19 @@ namespace ta
 	public:
 		AiBTConditionIsInAttackRange(bool isNot) noexcept;
 		virtual ~AiBTConditionIsInAttackRange(void) noexcept;
+
+		virtual bool checkConditionDetail(const ActorKey& actorKey) const noexcept override final;
+	};
+}
+
+
+namespace ta
+{
+	class AiBTConditionHasPathPointPath : public AiBTCondition
+	{
+	public:
+		AiBTConditionHasPathPointPath(bool isNot) noexcept;
+		virtual ~AiBTConditionHasPathPointPath(void) noexcept;
 
 		virtual bool checkConditionDetail(const ActorKey& actorKey) const noexcept override final;
 	};

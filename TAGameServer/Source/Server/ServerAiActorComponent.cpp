@@ -1,5 +1,8 @@
-#include "Server/ServerAiActorComponent.h"
+﻿#include "Server/ServerAiActorComponent.h"
 #include "Common/ScopedLock.h"
+#include "Common/AiPathPointPath.h"
+#include "Common/GetComponentAndSystem.h"
+#include "Server/ServerMoveActorSystem.h"
 
 
 namespace ta
@@ -7,11 +10,16 @@ namespace ta
 	ServerAiActorComponent::ServerAiActorComponent(void) noexcept
 		: _currentAiState(AiState::Disabled)
 		, _aiClassType(AiClassType::Count)
+		, _aiPathPointPath(nullptr)
 	{
 	}
 
 	ServerAiActorComponent::~ServerAiActorComponent(void) noexcept
 	{
+		if (nullptr != _aiPathPointPath)
+		{
+			delete _aiPathPointPath;
+		}
 	}
 
 	bool ServerAiActorComponent::initializeData(const ComponentData* componentData) noexcept
@@ -30,6 +38,21 @@ namespace ta
 				TA_ASSERT_DEV(false, "비정상입니다.");
 				return false;
 			}
+
+			_aiPathPointPath = nullptr;
+			if (true == data->_pathPointPathKey.isValid())
+			{
+				ServerMoveActorSystem* moveSystem = GetActorSystem<ServerMoveActorSystem>();
+				const PathPointPath* rv = moveSystem->getPathPointPath(data->_pathPointPathKey);
+				if (nullptr == rv)
+				{
+					TA_ASSERT_DEV(false, "비정상입니다.");
+					return false;
+				}
+				
+				_aiPathPointPath = new AiPathPointPath(*rv, getOwnerActorKey());
+			}
+
 		}
 
 		return true;
@@ -100,5 +123,20 @@ namespace ta
 	AiBehaviorTree& ServerAiActorComponent::getAi(void) noexcept
 	{
 		return _ai;
+	}
+
+	bool ServerAiActorComponent::hasPathPointPath_(void) const noexcept
+	{
+		return (nullptr != _aiPathPointPath);
+	}
+	
+	const AiPathPointPath* ServerAiActorComponent::getAiPathPointPath_(void) const noexcept
+	{
+		return _aiPathPointPath;
+	}
+
+	AiPathPointPath* ServerAiActorComponent::getAiPathPointPath_(void) noexcept
+	{
+		return _aiPathPointPath;
 	}
 }

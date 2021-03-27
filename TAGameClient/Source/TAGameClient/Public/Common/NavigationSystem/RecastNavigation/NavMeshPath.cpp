@@ -53,6 +53,21 @@ namespace ta
 		_customLinkIds.clear();
 	}
 
+	const NavMeshPoint* NavMeshPath::getPathPoint(const uint32 index) const noexcept
+	{
+		if (_path.size() <= index)
+		{
+			return nullptr;
+		}
+
+		return _path[index];
+	}
+
+	const uint32 NavMeshPath::getPathPointCount(void) const noexcept
+	{
+		return _path.size();
+	}
+
 	void NavMeshPath::addPathPoint(NavMeshPoint* point) noexcept
 	{
 		if (nullptr == point)
@@ -68,29 +83,29 @@ namespace ta
 		_path.push_back(new NavMeshPoint(position, polyRef));
 	}
 
-	NavMeshPoint* NavMeshPath::popLastPathPoint(void) noexcept
-	{
-		if (false == hasPathPoint())
-		{
-			return nullptr;
-		}
-
-		NavMeshPoint * last = _path.back();
-		_path.pop_back();
-		return last;
-	}
-
-	NavMeshPoint* NavMeshPath::popFristPathPoint(void) noexcept
-	{
-		if (false == hasPathPoint())
-		{
-			return nullptr;
-		}
-
-		NavMeshPoint* frist = _path.front();
-		_path.erase(_path.begin());
-		return frist;
-	}
+	//NavMeshPoint* NavMeshPath::popLastPathPoint(void) noexcept
+	//{
+	//	if (false == hasPathPoint())
+	//	{
+	//		return nullptr;
+	//	}
+	//
+	//	NavMeshPoint * last = _path.back();
+	//	_path.pop_back();
+	//	return last;
+	//}
+	//
+	//NavMeshPoint* NavMeshPath::popFristPathPoint(void) noexcept
+	//{
+	//	if (false == hasPathPoint())
+	//	{
+	//		return nullptr;
+	//	}
+	//
+	//	NavMeshPoint* frist = _path.front();
+	//	_path.erase(_path.begin());
+	//	return frist;
+	//}
 
 	void NavMeshPath::addPathCorridor(const dtPolyRef& corridor) noexcept
 	{

@@ -1,4 +1,4 @@
-#include "RecastNavigation/NavMeshPoint.h"
+﻿#include "RecastNavigation/NavMeshPoint.h"
 
 
 namespace ta
@@ -17,6 +17,25 @@ namespace ta
 	bool NavMeshPoint::hasPolyRef(void) const noexcept
 	{
 		return _polyRef != INVALID_NAVNODEREF;
+	}
+	const Vector& NavMeshPoint::getPosition(void) const noexcept
+	{
+		return _position;
+	}
+
+	const dtPolyRef& NavMeshPoint::getPolyRef(void) const noexcept
+	{
+		return _polyRef;
+	}
+
+	void NavMeshPoint::setPosition(const Vector& position) noexcept
+	{
+		_position = position;
+	}
+
+	void NavMeshPoint::setPolyRef(const dtPolyRef& polyRef) noexcept
+	{
+		_polyRef = polyRef;
 	}
 }
 

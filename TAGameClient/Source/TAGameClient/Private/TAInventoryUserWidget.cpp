@@ -1,4 +1,4 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+﻿// Fill out your copyright notice in the Description page of Project Settings.
 
 
 #include "TAInventoryUserWidget.h"
@@ -16,7 +16,7 @@
 UTAInventoryUserWidget::UTAInventoryUserWidget(const FObjectInitializer& ObjectInitializer)
 	: Super(ObjectInitializer)
 {
-	static ConstructorHelpers::FClassFinder<UTAInventorySlotUserWidget> InventorySlot_C(TEXT("/Game/UI/InventorySlot.InventorySlot_C"));
+	static ConstructorHelpers::FClassFinder<UTAInventorySlotUserWidget> InventorySlot_C(TEXT("/Game/_UI/InventorySlot.InventorySlot_C"));
 	TA_ASSERT_DEV(true == InventorySlot_C.Succeeded(), "비정상");
 	if (true == InventorySlot_C.Succeeded())
 	{

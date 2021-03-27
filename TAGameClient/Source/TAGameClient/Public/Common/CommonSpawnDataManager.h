@@ -2,18 +2,21 @@
 #include "Common/CommonBase.h"
 #include "Common/Uncopyable.h"
 #include "Common/KeyDefinition.h"
-#include <unordered_map>
 #include <filesystem>
 
 
 namespace fs = std::filesystem;
 
-#ifndef TA_SERVER
+
 namespace ta
 {
+#if defined(TA_SERVER) && !defined(TA_CLIENT_IN_SERVER)
+	extern const fs::path SpawnDataFilePath;
+#elif !defined(TA_SERVER)
 	extern fs::path SpawnDataFilePath;
-}
 #endif
+}
+
 
 namespace ta
 {
@@ -34,11 +37,7 @@ namespace ta
 		virtual bool open(void) noexcept;
 		virtual void close(void) noexcept;
 
-		bool loadSpawnDataFromXml(const fs::path filePath) noexcept;
-
-
-	protected:
-		std::unordered_map<GameWorldType, std::vector<CommonActorDetailSpawnData*>> _spawnDataSet;
+		virtual bool loadSpawnDataFromXml(const fs::path& filePath) noexcept;
 
 	};
 }

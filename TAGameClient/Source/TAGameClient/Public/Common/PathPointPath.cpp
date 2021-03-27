@@ -95,7 +95,7 @@ namespace ta
 
 		if (-1 == resultPathPointIndex)
 		{
-			TA_ASSERT_DEV(false, "MaxDistanceFromActorToPathPoint거리보다 멀어서 가까운 PathPoint를 구하지 못했습니다.");
+			TA_LOG_DEV("MaxDistanceFromActorToPathPoint거리보다 멀어서 가까운 PathPoint를 구하지 못했습니다.");
 			pathPointIndex.clear();
 			
 			return nullptr;
@@ -107,7 +107,7 @@ namespace ta
 		return _path[resultPathPointIndex];
 	}
 
-	const PathPoint* PathPointPath::getNextPathPoint(PathPointIndex& currentPathPointIndex) noexcept
+	const PathPoint* PathPointPath::getNextPathPoint(PathPointIndex& currentPathPointIndex) const noexcept
 	{
 		if (false == currentPathPointIndex.isValid())
 		{
@@ -132,13 +132,28 @@ namespace ta
 		{
 			if (currentPathPointIndex._prevIndex == getPrevIndex(currentPathPointIndex._currentIndex))
 			{
-				// 정방향
-				isForwardDirection = true;
+				// 정방향인데 마지막 노드면 역방향으로
+				if ((_path.size() - 1) == currentPathPointIndex._currentIndex)
+				{
+					isForwardDirection = false;
+				}
+				else // 끝까지 못갔으면 정방향으로
+				{
+					isForwardDirection = true;
+				}
+				
 			}
 			else if (currentPathPointIndex._prevIndex == getNextIndex(currentPathPointIndex._currentIndex))
 			{
-				// 역방향
-				isForwardDirection = false;
+				// 역방향인데 첫번째 노드면 정방향으로
+				if (0 == currentPathPointIndex._currentIndex)
+				{
+					isForwardDirection = true;
+				}
+				else // 첫번째까지 못갔으면 역방향으로
+				{
+					isForwardDirection = false;
+				}
 			}
 			else
 			{

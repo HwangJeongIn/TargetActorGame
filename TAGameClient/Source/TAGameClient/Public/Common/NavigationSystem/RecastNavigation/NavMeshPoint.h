@@ -11,12 +11,20 @@ namespace ta
 	class NavMeshPoint
 	{
 	public:
-		Vector _position;
-		dtPolyRef _polyRef;
-
 		NavMeshPoint(void) noexcept;
 		explicit NavMeshPoint(const Vector& position, dtPolyRef polyRef = INVALID_NAVNODEREF) noexcept;
 
 		bool hasPolyRef(void) const noexcept;
+
+		const Vector& getPosition(void) const noexcept;
+		const dtPolyRef& getPolyRef(void) const noexcept;
+
+		void setPosition(const Vector& position) noexcept;
+		void setPolyRef(const dtPolyRef& polyRef) noexcept;
+
+	private:
+		Vector _position;
+		dtPolyRef _polyRef;
+
 	};
 }

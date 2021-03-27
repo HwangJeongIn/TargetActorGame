@@ -1,4 +1,4 @@
-#include "Common/AiBTCondition.h"
+﻿#include "Common/AiBTCondition.h"
 #include "Common/CommonMoveActorComponent.h"
 #include "Common/CommonAiActorComponent.h"
 #include "Common/CommonMoveActorSystem.h"
@@ -126,5 +126,35 @@ namespace ta
 		}
 		
 		return result.sizeSquared() <= (attackRange * attackRange);
+	}
+}
+
+
+namespace ta
+{
+	AiBTConditionHasPathPointPath::AiBTConditionHasPathPointPath(bool isNot) noexcept
+		: AiBTCondition(isNot)
+	{
+	}
+
+	AiBTConditionHasPathPointPath::~AiBTConditionHasPathPointPath(void) noexcept
+	{
+	}
+	bool AiBTConditionHasPathPointPath::checkConditionDetail(const ActorKey& actorKey) const noexcept
+	{
+		CommonAiActorComponent* aiCom = GetActorComponent<CommonAiActorComponent>(actorKey);
+		if (nullptr == aiCom)
+		{
+			TA_ASSERT_DEV(false, "비정상입니다.");
+			return false;
+		}
+
+		bool rv = false;
+		{
+			ScopedLock componentLock(aiCom, true);
+			rv = aiCom->hasPathPointPath_();
+		}
+
+		return rv;
 	}
 }

@@ -1,4 +1,4 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+﻿// Fill out your copyright notice in the Description page of Project Settings.
 
 
 #include "TAPawn.h"
@@ -37,7 +37,7 @@ ATAPawn::ATAPawn()
 	_springArm->TargetArmLength = 400.f;
 	_springArm->SetRelativeRotation(FRotator(-15.0f, 0.f, 0.f));
 
-	static ConstructorHelpers::FObjectFinder<USkeletalMesh>SK_CARDBOARD(TEXT("/Game/InfinityBladeWarriors/Character/CompleteCharacters/SK_CharM_RaggedElite.SK_CharM_RaggedElite"));
+	static ConstructorHelpers::FObjectFinder<USkeletalMesh>SK_CARDBOARD(TEXT("/Game/_Dev/_Characters/InfinityBladeWarriors/Character/CompleteCharacters/SK_CharM_Cardboard.SK_CharM_Cardboard"));
 	if (true == SK_CARDBOARD.Succeeded())
 	{
 		_mesh->SetSkeletalMesh(SK_CARDBOARD.Object);

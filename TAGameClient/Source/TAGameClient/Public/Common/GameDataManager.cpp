@@ -195,7 +195,7 @@ namespace ta
 			//std::cout << "GameDataType : " << static_cast<uint32>(gameDataType) << ", Thread id : " << this_id << std::endl;
 			switch (gameDataType)
 			{
-				
+				// _setOf##GameDataName 이 각각의 변수니까 공유하지 않는다 따로 락걸필요가 없다.
 
 #define LOADXML(GameDataName)																				\
 			case GameDataType::GameDataName:																\

@@ -1,4 +1,4 @@
-#include "Common/ComponentData.h"
+﻿#include "Common/ComponentData.h"
 
 namespace ta
 {
@@ -72,6 +72,7 @@ namespace ta
 	void CommonAiComponentData::clear(void) noexcept
 	{
 		_aiClassType = AiClassType::Count;
+		_pathPointPathKey.clear();
 	}
 }
 

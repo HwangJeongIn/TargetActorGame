@@ -55,7 +55,8 @@ namespace std																	 				\
 KEY_DECLARATION(ActorKey, uint32, 0)
 KEY_DECLARATION(CharacterDBNo, int32, -1) // DB에 저장되는 값
 KEY_DECLARATION(SectorKey, int32, -1)
-KEY_DECLARATION(PathPointPathKey, hash_value, 0)
+KEY_DECLARATION(PathPointPathKey, hash_value, 0) // 파일이름 해시값
+KEY_DECLARATION(SpawnDataGroupKey, hash_value, 0) // 파일이름 해시값
 
 
 // GameData Key

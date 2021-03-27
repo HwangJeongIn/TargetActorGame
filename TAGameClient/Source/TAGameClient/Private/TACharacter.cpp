@@ -1,4 +1,4 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+﻿// Fill out your copyright notice in the Description page of Project Settings.
 
 
 #include "TACharacter.h"
@@ -31,15 +31,15 @@ ATACharacter::ATACharacter()
 	capsule->SetCollisionProfileName(TEXT("TACharacter"));
 	mesh->SetRelativeLocationAndRotation(FVector(0.f, 0.f, -88.f), FRotator(0.f, -90.f, 0.f));
 	//GetCharacterMovement()->JumpZVelocity = 500.0f;
-
-	static ConstructorHelpers::FObjectFinder<USkeletalMesh>SK_CARDBOARD(TEXT("/Game/InfinityBladeWarriors/Character/CompleteCharacters/SK_CharM_Cardboard.SK_CharM_Cardboard"));
+	
+	static ConstructorHelpers::FObjectFinder<USkeletalMesh>SK_CARDBOARD(TEXT("/Game/_Dev/_Characters/InfinityBladeWarriors/Character/CompleteCharacters/SK_CharM_Cardboard.SK_CharM_Cardboard"));
 	if (true == SK_CARDBOARD.Succeeded())
 	{
 		mesh->SetSkeletalMesh(SK_CARDBOARD.Object);
 	}
 
 	mesh->SetAnimationMode(EAnimationMode::AnimationBlueprint);
-	static ConstructorHelpers::FClassFinder<UAnimInstance>WARRIOR_ANIM(TEXT("/Game/Animations/TAAnimationBlueprint.TAAnimationBlueprint_C"));
+	static ConstructorHelpers::FClassFinder<UAnimInstance>WARRIOR_ANIM(TEXT("/Game/_Dev/_Characters/Animations/TAAnimationBlueprint.TAAnimationBlueprint_C"));
 	if (true == WARRIOR_ANIM.Succeeded())
 	{
 		mesh->SetAnimInstanceClass(WARRIOR_ANIM.Class);

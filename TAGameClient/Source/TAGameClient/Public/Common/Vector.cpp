@@ -1,4 +1,4 @@
-#include "Common/Vector.h"
+﻿#include "Common/Vector.h"
 #include <cmath>
 
 namespace ta
@@ -36,7 +36,23 @@ namespace ta
 
 	Vector Vector::operator/(const Vector& v) const noexcept
 	{
-		return Vector();
+		return Vector(_x / v._x, _y / v._y, _z / v._z);
+	}
+
+	Vector Vector::operator/(float scale) const noexcept
+	{
+		const float rScale = 1.f / scale;
+		return Vector(_x * rScale, _y * rScale, _z * rScale);
+	}
+
+	Vector Vector::operator*(const Vector& v) const noexcept
+	{
+		return Vector(_x * v._x, _y * v._y, _z * v._z);
+	}
+
+	Vector Vector::operator*(float scale) const noexcept
+	{
+		return Vector(_x * scale, _y * scale, _z * scale);
 	}
 
 	Vector& Vector::operator+=(const Vector& v) noexcept

@@ -1,4 +1,4 @@
-#include "Common/CommonApp.h"
+﻿#include "Common/CommonApp.h"
 #include "Common/Iocp.h"
 #include "Common/Socket.h"
 #include "Common/CommonActorManager.h"
@@ -16,9 +16,9 @@
 
 namespace ta
 {
-	bool RegisterActorEvent(ActorEventObject* actorEventObject, const long long delay) noexcept
+	bool RegisterActorEvent(ActorEventObject* actorEventObject, const long long delayMilliSec) noexcept
 	{
-		return g_app->registerActorEvent(actorEventObject, delay);
+		return g_app->registerActorEvent(actorEventObject, delayMilliSec);
 	}
 
 
@@ -130,9 +130,9 @@ namespace ta
 		return _gameDataManager;
 	}
 
-	bool CommonApp::registerActorEvent(ActorEventObject* actorEventObject, const long long delay) noexcept
+	bool CommonApp::registerActorEvent(ActorEventObject* actorEventObject, const long long delayMilliSec) noexcept
 	{
-		return _actorEventTimer->addEvent(actorEventObject, delay);
+		return _actorEventTimer->addEvent(actorEventObject, delayMilliSec);
 	}
 
 	bool CommonApp::initialize(void) noexcept
@@ -256,10 +256,12 @@ namespace ta
 
 	void CommonApp::sendThreadEndEventToAllThread(void) noexcept
 	{
+		// 이벤트 타이머 스레드한테도 보내고
 		ActorEventObject* actorEventObject = new ActorEventObject;
 		actorEventObject->_actorEventType = ActorEventType::ThreadEnd;
 		registerActorEvent(actorEventObject, 0);
 
+		// 나머지 스레드한테도 보낸다.
 		uint32 workerCount = _threads.size() -1;
 		for (uint32 index = 0; index < workerCount; ++index)
 		{

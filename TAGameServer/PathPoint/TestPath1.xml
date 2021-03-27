@@ -1,21 +1,21 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <Root>
 	<TestPath1>
-		<Position X="-3380" Y="-1390" Z="0"/>
+		<Position X="-2360" Y="-70" Z="0"/>
 	</TestPath1>
 	<TestPath1>
-		<Position X="-3380" Y="-1110" Z="0"/>
+		<Position X="-2360" Y="210" Z="0"/>
 	</TestPath1>
 	<TestPath1>
-		<Position X="-3580" Y="-830" Z="0"/>
+		<Position X="-2560" Y="490" Z="0"/>
 	</TestPath1>
 	<TestPath1>
-		<Position X="-3220" Y="-430" Z="0"/>
+		<Position X="-2200" Y="890" Z="0"/>
 	</TestPath1>
 	<TestPath1>
-		<Position X="-2640" Y="-350" Z="0"/>
+		<Position X="-1620" Y="970" Z="0"/>
 	</TestPath1>
 	<TestPath1>
-		<Position X="-2020" Y="-500" Z="0"/>
+		<Position X="-1000" Y="820" Z="0"/>
 	</TestPath1>
 </Root>

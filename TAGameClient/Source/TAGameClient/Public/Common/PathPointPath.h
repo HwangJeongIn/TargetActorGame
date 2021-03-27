@@ -29,7 +29,7 @@ namespace ta
 		void addPathPoint(const Vector& position) noexcept;
 		
 		const PathPoint* getNearestPathPoint(const Vector& currentPosition, PathPointIndex& pathPointIndex) const noexcept;
-		const PathPoint* getNextPathPoint(PathPointIndex& currentPathPointIndex) noexcept;
+		const PathPoint* getNextPathPoint(PathPointIndex& currentPathPointIndex) const noexcept;
 
 	private:
 		const uint32 getPrevIndex(const uint32& index) const noexcept;
@@ -54,8 +54,6 @@ namespace ta
 		~PathPointIndex(void) noexcept;
 
 		const bool isValid(void) const noexcept;
-
-	private:
 		void clear(void) noexcept;
 
 	private:

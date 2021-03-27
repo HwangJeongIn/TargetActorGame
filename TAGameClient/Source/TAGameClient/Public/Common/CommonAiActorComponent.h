@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 #include "Common/ActorComponent.h"
 #include "Common/Vector.h"
@@ -16,6 +16,9 @@ namespace ta
 		virtual ComponentData* packData_(void) noexcept override;
 
 		static const ActorComponentType getActorComponentType(void) noexcept;
+
+		// 서버용
+		virtual bool hasPathPointPath_(void) const noexcept;
 
 	protected:
 		CommonAiActorComponent(void) noexcept;

@@ -1,4 +1,4 @@
-#include "Common/CommonAiActorSystem.h"
+﻿#include "Common/CommonAiActorSystem.h"
 #include "Common/CommonAiActorComponent.h"
 #include "Common/CommonActor.h"
 #include "Common/ScopedLock.h"
@@ -18,17 +18,26 @@ namespace ta
 
 	bool CommonAiActorSystem::processCommandTickAi(CommonActor* actor, const float deltaTime) const noexcept
 	{
-		return true;
+		TA_ASSERT_DEV(false, "비정상입니다.");
+		return false;
 	}
 
 	bool CommonAiActorSystem::processDetectTargetPlayer(CommonAiActorComponent* myAi, CommonMoveActorComponent* myMove) const noexcept
 	{
-		return true;
+		TA_ASSERT_DEV(false, "비정상입니다.");
+		return false;
 	}
 
 	bool CommonAiActorSystem::processDetectTargetMonster(CommonAiActorComponent* myAi, CommonMoveActorComponent* myMove) const noexcept
 	{
-		return true;
+		TA_ASSERT_DEV(false, "비정상입니다.");
+		return false;
+	}
+
+	bool CommonAiActorSystem::processMoveToPathPoint(CommonAiActorComponent* myAi, CommonMoveActorComponent* myMove, const float deltaTime) const noexcept
+	{
+		TA_ASSERT_DEV(false, "비정상입니다.");
+		return false;
 	}
 
 	bool CommonAiActorSystem::setTargetActor(CommonAiActorComponent* myAi, const ActorKey& targetActorKey) const noexcept

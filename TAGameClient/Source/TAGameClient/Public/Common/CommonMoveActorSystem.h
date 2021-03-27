@@ -28,6 +28,7 @@ namespace ta
 	class Vector;
 	class CommonMoveActorComponent;
 	class Serializer;
+	class NavMeshPath;
 }
 
 
@@ -68,6 +69,8 @@ namespace ta
 									   , std::vector<ActorKey>& output
 									   , const bool searchNearSectors = false) const noexcept;
 
+		virtual bool findPath(const ActorKey& targetActorKey, const Vector& startPos, const Vector& endPos, NavMeshPath& path) noexcept;
+		virtual bool projectPointToNavMesh(const Vector& point, Vector& result) const noexcept;
 
 	protected:
 		CommonMoveActorSystem(void) noexcept;

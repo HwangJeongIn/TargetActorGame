@@ -1,4 +1,4 @@
-#include "Common/AiBTNode.h"
+﻿#include "Common/AiBTNode.h"
 #include "Common/AiBTCondition.h"
 #include "Common/CommonMoveActorComponent.h"
 #include "Common/CommonAiActorComponent.h"
@@ -411,6 +411,44 @@ namespace ta
 		if (false == moveSystem->processMoveToTarget(moveCom, targetMoveCom))
 		{
 			//targetMoveCom
+			TA_ASSERT_DEV(false, "비정상입니다.");
+			return AiBTNodeState::Failure;
+		}
+
+		return AiBTNodeState::Success;
+	}
+}
+
+
+namespace ta
+{
+	AiBTNodeMoveToPathPoint::AiBTNodeMoveToPathPoint(void) noexcept
+	{
+	}
+
+	AiBTNodeMoveToPathPoint::~AiBTNodeMoveToPathPoint(void) noexcept
+	{
+	}
+
+	AiBTNodeState AiBTNodeMoveToPathPoint::executeNodeDetail(const ActorKey& actorKey, const float& deltaTime) noexcept
+	{
+		CommonAiActorComponent* aiCom = GetActorComponent<CommonAiActorComponent>(actorKey);
+		if (nullptr == aiCom)
+		{
+			TA_ASSERT_DEV(false, "비정상입니다.");
+			return AiBTNodeState::Failure;
+		}
+
+		CommonMoveActorComponent* moveCom = GetActorComponent<CommonMoveActorComponent>(actorKey);
+		if (nullptr == moveCom)
+		{
+			TA_ASSERT_DEV(false, "비정상입니다.");
+			return AiBTNodeState::Failure;
+		}
+
+		CommonAiActorSystem* aiSystem = GetActorSystem<CommonAiActorSystem>();
+		if (false == aiSystem->processMoveToPathPoint(aiCom, moveCom, deltaTime))
+		{
 			TA_ASSERT_DEV(false, "비정상입니다.");
 			return AiBTNodeState::Failure;
 		}

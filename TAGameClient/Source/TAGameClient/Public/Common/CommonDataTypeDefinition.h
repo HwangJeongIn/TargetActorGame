@@ -210,8 +210,8 @@ namespace ta
 
 namespace ta
 {
-	constexpr float MaxMoveDistance = 10.0f;
-	constexpr long long AiTickInterval = 500;
+	constexpr float MaxMoveDistance = 10000.0f;
+	constexpr long long AiTickIntervalMilliSec = 500;
 }
 
 
@@ -228,6 +228,7 @@ namespace ta
 
 	enum class AiClassType : uint8
 	{
+		// 몬스터 엔피씨 종류에 따라서 더 늘어날 수 있음
 		Player = 0
 		, Monster
 		, Npc
@@ -261,5 +262,7 @@ namespace ta
 
 namespace ta
 {
-	constexpr float MaxDistanceFromActorToPathPoint = 300.0f;
+	constexpr float MaxDistanceFromActorToPathPoint = 10000.0f;
+	constexpr float AllowedRangeToDestination = 3.0f;
+	constexpr float AllowedRangeToDestinationSquared = 3.0f * 3.0f;
 }

@@ -21,16 +21,8 @@ public:
 public:
 	virtual void PostEditChangeProperty(FPropertyChangedEvent& PropertyChangedEvent) override final;
 
+	const int getGroupGameDataKey(void) const noexcept;
 private:
-	//void setDefaultPathPoint(void) noexcept;
-	//void refreshPathPoint(void) noexcept;
-	//void setPointColor(const bool isSinglePathPoint) noexcept;
-	//
-	//ATAPathPoint* getNext(void) noexcept;
-	//ATAPathPoint* getPrev(void) noexcept;
-	//
-	//void setNext(ATAPathPoint* input) noexcept;
-	//void setPrev(ATAPathPoint* input) noexcept;
 
 public:
 

@@ -1,4 +1,4 @@
-#include "Common/ActorEventTimer.h"
+﻿#include "Common/ActorEventTimer.h"
 #include "Common/ScopedLock.h"
 #include "Common/Iocp.h"
 #include "Common/ActorEvent.h"
@@ -22,6 +22,7 @@ namespace ta
 					break;
 				}
 
+				// 이벤트 처리하려고 봤더니 끝내라고하면 바로 끝낸다.
 				if (ActorEventType::ThreadEnd == actorEventType)
 				{
 					return;

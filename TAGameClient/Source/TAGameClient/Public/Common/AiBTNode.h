@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include "Common/CommonBase.h"
 #include "Common/AiBlackboard.h"
 #include <vector>
@@ -198,6 +198,19 @@ namespace ta
 	public:
 		AiBTNodeMoveToRandomPoint(void) noexcept;
 		virtual ~AiBTNodeMoveToRandomPoint(void) noexcept;
+		virtual AiBTNodeState executeNodeDetail(const ActorKey& actorKey, const float& deltaTime) noexcept override final;
+
+	};
+}
+
+
+namespace ta
+{
+	class AiBTNodeMoveToPathPoint : public AiBTNode
+	{
+	public:
+		AiBTNodeMoveToPathPoint(void) noexcept;
+		virtual ~AiBTNodeMoveToPathPoint(void) noexcept;
 		virtual AiBTNodeState executeNodeDetail(const ActorKey& actorKey, const float& deltaTime) noexcept override final;
 
 	};

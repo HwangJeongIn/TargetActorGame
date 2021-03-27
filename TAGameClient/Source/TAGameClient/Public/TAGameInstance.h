@@ -20,7 +20,9 @@ extern UTAGameInstance* TAGetGameInstance(void) noexcept;
 extern UWorld* TAGetGameWorld(void) noexcept;
 
 extern ULevel* TAGetStreamingLevelByName(const FString& levelName) noexcept;
-extern int32 TAGetStreamingLevelByTag(const FString& tag, TArray<ULevel*>& output) noexcept;
+extern int32 TAGetStreamingLevelByTag(const FString& tag, TArray<ULevel*>& levelOutput, TArray<FString>* nameWithoutTagOutput = nullptr) noexcept;
+extern FString TAGetLevelNameWithoutTag(const ULevel* level) noexcept;
+extern FString TATrimLevelTag(const FString& levelNameWithTag) noexcept;
 extern void TAPrintAllStreamingLevelName(void) noexcept; // test
 
 extern ATAPlayerController* TAGetFirstPlayerController(void) noexcept;
@@ -32,6 +34,7 @@ extern bool TAExportPathPoint(void) noexcept;
 extern bool TAExportLevelPathPoint(ULevel* level) noexcept;
 
 extern bool TAExportSpawnData(void) noexcept;
+extern bool TAExportLevelSpawnData(ULevel* level) noexcept;
 
 
 /**

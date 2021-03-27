@@ -4,15 +4,15 @@
 	<CharacterGameData Key="1" ActorType="Player" Strength="10" Agility="10" MaxHp="300"/>
 	<CharacterGameData Key="2" ActorType="Player" Strength="20" Agility="20" MaxHp="500"/>
 	<CharacterGameData Key="3" ActorType="Player" Strength="100" Agility="100" MaxHp="9999"/>
-	<CharacterGameData Key="100" Description="몬스터" ActorType="Monster" Strength="1" Agility="1" MaxHp="50"/>
-	<CharacterGameData Key="101" ActorType="Monster" Strength="3" Agility="3" MaxHp="100"/>
-	<CharacterGameData Key="102" ActorType="Monster" Strength="5" Agility="5" MaxHp="200"/>
-	<CharacterGameData Key="103" ActorType="Monster" Strength="10" Agility="10" MaxHp="500"/>
-	<CharacterGameData Key="104" ActorType="Monster" Strength="100" Agility="100" MaxHp="9999"/>
-	<CharacterGameData Key="105" ActorType="Monster" Strength="3" Agility="3" MaxHp="300"/>
-	<CharacterGameData Key="1000" Description="엔피씨" ActorType="Npc" Strength="1" Agility="1" MaxHp="9999"/>
-	<CharacterGameData Key="1001" ActorType="Npc" Strength="1" Agility="1" MaxHp="9999"/>
-	<CharacterGameData Key="1002" ActorType="Npc" Strength="1" Agility="1" MaxHp="9999"/>
-	<CharacterGameData Key="1003" ActorType="Npc" Strength="1" Agility="1" MaxHp="9999"/>
-	<CharacterGameData Key="1004" ActorType="Npc" Strength="1" Agility="1" MaxHp="9999"/>
+	<CharacterGameData Key="100" Description="몬스터" ActorType="Monster" AiGameDataKey="100" Strength="1" Agility="1" MaxHp="50"/>
+	<CharacterGameData Key="101" ActorType="Monster" AiGameDataKey="101" Strength="3" Agility="3" MaxHp="100"/>
+	<CharacterGameData Key="102" ActorType="Monster" AiGameDataKey="100" Strength="5" Agility="5" MaxHp="200"/>
+	<CharacterGameData Key="103" ActorType="Monster" AiGameDataKey="100" Strength="10" Agility="10" MaxHp="500"/>
+	<CharacterGameData Key="104" ActorType="Monster" AiGameDataKey="100" Strength="100" Agility="100" MaxHp="9999"/>
+	<CharacterGameData Key="105" ActorType="Monster" AiGameDataKey="100" Strength="3" Agility="3" MaxHp="300"/>
+	<CharacterGameData Key="1000" Description="엔피씨" ActorType="Npc" AiGameDataKey="1000" Strength="1" Agility="1" MaxHp="9999"/>
+	<CharacterGameData Key="1001" ActorType="Npc" AiGameDataKey="1001" Strength="1" Agility="1" MaxHp="9999"/>
+	<CharacterGameData Key="1002" ActorType="Npc" AiGameDataKey="1000" Strength="1" Agility="1" MaxHp="9999"/>
+	<CharacterGameData Key="1003" ActorType="Npc" AiGameDataKey="1000" Strength="1" Agility="1" MaxHp="9999"/>
+	<CharacterGameData Key="1004" ActorType="Npc" AiGameDataKey="1000" Strength="1" Agility="1" MaxHp="9999"/>
 </Root>

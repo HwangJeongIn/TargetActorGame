@@ -11,6 +11,7 @@
 #include "TAPlayer.h"
 #include "TAPlayerController.h"
 #include "TAPathPoint.h"
+#include "TASpawnData.h"
 #include "TimerManager.h"
 #include "NavigationSystem.h"
 #include "NavMesh/RecastNavMesh.h"
@@ -106,9 +107,13 @@ ULevel* TAGetStreamingLevelByName(const FString& levelName) noexcept
 	return nullptr;
 }
 
-int32 TAGetStreamingLevelByTag(const FString& tag, TArray<ULevel*>& output) noexcept
+int32 TAGetStreamingLevelByTag(const FString& tag, TArray<ULevel*>& levelOutput, TArray<FString>* nameWithoutTagOutput/* = nullptr*/) noexcept
 {
-	output.Empty();
+	levelOutput.Empty();
+	if (nullptr != nameWithoutTagOutput)
+	{
+		nameWithoutTagOutput->Empty();
+	}
 
 	const TArray<ULevelStreaming*>& streamingLevels = TAGetGameWorld()->GetStreamingLevels();
 
@@ -134,11 +139,32 @@ int32 TAGetStreamingLevelByTag(const FString& tag, TArray<ULevel*>& output) noex
 		if (tag == splitedString.Last())
 		{
 			TA_LOG_DEV("tag : %s, level name : %s", *tag, *levelName);
-			output.Add(level);
+			levelOutput.Add(level);
+			if (nullptr != nameWithoutTagOutput)
+			{
+				nameWithoutTagOutput->Add(splitedString[0]);
+			}
 		}
 	}
 
-	return output.Num();
+	return levelOutput.Num();
+}
+
+extern FString TAGetLevelNameWithoutTag(const ULevel* level) noexcept
+{
+	if (nullptr == level)
+	{
+		return FString();
+	}
+
+	return TATrimLevelTag(level->GetOuter()->GetName());
+}
+
+extern FString TATrimLevelTag(const FString& levelNameWithTag) noexcept
+{
+	TArray<FString> splitedString;
+	levelNameWithTag.ParseIntoArray(splitedString, TEXT("_"));
+	return splitedString[0];
 }
 
 void TAPrintAllStreamingLevelName(void) noexcept
@@ -314,11 +340,11 @@ bool TAExportPathPoint(void) noexcept
 
 bool TAExportLevelPathPoint(ULevel* level) noexcept
 {
-	TMap<FString, TArray<ATAPathPoint*>> allPathPointFolders;
-	TAGetTargetLevelActorsByFolder(level, allPathPointFolders);
+	TMap<FString, TArray<ATAPathPoint*>> allPathPointLevelFolders;
+	TAGetTargetLevelActorsByFolder(level, allPathPointLevelFolders);
 
 	std::string currentFolderName;
-	for (TPair<FString, TArray<ATAPathPoint*>>& currentPathPointFolder : allPathPointFolders)
+	for (TPair<FString, TArray<ATAPathPoint*>>& currentPathPointFolder : allPathPointLevelFolders)
 	{
 		// 사실상 wchar -> char(ASCII)
 		currentFolderName = TCHAR_TO_ANSI(*currentPathPointFolder.Key);
@@ -333,8 +359,9 @@ bool TAExportLevelPathPoint(ULevel* level) noexcept
 		for (int32 index = 0; index < count; ++index)
 		{
 			child = new ta::XmlNode(currentFolderName.c_str());
-
 			childPositionNode = new ta::XmlNode("Position");
+
+			tempRoot.addChildElement(child);
 			child->addChildElement(childPositionNode);
 
 			FVector pathPointLocation = currentPathPointGroup[index]->GetActorLocation();
@@ -346,7 +373,6 @@ bool TAExportLevelPathPoint(ULevel* level) noexcept
 			//FormatString(positionValue, "(%.1f,%.1f,%.1f)", pathPointLocation.X, pathPointLocation.Y, pathPointLocation.Z);
 			//child->addAttribute("Position", ta::ToString(positionValue));
 
-			tempRoot.addChildElement(child);
 		}
 
 		if (false == ta::FileLoader::saveXml((ta::PathPointFilePath / currentFolderName) += ".xml", &tempRoot))
@@ -362,12 +388,99 @@ bool TAExportLevelPathPoint(ULevel* level) noexcept
 bool TAExportSpawnData(void) noexcept
 {
 	TArray<ULevel*> spawnDataLevels;
-	const int32 levelCount = TAGetStreamingLevelByTag("spawndata", spawnDataLevels);
+	TArray<FString> levelNameWitoutTag;
+	const int32 levelCount = TAGetStreamingLevelByTag("spawndata", spawnDataLevels, &levelNameWitoutTag);
 
 	if (0 == levelCount)
 	{
 		TA_LOG_DEV("spawn data level이 없습니다.");
 		return true;
+	}
+
+
+	for (int32 levelIndex = 0; levelIndex < levelCount; ++levelIndex)
+	{
+		if (false == TAExportLevelSpawnData(spawnDataLevels[levelIndex]))
+		{
+			TA_LOG_DEV("비정상입니다.");
+			return false;
+		}
+	}
+
+	return true;
+}
+
+extern bool TAExportLevelSpawnData(ULevel* level) noexcept
+{
+	TMap<FString, TArray<ATASpawnData*>> allSpawnDataLevelFolders;
+	TAGetTargetLevelActorsByFolder(level, allSpawnDataLevelFolders);
+
+	std::string currentLevelName = TCHAR_TO_ANSI(*TAGetLevelNameWithoutTag(level));
+	std::string currentFolderName;
+
+	for (TPair<FString, TArray<ATASpawnData*>>& currentSpawnLevelFolder : allSpawnDataLevelFolders)
+	{
+		TArray<ATASpawnData*>& spawnData = currentSpawnLevelFolder.Value;
+
+		const int32 spawnDataCount = spawnData.Num();
+		if (0 == spawnDataCount)
+		{
+			continue;
+		}
+
+		currentFolderName = TCHAR_TO_ANSI(*currentSpawnLevelFolder.Key);
+
+		ta::XmlNode tempRoot("Root");
+		ta::XmlNode* child = nullptr;
+		ta::XmlNode* childPositionNode = nullptr;
+		ta::XmlNode* childRotationNode = nullptr;
+		ta::XmlNode* childGroupGameDataNode = nullptr;
+
+		for (int32 spawnDataIndex = 0; spawnDataIndex < spawnDataCount; ++spawnDataIndex)
+		{
+			child = new ta::XmlNode("SpawnData");
+			childPositionNode = new ta::XmlNode("Position");
+			childRotationNode = new ta::XmlNode("Rotation");
+			childGroupGameDataNode = new ta::XmlNode("GroupGameData");
+
+			tempRoot.addChildElement(child);
+			child->addChildElement(childGroupGameDataNode);
+			child->addChildElement(childPositionNode);
+			child->addChildElement(childRotationNode);
+
+			{
+				const ta::GroupGameDataKey groupGameDataKey(static_cast<ta::GroupGameDataKeyType>(spawnData[spawnDataIndex]->getGroupGameDataKey()));
+				if (false == groupGameDataKey.isValid())
+				{
+					TA_ASSERT_DEV(false, "비정상입니다.");
+					return false;
+				}
+
+				childGroupGameDataNode->addAttribute("Key", ta::ToStringCast<ta::GroupGameDataKeyType>(groupGameDataKey.getKeyValue()));
+			}
+
+			{
+				FVector spawnDataLocation = spawnData[spawnDataIndex]->GetActorLocation();
+
+				childPositionNode->addAttribute("X", ta::ToStringCast<float>(spawnDataLocation.X));
+				childPositionNode->addAttribute("Y", ta::ToStringCast<float>(spawnDataLocation.Y));
+				childPositionNode->addAttribute("Z", ta::ToStringCast<float>(spawnDataLocation.Z));
+			}
+
+			{
+				FRotator spawnDataRotation = spawnData[spawnDataIndex]->GetActorRotation();
+
+				childRotationNode->addAttribute("X", ta::ToStringCast<float>(spawnDataRotation.Roll));
+				childRotationNode->addAttribute("Y", ta::ToStringCast<float>(spawnDataRotation.Pitch));
+				childRotationNode->addAttribute("Z", ta::ToStringCast<float>(spawnDataRotation.Yaw));
+			}
+		}
+
+		if (false == ta::FileLoader::saveXml((ta::SpawnDataFilePath / (currentLevelName + "_" + currentFolderName)) += ".xml", &tempRoot))
+		{
+			TA_ASSERT_DEV(false, "save xml failed : %s %s", currentLevelName.c_str(), currentFolderName.c_str());
+			return false;
+		}
 	}
 
 	return true;

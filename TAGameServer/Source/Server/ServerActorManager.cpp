@@ -1,4 +1,4 @@
-#include "Server/ServerActorManager.h"
+﻿#include "Server/ServerActorManager.h"
 #include "Server/ServerActorDataPool.h"
 #include "Server/ServerComponentData.h"
 #include "Server/ServerSector.h"
@@ -229,7 +229,7 @@ namespace ta
 			case ActorComponentType::Move:																									 
 				{							
                     CommonMoveComponentData data;
-                    data._position = Vector(30, 0, 0);
+                    data._position = Vector(-2810, 930, 0);
                     data._rotation = Vector(0, 0, 0);
                     data._speed = 3.0f;
                     if (false == initializeActorComponent(targetActorKey, &data, false))
@@ -384,15 +384,23 @@ namespace ta
                 break;
             case ActorComponentType::Ai:
                 {
-                    const AiGameData* aiGameData = GetGameData<AiGameData>(groupGameData->_aiGameDataKey);
+                    const CharacterGameData* characterGameData = GetGameData<CharacterGameData>(groupGameData->_characterGameDataKey);
+                    if (nullptr == characterGameData)
+                    {
+                        TA_ASSERT_DEV(false, "데이터가 없습니다. CharacterGameDataKey : %d", groupGameData->_characterGameDataKey.getKeyValue());
+                        return false;
+                    }
+
+                    const AiGameData* aiGameData = GetGameData<AiGameData>(characterGameData->_aiGameDataKey);
                     if (nullptr == aiGameData)
                     {
-                        TA_ASSERT_DEV(false, "데이터가 없습니다. AiGameDataKey : %d", groupGameData->_aiGameDataKey.getKeyValue());
+                        TA_ASSERT_DEV(false, "데이터가 없습니다. AiGameDataKey : %d", characterGameData->_aiGameDataKey.getKeyValue());
                         return false;
                     }
                    
                     CommonAiComponentData data;
                     data._aiClassType = aiGameData->_aiClassType;
+                    data._pathPointPathKey = aiGameData->_pathPointPathKey;
                     if (false == initializeActorComponent(targetActorKey, &data, false))
                     {
                         TA_ASSERT_DEV(false, "비정상입니다.");

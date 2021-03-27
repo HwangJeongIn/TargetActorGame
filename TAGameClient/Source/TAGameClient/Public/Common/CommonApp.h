@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 #include "Common/CommonBase.h"
 #include "Common/Uncopyable.h"
@@ -28,7 +28,7 @@ namespace ta
 	extern void WorkerThread(Iocp* iocp) noexcept;
 
 	// Common에 존재
-	extern bool RegisterActorEvent(ActorEventObject* actorEventObject, const long long delay) noexcept;
+	extern bool RegisterActorEvent(ActorEventObject* actorEventObject, const long long delayMilliSec) noexcept;
 	extern bool ProcessActorEvent(ActorKey& targetActorKey, const ActorEventObject* actorEvent) noexcept;
 }
 
@@ -44,7 +44,7 @@ namespace ta
 		CommonActorSystemManager* getActorSystemManager(void) noexcept;
 		GameDataManager* getGameDataManager(void) noexcept;
 
-		bool registerActorEvent(ActorEventObject* actorEventObject, const long long delay) noexcept;
+		bool registerActorEvent(ActorEventObject* actorEventObject, const long long delayMilliSec) noexcept;
 
 		~CommonApp(void) noexcept;
 	protected:

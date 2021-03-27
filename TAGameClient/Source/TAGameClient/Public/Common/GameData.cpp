@@ -52,7 +52,6 @@ namespace ta
 	{
 		_key.clear();
 		_moveGameDataKey.clear();
-		_aiGameDataKey.clear();
 		_characterGameDataKey.clear();
 	}
 
@@ -67,14 +66,6 @@ namespace ta
 			}
 
 			_moveGameDataKey = FromStringCast<int32>(*value);
-		}
-
-		{
-			const std::string* value = xmlNode->getAttribute("AiGameDataKey");
-			if (nullptr != value) // 플레이어인 경우 없을 수 있다.
-			{
-				_aiGameDataKey = FromStringCast<int32>(*value);
-			}
 		}
 
 		{
@@ -149,22 +140,13 @@ namespace ta
 	void AiGameData::clearDetail(void) noexcept
 	{
 		_key.clear();
+		_aiClassType = AiClassType::Count;
+		_pathPointPathKey.clear();
 		_attackRange = 0.0f;
 	}
 
 	bool AiGameData::loadXml(XmlNode* xmlNode) noexcept
 	{
-		{
-			const std::string* value = xmlNode->getAttribute("AttackRange");
-			if (nullptr == value)
-			{
-				TA_ASSERT_DEV(false, "AttackRange 로드 실패");
-				return false;
-			}
-
-			_attackRange = FromStringCast<float>(*value);
-		}
-
 		{
 			const std::string* value = xmlNode->getAttribute("AiClassType");
 			if (nullptr == value)
@@ -174,6 +156,26 @@ namespace ta
 			}
 			_aiClassType = ConvertStringToEnum<AiClassType>(*value);
 			TA_ASSERT_DEV((AiClassType::Count != _aiClassType), "AiClassType 비정상입니다.");
+		}
+
+		{
+			const std::string* value = xmlNode->getAttribute("PathPointPathKey");
+			if (nullptr != value) // 경로는 없을 수 있다.
+			{
+				hash_value stringHash = ComputeHash(*value);
+				_pathPointPathKey = stringHash;
+			}
+		}
+
+		{
+			const std::string* value = xmlNode->getAttribute("AttackRange");
+			if (nullptr == value)
+			{
+				TA_ASSERT_DEV(false, "AttackRange 로드 실패");
+				return false;
+			}
+
+			_attackRange = FromStringCast<float>(*value);
 		}
 
 		return true;
@@ -199,6 +201,7 @@ namespace ta
 	void CharacterGameData::clearDetail(void) noexcept
 	{
 		_key.clear();
+		_aiGameDataKey.clear();
 		_strength = 0.0f;
 		_agility = 0.0f;
 		_maxHp = 0.0f;
@@ -215,6 +218,14 @@ namespace ta
 			}
 
 			_actorType = ConvertStringToEnum<ActorType>(*value);
+		}
+
+		{
+			const std::string* value = xmlNode->getAttribute("AiGameDataKey");
+			if (nullptr != value) // 플레이어인 경우 없을 수 있다.
+			{
+				_aiGameDataKey = FromStringCast<int32>(*value);
+			}
 		}
 
 		{

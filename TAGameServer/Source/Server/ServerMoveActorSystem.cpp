@@ -1000,7 +1000,7 @@ namespace ta
 
 			// findStraightPath returns 0 for polyId of last point for some reason, even though it knows the poly id.  We will fill that in correctly with the last poly id of the corridor.
 			// @TODO shouldn't it be the same as EndPolyID? (nope, it could be partial path)
-			pathPoints.back()->_polyRef = pathCorridor.back();
+			pathPoints.back()->setPolyRef(pathCorridor.back());
 			rv = true;
 		}
 
@@ -1035,14 +1035,8 @@ namespace ta
 		ss << std::this_thread::get_id();
 		TA_LOG_DEV("PathPointPath FileName : %s, PathPointPathKey(HashKey) : %lld, Thread id : %s", ToTstring(fileName).c_str(), pathPointPathKey.getKeyValue(), ss.str().c_str());
 
-		std::pair<std::unordered_map<PathPointPathKey, PathPointPath*>::iterator, bool> dataSet =
-		_pathPointPathSet.insert(std::pair(pathPointPathKey, new PathPointPath));
-		
-		if (false == dataSet.second)
-		{
-			TA_ASSERT_DEV(false, "중복되는 파일이 있을 수 없는데..");
-			return false;
-		}
+
+		std::pair<PathPointPathKey, PathPointPath*> pairData(pathPointPathKey, new PathPointPath);
 
 		const uint32 childElementCount = rootNode.getChildElementCount();
 		XmlNode* childElement = nullptr;
@@ -1066,9 +1060,42 @@ namespace ta
 			position._y = FromStringCast<float>(*(positionElement->getAttribute("Y")));
 			position._z = FromStringCast<float>(*(positionElement->getAttribute("Z")));
 
-			dataSet.first->second->addPathPoint(position);
+			pairData.second->addPathPoint(position);
 		}
 
+
+		// 공유자원이므로 최종 삽입시 락걸어야한다.
+		{
+			ScopedLock lock(&_pathPointPathSetLoadLock);
+
+			std::pair<std::unordered_map<PathPointPathKey, PathPointPath*>::iterator, bool> rv =
+				_pathPointPathSet.insert(pairData);
+			if (false == rv.second)
+			{
+				TA_ASSERT_DEV(false, "중복되는 파일이 있을 수 없는데..");
+				return false;
+			}
+		}
+
+
 		return true;
+	}
+	
+	const PathPointPath* ServerMoveActorSystem::getPathPointPath(const PathPointPathKey& pathPointPathKey) const noexcept
+	{
+		if (false == pathPointPathKey.isValid())
+		{
+			TA_ASSERT_DEV(false, "비정상입니다.");
+			return nullptr;
+		}
+
+		const std::unordered_map<PathPointPathKey, PathPointPath*>::const_iterator rv = _pathPointPathSet.find(pathPointPathKey);
+		if (_pathPointPathSet.end() == rv)
+		{
+			TA_ASSERT_DEV(false, "비정상입니다.");
+			return nullptr;
+		}
+
+		return rv->second;
 	}
 }
