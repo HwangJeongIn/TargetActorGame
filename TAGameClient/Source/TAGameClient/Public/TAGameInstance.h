@@ -5,7 +5,8 @@
 #include "CoreMinimal.h"
 #include "Engine/GameInstance.h"
 #include "Containers/Queue.h"
-#include "TAGameEvent.h"
+#include <vector>
+#include "Common/Lockable.h"
 #include "TAGameInstance.generated.h"
 
 
@@ -14,6 +15,7 @@ class UWorld;
 class ATAPlayer;
 class ATAPlayerController;
 class ULevel;
+class TAGameEvent;
 
 
 extern UTAGameInstance* TAGetGameInstance(void) noexcept;
@@ -59,7 +61,13 @@ public:
 	void clearGameEvents(void) noexcept;
 
 private:
-	TQueue<TAGameEvent*> _gameEventQueue;
+	// UE4 자체 TQueue로 c++ 클래스 TAGameEvent 객체들을 담았다가 일단 문제 발생할것 같아서 바꾸었다.
+	// UPROPERTY로 가비지 수집되는 것을 막을 순 있지만, 그러려면 객체가 UCLASS나 USTRUCT이여야 하는데 
+	// UCLASS의 UObject객체로 하자니 여러 스레드에서 생성하게 되어서 문제 생길 수 있다. // UObject는 따로 관리받는 객체
+	// USTRUCT의 경우는 시도해봤지만 빌드는 UPROPERTY없을 때 잘되었지만, UPROPERTY를 붙이는 순간 불가능하다고 컴파일 에러난다.
+	// 추후 좋은 방법이 있으면 바꿀 예정이다. (TQueue가 Thread Safe하기 때문에 락이 따로 필요없어서 빠르긴하다.. 방법고민중)
+	std::vector<TAGameEvent*> _gameEventQueue;
+	ta::LockableObject _gameEventQueueLock;
 
 	UPROPERTY(VisibleAnyWhere, Category = GameControl)
 	bool _navMeshExported;

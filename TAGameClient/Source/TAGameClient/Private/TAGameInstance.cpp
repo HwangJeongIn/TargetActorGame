@@ -12,6 +12,7 @@
 #include "TAPlayerController.h"
 #include "TAPathPoint.h"
 #include "TASpawnData.h"
+#include "TAGameEvent.h"
 #include "TimerManager.h"
 #include "NavigationSystem.h"
 #include "NavMesh/RecastNavMesh.h"
@@ -28,6 +29,7 @@
 #include "Common/FileLoader.h"
 #include "Common/GetComponentAndSystem.h"
 #include "Common/StringUtility.h"
+#include "Common/ScopedLock.h"
 
 
 UTAGameInstance* TAGetGameInstance(void) noexcept
@@ -659,43 +661,55 @@ void UTAGameInstance::processGameEventQueue(void) noexcept
 	//TA_LOG_DEV("processGameEvent");
 	GetTimerManager().SetTimerForNextTick(this, &UTAGameInstance::processGameEventQueue);
 
-	if (true == _gameEventQueue.IsEmpty())
 	{
-		return;
-	}
-
-	TAGameEventProcessParameter parameter;
-	parameter._gameInstance = this;
-	parameter._world = GetWorld();
-
-	while (false == _gameEventQueue.IsEmpty())
-	{
-		TAGameEvent* output = nullptr;
-		if (true == _gameEventQueue.Dequeue(output))
+		ta::ScopedLock gameEventQueueLock(&_gameEventQueueLock);
+		const uint32 gameEventCount = _gameEventQueue.size();
+		if (0 == gameEventCount)
 		{
-			TA_LOG_DEV("GameEventType : %d, ActorKey : %d", output->getGameEventType(), output->getActorKey().getKeyValue());
-			if (false == output->processEvent(parameter))
-			{
-				TA_ASSERT_DEV(false, "비정상입니다");
-			}
-			delete output;
+			return;
 		}
+
+		TAGameEventProcessParameter parameter;
+		parameter._gameInstance = this;
+		parameter._world = GetWorld();
+
+		for (uint32 index = 0; index < gameEventCount; ++index)
+		{
+			TAGameEvent* gameEvent = _gameEventQueue[index];
+			if (nullptr != gameEvent)
+			{
+				TA_LOG_DEV("GameEventType : %d, ActorKey : %d", gameEvent->getGameEventType(), gameEvent->getActorKey().getKeyValue());
+				if (false == gameEvent->processEvent(parameter))
+				{
+					TA_ASSERT_DEV(false, "비정상입니다");
+				}
+				delete gameEvent;
+			}
+		}
+
+		_gameEventQueue.clear();
 	}
+
 }
 
 bool UTAGameInstance::registerGameEvent(TAGameEvent* gameEvent) noexcept
 {
-	return _gameEventQueue.Enqueue(gameEvent);
+	ta::ScopedLock gameEventQueueLock(&_gameEventQueueLock);
+	_gameEventQueue.push_back(gameEvent);
+	return true;
 }
 
 void UTAGameInstance::clearGameEvents(void) noexcept
 {
-	while (false == _gameEventQueue.IsEmpty())
+	ta::ScopedLock gameEventQueueLock(&_gameEventQueueLock);
+	const uint32 gameEventCount = _gameEventQueue.size();
+	for (uint32 index = 0; index < gameEventCount; ++index)
 	{
-		TAGameEvent* output = nullptr;
-		if (true == _gameEventQueue.Dequeue(output))
+		if (nullptr != _gameEventQueue[index])
 		{
-			delete output;
+			delete _gameEventQueue[index];
 		}
 	}
+
+	_gameEventQueue.clear();
 }

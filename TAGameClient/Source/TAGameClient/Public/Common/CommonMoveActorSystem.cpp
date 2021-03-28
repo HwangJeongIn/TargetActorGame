@@ -6,11 +6,14 @@
 #include "Common/Sector.h"
 #include "Common/Serializer.h"
 
+// 충돌나지 않게 조심해야한다. // TA의 recast nav mesh / UE4의 recast nav mesh
+//#include "RecastNavigation/NavMeshPoint.h"
+//#include "RecastNavigation/NavMeshPath.h"
+
 #if defined(TA_SERVER) && !defined(TA_CLIENT_IN_SERVER)
 #include "RecastNavigation/Detour/DetourNavMesh.h"
 #include "RecastNavigation/Detour/DetourNavMeshQuery.h"
-#include "RecastNavigation/NavMeshPoint.h"
-#include "RecastNavigation/NavMeshPath.h"
+
 #elif !defined(TA_SERVER)
 #include "Detour/DetourNavMesh.h"
 #include "Detour/DetourNavMeshQuery.h"

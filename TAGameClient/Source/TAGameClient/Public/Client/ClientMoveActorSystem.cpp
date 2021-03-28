@@ -1,6 +1,6 @@
 ﻿#include "Client/ClientMoveActorSystem.h"
 #include "Client/AllPacketClient.h"
-#include "Common/CommonActor.h"
+#include "Client/ClientActor.h"
 #include "Common/CommonMoveActorComponent.h"
 #include "Common/ScopedLock.h"
 #include "Common/FileLoader.h"
@@ -99,7 +99,14 @@ namespace ta
 
 	bool ClientMoveActorSystem::respondMoveActor(CommonActor* target, const Vector& newPos) const noexcept
 	{
-		return moveActor(target, newPos, true);
+		const bool rv = moveActor(target, newPos, true);
+		ClientActor* targetClientActor = static_cast<ClientActor*>(target);
+
+		//targetClientActor->
+		//
+		return rv;
+
+
 	}
 	
 	bool ClientMoveActorSystem::respondRotateActor(CommonMoveActorComponent* myMove, const Vector& newDirection) const noexcept
