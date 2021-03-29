@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 #include "Common/ActorComponent.h"
 #include "Common/Vector.h"
@@ -39,7 +39,7 @@ namespace ta
 	protected:
 		CommonMoveActorComponent(void) noexcept;
 
-	private:
+	protected:
 		Vector _currentPosition;
 		Vector _currentRotation;
 		float _speed;

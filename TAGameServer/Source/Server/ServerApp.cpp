@@ -16,6 +16,8 @@
 //test
 #include "Common/Serializer.h"
 #include "Common/FileLoader.h"
+#include "Common/Sector.h"
+#include "Common/Vector.h"
 
 
 
@@ -276,6 +278,12 @@ namespace ta
 			return;
 		}
 
+		// 테스트
+		{
+			//GetSectorIndex(Vector(-2914.950684, -103.544373, 10.000));
+			//GetSectorIndex(Vector(-2707.453613, 128.698975, 36.1500));
+		}
+		
 
 		CommonApp::run();
 

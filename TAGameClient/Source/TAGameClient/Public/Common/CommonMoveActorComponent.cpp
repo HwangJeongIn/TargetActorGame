@@ -1,4 +1,4 @@
-#include "Common/CommonMoveActorComponent.h"
+﻿#include "Common/CommonMoveActorComponent.h"
 #include "Common/GetComponentAndSystem.h"
 #include "Common/CommonMoveActorSystem.h"
 #include "Common/ScopedLock.h"
@@ -32,6 +32,9 @@ namespace ta
 
 		// Common초기화
 		data->_position = _currentPosition;
+		data->_rotation = _currentRotation;
+		data->_speed = _speed;
+
 		return data;
 	}
 

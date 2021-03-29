@@ -110,13 +110,6 @@ namespace ta
 		const ActorType targetActorType = targetActor->getActorType();
 		const ActorKey targetActorKey = targetActor->getActorKey();
 
-		// 일반 몬스터들도 사용해야한다.
-		//if (ActorType::Player != targetActorType)
-		//{
-		//	TA_ASSERT_DEV(false, "비정상입니다.");
-		//	return false;
-		//}
-
 		ServerMoveActorComponent* targetActorMoveCom = GetActorComponent<ServerMoveActorComponent>(targetActorKey);
 		if (nullptr == targetActorMoveCom)
 		{
@@ -154,43 +147,24 @@ namespace ta
 		}
 		newViewList.erase(targetActorKey);
 
-		// Create Move 처리
+		// 플레이어가 아님에도 뷰를 관리해야하는 이유
+		// Activate / Deactivate AI
+
+		// Create Move 처리 // old 존재O new 존재O or old 존재X new 존재O
 		{
 			std::unordered_map<ActorKey, ActorType>::iterator it = newViewList.begin();
 			const std::unordered_map<ActorKey, ActorType>::const_iterator end = newViewList.end();
 			for (; end != it; ++it)
 			{
+				// 나 먼저 갱신 // 내가 움직였기 때문에 내입장에서는 새로 생긴것들에 대해서 create만 해주면된다. 
 				if (oldViewList.end() == oldViewList.find(it->first)) // old 존재X new 존재O
 				{
 					// 내 입장에서 새로 들어온 액터들 => 나도 모르기 때문에 나한테 액터를 Create 해준다.
-
-					// 일단 나한테 해당 액터 들어왔다고 알려준다. // 플레이어가 아닌친구들까지 뷰를 관리해줄필요가 없다
-					if (ActorType::Player == targetActorType)
-					{
-						createActorInClient(targetActorMoveCom, it->first, it->second);
-						if (ActorType::Player != it->second)
-						{
-							activateAiIfDisabled(it->first);
-						}
-					}
-					else
-					{
-						// AI인 경우 새로들어온것이 플레이어인경우 + AI가 비활성화되어있는 경우 AI를 깨워준다.
-						if (ActorType::Player == it->second)
-						{
-							activateAiIfDisabled(targetActorKey);
-						}
-					}
+					createActorToViewList(targetActorMoveCom, targetActorType, it->first, it->second);
 				}
 
-				// old 존재X new 존재O or old new 존재O // new에 존재하면 해당 sector actor가 플레이어일때 move나 create 둘 중 하나다
-
-				// 플레이어가 아닌친구들까지 뷰를 관리해줄필요가 없다
-				if (ActorType::Player != it->second)
-				{
-					continue;
-				}
-
+				// 상대방 갱신
+				// old 존재O new 존재O or old 존재X new 존재O // 상대방 입장에서 내가 있는지 보고 있으면 Move 없으면 Create
 				ServerMoveActorComponent* sectorActorMoveCom = GetActorComponent<ServerMoveActorComponent>(it->first);
 				if (nullptr == sectorActorMoveCom)
 				{
@@ -205,54 +179,37 @@ namespace ta
 					targetExistInSectorActorViewList = sectorActorMoveCom->checkExistInViewList_(targetActorKey);
 				}
 
-				if (true == targetExistInSectorActorViewList) // 상대방이 나를 알때 Move
+				if (true == targetExistInSectorActorViewList) // 상대방이 나를 알때 Move // 플레이어 한정
 				{
-					moveActorInClient(sectorActorMoveCom, targetActorKey);
+					if (ActorType::Player == it->second)
+					{
+						moveActorInClient(sectorActorMoveCom, targetActorKey);
+					}
 				}
 				else // 상대방이 나를 모를때 Create
 				{
-					createActorInClient(sectorActorMoveCom, targetActorKey, targetActorType);
+					createActorToViewList(sectorActorMoveCom, it->second, targetActorKey, targetActorType);
 				}
 			}
 		}
 
-		// Destroy처리
+		// Destroy처리 // old 존재O new 존재X // old 존재O new 존재O 는 방금 처리했다.
 		{
 			std::unordered_map<ActorKey, ActorType>::iterator it = oldViewList.begin();
 			const std::unordered_map<ActorKey, ActorType>::const_iterator end = oldViewList.end();
 			for (; end != it; ++it)
 			{
-				if (newViewList.end() != newViewList.find(it->first)) // old 존재O new 존재O
+				if (newViewList.end() != newViewList.find(it->first)) // old 존재O new 존재O // 방금 처리했다.
 				{
 					continue;
 				}
 
 				// old 존재O new 존재X
 
-				// 내 입장에서 빠져나온 액터들 => 나도 SectorActor Destroy / SectorActor입장에서도 나 있으면 Destroy // 플레이어일때만 적용
-				// 일단 나한테 해당 액터 들어왔다고 알려준다. // 플레이어가 아닌친구들까지 뷰를 관리해줄필요가 없다
-				if (ActorType::Player == targetActorType)
-				{
-					destroyActorInClient(targetActorMoveCom, it->first);
-					if (ActorType::Player != it->second)
-					{
-						deactivateAiIfNotDisabled(it->first);
-					}
-				}
-				else
-				{
-					if (ActorType::Player == it->second)
-					{
-						deactivateAiIfNotDisabled(targetActorKey);
-					}
-				}
+				// 나 먼저 갱신 // 내 입장에서 빠져나온 액터들 => 더이상 ViewList에 없는 액터 => Destroy 
+				destroyActorFromViewList(targetActorMoveCom, targetActorType, it->first, it->second);
 
-				// 플레이어가 아닌친구들까지 뷰를 관리해줄필요가 없다
-				if (ActorType::Player != it->second)
-				{
-					continue;
-				}
-
+				// 상대방 갱신
 				ServerMoveActorComponent* sectorActorMoveCom = GetActorComponent<ServerMoveActorComponent>(it->first);
 				if (nullptr == sectorActorMoveCom)
 				{
@@ -269,7 +226,7 @@ namespace ta
 
 				if (true == targetExistInSectorActorViewList) // 상대방이 나를 알때 Destroy
 				{
-					destroyActorInClient(sectorActorMoveCom, targetActorKey);
+					destroyActorFromViewList(sectorActorMoveCom, it->second, targetActorKey, targetActorType);
 				}
 			}
 		}
@@ -315,13 +272,13 @@ namespace ta
 					const ActorType sectorActorType = sectorActor->getActorType();
 					if (ActorType::Player == sectorActorType)
 					{
-						createActorInClient(*it, targetActorKey, targetActorActorType);
+						createActorToViewList(*it, targetActorKey, targetActorActorType);
 					}
 
 					// 나한테 알리기
 					if (ActorType::Player == targetActorActorType)
 					{
-						createActorInClient(targetActorKey, *it, sectorActorType);
+						createActorToViewList(targetActorKey, *it, sectorActorType);
 					}
 				}
 			}
@@ -354,13 +311,13 @@ namespace ta
 					const ActorType sectorActorType = sectorActor->getActorType();
 					if (ActorType::Player == sectorActorType)
 					{
-						destroyActorInClient(*it, targetActorKey);
+						destroyActorFromViewList(*it, targetActorKey);
 					}
 
 					// 나한테 알리기
 					if (ActorType::Player == targetActorActorType)
 					{
-						destroyActorInClient(targetActorKey, *it);
+						destroyActorFromViewList(targetActorKey, *it);
 					}
 				}
 			}
@@ -466,14 +423,15 @@ namespace ta
 		return true;
 	}
 
-	void ServerMoveActorSystem::moveActorInClient(ServerMoveActorComponent* clientActorMoveCom, const ActorKey& targetActorKey) const noexcept
+	void ServerMoveActorSystem::moveActorInClient(ServerMoveActorComponent* observerMoveCom, const ActorKey& targetActorKey) const noexcept
 	{
-		const ActorKey& clientActorKey = clientActorMoveCom->getOwnerActorKey();
+		const ActorKey& observerActorKey = observerMoveCom->getOwnerActorKey();
+		CommonMoveActorComponent* targetActorMoveCom = GetActorComponent<CommonMoveActorComponent>(targetActorKey);
 
 		Vector position;
 		{
-			ScopedLock lock(clientActorMoveCom, true);
-			position = clientActorMoveCom->getCurrentPosition_();
+			ScopedLock lock(targetActorMoveCom, true);
+			position = targetActorMoveCom->getCurrentPosition_();
 		}
 
 		TA_LOG_DEV("actor<%d> move to (%.1f, %.1f, %.1f) / observer : actor<%d>"
@@ -481,54 +439,70 @@ namespace ta
 				   , position._x
 				   , position._y
 				   , position._z
-				   , clientActorKey.getKeyValue());
+				   , observerActorKey.getKeyValue());
 
-		SendMoveActorSTC(clientActorKey, targetActorKey, position);
+		SendMoveActorSTC(observerActorKey, targetActorKey, position);
 	}
 
-	void ServerMoveActorSystem::createActorInClient(ServerMoveActorComponent* clientActorMoveCom
+	void ServerMoveActorSystem::createActorToViewList(ServerMoveActorComponent* observerMoveCom
+													, const ActorType& observerActorType
 													, const ActorKey& targetActorKey
-													, const ActorType& actorType) const noexcept
+													, const ActorType& targetActorType) const noexcept
 	{
-		const ActorKey& clientActorKey = clientActorMoveCom->getOwnerActorKey();
+		const ActorKey& observerActorKey = observerMoveCom->getOwnerActorKey();
 
-		//CommonActor* targetActor = GetActorManager()->getActor(targetActorKey, true);
-		//if (nullptr == targetActor)
-		//{
-
-		//}
-		//ActorType actorType = ActorType::Count;
-		//{
-		//	ScopedLock lock(clientActorMoveCom);
-		//	clientActorMoveCom->addToViewList_(targetActorKey);
-		//}
-
+		bool canActivateAi = false;
 		{
-			ScopedLock lock(clientActorMoveCom);
-			clientActorMoveCom->addToViewList_(targetActorKey);
+			ScopedLock lock(observerMoveCom);
+			observerMoveCom->addToViewList_(targetActorKey, targetActorType);
+			canActivateAi = (1 == observerMoveCom->getViewListPlayerCount_());
 		}
 
-		TA_LOG_DEV("create actor<%d> to actor<%d>", targetActorKey.getKeyValue(), clientActorKey.getKeyValue());
+		TA_LOG_DEV("create actor<%d> to actor<%d>", targetActorKey.getKeyValue(), observerActorKey.getKeyValue());
 
-		// createActorInClient은 항상 moveActorInClient를 타고 들어오도록 설계 // 앞에서 ViewList체크 끝났다.
-		SendCreateActorSTC(clientActorKey, static_cast<uint32>(actorType), targetActorKey);
-
-		// 컴포넌트 정보들도 싸서 보내주자
-		SendAllComponentDataToClient(clientActorKey, targetActorKey);
+		if (ActorType::Player != observerActorType) // observer 가 플레이어가 아닐때
+		{
+			if (true == canActivateAi)
+			{
+				activateAiIfDisabled(observerMoveCom->getOwnerActorKey());
+			}
+		}
+		else // observer 가 플레이어 일때
+		{
+			// createActorToViewList은 항상 moveActorInClient를 타고 들어오도록 설계 // 앞에서 ViewList체크 끝났다.
+			SendCreateActorSTC(observerActorKey, static_cast<uint32>(targetActorType), targetActorKey);
+			// 컴포넌트 정보들도 싸서 보내주자
+			SendAllComponentDataToClient(observerActorKey, targetActorKey);
+		}
 	}
 
-	void ServerMoveActorSystem::destroyActorInClient(ServerMoveActorComponent* clientActorMoveCom
-													 , const ActorKey& actorKeyToDestroy) const noexcept
+	void ServerMoveActorSystem::destroyActorFromViewList(ServerMoveActorComponent* observerMoveCom
+														 , const ActorType& observerActorType
+														 , const ActorKey& targetActorKey
+														 , const ActorType& targetActorType) const noexcept
 	{
-		const ActorKey& clientActorKey = clientActorMoveCom->getOwnerActorKey();
+		const ActorKey& observerActorKey = observerMoveCom->getOwnerActorKey();
 
+		bool canDeactivateAi = false;
 		{
-			ScopedLock lock(clientActorMoveCom);
-			clientActorMoveCom->removeFromViewList_(actorKeyToDestroy);
+			ScopedLock lock(observerMoveCom);
+			observerMoveCom->removeFromViewList_(targetActorKey, targetActorType);
+			canDeactivateAi = (false == observerMoveCom->existPlayerInViewList_());
 		}
 
-		TA_LOG_DEV("destroy actor<%d> from actor<%d>", actorKeyToDestroy.getKeyValue(), clientActorKey.getKeyValue());
-		SendDestroyActorSTC(clientActorKey, actorKeyToDestroy);
+		TA_LOG_DEV("destroy actor<%d> from actor<%d>", targetActorKey.getKeyValue(), observerActorKey.getKeyValue());
+
+		if (ActorType::Player != observerActorType) // observer 가 플레이어가 아닐때
+		{
+			if (true == canDeactivateAi)
+			{
+				deactivateAiIfNotDisabled(observerMoveCom->getOwnerActorKey());
+			}
+		}
+		else // observer 가 플레이어 일때
+		{
+			SendDestroyActorSTC(observerActorKey, targetActorKey);
+		}
 	}
 
 	void ServerMoveActorSystem::convertToActorKeyWithActorType(const std::unordered_set<ActorKey>& input, std::unordered_map<ActorKey, ActorType>& output) const noexcept

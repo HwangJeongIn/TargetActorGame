@@ -39,5 +39,10 @@ namespace ta
 
 		bool respondRotateActor(CommonMoveActorComponent* myMove
 							   , const Vector& newDirection) const noexcept;
+
+		// Client에서 스폰완료후 Client Move Com의 onActive에서 호출
+		bool setStartTransform(CommonActor* target
+							   , const Vector& newPos
+							   , const Vector& newRot) const noexcept;
 	};
 }

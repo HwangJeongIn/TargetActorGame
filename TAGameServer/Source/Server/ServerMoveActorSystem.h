@@ -58,9 +58,9 @@ namespace ta
 								, const std::unordered_set<SectorKey>& fromSectors
 								, const std::unordered_set<SectorKey>& toSectors) const noexcept;
 
-		void moveActorInClient(ServerMoveActorComponent* clientActorMoveCom, const ActorKey& targetActorKey) const noexcept;
-		void createActorInClient(ServerMoveActorComponent* clientActorMoveCom, const ActorKey& targetActorKey, const ActorType& actorType) const noexcept;
-		void destroyActorInClient(ServerMoveActorComponent* clientActorMoveCom, const ActorKey& targetActorKey) const noexcept;
+		void moveActorInClient(ServerMoveActorComponent* observerMoveCom, const ActorKey& targetActorKey) const noexcept;
+		void createActorToViewList(ServerMoveActorComponent* observerMoveCom, const ActorType& observerActorType, const ActorKey& targetActorKey, const ActorType& targetActorType) const noexcept;
+		void destroyActorFromViewList(ServerMoveActorComponent* observerMoveCom, const ActorType& observerActorType, const ActorKey& targetActorKey, const ActorType& targetActorType) const noexcept;
 
 		void convertToActorKeyWithActorType(const std::unordered_set<ActorKey>& input, std::unordered_map<ActorKey, ActorType>& output) const noexcept;
 

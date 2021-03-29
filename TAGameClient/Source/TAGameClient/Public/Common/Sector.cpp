@@ -1,4 +1,4 @@
-#include "Common/Sector.h"
+﻿#include "Common/Sector.h"
 #include <cmath>
 #include "Common/Vector.h"
 #include "Common/CommonActor.h"
@@ -43,15 +43,19 @@ namespace ta
 
 		uint32 indexX = 0;
 		uint32 indexY = 0;
+		// 인덱스는 무조건 올려야한다. ex) SectorSize = 300일때, // 좀 더 계산이 들어가지만 기본적으로 다음과 같다.
+		//								 Position(-200, 100) => SectorIndex(0,1)
+		//								 Position(-301, 100) => SectorIndex(-1,1)
+		//								 Position(400, 500) => SectorIndex(2,2)
+
 		if (0.0f < position._x)
 		{
 			// x값이 클수록 높아지기 때문에 x인덱스는 작아진다. // 남으면 올림해야한다.
-			indexX = (HalfCountOfOneSideSectors)-(uint32)ceil(position._x / SectorSize);
+			indexX = (HalfCountOfOneSideSectors)+(uint32)ceil(position._x / SectorSize);
 		}
 		else
 		{
-			// 남으면 내림림해야한다. ex) -15/10 => -1.5 => -2.0
-			indexX = (HalfCountOfOneSideSectors)+(uint32)abs(floor(position._x / SectorSize));
+			indexX = (HalfCountOfOneSideSectors)-(uint32)abs(ceil(position._x / SectorSize));
 		}
 
 		if (0.0f < position._y)
@@ -60,7 +64,7 @@ namespace ta
 		}
 		else
 		{
-			indexY = (HalfCountOfOneSideSectors)-(uint32)abs(floor(position._x / SectorSize));
+			indexY = (HalfCountOfOneSideSectors)-(uint32)abs(ceil(position._y / SectorSize));
 		}
 
 		return SectorKey(indexX * CountOfOneSideSectors + indexY);

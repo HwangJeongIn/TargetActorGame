@@ -1,4 +1,4 @@
-#include "Server/ServerMoveActorComponent.h"
+﻿#include "Server/ServerMoveActorComponent.h"
 #include "Server/ServerMoveActorSystem.h"
 #include "Common/ScopedLock.h"
 #include "Common/GetComponentAndSystem.h"
@@ -7,6 +7,7 @@
 namespace ta
 {
 	ServerMoveActorComponent::ServerMoveActorComponent(void) noexcept
+		: _viewListPlayerCount(0)
 	{
 	}
 
@@ -43,22 +44,63 @@ namespace ta
 		_viewList = newViewList;
 	}
 
-	bool ServerMoveActorComponent::addToViewList_(const ActorKey& target) noexcept
+	bool ServerMoveActorComponent::addToViewList_(const ActorKey& target, const ActorType& targetActorType) noexcept
 	{
-		std::pair<std::unordered_set<ActorKey>::iterator, bool> rv = _viewList.insert(target);
-		return rv.second;
+		std::pair<std::unordered_set<ActorKey>::iterator, bool> result = _viewList.insert(target);
+		const bool rv = result.second;
+		if (true == rv)
+		{
+			if (ActorType::Player == targetActorType)
+			{
+				increaseViewListPlayerCount_();
+			}
+		}
+
+		return rv;
 	}
 
-	bool ServerMoveActorComponent::removeFromViewList_(const ActorKey& target) noexcept
+	bool ServerMoveActorComponent::removeFromViewList_(const ActorKey& target, const ActorType& targetActorType) noexcept
 	{
-		size_t rv = _viewList.erase(target);
-		return (0 < rv);
+		size_t result = _viewList.erase(target);
+		const bool rv = (0 < result);
+		if (true == rv)
+		{
+			if (ActorType::Player == targetActorType)
+			{
+				decreaseViewListPlayerCount_();
+			}
+		}
+
+		return rv;
 	}
 
 	bool ServerMoveActorComponent::checkExistInViewList_(const ActorKey& target) const noexcept
 	{
 		std::unordered_set<ActorKey>::iterator rv = _viewList.find(target);
 		return (_viewList.end() != rv);
+	}
+
+	bool ServerMoveActorComponent::existPlayerInViewList_(void) const noexcept
+	{
+		return (0 < _viewListPlayerCount);
+	}
+
+	uint32 ServerMoveActorComponent::getViewListPlayerCount_(void) const noexcept
+	{
+		return _viewListPlayerCount;
+	}
+
+	void ServerMoveActorComponent::increaseViewListPlayerCount_(void) noexcept
+	{
+		++_viewListPlayerCount;
+	}
+
+	void ServerMoveActorComponent::decreaseViewListPlayerCount_(void) noexcept
+	{
+		if (0 != _viewListPlayerCount)
+		{
+			--_viewListPlayerCount;
+		}
 	}
 }
 

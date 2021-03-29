@@ -2,9 +2,11 @@
 #include "TAGameInstance.h"
 #include "TAPlayer.h"
 #include "TACharacter.h"
+#include "TANonPlayer.h"
 #include "TAConvertFunctions.h"
 #include "TAGameInstance.h"
 #include "TAPlayerController.h"
+#include "TAAIController.h"
 #include "TAInventoryUserWidget.h"
 #include "Client/ClientApp.h"
 #include "Client/ClientActorManager.h"
@@ -79,6 +81,7 @@ bool TAGameEvent::setActorKey(const ta::ActorKey& actorKey) noexcept
 	return true;
 }
 
+//=============================================================================================================
 TAGameEventSpawnActor::TAGameEventSpawnActor(void) noexcept
 	: TAGameEvent(TAGameEvent::GameEventType::SpawnActor)
 	, _isMainPlayer(false)
@@ -120,34 +123,28 @@ bool TAGameEventSpawnActor::processEvent(TAGameEventProcessParameter& parameter)
 	}
 
 	ATACharacter* character = nullptr;
+	FVector position;
+	FRotator rotation;
+	float speed;
+	{
+		ta::ScopedLock componentLock(actorMove, true);
+		ta::Vector currentPosition = actorMove->getCurrentPosition_();
+		ta::Vector currentRotation = actorMove->getCurrentRotation_();
+		speed= actorMove->getSpeed_();
+
+		TAVectorToFVector(currentPosition, position);
+		rotation.Roll	= currentRotation._x;
+		rotation.Pitch	= currentRotation._y;
+		rotation.Yaw	= currentRotation._z;
+	}
+
 	if (false == _isMainPlayer)
 	{
-		FVector position;
+		character = TASpawnTAActor(actorKey, position, rotation);
+		if (nullptr == character)
 		{
-			ta::ScopedLock componentLock(actorMove, true);
-			ta::Vector currentPosition = actorMove->getCurrentPosition_();
-			TA_LOG_DEV("<SpawnActor> => actorkey : %d, current position (%.1f, %.1f, %.1f)", actorKey.getKeyValue(), currentPosition._x, currentPosition._y, currentPosition._z);
-			TAVectorToFVector(currentPosition, position);
-		}
-
-		{
-			ta::ScopedLock actorLock(actor);
-			//if (false == actor->isActive_())
-			//{
-			//	TA_ASSERT_DEV(false, "액터가 활성화 되어있지 않습니다. ActorKey : %d", _actorKey.getKeyValue());
-			//	return false;
-			//}
-
-			//actor->getActorType_();
-			FActorSpawnParameters actorSpawnParameters;
-			actorSpawnParameters.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
-			character = parameter._world->SpawnActor<ATACharacter>(ATACharacter::StaticClass(), position, FRotator::ZeroRotator, actorSpawnParameters);
-			if (nullptr == character)
-			{
-				TA_ASSERT_DEV(false, "비정상입니다.");
-				return false;
-			}
-
+			TA_ASSERT_DEV(false, "비정상입니다.");
+			return false;
 		}
 	}
 	else
@@ -158,15 +155,35 @@ bool TAGameEventSpawnActor::processEvent(TAGameEventProcessParameter& parameter)
 			TA_ASSERT_DEV(false, "비정상입니다.");
 			return false;
 		}
+		character->SetActorLocation(position);
+		character->SetActorRotation(rotation);
+
+		character->setActorKey(actorKey);
+
+		{
+			ta::ScopedLock actorLock(actor);
+			actor->setUnrealCharacter_(character);
+		}
+
 	}
 
-	character->setActorKey(actorKey);
-	actor->setUnrealCharacter_(character);
+	UCharacterMovementComponent* characterMovement = character->GetCharacterMovement();
+	if (nullptr == characterMovement)
+	{
+		return false;
+	}
+
+	characterMovement->MaxWalkSpeed = speed;
+
+	TA_LOG_DEV("<SpawnActor> => actorkey : %d, position : (%.1f, %.1f, %.1f), rotation : (%.1f, %.1f, %.1f), speed : %.1f", actorKey.getKeyValue()
+			   , position.X, position.Y, position.Z
+			   , rotation.Roll, rotation.Pitch, rotation.Yaw, speed);
 
 	return true;
 }
 
 
+//=============================================================================================================
 TAGameEventDestroyActor::TAGameEventDestroyActor(void) noexcept
 	: TAGameEvent(TAGameEvent::GameEventType::DestroyActor)
 {
@@ -194,25 +211,17 @@ bool TAGameEventDestroyActor::processEvent(TAGameEventProcessParameter& paramete
 		return false;
 	}
 
+	if (false == TADestroyTAActor(actorKey))
 	{
-		ta::ScopedLock actorLock(actor);
-		if (false == actor->isActive_())
-		{
-			TA_ASSERT_DEV(false, "액터가 활성화 되어있지 않습니다. ActorKey : %d", actorKey.getKeyValue());
-			return false;
-		}
-
-		if (false == actor->destroyUnrealCharacter_())
-		{
-			TA_ASSERT_DEV(false, "비정상입니다.");
-			return false;
-		}
+		TA_ASSERT_DEV(false, "비정상입니다.");
+		return false;
 	}
 
 	return true;
 }
 
 
+//=============================================================================================================
 TAGameEventInitializeInventory::TAGameEventInitializeInventory(void) noexcept
 	: TAGameEvent(TAGameEvent::GameEventType::InitializeInventory)
 	, _capacity(0)
@@ -270,6 +279,7 @@ bool TAGameEventInitializeInventory::setCapacity(const ta::int32 capacity) noexc
 }
 
 
+//=============================================================================================================
 TAGameEventRefreshInventory::TAGameEventRefreshInventory(void) noexcept
 	: TAGameEvent(TAGameEvent::GameEventType::RefreshInventory)
 	, _slotNo(-1)
@@ -324,4 +334,141 @@ bool TAGameEventRefreshInventory::setSlotNo(const ta::ItemSlotNo slotNo) noexcep
 
 	_slotNo = slotNo;
 	return true;
+}
+
+
+//=============================================================================================================
+TAGameEventMoveToLocation::TAGameEventMoveToLocation(void) noexcept
+	: TAGameEvent(TAGameEvent::GameEventType::MoveToLocation)
+{
+
+}
+
+TAGameEventMoveToLocation::~TAGameEventMoveToLocation(void) noexcept
+{
+
+}
+
+bool TAGameEventMoveToLocation::processEvent(TAGameEventProcessParameter& parameter) noexcept
+{
+	if (nullptr == parameter._world)
+	{
+		TA_ASSERT_DEV(false, "게임월드가 존재하지 않습니다.");
+		return false;
+	}
+
+	const ta::ActorKey actorKey = getActorKey();
+	ta::ClientActor* actor = static_cast<ta::ClientActor*>(ta::GetActorManager()->getActor(actorKey));
+	if (nullptr == actor)
+	{
+		TA_ASSERT_DEV(false, "비정상입니다.");
+		return false;
+	}
+
+	ATAPlayerController* playerController = TAGetFirstPlayerController();
+	if (nullptr == playerController)
+	{
+		TA_ASSERT_DEV(false, "비정상입니다.");
+		return false;
+	}
+
+	{
+		ATACharacter* character = actor->getUnrealCharacter_();
+		if (nullptr == character)
+		{
+			TA_ASSERT_DEV(false, "비정상입니다.");
+			return false;
+		}
+
+		ATAPlayerController* playerController = Cast<ATAPlayerController>(character->GetController());
+		if (nullptr != playerController)
+		{
+			// 플레이어 자동이동 구현해야됨
+			return true;
+		}
+
+		ATAAIController* aiController = Cast<ATAAIController>(character->GetController());
+		if (nullptr != aiController)
+		{
+			// 서버에서 길찾기 했기 떄문에 따로 길찾기 하지않는다.
+			FVector destination;
+			TAVectorToFVector(_destination, destination);
+			//character->SetActorLocation(destination);
+			aiController->MoveToLocation(destination, -1.0f, true, false);
+			TA_LOG_DEV("<MoveToLocation> => actorkey : %d, current position (%.1f, %.1f, %.1f)", actorKey.getKeyValue(), _destination._x, _destination._y, _destination._z);
+
+			return true;
+		}
+
+	}
+
+	return false;
+}
+
+void TAGameEventMoveToLocation::setDestination(const ta::Vector& destination) noexcept
+{
+	_destination = destination;
+}
+
+
+//=============================================================================================================
+TAGameEventSetTransform::TAGameEventSetTransform(void) noexcept
+	: TAGameEvent(TAGameEvent::GameEventType::SetTransform)
+{
+
+}
+
+TAGameEventSetTransform::~TAGameEventSetTransform(void) noexcept
+{
+
+}
+
+bool TAGameEventSetTransform::processEvent(TAGameEventProcessParameter& parameter) noexcept
+{
+	if (nullptr == parameter._world)
+	{
+		TA_ASSERT_DEV(false, "게임월드가 존재하지 않습니다.");
+		return false;
+	}
+
+	const ta::ActorKey actorKey = getActorKey();
+	ta::ClientActor* actor = static_cast<ta::ClientActor*>(ta::GetActorManager()->getActor(actorKey));
+	if (nullptr == actor)
+	{
+		TA_ASSERT_DEV(false, "비정상입니다.");
+		return false;
+	}
+
+	TA_LOG_DEV("<SetTransform> => actorkey : %d, current position (%.1f, %.1f, %.1f)", actorKey.getKeyValue(), _position._x, _position._y, _position._z);
+	{
+		ATACharacter* character = actor->getUnrealCharacter_();
+		if (nullptr == character)
+		{
+			TA_ASSERT_DEV(false, "비정상입니다.");
+			return false;
+		}
+
+		FVector position;
+		TAVectorToFVector(_position, position);
+
+		FRotator rotation;
+		rotation.Roll = _rotation._x;
+		rotation.Pitch = _rotation._y;
+		rotation.Yaw = _rotation._z;
+
+		character->SetActorLocation(position);
+		character->SetActorRotation(rotation);
+	}
+
+	return true;
+}
+
+void TAGameEventSetTransform::setPosition(const ta::Vector& position) noexcept
+{
+	_position = position;
+}
+
+void TAGameEventSetTransform::setRotation(const ta::Vector& rotation) noexcept
+{
+	_rotation = rotation;
 }

@@ -16,6 +16,13 @@ class ATAPlayer;
 class ATAPlayerController;
 class ULevel;
 class TAGameEvent;
+class ATANonPlayer;
+class ATACharacter;
+
+namespace ta
+{
+	class ActorKey;
+}
 
 
 extern UTAGameInstance* TAGetGameInstance(void) noexcept;
@@ -29,6 +36,9 @@ extern void TAPrintAllStreamingLevelName(void) noexcept; // test
 
 extern ATAPlayerController* TAGetFirstPlayerController(void) noexcept;
 extern ATAPlayer* TAGetFirstPlayer(void) noexcept;
+
+extern ATACharacter* TASpawnTAActor(const ta::ActorKey& actorKey, const FVector& position, const FRotator& rotation) noexcept;
+extern bool TADestroyTAActor(const ta::ActorKey& actorKey) noexcept;
 
 extern bool TAExportRecastNavMesh(void) noexcept;
 
@@ -60,6 +70,9 @@ public:
 	bool registerGameEvent(TAGameEvent* gameEvent) noexcept;
 	void clearGameEvents(void) noexcept;
 
+	ATACharacter* spawnTAActor(const ta::ActorKey& actorKey, const FVector& position, const FRotator& rotation) noexcept;
+	bool destroyTAActor(const ta::ActorKey& actorKey) noexcept;
+
 private:
 	// UE4 자체 TQueue로 c++ 클래스 TAGameEvent 객체들을 담았다가 일단 문제 발생할것 같아서 바꾸었다.
 	// UPROPERTY로 가비지 수집되는 것을 막을 순 있지만, 그러려면 객체가 UCLASS나 USTRUCT이여야 하는데 
@@ -68,6 +81,11 @@ private:
 	// 추후 좋은 방법이 있으면 바꿀 예정이다. (TQueue가 Thread Safe하기 때문에 락이 따로 필요없어서 빠르긴하다.. 방법고민중)
 	std::vector<TAGameEvent*> _gameEventQueue;
 	ta::LockableObject _gameEventQueueLock;
+
+
+	UPROPERTY()
+	TMap<uint32, ATANonPlayer*> _spawnedTAActors;
+
 
 	UPROPERTY(VisibleAnyWhere, Category = GameControl)
 	bool _navMeshExported;

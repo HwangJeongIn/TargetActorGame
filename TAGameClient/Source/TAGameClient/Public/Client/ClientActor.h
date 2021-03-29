@@ -1,9 +1,11 @@
-#pragma once
+﻿#pragma once
+
+#ifndef TA_SERVER
+#include "TACharacter.h"
+#endif
 
 #include "Common/CommonActor.h"
-#ifndef TA_SERVER
-class ATACharacter;
-#endif
+
 
 namespace ta
 {
@@ -14,7 +16,7 @@ namespace ta
 #ifndef TA_SERVER
 		ATACharacter* getUnrealCharacter_(void) noexcept;
 		bool setUnrealCharacter_(ATACharacter* character) noexcept;
-		bool destroyUnrealCharacter_(void) noexcept;
+		bool resetUnrealCharacter_(void) noexcept;
 #endif
 	
 	private:
@@ -27,6 +29,7 @@ namespace ta
 
 	private:
 #ifndef TA_SERVER
+		//TSharedPtr<ATACharacter> _unrealCharacter;
 		ATACharacter* _unrealCharacter;
 #endif
 	};

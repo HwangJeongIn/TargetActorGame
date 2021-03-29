@@ -1,10 +1,16 @@
-﻿#include "Client/ClientMoveActorSystem.h"
+﻿#ifndef TA_SERVER
+#include "TAGameEvent.h"
+#endif
+
+#include "Client/ClientMoveActorSystem.h"
 #include "Client/AllPacketClient.h"
 #include "Client/ClientActor.h"
 #include "Common/CommonMoveActorComponent.h"
 #include "Common/ScopedLock.h"
 #include "Common/FileLoader.h"
 #include "Common/StringUtility.h"
+
+
 
 
 
@@ -99,20 +105,55 @@ namespace ta
 
 	bool ClientMoveActorSystem::respondMoveActor(CommonActor* target, const Vector& newPos) const noexcept
 	{
+		TA_LOG_DEV("<RespondMoveActor> => ActorKey : %d, position(%.1f, %.1f, %.1f)", target->getActorKey().getKeyValue(), newPos._x, newPos._y, newPos._z);
 		const bool rv = moveActor(target, newPos, true);
-		ClientActor* targetClientActor = static_cast<ClientActor*>(target);
+		if (false == rv)
+		{
+			TA_ASSERT_DEV(false, "비정상입니다.");
+			return false;
+		}
 
-		//targetClientActor->
-		//
+#ifndef TA_SERVER
+		TAGameEventMoveToLocation* event = new TAGameEventMoveToLocation;
+		event->setActorKey(target->getActorKey());
+		event->setDestination(newPos);
+
+		if (false == RegisterTAGameEvent(event))
+		{
+			TA_ASSERT_DEV(false, "이벤트 등록에 실패했습니다.");
+		}
+#endif
+
 		return rv;
-
-
 	}
 	
 	bool ClientMoveActorSystem::respondRotateActor(CommonMoveActorComponent* myMove, const Vector& newDirection) const noexcept
 	{
 		ScopedLock lock(myMove);
 		myMove->setCurrentRotation_(newDirection);
+		return true;
+	}
+	
+	bool ClientMoveActorSystem::setStartTransform(CommonActor* target, const Vector& newPos, const Vector& newRot) const noexcept
+	{
+		const bool rv = moveActor(target, newPos, true);
+		if (false == rv)
+		{
+			TA_ASSERT_DEV(false, "비정상입니다.");
+			return false;
+		}
+
+#ifndef TA_SERVER
+		//TAGameEventSetTransform* event = new TAGameEventSetTransform;
+		//event->setActorKey(target->getActorKey());
+		//event->setPosition(newPos);
+		//event->setRotation(newRot);
+		//
+		//if (false == RegisterTAGameEvent(event))
+		//{
+		//	TA_ASSERT_DEV(false, "이벤트 등록에 실패했습니다.");
+		//}
+#endif
 		return true;
 	}
 }

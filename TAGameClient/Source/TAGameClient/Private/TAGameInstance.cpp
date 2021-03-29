@@ -7,7 +7,7 @@
 //#include "Engine/Engine.h" 
 #include "Engine/GameEngine.h" 
 #include "TAGameMode.h"
-#include "TACharacter.h"
+#include "TANonPlayer.h"
 #include "TAPlayer.h"
 #include "TAPlayerController.h"
 #include "TAPathPoint.h"
@@ -30,6 +30,10 @@
 #include "Common/GetComponentAndSystem.h"
 #include "Common/StringUtility.h"
 #include "Common/ScopedLock.h"
+#include "Common/KeyDefinition.h"
+#include "Common/GetComponentAndSystem.h"
+#include "Client/ClientActorManager.h"
+#include "Client/ClientActor.h"
 
 
 UTAGameInstance* TAGetGameInstance(void) noexcept
@@ -236,6 +240,30 @@ ATAPlayer* TAGetFirstPlayer(void) noexcept
 	}
 
 	return player;
+}
+
+ATACharacter* TASpawnTAActor(const ta::ActorKey& actorKey, const FVector& position, const FRotator& rotation) noexcept
+{
+	UTAGameInstance* gameInstance = TAGetGameInstance();
+	if (nullptr == gameInstance)
+	{
+		TA_ASSERT_DEV(false, "비정상입니다.");
+		return nullptr;
+	}
+
+	return gameInstance->spawnTAActor(actorKey, position, rotation);
+}
+
+bool TADestroyTAActor(const ta::ActorKey& actorKey) noexcept
+{
+	UTAGameInstance* gameInstance = TAGetGameInstance();
+	if (nullptr == gameInstance)
+	{
+		TA_ASSERT_DEV(false, "비정상입니다.");
+		return nullptr;
+	}
+
+	return gameInstance->destroyTAActor(actorKey);
 }
 
 bool TAExportRecastNavMesh(void) noexcept
@@ -712,4 +740,89 @@ void UTAGameInstance::clearGameEvents(void) noexcept
 	}
 
 	_gameEventQueue.clear();
+}
+
+ATACharacter* UTAGameInstance::spawnTAActor(const ta::ActorKey& actorKey, const FVector& position, const FRotator& rotation) noexcept
+{
+	if (false == actorKey.isValid())
+	{
+		TA_ASSERT_DEV(false, "비정상입니다");
+		return nullptr;
+	}
+
+	ta::ClientActor* actor = static_cast<ta::ClientActor*>(ta::GetActorManager()->getActor(actorKey));
+	if (nullptr == actor)
+	{
+		TA_ASSERT_DEV(false, "비정상입니다.");
+		return nullptr;
+	}
+
+	ATANonPlayer* character = nullptr;
+	FActorSpawnParameters actorSpawnParameters;
+	actorSpawnParameters.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
+	character = GetWorld()->SpawnActor<ATANonPlayer>(ATANonPlayer::StaticClass(), position, rotation, actorSpawnParameters);
+	if (nullptr == character)
+	{
+		TA_ASSERT_DEV(false, "비정상입니다.");
+		return nullptr;
+	}
+
+	if (true == _spawnedTAActors.Contains(actorKey.getKeyValue()))
+	{
+		TA_ASSERT_DEV(false, "두번 추가하려 합니다.");
+		return nullptr;
+	}
+	
+	_spawnedTAActors.Emplace(actorKey.getKeyValue(), character);
+
+	character->setActorKey(actorKey);
+
+	{
+		ta::ScopedLock actorLock(actor);
+		ATACharacter* tempCharacter = Cast<ATACharacter>(character);
+		actor->setUnrealCharacter_(tempCharacter);
+	}
+
+
+	return character;
+}
+
+bool UTAGameInstance::destroyTAActor(const ta::ActorKey& actorKey) noexcept
+{
+	if (false == actorKey.isValid())
+	{
+		TA_ASSERT_DEV(false, "비정상입니다.");
+		return false;
+	}
+
+	ta::ClientActor* actor = static_cast<ta::ClientActor*>(ta::GetActorManager()->getActor(actorKey));
+	if (nullptr == actor)
+	{
+		TA_ASSERT_DEV(false, "비정상입니다.");
+		return false;
+	}
+
+	ATANonPlayer** character = _spawnedTAActors.Find(actorKey.getKeyValue());
+	if (nullptr == character)
+	{
+		TA_ASSERT_DEV(false, "해당 액터를 찾을 수 없습니다.");
+		return false;
+	}
+
+
+	(*character)->resetActorKey();
+	{
+		ta::ScopedLock actorLock(actor);
+		actor->resetUnrealCharacter_();
+	}
+
+	_spawnedTAActors.Remove(actorKey.getKeyValue());
+
+	if (false == (*character)->ConditionalBeginDestroy())
+	{
+		TA_ASSERT_DEV(false, "비정상입니다.");
+		return false;
+	}
+
+	return true;
 }

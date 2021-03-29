@@ -75,6 +75,11 @@ void ATACharacter::PostInitializeComponents()
 	Super::PostInitializeComponents();
 }
 
+void ATACharacter::resetActorKey(void) noexcept
+{
+	_actorKey.clear();
+}
+
 bool ATACharacter::setActorKey(const ta::ActorKey& actorKey) noexcept
 {
 	if (false == actorKey.isValid())
@@ -100,6 +105,12 @@ const ta::ActorKey& ATACharacter::getActorKey(void) const noexcept
 
 ta::ClientActor* ATACharacter::getActorFromActorManager(void) const noexcept
 {
+	if (false == _actorKey.isValid())
+	{
+		TA_ASSERT_DEV(false, "비정상");
+		return nullptr;
+	}
+
 	return static_cast<ta::ClientActor*>(ta::GetActorManager()->getActor(_actorKey));
 }
 

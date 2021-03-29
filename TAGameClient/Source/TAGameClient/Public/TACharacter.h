@@ -1,4 +1,4 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+﻿// Fill out your copyright notice in the Description page of Project Settings.
 
 #pragma once
 
@@ -39,6 +39,7 @@ public:
 	//virtual bool movePosition(const FVector& newPosition, bool teleport = false) noexcept;
 	//bool teleportToPosition(const FVector& newPosition) noexcept;
 
+	void resetActorKey(void) noexcept;
 	bool setActorKey(const ta::ActorKey& actorKey) noexcept;
 	const ta::ActorKey& getActorKey(void) const noexcept;
 	ta::ClientActor* getActorFromActorManager(void) const noexcept;

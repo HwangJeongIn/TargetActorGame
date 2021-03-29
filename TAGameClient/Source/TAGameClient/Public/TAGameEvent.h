@@ -2,6 +2,7 @@
 
 #include "Common/CommonBase.h"
 #include "Common/KeyDefinition.h"
+#include "Common/Vector.h"
 
 
 class UTAGameInstance;
@@ -34,6 +35,8 @@ public:
 		, DestroyActor
 		, InitializeInventory
 		, RefreshInventory
+		, MoveToLocation
+		, SetTransform
 	};
 
 	explicit TAGameEvent(const GameEventType gameEventType) noexcept;
@@ -102,5 +105,37 @@ public:
 
 private:
 	ta::ItemSlotNo _slotNo;
+};
+
+
+class TAGameEventMoveToLocation : public TAGameEvent
+{
+public:
+	TAGameEventMoveToLocation(void) noexcept;
+	virtual ~TAGameEventMoveToLocation(void) noexcept;
+
+	virtual bool processEvent(TAGameEventProcessParameter& parameter) noexcept override final;
+
+	void setDestination(const ta::Vector& destination) noexcept;
+
+private:
+	ta::Vector _destination;
+};
+
+
+class TAGameEventSetTransform : public TAGameEvent
+{
+public:
+	TAGameEventSetTransform(void) noexcept;
+	virtual ~TAGameEventSetTransform(void) noexcept;
+
+	virtual bool processEvent(TAGameEventProcessParameter& parameter) noexcept override final;
+
+	void setPosition(const ta::Vector& position) noexcept;
+	void setRotation(const ta::Vector& rotation) noexcept;
+
+private:
+	ta::Vector _position;
+	ta::Vector _rotation;
 };
 

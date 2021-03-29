@@ -1,4 +1,14 @@
-﻿#include "Common/CommonMoveActorSystem.h"
+﻿#if defined(TA_SERVER) && !defined(TA_CLIENT_IN_SERVER)
+#include "Common/CommonBase.h"
+#include "RecastNavigation/Detour/DetourNavMesh.h"
+#include "RecastNavigation/Detour/DetourNavMeshQuery.h"
+
+#elif !defined(TA_SERVER)
+#include "Detour/DetourNavMesh.h"
+#include "Detour/DetourNavMeshQuery.h"
+#endif
+
+#include "Common/CommonMoveActorSystem.h"
 #include "Common/CommonMoveActorComponent.h"
 #include "Common/CommonActor.h"
 #include "Common/ScopedLock.h"
@@ -10,14 +20,7 @@
 //#include "RecastNavigation/NavMeshPoint.h"
 //#include "RecastNavigation/NavMeshPath.h"
 
-#if defined(TA_SERVER) && !defined(TA_CLIENT_IN_SERVER)
-#include "RecastNavigation/Detour/DetourNavMesh.h"
-#include "RecastNavigation/Detour/DetourNavMeshQuery.h"
 
-#elif !defined(TA_SERVER)
-#include "Detour/DetourNavMesh.h"
-#include "Detour/DetourNavMeshQuery.h"
-#endif
 
 
 
@@ -533,6 +536,11 @@ namespace ta
 			}
 
 			std::unordered_set<SectorKey>& nearSectors = actorMoveCom->getNewNearSectors_();
+			if (nullptr != oldSectors)
+			{
+				*oldSectors = nearSectors;
+			}
+
 			const SectorKey currentSectorKey = actorMoveCom->getCurrentSectorKey_();
 			if (newSectorKey != currentSectorKey)
 			{
@@ -541,18 +549,11 @@ namespace ta
 					TA_ASSERT_DEV(false, "moveSector 단계에서 실패했습니다.")
 						return false;
 				}
+			}
 
-				if (nullptr != oldSectors)
-				{
-					*oldSectors = nearSectors;
-				}
-				
-				GetNearSectors(newSectorKey, nearSectors);
-
-				if (nullptr != newSectors)
-				{
-					*newSectors = nearSectors;
-				}
+			if (nullptr != newSectors)
+			{
+				*newSectors = nearSectors;
 			}
 		}
 
@@ -725,6 +726,7 @@ namespace ta
 
 		newSector->enterSector(owner);
 		target->setCurrentSectorKey_(newSectorKey);
+		GetNearSectors(newSectorKey, target->getNewNearSectors_());
 		
 		return true;
 	}

@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 #include "Common/CommonBase.h"
 #include "Common/KeyDefinition.h"
@@ -22,7 +22,7 @@ namespace ta
 
 namespace ta
 {
-	constexpr float SectorSize = 10.0f;
+	constexpr float SectorSize = 3000.0f;
 	constexpr uint32 CountOfOneSideSectors = 1000;
 	constexpr uint32 HalfCountOfOneSideSectors = (CountOfOneSideSectors / 2);
 	constexpr uint32 CountOfSectors = CountOfOneSideSectors * CountOfOneSideSectors;

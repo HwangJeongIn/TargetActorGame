@@ -1,4 +1,4 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+﻿// Fill out your copyright notice in the Description page of Project Settings.
 
 #pragma once
 
@@ -57,6 +57,9 @@ protected:
 	virtual void BeginPlay() override final;
 	virtual void SetupInputComponent() override final;
 
+
+protected:
+
 	// TSubclassOf 템플릿 클래스를 이용해 특정 멤버 변수나 변수를 특정 UObject/UClass의 하위 클래스로 한정지을 수 있다. 컴파일 타임
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = UI)
 	TSubclassOf<UTAHudUserWidget> _hudUserWidgetClass;
@@ -68,6 +71,7 @@ protected:
 	TSubclassOf<UTAInteractionMenuUserWidget> _interactionMenuUserWidgetClass;
 
 private:
+
 	// ui
 	UPROPERTY()
 	UiBoundaryType _hoveredUi;

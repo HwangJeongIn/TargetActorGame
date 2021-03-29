@@ -229,9 +229,9 @@ namespace ta
 			case ActorComponentType::Move:																									 
 				{							
                     CommonMoveComponentData data;
-                    data._position = Vector(-2810, 930, 0);
+                    data._position = Vector(-2000, 900, 0);
                     data._rotation = Vector(0, 0, 0);
-                    data._speed = 3.0f;
+                    data._speed = 500.0f;
                     if (false == initializeActorComponent(targetActorKey, &data, false))
                     {
                         TA_ASSERT_DEV(false, "비정상입니다.");

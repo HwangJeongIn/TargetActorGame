@@ -96,6 +96,8 @@ private:
 	// nav
 	void exportRecastNavMesh(void) noexcept;
 
+	void processSyncToServer(float deltaTime) noexcept;
+
 public:
 	UPROPERTY(VisibleAnyWhere, Category = Camera)
 	USpringArmComponent* _springArm;
@@ -114,6 +116,14 @@ public:
 	FRotator		_toArmRotation;
 	float			_armLengthSpeed;
 	float			_armRotationSpeed;
+
+	UPROPERTY(EditAnyWhere, Category = Camera)
+	float			_thirdPersonToArmLength;
+
+	UPROPERTY(EditAnyWhere, Category = Camera)
+	float			_fixedThirdPersonToArmLength;
+
+
 
 	//UPROPERTY(VisibleInstanceOnly)
 //TWeakObjectPtr<ATAPawn> _target;
@@ -137,4 +147,7 @@ public:
 	UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly, Category = Attack, Meta = (AllowPrivateAccess = true))
 	int32 _maxCombo;
 
+	// 클라이언트에서 서버로 동기화 시키기
+	float _maxTimeToSync;
+	float _currentTimeToSync;
 };

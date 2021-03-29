@@ -40,6 +40,12 @@ void ATAPathPoint::BeginPlay()
 {
 	Super::BeginPlay();
 
+	if (false == _refreshCurrentPath)
+	{
+		refreshPathPoint();
+	}
+
+
 	//setPointColor(true);
 }
 

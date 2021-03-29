@@ -1,4 +1,4 @@
-#include "Client/ClientMoveActorComponent.h"
+﻿#include "Client/ClientMoveActorComponent.h"
 #include "Client/ClientMoveActorSystem.h"
 #include "Common/GetComponentAndSystem.h"
 #include "Common/ScopedLock.h"
@@ -19,14 +19,8 @@ namespace ta
 	{
 		CommonMoveActorComponent::onActive();
 
-		Vector position;
-		{
-			ScopedLock lock(this, true);
-			position = getCurrentPosition_();
-		}
-
 		ClientMoveActorSystem* moveActorSystem = GetActorSystem<ClientMoveActorSystem>();
-		if (false == moveActorSystem->respondMoveActor(getOwner(), position))
+		if (false == moveActorSystem->setStartTransform(getOwner(), _currentPosition, _currentRotation))
 		{
 			TA_ASSERT_DEV(false, "비정상입니다.");
 		}

@@ -6,15 +6,20 @@
 #include "TAGameInstance.h"
 #include "TAAIController.h"
 #include "TAPlayerController.h"
+#include "TAConvertFunctions.h"
 #include "DrawDebugHelpers.h"
 #include "Common/GetComponentAndSystem.h"
+#include "Common/ScopedLock.h"
 #include "Client/ClientMoveActorSystem.h"
+#include "Client/ClientMoveActorComponent.h"
+#include "Client/ClientActor.h"
 
 
 // Sets default values
 ATAPlayer::ATAPlayer()
 {
 	PrimaryActorTick.bCanEverTick = true;
+
 
 	// generate components
 	USkeletalMeshComponent* mesh = nullptr;
@@ -38,13 +43,20 @@ ATAPlayer::ATAPlayer()
 	_springArm->TargetArmLength = 400.f;
 	_springArm->SetRelativeRotation(FRotator(-15.0f, 0.f, 0.f));
 
+	_thirdPersonToArmLength = 1350.0f;
+	_fixedThirdPersonToArmLength = 2700.0f;
+
 	_moveAndRotationDirtyFlag = false;
 	_cameraDirtyFlag = false;
 	_isAttacking = false;
 	_maxCombo = 4;
 	attackEndComboSate();
 
-	setControlMode(ControlMode::PlayerFixedThirdPerson);
+	_maxTimeToSync = 1.0f;
+	_currentTimeToSync = 0.0f;
+
+	setControlMode(ControlMode::PlayerThirdPerson);
+
 
 	// 따로 액터로 빠졌음
 	//FName weaponSocket(TEXT("hand_rSocket"));
@@ -90,6 +102,9 @@ void ATAPlayer::BeginPlay()
 void ATAPlayer::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+
+	processSyncToServer(DeltaTime);
+
 
 	//TA_LOG_DEV("ATAPlayer::Tick");
 
@@ -503,6 +518,44 @@ void ATAPlayer::exportRecastNavMesh(void) noexcept
 	TA_LOG_DEV("ExportRecastNavMesh result : %d", result);
 }
 
+void ATAPlayer::processSyncToServer(float deltaTime) noexcept
+{
+	_currentTimeToSync += deltaTime;
+	if (_maxTimeToSync < _currentTimeToSync)
+	{
+		_currentTimeToSync = 0.0f;
+		ta::ClientActor* clientActor = getActorFromActorManager();
+		if (nullptr == clientActor)
+		{
+			return;
+		}
+
+		ta::ClientMoveActorComponent* moveCom = ta::GetActorComponent<ta::ClientMoveActorComponent>(getActorKey());
+		FVector currentPos;
+		{
+			ta::ScopedLock moveLock(moveCom, true);
+			TAVectorToFVector(moveCom->getCurrentPosition_(), currentPos);
+		}
+
+		const FVector currentUEPos = GetActorLocation();
+		if ( (1.5f * 1.5f) > (GetActorLocation() - currentPos).SizeSquared())
+		{
+			return;
+		}
+
+		ta::Vector destination;
+		FVectorToTAVector(currentUEPos, destination);
+		ta::ClientMoveActorSystem* moveSystem = ta::GetActorSystem<ta::ClientMoveActorSystem>();
+		if (false == moveSystem->requestMoveActor(clientActor, destination))
+		{
+			TA_ASSERT_DEV(false, "비정상입니다");
+			return;
+		}
+
+		//TA_LOG_DEV("<SyncActor> => actorkey : %d, current position (%.1f, %.1f, %.1f)", getActorKey().getKeyValue(), destination._x, destination._y, destination._z);
+	}
+}
+
 void ATAPlayer::onAttackMontageEnded(UAnimMontage* montage, bool interrupted) noexcept
 {
 	TA_ASSERT_DEV(true == _isAttacking, "변수값이 비정상입니다. isAttacking : %d", _isAttacking);
@@ -680,7 +733,7 @@ void ATAPlayer::setControlMode(const ControlMode controlMode) noexcept
 		{
 			//_springArm->TargetArmLength = 450.f;
 			//_springArm->SetRelativeRotation(FRotator::ZeroRotator);
-			_toArmLength = 450.0f;
+			_toArmLength = _thirdPersonToArmLength;//450.0f;
 
 			// 폰은 안따라가는데 컨트롤러 로테이션 카메라만 따라간다. 폰이 컨트롤러 로테이션 기준으로 움직이면 거기에 맞게 로테이션 
 
@@ -708,7 +761,7 @@ void ATAPlayer::setControlMode(const ControlMode controlMode) noexcept
 		{
 			//_springArm->TargetArmLength = 800.f;
 			//_springArm->SetRelativeRotation(FRotator(-45.0f, 0.0f, 0.0f));
-			_toArmLength = 800.0f;
+			_toArmLength = _fixedThirdPersonToArmLength;//800.0f;
 			_toArmRotation = FRotator(-45.0f, 0.0f, 0.0f);
 
 			_springArm->bUsePawnControlRotation = false; // 부모의 영향(pawn's controlRotation)을 받지 않음

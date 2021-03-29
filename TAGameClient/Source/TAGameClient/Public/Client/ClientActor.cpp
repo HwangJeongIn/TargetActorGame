@@ -2,7 +2,7 @@
 #include "Common/ScopedLock.h"
 
 #ifndef TA_SERVER
-#include "TACharacter.h"
+
 #include "TAGameEvent.h"
 #endif
 
@@ -34,7 +34,7 @@ namespace ta
 		}
 
 		TAGameEventDestroyActor* event = new TAGameEventDestroyActor;
-		//event->_actorKey = getActorKey();
+		event->setActorKey(getActorKey());
 		if (false == RegisterTAGameEvent(event))
 		{
 			TA_ASSERT_DEV(false, "이벤트 등록에 실패했습니다.");
@@ -57,7 +57,7 @@ namespace ta
 		ActorType actorType = ActorType::Count;
 		{
 			ScopedLock actorLock(this);
-			if (nullptr != _unrealCharacter)
+			if (_unrealCharacter)
 			{
 				TA_ASSERT_DEV(false, "이미 액터가 존재합니다. 비정상입니다.");
 				return;
@@ -86,22 +86,33 @@ namespace ta
 #ifndef TA_SERVER
 	ATACharacter* ClientActor::getUnrealCharacter_(void) noexcept
 	{
+		//if (!_unrealCharacter)
+		//{
+		//	return nullptr;
+		//}
+		//
+		//return _unrealCharacter.Get();
+
 		return _unrealCharacter;
 	}
 
 	bool ClientActor::setUnrealCharacter_(ATACharacter* character) noexcept
 	{
+		//_unrealCharacter = MakeShareable(character);
 		_unrealCharacter = character;
 		return true;
 	}
 	
-	bool ClientActor::destroyUnrealCharacter_(void) noexcept
+	bool ClientActor::resetUnrealCharacter_(void) noexcept
 	{
-		if (false == _unrealCharacter->ConditionalBeginDestroy())
-		{
-			TA_ASSERT_DEV(false, "액터 삭제에 실패했습니다.");
-			return false;
-		}
+		//if (!_unrealCharacter)
+		//{
+		//	TA_ASSERT_DEV(false, "액터 삭제에 실패했습니다.");
+		//	return false;
+		//}
+		//
+		//_unrealCharacter.Reset();
+		//return true;
 		_unrealCharacter = nullptr;
 		return true;
 	}
