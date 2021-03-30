@@ -6,6 +6,7 @@
 #elif !defined(TA_SERVER)
 #include "Detour/DetourNavMesh.h"
 #include "Detour/DetourNavMeshQuery.h"
+
 #endif
 
 #include "Common/CommonMoveActorSystem.h"

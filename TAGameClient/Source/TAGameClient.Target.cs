@@ -10,6 +10,6 @@ public class TAGameClientTarget : TargetRules
 		Type = TargetType.Game;
 		DefaultBuildSettings = BuildSettingsVersion.V2;
 
-		ExtraModuleNames.AddRange( new string[] { "TAGameClient"} );
+		ExtraModuleNames.AddRange( new string[] { "TAGameClient", "TAGameClientSetting" } );
 	}
 }

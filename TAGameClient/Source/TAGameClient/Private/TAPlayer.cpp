@@ -96,6 +96,24 @@ void ATAPlayer::BeginPlay()
 {
 	Super::BeginPlay();
 	//TAGetGameInstance()->exportNavMesh();
+
+	//if (false == setSkeletalMeshAndAnimInstance("/Game/_Dev/_Characters/InfinityBladeWarriors/Character/CompleteCharacters/SK_CharM_Cardboard.SK_CharM_Cardboard"
+	//	, "/Game/_Dev/_Characters/Animations/TAAnimationBlueprint.TAAnimationBlueprint_C"))
+	//{
+	//	TA_ASSERT_DEV(false, "비정상");
+	//}
+
+	if (false == setSkeletalMeshAndAnimInstance("/Game/_Dev/_Characters/InfinityBladeWarriors/Character/CompleteCharacters/SK_CharM_FrostGiant.SK_CharM_FrostGiant"
+		, "/Game/_Dev/_Characters/Animations/TAAnimationBlueprint.TAAnimationBlueprint"))
+	{
+		TA_ASSERT_DEV(false, "비정상");
+	}
+
+	//if (false == setSkeletalMeshAndAnimInstance("/Game/_Characters/ParagonGideon/Characters/Heroes/Gideon/Meshes/Gideon.Gideon"
+	//	, "/Game/_Characters/ParagonGideon/Characters/Heroes/Gideon/TAGideonAnimationBlueprint.TAGideonAnimationBlueprint_C"))
+	//{
+	//	TA_ASSERT_DEV(false, "비정상");
+	//}
 }
 
 // Called every frame
@@ -241,7 +259,11 @@ void ATAPlayer::PostInitializeComponents()
 {
 	Super::PostInitializeComponents();
 	_animInstance = Cast<UTAAnimInstance>(GetMesh()->GetAnimInstance());
-	TA_ASSERT_DEV(nullptr != _animInstance, "AnimInstance를 받아올 수 없습니다.");
+	if (nullptr == _animInstance)
+	{
+		TA_ASSERT_DEV(false, "AnimInstance를 받아올 수 없습니다.");
+		return;
+	}
 
 	// 델리게이트에 연결시킨다. // 멀티캐스트(여러 함수가 등록됨)
 
@@ -259,21 +281,8 @@ void ATAPlayer::PostInitializeComponents()
 		//);
 
 		// 다음 콤보에 대한 델리게이트에 람다식 연결
-		_animInstance->_onNextAttackCheck.AddLambda(
-			[this]()->void
-			{
-
-				_canNextCombo = false;
-				if (true == _isComboInputOn)
-				{
-					TA_LOG_DEV("NextAttack");
-					attackStartComboSate();
-					_animInstance->jumpToAttackMontageSection(_currentCombo);
-				}
-			}
-		);
-
-		_animInstance->_onAttackHitCheck.AddUObject(this, &ATAPlayer::attackCheck);
+		_animInstance->_onNextAttackCheck.AddDynamic(this, &ATAPlayer::nextAttackCheck);
+		_animInstance->_onAttackHitCheck.AddDynamic(this, &ATAPlayer::attackCheck);
 	}
 
 }
@@ -524,6 +533,11 @@ void ATAPlayer::processSyncToServer(float deltaTime) noexcept
 	if (_maxTimeToSync < _currentTimeToSync)
 	{
 		_currentTimeToSync = 0.0f;
+		if (false == getActorKey().isValid())
+		{
+			return;
+		}
+
 		ta::ClientActor* clientActor = getActorFromActorManager();
 		if (nullptr == clientActor)
 		{
@@ -582,13 +596,24 @@ void ATAPlayer::attackEndComboSate(void) noexcept
 	_currentCombo = 0;
 }
 
-void ATAPlayer::attackCheck(void) noexcept
+void ATAPlayer::attackCheck() noexcept
 {
 	// 바꿔야한다.
 	const float finalAttackRange = 200.0f;
 	const float finalAttackRadius = 50.0f;
 
 	interact(InteractType::Attack, finalAttackRange, finalAttackRadius);
+}
+
+void ATAPlayer::nextAttackCheck() noexcept
+{
+	_canNextCombo = false;
+	if (true == _isComboInputOn)
+	{
+		TA_LOG_DEV("NextAttack");
+		attackStartComboSate();
+		_animInstance->jumpToAttackMontageSection(_currentCombo);
+	}
 }
 
 void ATAPlayer::interact(const InteractType& interactType, float range, float radius) noexcept

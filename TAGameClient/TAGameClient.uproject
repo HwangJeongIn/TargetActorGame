@@ -5,6 +5,14 @@
 	"Description": "",
 	"Modules": [
 		{
+			"Name": "TAGameClientSetting",
+			"Type": "Runtime",
+			"LoadingPhase": "PreDefault",
+			"AdditionalDependencies": [
+				"CoreUObject"
+			]
+		},
+		{
 			"Name": "TAGameClient",
 			"Type": "Runtime",
 			"LoadingPhase": "Default",

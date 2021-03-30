@@ -5,6 +5,7 @@
 
 UTAAnimInstance::UTAAnimInstance()
 {
+	_maxWalkSpeed = 300.0f;
 	_currentCharacterSpeed = 0.0f;
 	_isInAir = false;
 	_isDead = false;

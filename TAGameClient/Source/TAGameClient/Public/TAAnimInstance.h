@@ -3,12 +3,17 @@
 #pragma once
 
 #include "Common/CommonBase.h"
+#include "UObject/ObjectMacros.h"
 #include "Animation/AnimInstance.h"
 #include "TAAnimInstance.generated.h"
 
 
-DECLARE_MULTICAST_DELEGATE(FOnNextAttackCheckDelegate);
-DECLARE_MULTICAST_DELEGATE(FOnAttackHitCheckDelegate);
+//DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnButtonClickedEvent);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnNextAttackCheckDelegate);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnAttackHitCheckDelegate);
+
+//DECLARE_MULTICAST_DELEGATE(FOnNextAttackCheckDelegate);
+//DECLARE_MULTICAST_DELEGATE(FOnAttackHitCheckDelegate);
 
 /**
  * 
@@ -27,10 +32,10 @@ public:
 	void jumpToAttackMontageSection(const int32 newSection);
 	void setDead(bool flag) noexcept;
 
-	//UPROPERTY(BlueprintAssignable)
+	UPROPERTY(BlueprintAssignable)
 	FOnNextAttackCheckDelegate	_onNextAttackCheck;
 
-	//UPROPERTY(BlueprintAssignable)
+	UPROPERTY(BlueprintAssignable)
 	FOnAttackHitCheckDelegate	_onAttackHitCheck;
 
 private:
@@ -45,6 +50,9 @@ private:
 private:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Pawn, Meta = (AllowPrivateAccess = true))
 	float _currentCharacterSpeed;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Pawn, Meta = (AllowPrivateAccess = true))
+	float _maxWalkSpeed;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Pawn, Meta = (AllowPrivateAccess = true))
 	bool _isInAir;

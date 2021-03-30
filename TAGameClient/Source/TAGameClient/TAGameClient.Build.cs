@@ -16,7 +16,7 @@ public class TAGameClient : ModuleRules
 		PrivatePCHHeaderFile = "PCH.h";
 		CppStandard = CppStandardVersion.Cpp17;
 
-		PrivateDependencyModuleNames.AddRange(new string[] { });
+		PrivateDependencyModuleNames.AddRange(new string[] { "TAGameClientSetting" });
 
 		// ../ => TAGameClient
 		PrivateIncludePaths.Add("../Source/TAGameClient/Public/Common/NavigationSystem");

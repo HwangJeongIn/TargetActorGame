@@ -5,6 +5,9 @@
 	
 	3월 23일 ~ 3월 29일 (1주 예정)
 	
+
+		
+	
 	 - 간단한 게임 레벨 구축
 		- 간단한 데이터 넣어서 테스트
 	
@@ -62,6 +65,15 @@
 	 - MoveAndNotify 버그수정
 	 - UE4 GameInstance에서 TA에서 스폰된 UE4 액터 관리하도록
 	 - UE4에 액터 스피드 적용
+	 
+	 - 런터임과 에셋로드
+		 - 런타임에 에셋로드를 비동기로 가능하게 하려면? => StreamableManager 사용하자
+			 - 한번이라도 로드가 되어야한다.
+				 - 어느 클래스 생성자에서 static ConstructorHelpers::FObjectFinder<USkeletalMesh> name(TEXT("/Game/....")); 이런식으로 선언시 에셋패스만 있으면 해당에셋을 로드할 수 있음
+				 - ini파일로 해당에셋패스를 저장하고, 에셋패스를 config기능을 이용해서 TArray<FSoftObjectPath>로 저장해둔다. 이렇게하면 위와 같은 효과를 얻을 수 있다. // 내부적으로 에셋을 로드할듯
+				 
+		 - 간단하고 가벼운 에셋(아이콘 텍스처 등)은 StaticLoadObject을 사용해서 런타임에 동기로 불러와도 될듯하다. 
+	 
 	
 	~ 3월 22일
 	

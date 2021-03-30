@@ -21,6 +21,7 @@
 #include "LevelEditor.h"
 #include "Editor.h"
 #include "Engine/LevelStreaming.h"
+#include "TAAssets.h"
 
 #include "Common/GameDataManager.h"
 #include "Common/CommonSpawnDataManager.h"
@@ -544,6 +545,68 @@ UTAGameInstance::UTAGameInstance()
 		ta::PathPointFilePath /= "../../TAGameServer/PathPoint";
 		TA_LOG_DEV("%s", ta::PathPointFilePath.c_str());
 	}
+
+	auto assets = GetDefault<UTAAssets>();
+	//const uint32 skeletalMeshCount = assets->_skeletalMeshAssets.Num();
+	//const uint32 staticMeshCount = assets->_staticMeshAssets.Num();
+	//const uint32 animInstanceCount = assets->_animInstanceAssets.Num();
+
+	{
+		FString currentPath;
+		uint32 count = assets->_skeletalMeshAssets.Num();
+		TA_LOG_DEV("skeletal mesh asset count : %d", count);
+		for (uint32 index = 0; index < count; ++index)
+		{
+			currentPath = assets->_skeletalMeshAssets[index].ToString();
+			TA_LOG_DEV("skeletal mesh : %s", *currentPath);
+
+			if (true == _skeletalMeshAssetKeyFinder.Contains(currentPath))
+			{
+				TA_ASSERT_DEV(false, "중복 파일입니다. %s", *currentPath);
+				return;
+			}
+
+			_skeletalMeshAssetKeyFinder.Emplace(currentPath, index);
+		}
+	}
+
+	{
+		FString currentPath;
+		uint32 count = assets->_staticMeshAssets.Num();
+		TA_LOG_DEV("static mesh asset count : %d", count);
+		for (uint32 index = 0; index < count; ++index)
+		{
+			currentPath = assets->_staticMeshAssets[index].ToString();
+			TA_LOG_DEV("static mesh : %s", *currentPath);
+
+			if (true == _staticMeshAssetKeyFinder.Contains(currentPath))
+			{
+				TA_ASSERT_DEV(false, "중복 파일입니다. %s", *currentPath);
+				return;
+			}
+
+			_staticMeshAssetKeyFinder.Emplace(currentPath, index);
+		}
+	}
+
+	{
+		FString currentPath;
+		uint32 count = assets->_animInstanceAssets.Num();
+		TA_LOG_DEV("anim instance asset count : %d", count);
+		for (uint32 index = 0; index < count; ++index)
+		{
+			currentPath = assets->_animInstanceAssets[index].ToString();
+			TA_LOG_DEV("anim instance : %s", *currentPath);
+
+			if (true == _animInstanceAssetKeyFinder.Contains(currentPath))
+			{
+				TA_ASSERT_DEV(false, "중복 파일입니다. %s", *currentPath);
+				return;
+			}
+
+			_animInstanceAssetKeyFinder.Emplace(currentPath, index);
+		}
+	}
 }
 
 
@@ -825,4 +888,51 @@ bool UTAGameInstance::destroyTAActor(const ta::ActorKey& actorKey) noexcept
 	}
 
 	return true;
+}
+
+FStreamableManager& UTAGameInstance::getStreamableManager(void) noexcept
+{
+	return _streamableManager;
+}
+
+FSoftObjectPath UTAGameInstance::getSkeletalMeshAssetPath(const FString& key) noexcept
+{
+	auto assets = GetDefault<UTAAssets>();
+
+	uint32* targetIndex = _skeletalMeshAssetKeyFinder.Find(key);
+	if (nullptr == targetIndex)
+	{
+		TA_ASSERT_DEV(false, "없습니다. %s", *key);
+		return FSoftObjectPath();
+	}
+
+	return assets->_skeletalMeshAssets[*targetIndex];
+}
+
+FSoftObjectPath UTAGameInstance::getStaticMeshAssetPath(const FString& key) noexcept
+{
+	auto assets = GetDefault<UTAAssets>();
+
+	uint32* targetIndex = _staticMeshAssetKeyFinder.Find(key);
+	if (nullptr == targetIndex)
+	{
+		TA_ASSERT_DEV(false, "없습니다. %s", *key);
+		return FSoftObjectPath();
+	}
+
+	return assets->_staticMeshAssets[*targetIndex];
+}
+
+FSoftObjectPath UTAGameInstance::getAnimInstanceAssetPath(const FString& key) noexcept
+{
+	auto assets = GetDefault<UTAAssets>();
+
+	uint32* targetIndex = _animInstanceAssetKeyFinder.Find(key);
+	if (nullptr == targetIndex)
+	{
+		TA_ASSERT_DEV(false, "없습니다. %s", *key);
+		return FSoftObjectPath();
+	}
+
+	return assets->_animInstanceAssets[*targetIndex];
 }

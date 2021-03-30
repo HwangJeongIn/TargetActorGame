@@ -46,4 +46,15 @@ void ATANonPlayer::Tick(float DeltaTime)
 	// 		TA_LOG_DEV("PlayerController");
 	// 	}
 	// }
+
+
+}
+
+void ATANonPlayer::BeginPlay()
+{
+	//if (false == setSkeletalMeshAndAnimInstance("/Game/_Characters/ParagonGideon/Characters/Heroes/Gideon/Meshes/Gideon.Gideon"
+	//	, "/Game/_Characters/ParagonGideon/Characters/Heroes/Gideon/TAGideonAnimationBlueprint.TAGideonAnimationBlueprint_C"))
+	//{
+	//	TA_ASSERT_DEV(false, "비정상");
+	//}
 }

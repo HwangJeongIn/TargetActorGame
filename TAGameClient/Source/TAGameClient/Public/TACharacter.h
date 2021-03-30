@@ -10,6 +10,7 @@
 
 
 class UTAAnimInstance;
+struct FStreamableHandle;
 
 namespace ta
 {
@@ -26,9 +27,6 @@ public:
 	// Sets default values for this character's properties
 	ATACharacter();
 
-	// Called when the game starts or when spawned
-	virtual void BeginPlay() override;
-
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
@@ -36,8 +34,11 @@ public:
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 	virtual void PostInitializeComponents() override;
 
-	//virtual bool movePosition(const FVector& newPosition, bool teleport = false) noexcept;
-	//bool teleportToPosition(const FVector& newPosition) noexcept;
+
+	bool setSkeletalMeshAndAnimInstance(const FString& skeletalMeshPath, const FString& animInstancePath) noexcept;
+	
+	void onSkeletalMeshAssetLoadCompleted(void) noexcept;
+	void onAnimInstanceAssetLoadCompleted(void) noexcept;
 
 	void resetActorKey(void) noexcept;
 	bool setActorKey(const ta::ActorKey& actorKey) noexcept;
@@ -45,14 +46,10 @@ public:
 	ta::ClientActor* getActorFromActorManager(void) const noexcept;
 
 private:
-
 	void setDeadAnimation(void) noexcept;
 
 
 public:
-
-	//UPROPERTY(VisibleInstanceOnly)
-	//TWeakObjectPtr<ATAPawn> _target;
 	/*
 	TWeakObjectPtr : UObjects
 	TWeakPtr : everything else
@@ -62,7 +59,18 @@ public:
 	UTAAnimInstance* _animInstance;
 
 private:
-
 	ta::ActorKey _actorKey;
+
+	UPROPERTY()
+	FString _skeletalMeshPath;
+
+	UPROPERTY()
+	FString _animInstancePath;
+
+	//UPROPERTY()
+	TSharedPtr<FStreamableHandle> _skeletalMeshAssetStreamingHandle;
+
+	//UPROPERTY()
+	TSharedPtr<FStreamableHandle> _animInstanceAssetStreamingHandle;
 
 };

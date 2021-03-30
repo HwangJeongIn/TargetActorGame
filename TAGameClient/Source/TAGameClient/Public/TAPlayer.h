@@ -77,9 +77,15 @@ private:
 	void attack(void) noexcept;
 	UFUNCTION()
 	void onAttackMontageEnded(UAnimMontage* montage, bool interrupted) noexcept;
+
 	void attackStartComboSate(void) noexcept;
 	void attackEndComboSate(void) noexcept;
-	void attackCheck(void) noexcept;
+
+	UFUNCTION()
+	void attackCheck() noexcept;
+
+	UFUNCTION()
+	void nextAttackCheck() noexcept;
 
 	// interaction
 	void interact(const InteractType& interactType, float range, float radius) noexcept;
