@@ -408,14 +408,27 @@ namespace ta
 
 		output = new XmlNode(attributeStrings[0]);
 
+		std::string keyValueString;
+		std::string finalValueString;
 		for (uint32 index = 0; index < count; ++index)
 		{
 			if (0 == attributeStrings[index].compare("="))
 			{
 				// name : attributeStrings[index-1]
 				// value : attributeStrings[index+2] //  attributeStrings[index+2]가 \"이라면 비어있는 문자열을 넣는다.
-				const bool rv = output->addAttribute(attributeStrings[index - 1]
-													 , 0 == attributeStrings[index + 2].compare("\"") ? "" : attributeStrings[index + 2]);
+				// \"가 나올때까지 집어넣는다. 공백있는 값도 받기 위함
+				keyValueString.clear();
+				finalValueString.clear();
+				keyValueString = attributeStrings[index - 1];
+
+				index += 2; // 만약에 "" 이런식으로 되어있으면 finalValueString에 빈문자열이 들어간다.
+				while (0 != attributeStrings[index].compare("\""))
+				{
+					finalValueString += attributeStrings[index];
+					++index;
+				}
+
+				const bool rv = output->addAttribute(keyValueString, finalValueString);
 				if (false == rv)
 				{
 					TA_ASSERT_DEV(false, "중복된 값이 들어갔습니다.");
