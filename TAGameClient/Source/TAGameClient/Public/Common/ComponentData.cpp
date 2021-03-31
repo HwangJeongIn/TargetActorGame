@@ -91,9 +91,7 @@ namespace ta
 
 	void CommonCharacterComponentData::clear(void) noexcept
 	{
-		_strength = 0;
-		_agility =0;
-		_maxHp = 0;
+		_characterGameDataKey.clear();
 		_currentHp =0;
 	}
 }

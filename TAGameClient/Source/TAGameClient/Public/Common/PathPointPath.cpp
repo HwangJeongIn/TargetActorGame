@@ -42,9 +42,15 @@ namespace ta
 	{
 	}
 
-	bool PathPointPath::hasPathPoint(void) noexcept
+	bool PathPointPath::hasPathPoint(void) const noexcept
 	{
 		return (0 != _path.size());
+	}
+
+	bool PathPointPath::hasPath(void) const noexcept
+	{
+		// 패스가 있으려면 하나이상
+		return (1 < _path.size());
 	}
 
 	const std::vector<PathPoint*>& PathPointPath::getPath(void) const noexcept

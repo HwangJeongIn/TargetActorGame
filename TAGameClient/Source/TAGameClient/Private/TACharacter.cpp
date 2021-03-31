@@ -25,11 +25,10 @@ ATACharacter::ATACharacter()
 		mesh = GetMesh();
 	}
 
-	capsule->SetCapsuleHalfHeight(88.f);
-	capsule->SetCapsuleRadius(34.0f);
+	setCharacterHeight(196.0f);
+
 	// 콜리전 프리셋 지정
 	capsule->SetCollisionProfileName(TEXT("TACharacter"));
-	mesh->SetRelativeLocationAndRotation(FVector(0.f, 0.f, -88.f), FRotator(0.f, -90.f, 0.f));
 	//GetCharacterMovement()->JumpZVelocity = 500.0f;
 	
 	//static ConstructorHelpers::FObjectFinder<USkeletalMesh> a(TEXT("/Game/_Dev/_Characters/InfinityBladeWarriors/Character/CompleteCharacters/SK_CharM_FrostGiant.SK_CharM_FrostGiant"));
@@ -42,12 +41,14 @@ ATACharacter::ATACharacter()
 	//	mesh->SetAnimInstanceClass(WARRIOR_ANIM.Class);
 	//}
 	//
-	//static ConstructorHelpers::FObjectFinder<USkeletalMesh>SK_CARDBOARD(TEXT("/Game/_Dev/_Characters/InfinityBladeWarriors/Character/CompleteCharacters/SK_CharM_Cardboard.SK_CharM_Cardboard"));
-	//if (true == SK_CARDBOARD.Succeeded())
-	//{
-	//	mesh->SetSkeletalMesh(SK_CARDBOARD.Object);
-	//}
+	static ConstructorHelpers::FObjectFinder<USkeletalMesh>SK_CARDBOARD(TEXT("/Game/_Dev/_Characters/InfinityBladeWarriors/Character/CompleteCharacters/SK_CharM_Cardboard.SK_CharM_Cardboard"));
+	if (true == SK_CARDBOARD.Succeeded())
+	{
+		mesh->SetSkeletalMesh(SK_CARDBOARD.Object);
+	}
 
+	_skeletalMeshPath.Empty();
+	_animInstancePath.Empty();
 
 	AIControllerClass = ATAAIController::StaticClass();
 	AutoPossessAI = EAutoPossessAI::PlacedInWorldOrSpawned;
@@ -63,6 +64,26 @@ void ATACharacter::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 }
 
+
+void ATACharacter::BeginPlay()
+{
+	Super::BeginPlay();
+
+	setCharacterHeight(196.0f);
+	//TA_LOG_DEV("begin play ActorKey<%d>", getActorKey().getKeyValue());
+	//if (true == _skeletalMeshPath.IsEmpty()
+	//	|| true == _animInstancePath.IsEmpty())
+	//{
+	//	return;
+	//}
+	//
+	//TA_LOG_DEV("begin play에서 setSkeletalMeshAndAnimInstance 실행 ActorKey<%d>", getActorKey().getKeyValue());
+	//if (false == setSkeletalMeshAndAnimInstance(_skeletalMeshPath, _animInstancePath, false))
+	//{
+	//	TA_ASSERT_DEV(false, "비정상");
+	//}
+}
+
 // Called to bind functionality to input
 void ATACharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
@@ -74,7 +95,7 @@ void ATACharacter::PostInitializeComponents()
 	Super::PostInitializeComponents();
 }
 
-bool ATACharacter::setSkeletalMeshAndAnimInstance(const FString& skeletalMeshPath, const FString& animInstancePath) noexcept
+bool ATACharacter::setSkeletalMeshAndAnimInstance(const FString& skeletalMeshPath, const FString& animInstancePath/*, const bool reserveExecutionOnPlay*/) noexcept
 {
 	TA_LOG_DEV("setSkeletalMeshAndAnimInstance skeletalMeshPath : %s", *skeletalMeshPath);
 	TA_LOG_DEV("setSkeletalMeshAndAnimInstance animaInstancePath : %s", *animInstancePath);
@@ -82,6 +103,12 @@ bool ATACharacter::setSkeletalMeshAndAnimInstance(const FString& skeletalMeshPat
 
 	_skeletalMeshPath = skeletalMeshPath;
 	_animInstancePath = animInstancePath;
+
+	//if (true == reserveExecutionOnPlay)
+	//{
+	//	TA_LOG_DEV("begin play에 실행하도록 예약되었습니다. ActorKey<%d>", getActorKey().getKeyValue());
+	//	return true;
+	//}
 
 	UTAGameInstance* gameInstance = TAGetGameInstance();
 	if (nullptr == gameInstance)
@@ -102,36 +129,32 @@ bool ATACharacter::setSkeletalMeshAndAnimInstance(const FString& skeletalMeshPat
 																							  , FStreamableDelegate::CreateUObject(this, &ATACharacter::onSkeletalMeshAssetLoadCompleted));
 
 	return true;
-
-	USkeletalMeshComponent* mesh = GetMesh();
-	if (nullptr == mesh)
-	{
-		TA_ASSERT_DEV(false, "비정상");
-		return false;
-	}
-	ConstructorHelpers::FObjectFinder<USkeletalMesh> targetSkeletalMesh(*skeletalMeshPath);
-	if (false == targetSkeletalMesh.Succeeded())
-	{
-		TA_ASSERT_DEV(false, "비정상적인 경로 : %s", *skeletalMeshPath);
-		return false;
-	}
-	mesh->SetSkeletalMesh(targetSkeletalMesh.Object);
-
-	
-	ConstructorHelpers::FClassFinder<UAnimInstance> targetAnimationBlueprint(*animInstancePath);
-	if (false == targetAnimationBlueprint.Succeeded())
-	{
-		TA_ASSERT_DEV(false, "비정상적인 경로 : %s", *animInstancePath);
-		return false;
-	}
-	mesh->SetAnimationMode(EAnimationMode::AnimationBlueprint);
-	mesh->SetAnimInstanceClass(targetAnimationBlueprint.Class);
-
 }
 
-void ATACharacter::onSkeletalMeshAssetLoadCompleted(void) noexcept
+void ATACharacter::setCharacterHeight(const float height) noexcept
 {
-	TA_LOG_DEV("onSkeletalMeshAssetLoadCompleted");
+	USkeletalMeshComponent* mesh = GetMesh();
+	UCapsuleComponent* capsule = GetCapsuleComponent();
+
+	float halfHeight = (height / 2.0f);
+	_characterHalfHeight = halfHeight;
+
+	capsule->SetCapsuleSize(_characterHalfHeight * 0.35f, _characterHalfHeight);
+	//capsule->SetCapsuleRadius(_characterHalfHeight * 0.35f, false); // 34
+	//capsule->SetCapsuleHalfHeight(_characterHalfHeight, false);
+	//capsule->SetCapsuleRadius(_characterHalfHeight * 0.35f, false); // 34
+
+	mesh->SetRelativeLocationAndRotation(FVector(0.f, 0.f, -_characterHalfHeight), FRotator(0.f, -90.f, 0.f));
+}
+
+float ATACharacter::getCharacterHalfHeight(void) const noexcept
+{
+	return _characterHalfHeight;
+}
+
+void ATACharacter::onSkeletalMeshAssetLoadCompleted() noexcept
+{
+	TA_LOG_DEV("onSkeletalMeshAssetLoadCompleted ActorKey<%d>, skeletalMeshPath : %s", getActorKey().getKeyValue(), *_skeletalMeshPath);
 
 	if (!_skeletalMeshAssetStreamingHandle)
 	{
@@ -155,27 +178,50 @@ void ATACharacter::onSkeletalMeshAssetLoadCompleted(void) noexcept
 	}
 	mesh->SetSkeletalMesh(asset);
 
+
 	// 이제 애니메이션 블루프린트를 불러온다.
-
-	UTAGameInstance* gameInstance = TAGetGameInstance();
-	if (nullptr == gameInstance)
+	bool directLoad = true;
+	if (true == directLoad)
 	{
-		TA_ASSERT_DEV(false, "비정상");
-		return;
-	}
+		// 다이렉트로 클래스 로드해본다.
+		UClass* animInstanceClass = LoadObject<UClass>(NULL, *_animInstancePath);
+		if (nullptr == animInstanceClass)
+		{
+			TA_ASSERT_DEV(false, "로드 실패 %s", *_animInstancePath);
+			return;
+		}
 
-	FSoftObjectPath animInstanceSoftObjectPath = gameInstance->getAnimInstanceAssetPath(_animInstancePath);
-	if (false == animInstanceSoftObjectPath.IsValid())
+		USkeletalMeshComponent* mesh = GetMesh();
+		if (nullptr == mesh)
+		{
+			TA_ASSERT_DEV(false, "비정상");
+			return;
+		}
+		mesh->SetAnimationMode(EAnimationMode::AnimationBlueprint);
+		mesh->SetAnimInstanceClass(animInstanceClass);
+	}
+	else // 아래 동작을 안한다. 혹시 모르니 일단 코드는 살려둔다.
 	{
-		TA_ASSERT_DEV(false, "비정상");
-		return;
-	}
+		UTAGameInstance* gameInstance = TAGetGameInstance();
+		if (nullptr == gameInstance)
+		{
+			TA_ASSERT_DEV(false, "비정상");
+			return;
+		}
 
-	_animInstanceAssetStreamingHandle = gameInstance->getStreamableManager().RequestAsyncLoad(animInstanceSoftObjectPath
-																							  , FStreamableDelegate::CreateUObject(this, &ATACharacter::onAnimInstanceAssetLoadCompleted));
+		FSoftObjectPath animInstanceSoftObjectPath = gameInstance->getAnimInstanceAssetPath(_animInstancePath);
+		if (false == animInstanceSoftObjectPath.IsValid())
+		{
+			TA_ASSERT_DEV(false, "비정상");
+			return;
+		}
+
+		_animInstanceAssetStreamingHandle = gameInstance->getStreamableManager().RequestAsyncLoad(animInstanceSoftObjectPath
+																								  , FStreamableDelegate::CreateUObject(this, &ATACharacter::onAnimInstanceAssetLoadCompleted));
+	}
 }
 
-void ATACharacter::onAnimInstanceAssetLoadCompleted(void) noexcept
+void ATACharacter::onAnimInstanceAssetLoadCompleted() noexcept
 {
 	TA_LOG_DEV("onAnimInstanceAssetLoadCompleted");
 

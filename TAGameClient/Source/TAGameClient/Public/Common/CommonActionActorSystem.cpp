@@ -1,6 +1,7 @@
-#include "Common/CommonActionActorSystem.h"
+﻿#include "Common/CommonActionActorSystem.h"
 #include "Common/ScopedLock.h"
 #include "Common/CommonCharacterActorComponent.h"
+#include "Common/GameData.h"
 
 
 namespace ta
@@ -10,23 +11,27 @@ namespace ta
 	{
 	}
 
-	bool CommonActionActorSystem::calcAndChangeHp_(const uint32 strength, CommonCharacterActorComponent* targetCom) const noexcept
+	bool CommonActionActorSystem::calcAndChangeHp_(const float strength, CommonCharacterActorComponent* targetCom) const noexcept
 	{
 		// 공식 필요
-		targetCom->_currentHp -= strength;
-		return true;
-	}
-
-	bool CommonActionActorSystem::changeHp_(const uint32 hpValue, CommonCharacterActorComponent* targetCom) const noexcept
-	{
-		if (targetCom->_maxHp < hpValue)
+		const bool rv = targetCom->setCurrentHp_(targetCom->getCurrentHp_() - strength);
+		if (false == rv)
 		{
 			TA_ASSERT_DEV(false, "비정상입니다.");
-			return false;
 		}
 
-		targetCom->_currentHp = hpValue;
-		return true;
+		return rv;
+	}
+
+	bool CommonActionActorSystem::changeHp_(const float hpValue, CommonCharacterActorComponent* targetCom) const noexcept
+	{
+		const bool rv = targetCom->setCurrentHp_(hpValue);
+		if (false == rv)
+		{
+			TA_ASSERT_DEV(false, "비정상입니다.");
+		}
+
+		return rv;
 	}
 
 	CommonActionActorSystem::~CommonActionActorSystem(void) noexcept

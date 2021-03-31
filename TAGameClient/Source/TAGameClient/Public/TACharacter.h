@@ -29,16 +29,22 @@ public:
 
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
+	void BeginPlay() override;
 
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 	virtual void PostInitializeComponents() override;
 
 
-	bool setSkeletalMeshAndAnimInstance(const FString& skeletalMeshPath, const FString& animInstancePath) noexcept;
-	
-	void onSkeletalMeshAssetLoadCompleted(void) noexcept;
-	void onAnimInstanceAssetLoadCompleted(void) noexcept;
+	bool setSkeletalMeshAndAnimInstance(const FString& skeletalMeshPath, const FString& animInstancePath/*, const bool reserveExecutionOnPlay*/) noexcept;
+	void setCharacterHeight(const float height) noexcept;
+	float getCharacterHalfHeight(void) const noexcept;
+
+	UFUNCTION()
+	void onSkeletalMeshAssetLoadCompleted() noexcept;
+
+	UFUNCTION()
+	void onAnimInstanceAssetLoadCompleted() noexcept;
 
 	void resetActorKey(void) noexcept;
 	bool setActorKey(const ta::ActorKey& actorKey) noexcept;
@@ -59,7 +65,11 @@ public:
 	UTAAnimInstance* _animInstance;
 
 private:
+
 	ta::ActorKey _actorKey;
+
+	UPROPERTY()
+	float _characterHalfHeight;
 
 	UPROPERTY()
 	FString _skeletalMeshPath;

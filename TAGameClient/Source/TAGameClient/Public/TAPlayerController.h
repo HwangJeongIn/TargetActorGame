@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/PlayerController.h"
 #include "TACommonBase.h"
+#include "Common/CommonDataTypeDefinition.h"
 #include "TAPlayerController.generated.h"
 
 
@@ -12,11 +13,13 @@ class UTAHudUserWidget;
 class UTAInventoryUserWidget;
 class UTAInteractionMenuUserWidget;
 class UTAChunkUserWidget;
+class UTAInteractionButtonUserWidget;
 
 
 namespace ta
 {
 	typedef int32 ItemSlotNo;
+	class ActorKey;
 }
 /**
  * 
@@ -30,7 +33,7 @@ public:
 
 	// 안에 정의하지 못한다. ue4자체적으로 오버해드 때문에 막아둠
 	//UENUM(/*BlueprintType*/)
-	//enum class UiBoundaryType: uint8
+	//enum class TAUiBoundaryType: uint8
 	//{
 	//	None = 0
 	//	, Inventory
@@ -48,10 +51,19 @@ public:
 	bool getInventoryVisibility(void) const noexcept;
 	void setInventoryVisibility(bool isVisible) const noexcept;
 
+	bool getInteractionMenuVisibility(void) const noexcept;
+	void setInteractionMenuVisibility(bool isVisible) const noexcept;
+
 	void onHoveredUi(UTAChunkUserWidget* input) noexcept;
 	void onUnhoveredUi(UTAChunkUserWidget* input) noexcept;
 	
 	void onSlotReleased(UTAChunkUserWidget* slotParent, const ta::ItemSlotNo& slotNo) noexcept;
+
+	bool setInteractionObjectsByInteractionType(const ta::ActorKey& targetActor, const uint8& buttonIndex, ta::InteractionType interactionType) noexcept;
+	bool executeInteractionButton(const uint8& buttonIndex) noexcept;
+	TWeakObjectPtr<UTAInteractionButtonUserWidget> getInteractionButton(const uint8& buttonIndex) noexcept;
+
+	void setVisibleButtons(const int32& count) noexcept;
 
 protected:
 	virtual void BeginPlay() override final;
@@ -74,7 +86,7 @@ private:
 
 	// ui
 	UPROPERTY()
-	UiBoundaryType _hoveredUi;
+	TAUiBoundaryType _hoveredUi;
 
 	UPROPERTY()
 	UTAHudUserWidget* _hudUserWidget;

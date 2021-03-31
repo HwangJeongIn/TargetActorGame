@@ -1,7 +1,12 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <Root>
-	<AiGameData Key="100" AiClassType="Monster" AttackRange="10"/>
-	<AiGameData Key="101" AiClassType="Monster" AttackRange="15"/>
-	<AiGameData Key="1000" AiClassType="Npc" PathPointPathKey="TestPath1" AttackRange="5"/>
-	<AiGameData Key="1001" AiClassType="Npc" PathPointPathKey="TestPath2" AttackRange="10"/>
+	<AiGameData Key="100" AiClassType="Monster" PathPointPathKey="MonsterDesertPath1" AttackRange="10"/>
+	<AiGameData Key="101" AiClassType="Monster" PathPointPathKey="MonsterDesertPath2" AttackRange="10"/>
+	<AiGameData Key="102" AiClassType="Monster" PathPointPathKey="MonsterDesertPath3" AttackRange="10"/>
+	<AiGameData Key="1000" AiClassType="Npc" PathPointPathKey="NpcDesertPath1" AttackRange="15"/>
+	<AiGameData Key="1001" AiClassType="Npc" PathPointPathKey="NpcDesertPath2" AttackRange="15"/>
+	<AiGameData Key="1002" AiClassType="Npc" PathPointPathKey="NpcDesertPath3" AttackRange="15"/>
+	<AiGameData Key="1003" AiClassType="Npc" PathPointPathKey="NpcDesertPath4" AttackRange="15"/>
+	<AiGameData Key="1004" AiClassType="Npc" PathPointPathKey="NpcDesertPath5" AttackRange="15"/>
+	<AiGameData Key="1005" AiClassType="Npc" AttackRange="15"/>
 </Root>

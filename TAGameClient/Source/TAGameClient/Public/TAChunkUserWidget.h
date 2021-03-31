@@ -1,4 +1,4 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+﻿// Fill out your copyright notice in the Description page of Project Settings.
 
 #pragma once
 
@@ -9,6 +9,7 @@
 #include "TAChunkUserWidget.generated.h"
 
 
+class AController;
 /**
  * 
  */
@@ -20,9 +21,14 @@ class TAGAMECLIENT_API UTAChunkUserWidget : public UUserWidget
 public:
 	UTAChunkUserWidget(const FObjectInitializer& ObjectInitializer);
 
-	bool initializeBase(ATACharacter* ownerActor, const UiBoundaryType& boundaryType) noexcept;
+	bool initializeBase(ATACharacter* ownerActor, const TAUiBoundaryType& boundaryType) noexcept;
 	ATACharacter* getOwnerActor(void) noexcept;
-	const UiBoundaryType getBoundaryType(void) noexcept;
+	AController* getOwnerController(void) noexcept;
+	const TAUiBoundaryType getBoundaryType(void) noexcept;
+
+	// UE4 자체적으로 버그있는것같다. 상속받은 객체를 여기서 Visibility 조절하면 비정상적인 상황이있다.(처음시작할때 Hidden으로 해놔도 가려지지않는다.)
+	//const bool getVisibility(void) const noexcept;
+	//void setVisibility(const bool isVisible) noexcept;
 
 protected:
 	//virtual void NativeConstruct() override final;
@@ -31,7 +37,7 @@ protected:
 
 private:
 	UPROPERTY()
-	UiBoundaryType _boundaryType;
+	TAUiBoundaryType _boundaryType;
 
 	UPROPERTY()
 	TWeakObjectPtr<ATACharacter> _ownerActor;

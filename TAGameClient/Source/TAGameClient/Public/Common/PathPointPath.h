@@ -21,7 +21,8 @@ namespace ta
 		explicit PathPointPath(const bool isCirculationPath = false) noexcept;
 		virtual ~PathPointPath(void) noexcept;
 
-		bool hasPathPoint(void) noexcept;
+		bool hasPathPoint(void) const noexcept;
+		bool hasPath(void) const noexcept;
 
 		const std::vector<PathPoint*>& getPath(void) const noexcept;
 		void clearPath(void) noexcept;

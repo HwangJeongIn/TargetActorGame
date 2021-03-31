@@ -278,7 +278,7 @@ namespace ta
 		 explicit ChangeHpSTC
 ( const ActorKey& attacker,
  const ActorKey& targetActorKey,
- const uint32& hpValue) noexcept
+ const float& hpValue) noexcept
 			: MessagePack(MessageType::ChangeHpSTC),
  		 attacker(attacker),
 		 targetActorKey(targetActorKey),
@@ -296,12 +296,12 @@ ChangeHpSTC::processChangeHpSTC
 ( const ActorKey& networkActorKey,
  const ActorKey& attacker,
  const ActorKey& targetActorKey,
- const uint32& hpValue) noexcept;
+ const float& hpValue) noexcept;
 
 	public:
  	 ActorKey attacker;
 	 ActorKey targetActorKey;
-	 uint32 hpValue; 
+	 float hpValue; 
 	};
 }
 

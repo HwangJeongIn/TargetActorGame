@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 #include "Common/CommonActionActorSystem.h"
 
@@ -25,7 +25,7 @@ namespace ta
 
 		bool respondChangeHp(const ActorKey& attacker
 							 , const ActorKey& targetActorKey
-							 , const uint32& hpValue) const noexcept;
+							 , const float& hpValue) const noexcept;
 
 		bool respondKillActor(const ActorKey& targetActorKey) const noexcept;
 	};

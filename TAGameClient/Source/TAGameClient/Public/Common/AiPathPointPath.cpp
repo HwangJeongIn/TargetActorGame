@@ -59,6 +59,11 @@ namespace ta
 		return true;
 	}
 
+	bool AiPathPointPath::hasPath(void) noexcept
+	{
+		return (true == _pathPointPath->hasPath());
+	}
+
 	bool AiPathPointPath::processNextPathPoint(const Vector& currentPos, const float speed, const float sec, Vector& output) noexcept
 	{
 		const Vector& nearDestination = _currentNearDestination->getPosition();

@@ -22,6 +22,7 @@ namespace ta
 
 		// output으로 크기와 방향을 가진 벡터가 나온다. // speed = cm/s이다 // ue4에서 Unreal Units/second
 		bool findNextPoint(const Vector& currentPos, const float speed, const float sec, Vector& output) noexcept;
+		bool hasPath(void) noexcept;
 
 	private:
 		bool processNextPathPoint(const Vector& currentPos, const float speed, const float sec, Vector& output) noexcept;

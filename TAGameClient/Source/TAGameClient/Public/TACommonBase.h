@@ -1,4 +1,4 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+﻿// Fill out your copyright notice in the Description page of Project Settings.
 
 #pragma once
 
@@ -7,9 +7,19 @@
 
 
 UENUM(/*BlueprintType*/)
-enum class UiBoundaryType : uint8
+enum class TAUiBoundaryType : uint8
 {
 	None = 0
 	, Hud
 	, Inventory
+};
+
+
+UENUM(/*BlueprintType*/)
+enum class TAInteractionObjectType : uint8
+{
+	LookAt = 0
+	, StopAndLookAt
+	, OpenDialog
+	, Count
 };

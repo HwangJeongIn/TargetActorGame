@@ -70,6 +70,16 @@ namespace ta
 	TA_COMPILE_DEV(12 == static_cast<uint8>(TADataType::Count), "여기도 확인해주세요");
 
 
+	const std::unordered_map<std::string, InteractionType> InteractionTypeConverter
+	{
+		 { "Talk", InteractionType::Talk }
+		,{ "Greet", InteractionType::Greet }
+		,{ "Gather", InteractionType::Gather }
+		,{ "Attack", InteractionType::Attack }
+	};
+	TA_COMPILE_DEV(4 == static_cast<uint8>(InteractionType::Count), "여기도 확인해주세요");
+
+
 
 #define CONVERT_FUNCTION_DEFINITION(EnumTypeName)											 \
 																							 \
@@ -109,6 +119,7 @@ namespace ta
 	CONVERT_FUNCTION_DEFINITION(GameWorldType)
 	CONVERT_FUNCTION_DEFINITION(ItemType)
 	CONVERT_FUNCTION_DEFINITION(TADataType)
+	CONVERT_FUNCTION_DEFINITION(InteractionType)
 
 
 

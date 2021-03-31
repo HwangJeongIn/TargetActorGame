@@ -1,4 +1,4 @@
-#include "Client/ClientActionActorSystem.h"
+﻿#include "Client/ClientActionActorSystem.h"
 #include "Common/CommonCharacterActorComponent.h"
 #include "Common/ScopedLock.h"
 #include "Common/GetComponentAndSystem.h"
@@ -39,7 +39,7 @@ namespace ta
 		return true;
 	}
 
-	bool ClientActionActorSystem::respondChangeHp(const ActorKey& attacker, const ActorKey& targetActorKey, const uint32& hpValue) const noexcept
+	bool ClientActionActorSystem::respondChangeHp(const ActorKey& attacker, const ActorKey& targetActorKey, const float& hpValue) const noexcept
 	{
 		// 추후 공격자 사용
 		CommonCharacterActorComponent* targetCharacterCom = GetActorComponent<CommonCharacterActorComponent>(targetActorKey);

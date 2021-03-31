@@ -1,4 +1,4 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+﻿// Fill out your copyright notice in the Description page of Project Settings.
 
 #pragma once
 
@@ -53,7 +53,7 @@ private:
 
 private:
 	UPROPERTY()
-	UTAInventoryUserWidget* _ownerInventory;
+	TWeakObjectPtr<UTAInventoryUserWidget> _ownerInventory;
  
 	UPROPERTY()
 	int32 _slotNo; // ta::ItemSlotNo _slotNo로 해야하는데 UPROPERTY()를 붙이면 지원되지 않는 것 같다

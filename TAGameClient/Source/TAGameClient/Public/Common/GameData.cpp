@@ -53,6 +53,7 @@ namespace ta
 		_key.clear();
 		_moveGameDataKey.clear();
 		_characterGameDataKey.clear();
+		_aiGameDataKey.clear();
 	}
 
 	bool GroupGameData::loadXml(XmlNode* xmlNode) noexcept
@@ -65,7 +66,7 @@ namespace ta
 				return false;
 			}
 
-			_moveGameDataKey = FromStringCast<int32>(*value);
+			_moveGameDataKey = FromStringCast<MoveGameDataKeyType>(*value);
 		}
 
 		{
@@ -76,7 +77,15 @@ namespace ta
 				return false;
 			}
 
-			_characterGameDataKey = FromStringCast<int32>(*value);
+			_characterGameDataKey = FromStringCast<CharacterGameDataKeyType>(*value);
+		}
+
+		{
+			const std::string* value = xmlNode->getAttribute("AiGameDataKey");
+			if (nullptr != value) // 플레이어인 경우 없을 수 있다.
+			{
+				_aiGameDataKey = FromStringCast<AiGameDataKeyType>(*value);
+			}
 		}
 
 		return true;
@@ -201,10 +210,14 @@ namespace ta
 	void CharacterGameData::clearDetail(void) noexcept
 	{
 		_key.clear();
-		_aiGameDataKey.clear();
+		_actorType = ActorType::Count;
+		_interactionTypes.clear();
 		_strength = 0.0f;
 		_agility = 0.0f;
 		_maxHp = 0.0f;
+		_openDialog.clear();
+		_skeletalMeshPath.clear();
+		_animInstancePath.clear();
 	}
 
 	bool CharacterGameData::loadXml(XmlNode* xmlNode) noexcept
@@ -218,13 +231,40 @@ namespace ta
 			}
 
 			_actorType = ConvertStringToEnum<ActorType>(*value);
+			if (ActorType::Count == _actorType)
+			{
+				TA_ASSERT_DEV(false, "ActorType 로드 실패 %s", ToTstring(*value).c_str());
+				return false;
+			}
 		}
 
 		{
-			const std::string* value = xmlNode->getAttribute("AiGameDataKey");
-			if (nullptr != value) // 플레이어인 경우 없을 수 있다.
+			const std::string* value = xmlNode->getAttribute("InteractionType");
+			if (nullptr != value) // 없을 수 있다.
 			{
-				_aiGameDataKey = FromStringCast<int32>(*value);
+				std::vector<std::string> splitedStrings;
+				Split(*value, ",", splitedStrings);
+				const uint32 count = splitedStrings.size();
+
+				// 최대 3가지 인터랙션을 넣을 수 있다.
+				// ex) Greet,Talk,Gather
+				if (count > 5)
+				{
+					TA_ASSERT_DEV(false, "InteractionType 로드 실패, 최대 3개까지 가능합니다. %s", ToTstring(*value).c_str());
+					return false;
+				}
+
+				InteractionType interactionType;
+				for (uint32 index = 0; index < count; index += 2)
+				{
+					interactionType = ConvertStringToEnum<InteractionType>(splitedStrings[index]);
+					if (InteractionType::Count == interactionType)
+					{
+						TA_ASSERT_DEV(false, "InteractionType 로드 실패, 비정상적인 타입 %s", ToTstring(splitedStrings[index]).c_str());
+						return false;
+					}
+					_interactionTypes.push_back(interactionType);
+				}
 			}
 		}
 
@@ -261,6 +301,65 @@ namespace ta
 			_maxHp = FromStringCast<float>(*value);
 		}
 
+		{
+			const std::string* value = xmlNode->getAttribute("OpenDialog");
+			if (nullptr != value) // 없을 수 있다.
+			{
+				_openDialog = *value;
+			}
+		}
+
+		{
+			const std::string* value = xmlNode->getAttribute("SkeletalMeshPath");
+			if (nullptr == value)
+			{
+				TA_ASSERT_DEV(false, "SkeletalMeshPath 로드 실패");
+				return false;
+			}
+
+			std::vector<std::string> splitedStrings;
+			Split(*value, "'", splitedStrings);
+			const uint32 count = splitedStrings.size();
+			if (1 == count)
+			{
+				_skeletalMeshPath = splitedStrings[0];
+			}
+			else if (4 == count)
+			{
+				_skeletalMeshPath = splitedStrings[2];
+			}
+			else
+			{
+				TA_ASSERT_DEV(false, "SkeletalMeshPath 로드 실패");
+				return false;
+			}
+		}
+
+		{
+			const std::string* value = xmlNode->getAttribute("AnimInstancePath");
+			if (nullptr == value)
+			{
+				TA_ASSERT_DEV(false, "AnimInstancePath 로드 실패");
+				return false;
+			}
+
+			std::vector<std::string> splitedStrings;
+			Split(*value, "'", splitedStrings);
+			const uint32 count = splitedStrings.size();
+			if (1 == count)
+			{
+				_animInstancePath = splitedStrings[0];
+			}
+			else if (4 == count)
+			{
+				_animInstancePath = splitedStrings[2];
+			}
+			else
+			{
+				TA_ASSERT_DEV(false, "SkeletalMeshPath 로드 실패");
+				return false;
+			}
+		}
 		return true;
 	}
 }

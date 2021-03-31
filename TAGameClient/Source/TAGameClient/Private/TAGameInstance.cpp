@@ -2,7 +2,6 @@
 
 
 #include "TAGameInstance.h"
-#include "Client/ClientApp.h"
 //#include "Engine.h" 
 //#include "Engine/Engine.h" 
 #include "Engine/GameEngine.h" 
@@ -22,6 +21,7 @@
 #include "Editor.h"
 #include "Engine/LevelStreaming.h"
 #include "TAAssets.h"
+#include "Misc/App.h"
 
 #include "Common/GameDataManager.h"
 #include "Common/CommonSpawnDataManager.h"
@@ -33,8 +33,11 @@
 #include "Common/ScopedLock.h"
 #include "Common/KeyDefinition.h"
 #include "Common/GetComponentAndSystem.h"
+#include "Common/CommonMoveActorComponent.h"
+#include "Common/CommonCharacterActorComponent.h"
 #include "Client/ClientActorManager.h"
 #include "Client/ClientActor.h"
+#include "Client/ClientApp.h"
 
 
 UTAGameInstance* TAGetGameInstance(void) noexcept
@@ -265,6 +268,18 @@ bool TADestroyTAActor(const ta::ActorKey& actorKey) noexcept
 	}
 
 	return gameInstance->destroyTAActor(actorKey);
+}
+
+TWeakObjectPtr<ATACharacter> TAGetTAActor(const ta::ActorKey& actorKey) noexcept
+{
+	UTAGameInstance* gameInstance = TAGetGameInstance();
+	if (nullptr == gameInstance)
+	{
+		TA_ASSERT_DEV(false, "비정상입니다.");
+		return nullptr;
+	}
+
+	return gameInstance->getTAActor(actorKey);
 }
 
 bool TAExportRecastNavMesh(void) noexcept
@@ -521,6 +536,9 @@ extern bool TAExportLevelSpawnData(ULevel* level) noexcept
 UTAGameInstance::UTAGameInstance()
 {
 	_navMeshExported = false;
+	_findInteractionActorInterval = 1.5f;
+	_currentFindInteractionActorTime = 0.0f;
+
 	{
 		//TA_LOG_DEV("%s", *FPaths::GetProjectFilePath());
 		//TA_LOG_DEV("test log");
@@ -635,8 +653,7 @@ void UTAGameInstance::OnStart()
 	//	TA_ASSERT_DEV(false, "비정상입니다.");
 	//}
 
-	GetTimerManager().SetTimerForNextTick(this, &UTAGameInstance::processGameEventQueue);
-	
+	GetTimerManager().SetTimerForNextTick(this, &UTAGameInstance::processTimerTick);
 	static_cast<ta::ClientApp*>(ta::g_app)->run();
 }
 
@@ -747,10 +764,26 @@ bool UTAGameInstance::exportNavMesh(void) noexcept
 	return true;
 }
 
-void UTAGameInstance::processGameEventQueue(void) noexcept
+
+void UTAGameInstance::processTimerTick(void) noexcept
+{
+	// 여러 스레드를 지원하지않는다고 문서에 나와있다. 데이터 레이스 문제는 걱정안해도 될 듯하다.
+	GetTimerManager().SetTimerForNextTick(this, &UTAGameInstance::processTimerTick);
+
+	const float deltaTime = GetWorld()->GetDeltaSeconds();
+	
+	// 완전히 동일하다.
+	// TA_LOG_DEV("%f", GetWorld()->GetDeltaSeconds());
+	// TA_LOG_DEV("%f", FApp::GetDeltaTime());
+	
+	processGameEventQueue(deltaTime);
+	processFindInteractionActor(deltaTime);
+}
+
+void UTAGameInstance::processGameEventQueue(float deltaTime) noexcept
 {
 	//TA_LOG_DEV("processGameEvent");
-	GetTimerManager().SetTimerForNextTick(this, &UTAGameInstance::processGameEventQueue);
+
 
 	{
 		ta::ScopedLock gameEventQueueLock(&_gameEventQueueLock);
@@ -769,7 +802,7 @@ void UTAGameInstance::processGameEventQueue(void) noexcept
 			TAGameEvent* gameEvent = _gameEventQueue[index];
 			if (nullptr != gameEvent)
 			{
-				TA_LOG_DEV("GameEventType : %d, ActorKey : %d", gameEvent->getGameEventType(), gameEvent->getActorKey().getKeyValue());
+				//TA_LOG_DEV("GameEventType : %d, ActorKey : %d", gameEvent->getGameEventType(), gameEvent->getActorKey().getKeyValue());
 				if (false == gameEvent->processEvent(parameter))
 				{
 					TA_ASSERT_DEV(false, "비정상입니다");
@@ -781,6 +814,123 @@ void UTAGameInstance::processGameEventQueue(void) noexcept
 		_gameEventQueue.clear();
 	}
 
+}
+
+void UTAGameInstance::processFindInteractionActor(float deltaTime) noexcept
+{
+	_currentFindInteractionActorTime += deltaTime;
+
+	if (_findInteractionActorInterval > _currentFindInteractionActorTime)
+	{
+		return;
+	}
+
+	_currentFindInteractionActorTime = 0.0f;
+
+	ATAPlayerController* playerController = TAGetFirstPlayerController();
+	ATAPlayer* player = Cast<ATAPlayer>(playerController->GetPawn());
+
+	if (nullptr == player)
+	{
+		return;
+	}
+
+	FVector playerPosition = player->GetActorLocation();
+	const float maxInteractionDistanceSquared = 150.0f * 150.0f;
+	float currentInteractionDistanceSquared = maxInteractionDistanceSquared;
+
+	FVector interactionActorPosition;
+	ta::ActorKey currentActorKey;
+	ta::ActorKey interactionActorKey;
+	ta::CommonActor* currentClientActor = nullptr;
+
+	for (auto currentTAActor : _spawnedTAActors)
+	{
+		currentActorKey = currentTAActor.Key;
+		// 있는지 검증 해야할까? => 어차피 요청했을때 없으면 실패하면 될듯
+		// ta::CommonActor* currentClientActor = ta::GetActorManager()->getActor(currentActorKey);
+		// if (nullptr == currentClientActor)
+		// {
+		// 	continue;
+		// }
+
+		// 비슷하고 거의 동기화 될것이기 때문에 그냥 UE4액터 위치로 계산하자
+		//ta::CommonMoveActorComponent* actorMoveCom = ta::GetActorComponent<ta::CommonMoveActorComponent>(currentActorKey);
+		//
+		//ta::Vector interactionActorPosition;
+		//{
+		//	ta::ScopedLock moveComLock(actorMoveCom, true);
+		//	interactionActorPosition = actorMoveCom->getCurrentPosition_();
+		//}
+
+		interactionActorPosition = currentTAActor.Value->GetActorLocation();
+		float distanceSquared = (interactionActorPosition - playerPosition).SizeSquared();
+
+		if (currentInteractionDistanceSquared > distanceSquared)
+		{
+			TA_LOG_DEV("processFindInteractionActor step1 ActorKey : %d, %f", currentTAActor.Key, distanceSquared);
+			currentInteractionDistanceSquared = distanceSquared;
+			interactionActorKey = currentTAActor.Key;
+		}
+	}
+
+	_currentInteractionActorKey = interactionActorKey;
+
+	if (true == _currentInteractionActorKey.isValid())
+	{
+		processInteractionMenu(playerController);
+	}
+	else
+	{
+		playerController->setInteractionMenuVisibility(false);
+	}
+}
+
+void UTAGameInstance::processInteractionMenu(ATAPlayerController* playerController) noexcept
+{
+	TA_LOG_DEV("processInteractionMenu");
+
+	if (false == _currentInteractionActorKey.isValid())
+	{
+		playerController->setInteractionMenuVisibility(false);
+		return;
+	}
+
+	ta::CommonActor* interactionClientActor = ta::GetActorManager()->getActor(_currentInteractionActorKey);
+	if (nullptr == interactionClientActor)
+	{
+		_currentInteractionActorKey.clear();
+		playerController->setInteractionMenuVisibility(false);
+		return;
+	}
+
+	ta::CommonCharacterActorComponent* characterCom = ta::GetActorComponent<ta::CommonCharacterActorComponent>(_currentInteractionActorKey);
+	const ta::CharacterGameData* characterGameData = nullptr;
+	// 한번 초기화되고 변할일이 없긴한데.. 그래도 일단 read 락걸고 가져오자
+	{
+		ta::ScopedLock characterLock(characterCom, true);
+		characterGameData = characterCom->getCharacterGameData_();
+	}
+
+	const uint32 interactionTypeCount = characterGameData->_interactionTypes.size();
+	{
+		for (uint32 index = 0; index < interactionTypeCount; ++index)
+		{
+			// 버튼을 초기화
+			const bool rv = playerController->setInteractionObjectsByInteractionType(_currentInteractionActorKey
+																					 , static_cast<uint8>(index)
+																					 , characterGameData->_interactionTypes[index]);
+
+			if (false == rv)
+			{
+				TA_ASSERT_DEV(false, "비정상입니다");
+				return;
+			}
+		}
+
+		playerController->setVisibleButtons(interactionTypeCount);
+		playerController->setInteractionMenuVisibility(true);
+	}
 }
 
 bool UTAGameInstance::registerGameEvent(TAGameEvent* gameEvent) noexcept
@@ -879,6 +1029,11 @@ bool UTAGameInstance::destroyTAActor(const ta::ActorKey& actorKey) noexcept
 		actor->resetUnrealCharacter_();
 	}
 
+	if (actorKey == _currentInteractionActorKey)
+	{
+		_currentInteractionActorKey.clear();
+	}
+
 	_spawnedTAActors.Remove(actorKey.getKeyValue());
 
 	if (false == (*character)->ConditionalBeginDestroy())
@@ -888,6 +1043,24 @@ bool UTAGameInstance::destroyTAActor(const ta::ActorKey& actorKey) noexcept
 	}
 
 	return true;
+}
+
+TWeakObjectPtr<ATACharacter> UTAGameInstance::getTAActor(const ta::ActorKey& actorKey) noexcept
+{
+	if (false == actorKey.isValid())
+	{
+		TA_ASSERT_DEV(false, "비정상입니다.");
+		return nullptr;
+	}
+
+	ATANonPlayer** character = _spawnedTAActors.Find(actorKey.getKeyValue());
+	if (nullptr == character)
+	{
+		TA_ASSERT_DEV(false, "해당 액터를 찾을 수 없습니다.");
+		return nullptr;
+	}
+
+	return *character;
 }
 
 FStreamableManager& UTAGameInstance::getStreamableManager(void) noexcept
@@ -935,4 +1108,16 @@ FSoftObjectPath UTAGameInstance::getAnimInstanceAssetPath(const FString& key) no
 	}
 
 	return assets->_animInstanceAssets[*targetIndex];
+}
+
+const ta::ActorKey& UTAGameInstance::getCurrentInteractionActorKey(void) noexcept
+{
+	// 있는지 검증
+	ta::CommonActor* clientActor = ta::GetActorManager()->getActor(_currentInteractionActorKey);
+	if (nullptr == clientActor)
+	{
+		_currentInteractionActorKey.clear();
+	}
+
+	return _currentInteractionActorKey;
 }

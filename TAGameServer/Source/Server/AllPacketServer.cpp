@@ -1,4 +1,4 @@
-#include "Common/AllPacketCommon.h"
+﻿#include "Common/AllPacketCommon.h"
 #include "Server/AllPacketServer.h"
 #include "Common/GetComponentAndSystem.h"
 #include "Server/ServerMoveActorSystem.h"
@@ -123,7 +123,7 @@ namespace ta
 	void ChangeHpSTC::processChangeHpSTC(const ActorKey& networkActorKey,
 										 const ActorKey& attacker,
 										 const ActorKey& targetActorKey,
-										 const uint32& hpValue) noexcept
+										 const float& hpValue) noexcept
 	{
 		__noop;
 	}

@@ -213,101 +213,18 @@ namespace ta
             serverActor->setCharacterDBNo_(characterDBNo);
         }
 
-        ActorType actorType = ActorType::Count;
+        // 임시로 그룹키 1로 스폰시킨다.
+        GroupGameDataKey groupGameDataKey(1);
+        const GroupGameData* groupGameData = GetGameData<GroupGameData>(groupGameDataKey);
+        if (nullptr == groupGameData)
         {
-            ScopedLock actorLock(serverActor, true);
-            actorType = serverActor->getActorType_();
+            TA_ASSERT_DEV(false, "비정상입니다.");
+            return false;
         }
 
-        const std::vector<ActorComponentType>& componentTypeList = ActorComponentGroups.at(actorType);
-        // TODO : DB + 데이터로부터 로드해야합니다.
-        const uint32 count = componentTypeList.size();
-        for (uint32 index = 0; index < count; ++index)
-        {
-            switch (componentTypeList[index])
-            {																										 
-			case ActorComponentType::Move:																									 
-				{							
-                    CommonMoveComponentData data;
-                    data._position = Vector(-2000, 900, 0);
-                    data._rotation = Vector(0, 0, 0);
-                    data._speed = 500.0f;
-                    if (false == initializeActorComponent(targetActorKey, &data, false))
-                    {
-                        TA_ASSERT_DEV(false, "비정상입니다.");
-                        return false;
-                    }
-				}																															 
-				break;																																	 
-			case ActorComponentType::Action:
-				{			
-                    CommonActionComponentData data;
-                    if (false == initializeActorComponent(targetActorKey, &data, false))
-                    {
-                        TA_ASSERT_DEV(false, "비정상입니다.");
-                        return false;
-                    }
-				}																															 
-				break;																																	 
-			case ActorComponentType::Ai:
-				{																															 
-                    CommonAiComponentData data;
-                    data._aiClassType = AiClassType::Player;
-                    if (false == initializeActorComponent(targetActorKey, &data, false))
-                    {
-                        TA_ASSERT_DEV(false, "비정상입니다.");
-                        return false;
-                    }
+        CommonActorDetailSpawnDataForUser spawnDataForUser(Vector(-2000, 900, 0), Vector(0, 0, 0), GroupGameDataKey(1));
 
-				}																															 
-				break;																																	 
-			case ActorComponentType::Character:
-				{				
-                    CommonCharacterComponentData data;
-                    if (false == initializeActorComponent(targetActorKey, &data, false))
-                    {
-                        TA_ASSERT_DEV(false, "비정상입니다.");
-                        return false;
-                    }
-				}																															 
-				break;																																 
-			case ActorComponentType::Inventory:
-				{			
-                    CommonInventoryComponentData data;
-
-                    // 임시
-                    {
-                        data._itemSetType = ItemSetType::ContainerType;
-                        data._capacity = 10;
-
-                        ItemElementData itemData;
-                        itemData._baseKey = ItemGameDataKey(1);
-                        itemData._stackCount = 2;
-                        data._itemElementDataSet[1] = itemData;
-
-
-                        itemData._baseKey = ItemGameDataKey(2);
-                        itemData._stackCount = 3;
-                        data._itemElementDataSet[3] = itemData;
-                    }
-
-                    if (false == initializeActorComponent(targetActorKey, &data, false))
-                    {
-                        TA_ASSERT_DEV(false, "비정상입니다.");
-                        return false;
-                    }
-				}																															 
-				break;
-            default:
-                {
-                    TA_COMPILE_DEV((5 == static_cast<uint8>(ActorComponentType::Count)), "여기도 추가해주세요")
-                }
-                break;
-            }
-
-        }
-
-        return true;
+        return initializeActorComponentsFromData(targetActorKey, spawnDataForUser);
     }
 
     bool ServerActorManager::initializeActorComponentsFromData(const ActorKey& targetActorKey, const CommonActorDetailSpawnData& detailSpawnData) noexcept
@@ -339,7 +256,7 @@ namespace ta
         }
 
         const std::vector<ActorComponentType>& componentTypeList = ActorComponentGroups.at(actorType);
-
+        // TODO : 유저인 경우 DB + 데이터로부터 로드해야합니다.
         const uint32 count = componentTypeList.size();
         for (uint32 index = 0; index < count; ++index)
         {
@@ -367,13 +284,6 @@ namespace ta
                 break;
             case ActorComponentType::Action:
                 {
-                    //const ActionGameData* actionGameData = GetGameData<ActionGameData>(groupGameData->_actionGameDataKey);
-                    //if (nullptr == actionGameData)
-                    //{
-                    //    TA_ASSERT_DEV(false, "데이터가 없습니다. ActionGameDataKey : %d", groupGameData->_actionGameDataKey.getKeyValue());
-                    //    return false;
-                    //}
-
                     CommonActionComponentData data;
                     if (false == initializeActorComponent(targetActorKey, &data, false))
                     {
@@ -384,23 +294,14 @@ namespace ta
                 break;
             case ActorComponentType::Ai:
                 {
-                    const CharacterGameData* characterGameData = GetGameData<CharacterGameData>(groupGameData->_characterGameDataKey);
-                    if (nullptr == characterGameData)
+                    const AiGameData* aiGameData = GetGameData<AiGameData>(groupGameData->_aiGameDataKey);
+                    CommonAiComponentData data;
+                    if (nullptr != aiGameData) // 없을 수 있다.
                     {
-                        TA_ASSERT_DEV(false, "데이터가 없습니다. CharacterGameDataKey : %d", groupGameData->_characterGameDataKey.getKeyValue());
-                        return false;
-                    }
-
-                    const AiGameData* aiGameData = GetGameData<AiGameData>(characterGameData->_aiGameDataKey);
-                    if (nullptr == aiGameData)
-                    {
-                        TA_ASSERT_DEV(false, "데이터가 없습니다. AiGameDataKey : %d", characterGameData->_aiGameDataKey.getKeyValue());
-                        return false;
+                        data._aiClassType = aiGameData->_aiClassType;
+                        data._pathPointPathKey = aiGameData->_pathPointPathKey;
                     }
                    
-                    CommonAiComponentData data;
-                    data._aiClassType = aiGameData->_aiClassType;
-                    data._pathPointPathKey = aiGameData->_pathPointPathKey;
                     if (false == initializeActorComponent(targetActorKey, &data, false))
                     {
                         TA_ASSERT_DEV(false, "비정상입니다.");
@@ -419,6 +320,9 @@ namespace ta
                     }
 
                     CommonCharacterComponentData data;
+                    data._currentHp = characterGameData->_maxHp;
+                    data._characterGameDataKey = groupGameData->_characterGameDataKey;
+
                     if (false == initializeActorComponent(targetActorKey, &data, false))
                     {
                         TA_ASSERT_DEV(false, "비정상입니다.");
@@ -428,15 +332,35 @@ namespace ta
                 break;
             case ActorComponentType::Inventory:
                 {
-                    // 인벤토리 컨텐츠를 가진것들은 DB로 부터 초기화 되어야할것 같은데..
-                    TA_ASSERT_DEV(false, "비정상입니다.");
+                    if (false == detailSpawnData.isUser())
+                    {
+                        TA_ASSERT_DEV(false, "비정상입니다.");
+                        return false;
+                    }
 
-                    //CommonInventoryComponentData data;
-                    //if (false == initializeActorComponent(targetActorKey, &data, false))
-                    //{
-                    //    TA_ASSERT_DEV(false, "비정상입니다.");
-                    //    return false;
-                    //}
+                    CommonInventoryComponentData data;
+
+                    // 임시
+                    {
+                        data._itemSetType = ItemSetType::ContainerType;
+                        data._capacity = 10;
+
+                        ItemElementData itemData;
+                        itemData._baseKey = ItemGameDataKey(1);
+                        itemData._stackCount = 2;
+                        data._itemElementDataSet[1] = itemData;
+
+
+                        itemData._baseKey = ItemGameDataKey(2);
+                        itemData._stackCount = 3;
+                        data._itemElementDataSet[3] = itemData;
+                    }
+
+                    if (false == initializeActorComponent(targetActorKey, &data, false))
+                    {
+                        TA_ASSERT_DEV(false, "비정상입니다.");
+                        return false;
+                    }
                 }
                 break;
             default:

@@ -93,11 +93,8 @@ namespace ta
 
 		void clear(void) noexcept;
 	public:
-		uint32 _strength;
-		uint32 _agility;
-
-		uint32 _maxHp;
-		uint32 _currentHp;
+		CharacterGameDataKey _characterGameDataKey;
+		float _currentHp;
 	};
 }
 

@@ -105,7 +105,7 @@ namespace ta
 
 	bool ClientMoveActorSystem::respondMoveActor(CommonActor* target, const Vector& newPos) const noexcept
 	{
-		TA_LOG_DEV("<RespondMoveActor> => ActorKey : %d, position(%.1f, %.1f, %.1f)", target->getActorKey().getKeyValue(), newPos._x, newPos._y, newPos._z);
+		//TA_LOG_DEV("<RespondMoveActor> => ActorKey : %d, position(%.1f, %.1f, %.1f)", target->getActorKey().getKeyValue(), newPos._x, newPos._y, newPos._z);
 		const bool rv = moveActor(target, newPos, true);
 		if (false == rv)
 		{

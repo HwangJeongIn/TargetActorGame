@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 #include "Common/CommonBase.h"
 #include "Common/KeyDefinition.h"
@@ -139,12 +139,30 @@ namespace ta
 	class CommonActorDetailSpawnData
 	{
 	public:
-		explicit CommonActorDetailSpawnData(const Vector& location, const Vector& rotation, const GroupGameDataKey& groupKey) noexcept;
-		~CommonActorDetailSpawnData(void) noexcept;
+		explicit CommonActorDetailSpawnData(const Vector& position, const Vector& rotation, const GroupGameDataKey& groupKey) noexcept;
+		virtual ~CommonActorDetailSpawnData(void) noexcept;
+
+		virtual bool isUser(void) const noexcept;
 
 	public:
 		Vector _position;
 		Vector _rotation;
 		GroupGameDataKey _groupGameDataKey;
+	};
+}
+
+
+namespace ta
+{
+	class CommonActorDetailSpawnDataForUser : public CommonActorDetailSpawnData
+	{
+	public:
+		explicit CommonActorDetailSpawnDataForUser(const Vector& position, const Vector& rotation, const GroupGameDataKey& groupKey) noexcept;
+		virtual ~CommonActorDetailSpawnDataForUser(void) noexcept;
+
+		virtual bool isUser(void) const noexcept override final;
+
+	public:
+		// DB에서 받은정보가 있으면 추가
 	};
 }

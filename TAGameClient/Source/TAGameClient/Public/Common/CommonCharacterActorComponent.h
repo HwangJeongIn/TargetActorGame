@@ -1,6 +1,12 @@
-#pragma once
+﻿#pragma once
 
 #include "Common/ActorComponent.h"
+
+
+namespace ta
+{
+	class CharacterGameData;
+}
 
 
 namespace ta
@@ -14,14 +20,16 @@ namespace ta
 		virtual ComponentData* packData_(void) noexcept override;
 
 		static const ActorComponentType getActorComponentType(void) noexcept;
+
+		const CharacterGameData* getCharacterGameData_(void) const noexcept;
+		float getCurrentHp_(void) const noexcept;
+		bool setCurrentHp_(const float value) noexcept;
+
 	protected:
 		CommonCharacterActorComponent(void) noexcept;
 
-	public:
-		uint32 _strength;
-		uint32 _agility;
-		
-		uint32 _maxHp;
-		uint32 _currentHp;
+	private:
+		const CharacterGameData* _characterGameData;
+		float _currentHp;
 	};
 }

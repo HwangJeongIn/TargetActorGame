@@ -1,4 +1,4 @@
-#include "Server/ServerActionActorSystem.h"
+﻿#include "Server/ServerActionActorSystem.h"
 #include "Server/ServerActionActorSystem.h"
 #include "Server/AllPacketServer.h"
 #include "Common/KeyDefinition.h"
@@ -7,6 +7,7 @@
 #include "Common/CommonMoveActorComponent.h"
 #include "Common/CommonMoveActorSystem.h"
 #include "Common/ScopedLock.h"
+#include "Common/GameData.h"
 
 
 namespace ta
@@ -30,13 +31,21 @@ namespace ta
 	
 	bool ServerActionActorSystem::attackTarget(CommonCharacterActorComponent* myCom, CommonCharacterActorComponent* targetCom) const noexcept
 	{
-		uint32 myStrength = 0;
+		
+		float myStrength = 0;
 		{
 			ScopedLock myLock(myCom);
-			myStrength = myCom->_strength;
+			const CharacterGameData* characterGameData = myCom->getCharacterGameData_();
+			if (nullptr == characterGameData)
+			{
+				TA_ASSERT_DEV(false, "비정상입니다.");
+				return false;
+			}
+
+			myStrength = characterGameData->_strength;
 		}
 
-		uint32 currentHp = 0;
+		float currentHp = 0;
 		{
 			ScopedLock targetLock(targetCom);
 
@@ -44,7 +53,8 @@ namespace ta
 			{
 				return false;
 			}
-			currentHp = targetCom->_currentHp;
+
+			currentHp = targetCom->getCurrentHp_();
 		}
 
 		bool isDead = false;

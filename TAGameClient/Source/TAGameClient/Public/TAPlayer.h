@@ -4,11 +4,13 @@
 
 #include "CoreMinimal.h"
 #include "TACharacter.h"
+#include "Common/CommonDataTypeDefinition.h"
 #include "TAPlayer.generated.h"
 
 
 class USpringArmComponent;
 class UCameraComponent;
+class UTAInteractionButtonUserWidget;
 
 /**
  * 
@@ -35,8 +37,8 @@ public:
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override final;
 	virtual void PostInitializeComponents() override final;
 
+	/* move, action, camera */
 private:
-
 	enum class CharacterBehaviorByInput : ta::uint8
 	{
 		Move = 0
@@ -57,24 +59,27 @@ private:
 		, Count
 	};
 
-	enum class InteractType : ta::uint8
-	{
-		Attack = 0
-		, Gather
-		, Count
-	};
+
 	
-	// move
 	void moveAndRotateCharacterByInput(const CharacterBehaviorByInput& characterBehaviorByInput, const DirectionType& directionType, const float axisValue) noexcept;
 	void moveCharacterByInput(const DirectionType& directionType, const float axisValue) noexcept;
 	void rotateCharacterByInput(const DirectionType& directionType, const float axisValue) noexcept;
+
+	UFUNCTION()
 	void upDown(const float axisValue) noexcept;
+
+	UFUNCTION()
 	void leftRight(const float axisValue) noexcept;
+
+	UFUNCTION()
 	void lookUp(const float axisValue) noexcept;
+
+	UFUNCTION()
 	void turn(const float axisValue) noexcept;
 
-	// battle
-	void attack(void) noexcept;
+	UFUNCTION()
+	void attack() noexcept;
+
 	UFUNCTION()
 	void onAttackMontageEnded(UAnimMontage* montage, bool interrupted) noexcept;
 
@@ -87,24 +92,19 @@ private:
 	UFUNCTION()
 	void nextAttackCheck() noexcept;
 
-	// interaction
-	void interact(const InteractType& interactType, float range, float radius) noexcept;
-	bool doInteract(FHitResult& hitResult, const InteractType& interactType) noexcept;
-	bool postInteract(FHitResult& hitResult, const InteractType& interactType) noexcept;
+	void interact(const ta::InteractionType& interactionType, float range, float radius) noexcept;
+	bool doInteract(FHitResult& hitResult, const ta::InteractionType& interactionType) noexcept;
+	bool postInteract(FHitResult& hitResult, const ta::InteractionType& interactionType) noexcept;
 
 	void setControlMode(const ControlMode controlMode) noexcept;
-	void viewChange(void) noexcept;
 
-	// ui
-	void toggleInventory(void) noexcept;
-	void toggleMousePoint(void) noexcept;
-
-	// nav
-	void exportRecastNavMesh(void) noexcept;
+	UFUNCTION()
+	void viewChange() noexcept;
 
 	void processSyncToServer(float deltaTime) noexcept;
 
-public:
+private:
+
 	UPROPERTY(VisibleAnyWhere, Category = Camera)
 	USpringArmComponent* _springArm;
 
@@ -129,15 +129,6 @@ public:
 	UPROPERTY(EditAnyWhere, Category = Camera)
 	float			_fixedThirdPersonToArmLength;
 
-
-
-	//UPROPERTY(VisibleInstanceOnly)
-//TWeakObjectPtr<ATAPawn> _target;
-	/*
-	TWeakObjectPtr : UObjects
-	TWeakPtr : everything else
-	*/
-
 	UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly, Category = Attack, Meta = (AllowPrivateAccess = true))
 	bool _isAttacking;
 
@@ -154,6 +145,58 @@ public:
 	int32 _maxCombo;
 
 	// 클라이언트에서 서버로 동기화 시키기
-	float _maxTimeToSync;
-	float _currentTimeToSync;
+	float _syncInterval;
+	float _currentTimeForSync;
+
+private:
+
+	/* ui */
+	enum class InteractionKeyType : ta::uint8
+	{
+		Interaction1Key = 0
+		, Interaction2Key
+		, Interaction3Key
+		, Count
+	};
+
+
+	UFUNCTION()
+	void toggleInventory() noexcept;
+
+	UFUNCTION()
+	void toggleMousePoint() noexcept;
+
+	// for test
+	UFUNCTION()
+	void key1Pressed() noexcept;
+
+	UFUNCTION()
+	void key2Pressed() noexcept;
+
+	UFUNCTION()
+	void key3Pressed() noexcept;
+
+	// for interaction
+	UFUNCTION()
+	void interaction1KeyPressed() noexcept;
+
+	UFUNCTION()
+	void interaction2KeyPressed() noexcept;
+
+	UFUNCTION()
+	void interaction3KeyPressed() noexcept;
+
+	bool processInteractionKeyPressed(const InteractionKeyType& interactionKeyType) const noexcept;
+
+
+private:
+
+	//UPROPERTY()
+	//TWeakObjectPtr<UTAInteractionButtonUserWidget> _interaction1KeyButton;
+	//
+	//UPROPERTY()
+	//TWeakObjectPtr<UTAInteractionButtonUserWidget> _interaction2KeyButton;
+	//
+	//UPROPERTY()
+	//TWeakObjectPtr<UTAInteractionButtonUserWidget> _interaction3KeyButton;
 };

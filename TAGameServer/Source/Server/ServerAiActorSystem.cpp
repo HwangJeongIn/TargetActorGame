@@ -96,6 +96,11 @@ namespace ta
 				return true; // 없을 수 있다.
 			}
 
+			if (false == aiPathPointPath->hasPath())
+			{
+				return true; // 없을 수 있다.
+			}
+
 			float speed = 0.0f;
 			{
 				ScopedLock moveLock(myMove, true);

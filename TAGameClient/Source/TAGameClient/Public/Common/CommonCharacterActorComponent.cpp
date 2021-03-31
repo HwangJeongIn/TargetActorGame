@@ -1,5 +1,6 @@
-#include "Common/CommonCharacterActorComponent.h"
+﻿#include "Common/CommonCharacterActorComponent.h"
 #include "Common/ComponentData.h"
+#include "Common/GetComponentAndSystem.h"
 
 namespace ta
 {
@@ -11,9 +12,13 @@ namespace ta
 	{
 		const CommonCharacterComponentData* data = static_cast<const CommonCharacterComponentData*>(componentData);
 
-		_strength = data->_strength;
-		_agility = data->_agility;
-		_maxHp = data->_maxHp;
+		_characterGameData = GetGameData<CharacterGameData>(data->_characterGameDataKey);
+		if (nullptr == _characterGameData)
+		{
+			TA_ASSERT_DEV(false, "비정상");
+			return false;
+		}
+
 		_currentHp = data->_currentHp;
 
 		return true;
@@ -23,10 +28,14 @@ namespace ta
 	{
 		CommonCharacterComponentData* data = new CommonCharacterComponentData;
 
-		data->_strength		= _strength;
-		data->_agility		= _agility;
-		data->_maxHp		= _maxHp;
-		data->_currentHp	= _currentHp;
+		if (nullptr == _characterGameData)
+		{
+			TA_ASSERT_DEV(false, "비정상");
+			return nullptr;
+		}
+
+		data->_characterGameDataKey = _characterGameData->_key;
+		data->_currentHp			= _currentHp;
 
 		return data;
 	}
@@ -39,6 +48,36 @@ namespace ta
 	CommonCharacterActorComponent::CommonCharacterActorComponent(void) noexcept
 		: ActorComponent(ActorComponentType::Character)
 	{
+	}
+
+	const CharacterGameData* CommonCharacterActorComponent::getCharacterGameData_(void) const noexcept
+	{
+		return _characterGameData;
+	}
+
+	float CommonCharacterActorComponent::getCurrentHp_(void) const noexcept
+	{
+		return _currentHp;
+	}
+
+	bool CommonCharacterActorComponent::setCurrentHp_(const float value) noexcept
+	{
+		if ((nullptr == _characterGameData)
+			|| (_characterGameData->_maxHp < value))
+		{
+			return false;
+		}
+
+		if (0.0f > value)
+		{
+			_currentHp = 0.0f;
+		}
+		else
+		{
+			_currentHp = value;
+		}
+
+		return true;
 	}
 }
 

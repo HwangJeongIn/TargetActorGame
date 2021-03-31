@@ -7,6 +7,7 @@
 #include "TAAIController.h"
 #include "TAPlayerController.h"
 #include "TAConvertFunctions.h"
+#include "TAInteractionButtonUserWidget.h"
 #include "DrawDebugHelpers.h"
 #include "Common/GetComponentAndSystem.h"
 #include "Common/ScopedLock.h"
@@ -52,8 +53,8 @@ ATAPlayer::ATAPlayer()
 	_maxCombo = 4;
 	attackEndComboSate();
 
-	_maxTimeToSync = 1.0f;
-	_currentTimeToSync = 0.0f;
+	_syncInterval = 1.0f;
+	_currentTimeForSync = 0.0f;
 
 	setControlMode(ControlMode::PlayerThirdPerson);
 
@@ -103,8 +104,12 @@ void ATAPlayer::BeginPlay()
 	//	TA_ASSERT_DEV(false, "비정상");
 	//}
 
-	if (false == setSkeletalMeshAndAnimInstance("/Game/_Dev/_Characters/InfinityBladeWarriors/Character/CompleteCharacters/SK_CharM_FrostGiant.SK_CharM_FrostGiant"
-		, "/Game/_Dev/_Characters/Animations/TAAnimationBlueprint.TAAnimationBlueprint"))
+
+	if (false == setSkeletalMeshAndAnimInstance("/Game/_Dev/_Characters/InfinityBladeWarriors/Character/CompleteCharacters/SK_CharM_Cardboard.SK_CharM_Cardboard"
+		, "/Game/_Dev/_Characters/Animations/TAAnimationBlueprint.TAAnimationBlueprint_C"))
+	
+	//if (false == setSkeletalMeshAndAnimInstance("/Game/_Dev/_Characters/InfinityBladeWarriors/Character/CompleteCharacters/SK_CharM_Cardboard.SK_CharM_Cardboard"
+	//	, "/Game/_Dev/_Characters/Animations/TAAnimationBlueprint.TAAnimationBlueprint_C"))
 	{
 		TA_ASSERT_DEV(false, "비정상");
 	}
@@ -251,8 +256,15 @@ void ATAPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 	PlayerInputComponent->BindAction(TEXT("ToggleInventory"), EInputEvent::IE_Pressed, this, &ATAPlayer::toggleInventory);
 	PlayerInputComponent->BindAction(TEXT("ToggleMousePoint"), EInputEvent::IE_Pressed, this, &ATAPlayer::toggleMousePoint);
 
-	// temp
-	PlayerInputComponent->BindAction(TEXT("ExportRecastNavMesh"), EInputEvent::IE_Pressed, this, &ATAPlayer::exportRecastNavMesh);
+	// for test
+	PlayerInputComponent->BindAction(TEXT("Key1Pressed"), EInputEvent::IE_Pressed, this, &ATAPlayer::key1Pressed);
+	PlayerInputComponent->BindAction(TEXT("Key2Pressed"), EInputEvent::IE_Pressed, this, &ATAPlayer::key2Pressed);
+	PlayerInputComponent->BindAction(TEXT("Key3Pressed"), EInputEvent::IE_Pressed, this, &ATAPlayer::key3Pressed);
+
+	// for interaction button
+	PlayerInputComponent->BindAction(TEXT("Interaction1KeyPressed"), EInputEvent::IE_Pressed, this, &ATAPlayer::interaction1KeyPressed);
+	PlayerInputComponent->BindAction(TEXT("Interaction2KeyPressed"), EInputEvent::IE_Pressed, this, &ATAPlayer::interaction2KeyPressed);
+	PlayerInputComponent->BindAction(TEXT("Interaction3KeyPressed"), EInputEvent::IE_Pressed, this, &ATAPlayer::interaction3KeyPressed);
 }
 
 void ATAPlayer::PostInitializeComponents()
@@ -476,7 +488,7 @@ void ATAPlayer::turn(const float axisValue) noexcept
 	moveAndRotateCharacterByInput(CharacterBehaviorByInput::Rotate, DirectionType::Z, axisValue);
 }
 
-void ATAPlayer::attack(void) noexcept
+void ATAPlayer::attack() noexcept
 {
 	if (true == _isAttacking)
 	{
@@ -502,71 +514,6 @@ void ATAPlayer::attack(void) noexcept
 			_animInstance->jumpToAttackMontageSection(_currentCombo);
 		}
 		_isAttacking = true;
-	}
-}
-
-void ATAPlayer::toggleInventory(void) noexcept
-{
-	ATAPlayerController* controller = static_cast<ATAPlayerController*>(GetController());
-	const bool toggleFlag = !(controller->getInventoryVisibility());
-	controller->bShowMouseCursor = toggleFlag;
-	controller->setInventoryVisibility(toggleFlag);
-	TA_LOG_DEV("Toggle inventory : %d", toggleFlag);
-}
-
-void ATAPlayer::toggleMousePoint(void) noexcept
-{
-	ATAPlayerController* controller = static_cast<ATAPlayerController*>(GetController());
-	controller->bShowMouseCursor = !(controller->bShowMouseCursor);
-	TA_LOG_DEV("Toggle mouse point : %d", controller->bShowMouseCursor);
-}
-
-void ATAPlayer::exportRecastNavMesh(void) noexcept
-{
-	const bool result = TAExportRecastNavMesh();
-	TA_LOG_DEV("ExportRecastNavMesh result : %d", result);
-}
-
-void ATAPlayer::processSyncToServer(float deltaTime) noexcept
-{
-	_currentTimeToSync += deltaTime;
-	if (_maxTimeToSync < _currentTimeToSync)
-	{
-		_currentTimeToSync = 0.0f;
-		if (false == getActorKey().isValid())
-		{
-			return;
-		}
-
-		ta::ClientActor* clientActor = getActorFromActorManager();
-		if (nullptr == clientActor)
-		{
-			return;
-		}
-
-		ta::ClientMoveActorComponent* moveCom = ta::GetActorComponent<ta::ClientMoveActorComponent>(getActorKey());
-		FVector currentPos;
-		{
-			ta::ScopedLock moveLock(moveCom, true);
-			TAVectorToFVector(moveCom->getCurrentPosition_(), currentPos);
-		}
-
-		const FVector currentUEPos = GetActorLocation();
-		if ( (1.5f * 1.5f) > (GetActorLocation() - currentPos).SizeSquared())
-		{
-			return;
-		}
-
-		ta::Vector destination;
-		FVectorToTAVector(currentUEPos, destination);
-		ta::ClientMoveActorSystem* moveSystem = ta::GetActorSystem<ta::ClientMoveActorSystem>();
-		if (false == moveSystem->requestMoveActor(clientActor, destination))
-		{
-			TA_ASSERT_DEV(false, "비정상입니다");
-			return;
-		}
-
-		//TA_LOG_DEV("<SyncActor> => actorkey : %d, current position (%.1f, %.1f, %.1f)", getActorKey().getKeyValue(), destination._x, destination._y, destination._z);
 	}
 }
 
@@ -602,7 +549,7 @@ void ATAPlayer::attackCheck() noexcept
 	const float finalAttackRange = 200.0f;
 	const float finalAttackRadius = 50.0f;
 
-	interact(InteractType::Attack, finalAttackRange, finalAttackRadius);
+	interact(ta::InteractionType::Attack, finalAttackRange, finalAttackRadius);
 }
 
 void ATAPlayer::nextAttackCheck() noexcept
@@ -616,7 +563,7 @@ void ATAPlayer::nextAttackCheck() noexcept
 	}
 }
 
-void ATAPlayer::interact(const InteractType& interactType, float range, float radius) noexcept
+void ATAPlayer::interact(const ta::InteractionType& interactionType, float range, float radius) noexcept
 {
 	FHitResult hitResult;
 	FCollisionQueryParams params(NAME_None, false, this);
@@ -659,13 +606,13 @@ void ATAPlayer::interact(const InteractType& interactType, float range, float ra
 		}
 
 		{
-			if (false == doInteract(hitResult, interactType))
+			if (false == doInteract(hitResult, interactionType))
 			{
 				TA_ASSERT_DEV(false, "DoInteract에 실패했습니다.");
 				return;
 			}
 
-			if (false == postInteract(hitResult, interactType))
+			if (false == postInteract(hitResult, interactionType))
 			{
 				TA_ASSERT_DEV(false, "PostInteract에 실패했습니다.");
 				return;
@@ -674,7 +621,7 @@ void ATAPlayer::interact(const InteractType& interactType, float range, float ra
 	}
 }
 
-bool ATAPlayer::doInteract(FHitResult& hitResult, const InteractType& interactType) noexcept
+bool ATAPlayer::doInteract(FHitResult& hitResult, const ta::InteractionType& interactionType) noexcept
 {
 	if (false == hitResult.Actor.IsValid())
 	{
@@ -682,9 +629,9 @@ bool ATAPlayer::doInteract(FHitResult& hitResult, const InteractType& interactTy
 		return false;
 	}
 
-	switch (interactType)
+	switch (interactionType)
 	{
-	case InteractType::Attack:
+	case ta::InteractionType::Attack:
 		{
 			TA_LOG_DEV("Hit ActorName : %s", *hitResult.Actor->GetName());
 
@@ -698,7 +645,17 @@ bool ATAPlayer::doInteract(FHitResult& hitResult, const InteractType& interactTy
 			//hitResult.Actor->TakeDamage(finalAttackRange, damageEvent, GetController(), this);
 		}
 		break;
-	case InteractType::Gather:
+	case ta::InteractionType::Greet:
+		{
+			// 추가해야한다.
+		}
+		break;
+	case ta::InteractionType::Gather:
+		{
+			// 추가해야한다.
+		}
+		break;
+	case ta::InteractionType::Talk:
 		{
 			// 추가해야한다.
 		}
@@ -709,13 +666,13 @@ bool ATAPlayer::doInteract(FHitResult& hitResult, const InteractType& interactTy
 			return false;
 		}
 		break;
-		TA_COMPILE_DEV(2 == static_cast<ta::uint8>(InteractType::Count), "여기도 확인해주세요");
+		TA_COMPILE_DEV(4 == static_cast<ta::uint8>(ta::InteractionType::Count), "여기도 확인해주세요");
 	}
 
 	return true;
 }
 
-bool ATAPlayer::postInteract(FHitResult& hitResult, const InteractType& interactType) noexcept
+bool ATAPlayer::postInteract(FHitResult& hitResult, const ta::InteractionType& interactionType) noexcept
 {
 	if (false == hitResult.Actor.IsValid())
 	{
@@ -723,14 +680,24 @@ bool ATAPlayer::postInteract(FHitResult& hitResult, const InteractType& interact
 		return false;
 	}
 
-	switch (interactType)
+	switch (interactionType)
 	{
-	case InteractType::Attack:
+	case ta::InteractionType::Attack:
 		{
 			// 추가해야한다.
 		}
 		break;
-	case InteractType::Gather:
+	case ta::InteractionType::Greet:
+		{
+			// 추가해야한다.
+		}
+		break;
+	case ta::InteractionType::Gather:
+		{
+			// 추가해야한다.
+		}
+		break;
+	case ta::InteractionType::Talk:
 		{
 			// 추가해야한다.
 		}
@@ -741,7 +708,7 @@ bool ATAPlayer::postInteract(FHitResult& hitResult, const InteractType& interact
 			return false;
 		}
 		break;
-		TA_COMPILE_DEV(2 == static_cast<ta::uint8>(InteractType::Count), "여기도 확인해주세요");
+		TA_COMPILE_DEV(4 == static_cast<ta::uint8>(ta::InteractionType::Count), "여기도 확인해주세요");
 	}
 
 	return true;
@@ -820,7 +787,7 @@ void ATAPlayer::setControlMode(const ControlMode controlMode) noexcept
 	_cameraDirtyFlag = true;
 }
 
-void ATAPlayer::viewChange(void) noexcept
+void ATAPlayer::viewChange() noexcept
 {
 	switch (_currentControlMode)
 	{
@@ -848,4 +815,134 @@ void ATAPlayer::viewChange(void) noexcept
 	default:
 		break;
 	}
+}
+
+void ATAPlayer::processSyncToServer(float deltaTime) noexcept
+{
+	_currentTimeForSync += deltaTime;
+	if (_syncInterval < _currentTimeForSync)
+	{
+		_currentTimeForSync = 0.0f;
+		if (false == getActorKey().isValid())
+		{
+			return;
+		}
+
+		ta::ClientActor* clientActor = getActorFromActorManager();
+		if (nullptr == clientActor)
+		{
+			return;
+		}
+
+		ta::ClientMoveActorComponent* moveCom = ta::GetActorComponent<ta::ClientMoveActorComponent>(getActorKey());
+		FVector currentPos;
+		{
+			ta::ScopedLock moveLock(moveCom, true);
+			TAVectorToFVector(moveCom->getCurrentPosition_(), currentPos);
+		}
+
+		const FVector currentUEPos = GetActorLocation();
+		if ((1.5f * 1.5f) > (GetActorLocation() - currentPos).SizeSquared())
+		{
+			return;
+		}
+
+		ta::Vector destination;
+		FVectorToTAVector(currentUEPos, destination);
+		ta::ClientMoveActorSystem* moveSystem = ta::GetActorSystem<ta::ClientMoveActorSystem>();
+		if (false == moveSystem->requestMoveActor(clientActor, destination))
+		{
+			TA_ASSERT_DEV(false, "비정상입니다");
+			return;
+		}
+
+		//TA_LOG_DEV("<SyncActor> => actorkey : %d, current position (%.1f, %.1f, %.1f)", getActorKey().getKeyValue(), destination._x, destination._y, destination._z);
+	}
+}
+
+void ATAPlayer::toggleInventory() noexcept
+{
+	ATAPlayerController* controller = static_cast<ATAPlayerController*>(GetController());
+	const bool toggleFlag = !(controller->getInventoryVisibility());
+	controller->bShowMouseCursor = toggleFlag;
+	controller->setInventoryVisibility(toggleFlag);
+	TA_LOG_DEV("Toggle inventory : %d", toggleFlag);
+}
+
+void ATAPlayer::toggleMousePoint() noexcept
+{
+	ATAPlayerController* controller = static_cast<ATAPlayerController*>(GetController());
+	controller->bShowMouseCursor = !(controller->bShowMouseCursor);
+	TA_LOG_DEV("Toggle mouse point : %d", controller->bShowMouseCursor);
+}
+
+void ATAPlayer::key1Pressed() noexcept
+{
+	TA_LOG_DEV("keyF1Pressed");
+	ATAPlayerController* controller = static_cast<ATAPlayerController*>(GetController());
+	controller->setInteractionMenuVisibility(true);
+}
+
+void ATAPlayer::key2Pressed() noexcept
+{
+	TA_LOG_DEV("keyF2Pressed");
+	ATAPlayerController* controller = static_cast<ATAPlayerController*>(GetController());
+	controller->setInteractionMenuVisibility(false);
+}
+
+void ATAPlayer::key3Pressed() noexcept
+{
+	TA_LOG_DEV("key3Pressed");
+}
+
+void ATAPlayer::interaction1KeyPressed() noexcept
+{
+	TA_LOG_DEV("interaction1KeyPressed");
+	if (false == processInteractionKeyPressed(InteractionKeyType::Interaction1Key))
+	{
+		TA_ASSERT_DEV(false, "비정상입니다");
+	}
+}
+
+void ATAPlayer::interaction2KeyPressed() noexcept
+{
+	TA_LOG_DEV("interaction2KeyPressed");
+	if (false == processInteractionKeyPressed(InteractionKeyType::Interaction2Key))
+	{
+		TA_ASSERT_DEV(false, "비정상입니다");
+	}
+}
+
+void ATAPlayer::interaction3KeyPressed() noexcept
+{
+	TA_LOG_DEV("interaction3KeyPressed");
+	if (false == processInteractionKeyPressed(InteractionKeyType::Interaction3Key))
+	{
+		TA_ASSERT_DEV(false, "비정상입니다");
+	}
+}
+
+bool ATAPlayer::processInteractionKeyPressed(const InteractionKeyType& interactionKeyType) const noexcept
+{
+	if (InteractionKeyType::Count <= interactionKeyType)
+	{
+		TA_ASSERT_DEV(false, "비정상입니다");
+		return false;
+	}
+
+	ATAPlayerController* controller = static_cast<ATAPlayerController*>(GetController());
+	if (false == controller->getInteractionMenuVisibility())
+	{
+		TA_ASSERT_DEV(false, "비정상입니다");
+		return false;
+	}
+
+	const uint8 buttonIndex = static_cast<uint8>(interactionKeyType);
+	if (false == controller->executeInteractionButton(buttonIndex))
+	{
+		TA_ASSERT_DEV(false, "비정상입니다");
+		return false;
+	}
+
+	return true;
 }

@@ -8,6 +8,7 @@
 #include "Containers/Queue.h"
 #include <vector>
 #include "Common/Lockable.h"
+#include "Common/KeyDefinition.h"
 #include "TAGameInstance.generated.h"
 
 
@@ -40,6 +41,7 @@ extern ATAPlayer* TAGetFirstPlayer(void) noexcept;
 
 extern ATACharacter* TASpawnTAActor(const ta::ActorKey& actorKey, const FVector& position, const FRotator& rotation) noexcept;
 extern bool TADestroyTAActor(const ta::ActorKey& actorKey) noexcept;
+extern TWeakObjectPtr<ATACharacter> TAGetTAActor(const ta::ActorKey& actorKey) noexcept;
 
 extern bool TAExportRecastNavMesh(void) noexcept;
 
@@ -67,18 +69,25 @@ public:
 	virtual void Shutdown() override final;
 
 	bool exportNavMesh(void) noexcept;
-	void processGameEventQueue(void) noexcept;
+	void processTimerTick(void) noexcept;
+	void processGameEventQueue(const float deltaTime) noexcept;
+	void processFindInteractionActor(const float deltaTime) noexcept;
+	void processInteractionMenu(ATAPlayerController* playerController) noexcept;
+
 	bool registerGameEvent(TAGameEvent* gameEvent) noexcept;
 	void clearGameEvents(void) noexcept;
 
 	ATACharacter* spawnTAActor(const ta::ActorKey& actorKey, const FVector& position, const FRotator& rotation) noexcept;
 	bool destroyTAActor(const ta::ActorKey& actorKey) noexcept;
+	TWeakObjectPtr<ATACharacter> getTAActor(const ta::ActorKey& actorKey) noexcept;
 
 	FStreamableManager& getStreamableManager(void) noexcept;
 
 	FSoftObjectPath getSkeletalMeshAssetPath(const FString& key) noexcept;
 	FSoftObjectPath getStaticMeshAssetPath(const FString& key) noexcept;
 	FSoftObjectPath getAnimInstanceAssetPath(const FString& key) noexcept;
+
+	const ta::ActorKey& getCurrentInteractionActorKey(void) noexcept;
 
 private:
 	// UE4 자체 TQueue로 c++ 클래스 TAGameEvent 객체들을 담았다가 일단 문제 발생할것 같아서 바꾸었다.
@@ -93,11 +102,17 @@ private:
 	UPROPERTY()
 	TMap<uint32, ATANonPlayer*> _spawnedTAActors;
 
+	ta::ActorKey _currentInteractionActorKey;
+	
+	float _findInteractionActorInterval;
+	float _currentFindInteractionActorTime;
+
+
 	// 비동기 로드를 위한 스트림 매니저
 	//UPROPERTY()
 	FStreamableManager _streamableManager;
 
-	// asset table key finder // 로드된 에셋을 계속 찾을 순 없으니 해당 에셋의 인덱스를 찾는 테이블을 마련해둔다.
+	// asset table key finder // 로드된 에셋을 선형적으로 돌면서 계속 찾을 순 없으니 해당 에셋의 인덱스를 찾는 테이블을 마련해둔다.
 	UPROPERTY()
 	TMap<FString, uint32> _skeletalMeshAssetKeyFinder;
 

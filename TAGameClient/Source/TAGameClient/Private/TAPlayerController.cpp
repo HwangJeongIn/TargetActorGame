@@ -6,10 +6,12 @@
 #include "TAHudUserWidget.h"
 #include "TAInventoryUserWidget.h"
 #include "TAInteractionMenuUserWidget.h"
+#include "TAInteractionButtonUserWidget.h"
 #include "Components/CanvasPanelSlot.h"
 #include "Common/CommonBase.h"
 #include "Common/ScopedLock.h"
 #include "Common/GetComponentAndSystem.h"
+#include "Common/KeyDefinition.h"
 #include "Client/ClientActor.h"
 #include "Client/ClientInventoryActorComponent.h"
 #include "Client/ClientInventoryActorSystem.h"
@@ -40,7 +42,7 @@ ATAPlayerController::ATAPlayerController()
 		_interactionMenuUserWidgetClass = InteractionMenu_C.Class;
 	}
 
-	_hoveredUi = UiBoundaryType::None;
+	_hoveredUi = TAUiBoundaryType::None;
 }
 
 void ATAPlayerController::PostInitializeComponents(void)
@@ -67,18 +69,35 @@ UTAInventoryUserWidget* ATAPlayerController::getInventoryUserWidget(void) const
 bool ATAPlayerController::getInventoryVisibility(void) const noexcept
 {
 	return (ESlateVisibility::Visible == _inventoryUserWidget->GetVisibility());
+	//return _inventoryUserWidget->getVisibility();
 }
 
 void ATAPlayerController::setInventoryVisibility(bool isVisible) const noexcept
 {
+	TA_LOG_DEV("setInventoryVisibility = %d", isVisible);
 	ESlateVisibility visibility = (true == isVisible) ? ESlateVisibility::Visible : ESlateVisibility::Hidden;
 	_inventoryUserWidget->SetVisibility(visibility);
+	//_inventoryUserWidget->setVisibility(isVisible);
+}
+
+bool ATAPlayerController::getInteractionMenuVisibility(void) const noexcept
+{
+	return (ESlateVisibility::Visible == _interactionMenuUserWidget->GetVisibility());
+	//return _interactionMenuUserWidget->getVisibility();
+}
+
+void ATAPlayerController::setInteractionMenuVisibility(bool isVisible) const noexcept
+{
+	TA_LOG_DEV("setInteractionMenuVisibility = %d", isVisible);
+	ESlateVisibility visibility = (true == isVisible) ? ESlateVisibility::Visible : ESlateVisibility::Hidden;
+	_interactionMenuUserWidget->SetVisibility(visibility);
+	//_interactionMenuUserWidget->setVisibility(isVisible);
 }
 
 void ATAPlayerController::onHoveredUi(UTAChunkUserWidget* input) noexcept
 {
-	const UiBoundaryType boundaryType = input->getBoundaryType();
-	if (boundaryType <= UiBoundaryType::Hud)
+	const TAUiBoundaryType boundaryType = input->getBoundaryType();
+	if (boundaryType <= TAUiBoundaryType::Hud)
 	{
 		return;
 	}
@@ -89,15 +108,15 @@ void ATAPlayerController::onHoveredUi(UTAChunkUserWidget* input) noexcept
 
 void ATAPlayerController::onUnhoveredUi(UTAChunkUserWidget* input) noexcept
 {
-	const UiBoundaryType boundaryType = input->getBoundaryType();
-	if (boundaryType <= UiBoundaryType::Hud)
+	const TAUiBoundaryType boundaryType = input->getBoundaryType();
+	if (boundaryType <= TAUiBoundaryType::Hud)
 	{
 		return;
 	}
 
 	if (_hoveredUi == boundaryType)
 	{
-		_hoveredUi = UiBoundaryType::None;
+		_hoveredUi = TAUiBoundaryType::None;
 		TA_LOG_DEV("unhovedUi = %d", static_cast<uint8>(boundaryType));
 	}
 }
@@ -117,13 +136,13 @@ void ATAPlayerController::onSlotReleased(UTAChunkUserWidget* slotParent, const t
 		return;
 	}
 
-	const UiBoundaryType boundaryType = slotParent->getBoundaryType();
+	const TAUiBoundaryType boundaryType = slotParent->getBoundaryType();
 
 	switch (boundaryType)
 	{
-	case UiBoundaryType::Inventory:
+	case TAUiBoundaryType::Inventory:
 		{
-			if (_hoveredUi <= UiBoundaryType::Hud)
+			if (_hoveredUi <= TAUiBoundaryType::Hud)
 			{
 				TA_LOG_DEV("onSlotReleased => Inventory to empty space // drop item");
 				ta::ClientInventoryActorComponent* inventory = ta::GetActorComponent<ta::ClientInventoryActorComponent>(targetActorKey);
@@ -146,6 +165,60 @@ void ATAPlayerController::onSlotReleased(UTAChunkUserWidget* slotParent, const t
 	}
 }
 
+
+bool ATAPlayerController::setInteractionObjectsByInteractionType(const ta::ActorKey& targetActor, const uint8& buttonIndex, ta::InteractionType interactionType) noexcept
+{
+	TWeakObjectPtr<UTAInteractionButtonUserWidget> interactionButton = getInteractionButton(buttonIndex);
+	if (false == interactionButton.IsValid())
+	{
+		TA_ASSERT_DEV(false, "비정상 %d", buttonIndex);
+		return false;
+	}
+
+	ATACharacter* myCharacter = Cast<ATACharacter>(GetPawn());
+	if (nullptr == myCharacter)
+	{
+		TA_ASSERT_DEV(false, "비정상");
+		return false;
+	}
+
+	if (false == interactionButton->setInteractionObjectsByInteractionType(myCharacter->getActorKey(), targetActor, interactionType))
+	{
+		TA_ASSERT_DEV(false, "비정상 %d", buttonIndex);
+		return false;
+	}
+
+	return true;
+}
+
+bool ATAPlayerController::executeInteractionButton(const uint8& buttonIndex) noexcept
+{
+	TWeakObjectPtr<UTAInteractionButtonUserWidget> interactionButton = getInteractionButton(buttonIndex);
+	if (false == interactionButton.IsValid())
+	{
+		TA_ASSERT_DEV(false, "비정상 %d", buttonIndex);
+		return false;
+	}
+
+	if (false == interactionButton->doInteraction())
+	{
+		TA_ASSERT_DEV(false, "비정상 %d", buttonIndex);
+		return false;
+	}
+
+	return true;
+}
+
+TWeakObjectPtr<UTAInteractionButtonUserWidget> ATAPlayerController::getInteractionButton(const uint8& buttonIndex) noexcept
+{
+	return _interactionMenuUserWidget->getInteractionButton(buttonIndex);
+}
+
+void ATAPlayerController::setVisibleButtons(const int32& count) noexcept
+{
+	_interactionMenuUserWidget->setVisibleButtons(count);
+}
+
 void ATAPlayerController::BeginPlay()
 {
 	TA_LOG_DEV("player controller BeginPlay");
@@ -166,19 +239,19 @@ void ATAPlayerController::BeginPlay()
 
 	{
 		_hudUserWidget = CreateWidget<UTAHudUserWidget>(this, _hudUserWidgetClass);
-		_hudUserWidget->initializeBase(targetCharacter, UiBoundaryType::None);
+		_hudUserWidget->initializeBase(targetCharacter, TAUiBoundaryType::None);
 		_hudUserWidget->AddToViewport();
 	}
 
 	{
 		_inventoryUserWidget = CreateWidget<UTAInventoryUserWidget>(this, _inventoryUserWidgetClass);
-		_inventoryUserWidget->initializeBase(targetCharacter, UiBoundaryType::Inventory);
+		_inventoryUserWidget->initializeBase(targetCharacter, TAUiBoundaryType::Inventory);
 		UCanvasPanelSlot* inventoryCanvasPanelSlot = _hudUserWidget->addChildWidgetToPanel(_inventoryUserWidget);
 		if (nullptr == inventoryCanvasPanelSlot)
 		{
 			TA_ASSERT_DEV(false, "비정상");
 		}
-		else
+		else // 부모인 Hud기준 상대좌표를 지정한다.
 		{
 			//float tempY = viewportSize.Y / 2.0f;
 			//float tempX = (viewportSize.X / 4.0f) / 2.0f;
@@ -200,8 +273,22 @@ void ATAPlayerController::BeginPlay()
 
 	{
 		_interactionMenuUserWidget = CreateWidget<UTAInteractionMenuUserWidget>(this, _interactionMenuUserWidgetClass);
-		_interactionMenuUserWidget->AddToViewport();
-		_interactionMenuUserWidget->SetVisibility(ESlateVisibility::Hidden);
+		_interactionMenuUserWidget->initializeBase(targetCharacter, TAUiBoundaryType::None);
+		UCanvasPanelSlot* interactionMenuCanvasPanelSlot = _hudUserWidget->addChildWidgetToPanel(_interactionMenuUserWidget);
+		if (nullptr == interactionMenuCanvasPanelSlot)
+		{
+			TA_ASSERT_DEV(false, "비정상");
+		}
+		else // 부모인 Hud기준 상대좌표를 지정한다.
+		{
+			interactionMenuCanvasPanelSlot->SetAnchors(FAnchors(0.5f, 0.5f));
+			interactionMenuCanvasPanelSlot->SetAlignment(FVector2D(0.5f, 0.5f)); // 중앙위치로
+			interactionMenuCanvasPanelSlot->SetPosition(FVector2D(0.0f, (viewportSize.X * 0.05f) )); // 화면의 1/4사이즈로 인벤토리 할 예정 피벗이 중앙이므로 2로 나눈값으로 위치를 잡는다.
+			//interactionMenuCanvasPanelSlot->SetSize(FVector2D(viewportSize.X / 2.0f, viewportSize.Y / 2.0f));
+			interactionMenuCanvasPanelSlot->SetSize(FVector2D(viewportSize.X * 0.3f, viewportSize.Y * 0.225f));
+
+			setInteractionMenuVisibility(false);
+		}
 	}
 
 

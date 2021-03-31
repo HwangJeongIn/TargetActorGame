@@ -1,4 +1,4 @@
-#include "Common/CommonActor.h"
+﻿#include "Common/CommonActor.h"
 #include "Common/ActorComponent.h"
 #include "Common/Socket.h"
 #include "Common/ScopedLock.h"
@@ -423,5 +423,28 @@ namespace ta
 
 	CommonActorDetailSpawnData::~CommonActorDetailSpawnData(void) noexcept
 	{
+	}
+
+	bool CommonActorDetailSpawnData::isUser(void) const noexcept
+	{
+		return false;
+	}
+}
+
+
+namespace ta
+{
+	CommonActorDetailSpawnDataForUser::CommonActorDetailSpawnDataForUser(const Vector& position, const Vector& rotation, const GroupGameDataKey& groupKey) noexcept
+		: CommonActorDetailSpawnData(position, rotation, groupKey)
+	{
+	}
+
+	CommonActorDetailSpawnDataForUser::~CommonActorDetailSpawnDataForUser(void) noexcept
+	{
+	}
+
+	bool CommonActorDetailSpawnDataForUser::isUser(void) const noexcept
+	{
+		return true;
 	}
 }

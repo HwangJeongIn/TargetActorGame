@@ -88,9 +88,9 @@ void UTAInventorySlotUserWidget::onSlotClicked() noexcept
 void UTAInventorySlotUserWidget::onSlotPressed() noexcept
 {
 	TA_LOG_DEV("onSlotPressed slotNo : %d", _slotNo);
-	if (nullptr == _ownerInventory)
+	if (false == _ownerInventory.IsValid())
 	{
-		TA_ASSERT_DEV(false, "_ownerInventory == nullptr");
+		TA_ASSERT_DEV(false, "IsValid failed : _ownerInventory");
 		return;
 	}
 
@@ -100,9 +100,9 @@ void UTAInventorySlotUserWidget::onSlotPressed() noexcept
 void UTAInventorySlotUserWidget::onSlotReleased() noexcept
 {
 	TA_LOG_DEV("onSlotReleased slotNo : %d", _slotNo);	
-	if (nullptr == _ownerInventory)
+	if (false == _ownerInventory.IsValid())
 	{
-		TA_ASSERT_DEV(false, "_ownerInventory == nullptr");
+		TA_ASSERT_DEV(false, "IsValid failed : _ownerInventory");
 		return;
 	}
 

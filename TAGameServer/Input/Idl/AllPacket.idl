@@ -21,7 +21,7 @@
 	CharacterComponentData(const ActorKey& targetActorKey, const CommonCharacterComponentData& componentData);
 	InventoryComponentData(const ActorKey& targetActorKey, const CommonInventoryComponentData& componentData);
 	MoveActor(const ActorKey& targetActorKey, const Vector& position);
-	ChangeHp(const ActorKey& attacker, const ActorKey& targetActorKey, const uint32& hpValue);
+	ChangeHp(const ActorKey& attacker, const ActorKey& targetActorKey, const float& hpValue);
 	KillActor(const ActorKey& targetActorKey);
 	SetTargetActor(const ActorKey& myActorKey, const ActorKey& targetActorKey);
 	DropItem(const ItemSlotNo& slotNo, const int32& stackCount);

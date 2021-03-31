@@ -52,6 +52,7 @@ void ATANonPlayer::Tick(float DeltaTime)
 
 void ATANonPlayer::BeginPlay()
 {
+	Super::BeginPlay();
 	//if (false == setSkeletalMeshAndAnimInstance("/Game/_Characters/ParagonGideon/Characters/Heroes/Gideon/Meshes/Gideon.Gideon"
 	//	, "/Game/_Characters/ParagonGideon/Characters/Heroes/Gideon/TAGideonAnimationBlueprint.TAGideonAnimationBlueprint_C"))
 	//{

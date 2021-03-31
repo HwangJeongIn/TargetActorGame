@@ -266,3 +266,16 @@ namespace ta
 	constexpr float AllowedRangeToDestination = 3.0f;
 	constexpr float AllowedRangeToDestinationSquared = 3.0f * 3.0f;
 }
+
+
+namespace ta
+{
+	enum class InteractionType : uint8
+	{
+		Talk = 0
+		, Greet
+		, Gather
+		, Attack // 코드 정리되면 삭제될듯
+		, Count
+	};
+}

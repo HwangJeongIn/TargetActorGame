@@ -1,4 +1,4 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+﻿// Fill out your copyright notice in the Description page of Project Settings.
 
 
 #include "TAHudUserWidget.h"
@@ -28,9 +28,12 @@ void UTAHudUserWidget::NativeConstruct()
 	//TA_ASSERT_DEV(nullptr != _inventoryTest, "비정상")
 }
 
+// 여기서 panelName은 Hud의 어떤 패널에 추가할지 지정하기 위해서 받는것
 UCanvasPanelSlot* UTAHudUserWidget::addChildWidgetToPanel(UWidget* target, FName panelName /*= FName()*/) noexcept
 {
-	// 어느 패널의 자식 객체로 들어간경우 SetXXXInViewport함수를 사용하면 안된다. 해당 패널의 슬롯을 가지고와서 패널에 맞게 캐스팅후 상대적인 좌표를 지정한다.
+	// 어느 패널의 자식 객체로 들어간경우 SetXXXInViewport함수를 사용하면 안된다. 해당 패널의 본인슬롯을 가지고와서 패널에 맞게 캐스팅후 상대적인 좌표를 지정한다.
+	// 여기서 중요한점은 해당 패널타입에 맞게 패널슬롯을 받아와서 사용해야한다는 것이다.
+
 	//{
 	//	FVector2D viewportSize(0, 0);
 	//	GetWorld()->GetGameViewport()->GetViewportSize(viewportSize);

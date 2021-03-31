@@ -1,4 +1,4 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+﻿// Fill out your copyright notice in the Description page of Project Settings.
 
 
 #include "TAChunkUserWidget.h"
@@ -8,10 +8,10 @@
 UTAChunkUserWidget::UTAChunkUserWidget(const FObjectInitializer& ObjectInitializer)
 	: Super(ObjectInitializer)
 {
-	_boundaryType = UiBoundaryType::None;
+	_boundaryType = TAUiBoundaryType::None;
 }
 
-bool UTAChunkUserWidget::initializeBase(ATACharacter* ownerActor, const UiBoundaryType& boundaryType) noexcept
+bool UTAChunkUserWidget::initializeBase(ATACharacter* ownerActor, const TAUiBoundaryType& boundaryType) noexcept
 {
 	_boundaryType = boundaryType;
 
@@ -43,10 +43,37 @@ ATACharacter* UTAChunkUserWidget::getOwnerActor(void) noexcept
 	return _ownerActor.Get();
 }
 
-const UiBoundaryType UTAChunkUserWidget::getBoundaryType(void) noexcept
+AController* UTAChunkUserWidget::getOwnerController(void) noexcept
+{
+	ATACharacter* character = getOwnerActor();
+	if (nullptr == character)
+	{
+		return nullptr;
+	}
+
+	return character->GetController();
+}
+
+const TAUiBoundaryType UTAChunkUserWidget::getBoundaryType(void) noexcept
 {
 	return _boundaryType;
 }
+
+//const bool UTAChunkUserWidget::getVisibility(void) const noexcept
+//{
+//	return (ESlateVisibility::Visible == GetVisibility());
+//}
+//
+//void UTAChunkUserWidget::setVisibility(const bool isVisible) noexcept
+//{
+//	if (isVisible == getVisibility())
+//	{
+//		return;
+//	}
+//
+//	ESlateVisibility visibility = (true == isVisible) ? ESlateVisibility::Visible : ESlateVisibility::Hidden;
+//	SetVisibility(visibility);
+//}
 
 void UTAChunkUserWidget::NativeOnMouseEnter(const FGeometry& InGeometry, const FPointerEvent& InMouseEvent)
 {

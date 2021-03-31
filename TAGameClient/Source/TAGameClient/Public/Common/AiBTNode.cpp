@@ -449,7 +449,8 @@ namespace ta
 		CommonAiActorSystem* aiSystem = GetActorSystem<CommonAiActorSystem>();
 		if (false == aiSystem->processMoveToPathPoint(aiCom, moveCom, deltaTime))
 		{
-			TA_ASSERT_DEV(false, "비정상입니다.");
+			// 못찾을 수 있다.
+			//TA_ASSERT_DEV(false, "비정상입니다.");
 			return AiBTNodeState::Failure;
 		}
 

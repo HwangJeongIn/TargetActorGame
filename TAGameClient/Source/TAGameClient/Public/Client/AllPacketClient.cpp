@@ -1,4 +1,4 @@
-#include "Client/AllPacketClient.h"
+﻿#include "Client/AllPacketClient.h"
 #include "Client/ClientApp.h"
 #include "Client/ClientActorManager.h"
 #include "Client/ClientMoveActorSystem.h"
@@ -137,7 +137,7 @@ namespace ta
 	void ChangeHpSTC::processChangeHpSTC(const ActorKey& networkActorKey,
 										 const ActorKey& attacker,
 										 const ActorKey& targetActorKey,
-										 const uint32& hpValue) noexcept
+										 const float& hpValue) noexcept
 	{
 		ClientActionActorSystem* actorSystem = GetActorSystem<ClientActionActorSystem>();
 		if (false == actorSystem->respondChangeHp(attacker, targetActorKey, hpValue))

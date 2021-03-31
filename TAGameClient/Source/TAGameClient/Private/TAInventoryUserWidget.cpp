@@ -29,6 +29,8 @@ UTAInventoryUserWidget::UTAInventoryUserWidget(const FObjectInitializer& ObjectI
 
 void UTAInventoryUserWidget::NativeConstruct()
 {
+	Super::NativeConstruct();
+
 	_inventoryGrid = Cast<UUniformGridPanel>(GetWidgetFromName(TEXT("inventoryGrid")));
 	TA_ASSERT_DEV(nullptr != _inventoryGrid, "비정상")
 }
@@ -165,7 +167,7 @@ bool UTAInventoryUserWidget::setPressedSlot(const ta::ItemSlotNo& slotNo) noexce
 
 void UTAInventoryUserWidget::releaseSlot(void) noexcept
 {
-	ATAPlayerController* playerController = Cast<ATAPlayerController>(getOwnerActor()->GetController());
+	ATAPlayerController* playerController = Cast<ATAPlayerController>(getOwnerController());
 	if (nullptr == playerController)
 	{
 		TA_ASSERT_DEV(false, "비정상");

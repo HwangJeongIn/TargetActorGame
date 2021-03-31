@@ -250,7 +250,7 @@ namespace ta
 ( const ActorKey& networkActorKey,
  const ActorKey& attacker,
  const ActorKey& targetActorKey,
- const uint32& hpValue)
+ const float& hpValue)
 	{
 		ChangeHpSTC message
 ( attacker,

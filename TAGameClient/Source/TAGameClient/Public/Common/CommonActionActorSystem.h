@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 #include "Common/ActorSystem.h"
 
@@ -24,8 +24,8 @@ namespace ta
 	protected:
 		CommonActionActorSystem(void) noexcept;
 
-		bool calcAndChangeHp_(const uint32 strength, CommonCharacterActorComponent* targetCom) const noexcept;
-		bool changeHp_(const uint32 hpValue, CommonCharacterActorComponent* targetCom) const noexcept;
+		bool calcAndChangeHp_(const float strength, CommonCharacterActorComponent* targetCom) const noexcept;
+		bool changeHp_(const float hpValue, CommonCharacterActorComponent* targetCom) const noexcept;
 
 	};
 }

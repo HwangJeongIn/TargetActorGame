@@ -58,6 +58,7 @@ namespace ta
 
 		MoveGameDataKey _moveGameDataKey;
 		CharacterGameDataKey _characterGameDataKey;
+		AiGameDataKey _aiGameDataKey;
 	};
 } 
 
@@ -129,10 +130,17 @@ namespace ta
 		CharacterGameDataKey _key;
 
 		ActorType _actorType;
-		AiGameDataKey _aiGameDataKey;
+		//AiGameDataKey _aiGameDataKey;
+		std::vector<InteractionType> _interactionTypes;
+
 		float _strength;
 		float _agility;
 		float _maxHp;
+
+		std::string _openDialog;
+
+		std::string _skeletalMeshPath;
+		std::string _animInstancePath;
 	};
 }
 

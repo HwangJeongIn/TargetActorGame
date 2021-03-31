@@ -12,9 +12,12 @@
 #include "Client/ClientActorManager.h"
 #include "Client/ClientActor.h"
 #include "Client/ClientMoveActorComponent.h"
+#include "Client/ClientCharacterActorComponent.h"
 #include "Common/ScopedLock.h"
 #include "Common/GetComponentAndSystem.h"
+#include "Common/GameData.h"
 
+//#define TA_MOVELOG
 
 
 bool RegisterTAGameEvent(TAGameEvent* gameEvent) noexcept
@@ -138,6 +141,9 @@ bool TAGameEventSpawnActor::processEvent(TAGameEventProcessParameter& parameter)
 		rotation.Yaw	= currentRotation._z;
 	}
 
+	// 읽어와야한다.
+	position.Z += 88.0f;
+
 	if (false == _isMainPlayer)
 	{
 		character = TASpawnTAActor(actorKey, position, rotation);
@@ -172,8 +178,23 @@ bool TAGameEventSpawnActor::processEvent(TAGameEventProcessParameter& parameter)
 	{
 		return false;
 	}
-
 	characterMovement->MaxWalkSpeed = speed;
+
+	ta::ClientCharacterActorComponent* characterCom = ta::GetActorComponent<ta::ClientCharacterActorComponent>(actorKey);
+	if (nullptr == characterCom)
+	{
+		TA_ASSERT_DEV(false, "character 컴포넌트가 없습니다.");
+		return false;
+	}
+
+	const ta::CharacterGameData* characterGameData = characterCom->getCharacterGameData_();
+	if (nullptr == characterGameData)
+	{
+		TA_ASSERT_DEV(false, "character 게임데이터가 없습니다.");
+		return false;
+	}
+	
+	character->setSkeletalMeshAndAnimInstance(characterGameData->_skeletalMeshPath.c_str(), characterGameData->_animInstancePath.c_str());
 
 	TA_LOG_DEV("<SpawnActor> => actorkey : %d, position : (%.1f, %.1f, %.1f), rotation : (%.1f, %.1f, %.1f), speed : %.1f", actorKey.getKeyValue()
 			   , position.X, position.Y, position.Z
@@ -394,9 +415,12 @@ bool TAGameEventMoveToLocation::processEvent(TAGameEventProcessParameter& parame
 			FVector destination;
 			TAVectorToFVector(_destination, destination);
 			//character->SetActorLocation(destination);
+			destination.Z += character->getCharacterHalfHeight();
 			aiController->MoveToLocation(destination, -1.0f, true, false);
+			
+#ifdef TA_MOVELOG
 			TA_LOG_DEV("<MoveToLocation> => actorkey : %d, current position (%.1f, %.1f, %.1f)", actorKey.getKeyValue(), _destination._x, _destination._y, _destination._z);
-
+#endif
 			return true;
 		}
 

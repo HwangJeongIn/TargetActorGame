@@ -79,6 +79,8 @@ namespace ta
 			TA_ASSERT_DEV(false, "이벤트 등록에 실패했습니다.");
 		}
 #endif
+
+
 		// 뒤에 해줘야 onActive시 관련된 정보를 받을 수 있다.
 		CommonActor::onActive();
 	}
