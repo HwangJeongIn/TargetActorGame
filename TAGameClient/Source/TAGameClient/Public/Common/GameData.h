@@ -129,6 +129,7 @@ namespace ta
 	public:
 		CharacterGameDataKey _key;
 
+		std::string _name;
 		ActorType _actorType;
 		//AiGameDataKey _aiGameDataKey;
 		std::vector<InteractionType> _interactionTypes;

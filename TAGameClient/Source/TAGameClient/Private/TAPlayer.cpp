@@ -46,6 +46,13 @@ ATAPlayer::ATAPlayer()
 
 	_thirdPersonToArmLength = 1350.0f;
 	_fixedThirdPersonToArmLength = 2700.0f;
+	_focusedAndControlBlockedToArmLength = 300.0f;
+	_fixedThirdPersonRotator = FRotator(-45.0f, 0.0f, 0.0f);
+
+	_armLengthSpeed = 5.0f;
+	_armRotationSpeed = 5.0f;
+	_armPositionSpeed = 5.0f;
+
 
 	_moveAndRotationDirtyFlag = false;
 	_cameraDirtyFlag = false;
@@ -57,54 +64,13 @@ ATAPlayer::ATAPlayer()
 	_currentTimeForSync = 0.0f;
 
 	setControlMode(ControlMode::PlayerThirdPerson);
-
-
-	// 따로 액터로 빠졌음
-	//FName weaponSocket(TEXT("hand_rSocket"));
-	//if (true == mesh->DoesSocketExist(weaponSocket))
-	//{
-	//	_weapon = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("WEAPON"));
-	//	static ConstructorHelpers::FObjectFinder<USkeletalMesh> SK_WEAPON(TEXT("/Game/InfinityBladeWeapons/Weapons/Blade/Swords/Blade_BlackKnight/SK_Blade_BlackKnight.SK_Blade_BlackKnight"));
-	//	if (true == SK_WEAPON.Succeeded())
-	//	{
-	//		_weapon->SetSkeletalMesh(SK_WEAPON.Object);
-	//	}
-
-	//	_weapon->SetupAttachment(mesh, weaponSocket);
-	//}
-
-	//_currentWeapon = nullptr;
-
-	//_hpBarWidget->SetupAttachment(mesh);
-	//_hpBarWidget->SetRelativeLocation(FVector(0.0f, 0.0f, 180.0f));
-	//_hpBarWidget->SetWidgetSpace(EWidgetSpace::Screen);
-	//static ConstructorHelpers::FClassFinder<UUserWidget>UI_HPBAR(TEXT("/Game/Book/UI/UI_HPBar.UI_HPBar_C")); // 블루 프린트 => _C추가
-	//if (true == UI_HPBAR.Succeeded())
-	//{
-	//	_hpBarWidget->SetWidgetClass(UI_HPBAR.Class);
-	//	_hpBarWidget->SetDrawSize(FVector2D(150.0f, 50.0f));
-	//}
-	//// 생성되기 전에 가려준다.
-	//_hpBarWidget->SetHiddenInGame(true);
-
-	//// AI 컨트롤러 클래스 지정 // PlacedInWorldOrSpawned : 배치되거나 스폰되는 것들에 대해서 적용
-	//AIControllerClass = ATAAIController::StaticClass();
-	//AutoPossessAI = EAutoPossessAI::PlacedInWorldOrSpawned;
+	_focusedCharacter = this;
 }
 
 // Called when the game starts or when spawned
 void ATAPlayer::BeginPlay()
 {
 	Super::BeginPlay();
-	//TAGetGameInstance()->exportNavMesh();
-
-	//if (false == setSkeletalMeshAndAnimInstance("/Game/_Dev/_Characters/InfinityBladeWarriors/Character/CompleteCharacters/SK_CharM_Cardboard.SK_CharM_Cardboard"
-	//	, "/Game/_Dev/_Characters/Animations/TAAnimationBlueprint.TAAnimationBlueprint_C"))
-	//{
-	//	TA_ASSERT_DEV(false, "비정상");
-	//}
-
-
 	if (false == setSkeletalMeshAndAnimInstance("/Game/_Dev/_Characters/InfinityBladeWarriors/Character/CompleteCharacters/SK_CharM_Cardboard.SK_CharM_Cardboard"
 		, "/Game/_Dev/_Characters/Animations/TAAnimationBlueprint.TAAnimationBlueprint_C"))
 	
@@ -114,11 +80,6 @@ void ATAPlayer::BeginPlay()
 		TA_ASSERT_DEV(false, "비정상");
 	}
 
-	//if (false == setSkeletalMeshAndAnimInstance("/Game/_Characters/ParagonGideon/Characters/Heroes/Gideon/Meshes/Gideon.Gideon"
-	//	, "/Game/_Characters/ParagonGideon/Characters/Heroes/Gideon/TAGideonAnimationBlueprint.TAGideonAnimationBlueprint_C"))
-	//{
-	//	TA_ASSERT_DEV(false, "비정상");
-	//}
 }
 
 // Called every frame
@@ -128,61 +89,13 @@ void ATAPlayer::Tick(float DeltaTime)
 
 	processSyncToServer(DeltaTime);
 
-
-	//TA_LOG_DEV("ATAPlayer::Tick");
-
-	//if (nullptr == _target.Get())
-	//{
-	//	TA_LOG_DEV("nullptr");
-	//}
-	//
-	////if (false == _target->IsValidLowLevel())
-	////{
-	////	TA_LOG_DEV("damgling ptr");
-	////}
-	//
-	//if(true == _target.IsValid())
-	//{
-	//	TA_LOG_DEV("valid ptr");
-	//}
-	//else
-	//{
-	//	TA_LOG_DEV("invalid ptr");
-	//}
-
 	AController* controller = GetController();
-	/*
-
-	static float time = 0.0f;
-	time += DeltaTime;
 	
-	if (time > 2.0f)
-	{
-		TA_LOG_DEV("Controller_pl");
-		time = 0.0f;
-		AAIController* test1 = Cast<AAIController>(controller);
-		APlayerController* test2 = Cast<APlayerController>(controller);
-
-		if (nullptr != test1)
-		{
-			TA_LOG_DEV("AIController1_pl");
-			test1->MoveToLocation(GetActorLocation() + FVector(200, 0, 0), 1.0f);
-		}
-
-		if (nullptr != test2)
-		{
-			TA_LOG_DEV("PlayerController_pl");
-
-			SetActorLocation(GetActorLocation() + FVector(200, 0, 10));
-		}
-	}
-	*/
-
-	// 보간작업
+	// 카메라 보간작업 // 추후 더티플래그 비트로 관리해야할듯
 	if (true == _cameraDirtyFlag)
 	{
 		bool armLengthUpdateComplete = false;
-		if (_springArm->TargetArmLength != _toArmLength)
+		if (1.0f < FMath::Abs(_springArm->TargetArmLength - _toArmLength))
 		{
 			_springArm->TargetArmLength = FMath::FInterpTo(_springArm->TargetArmLength, _toArmLength, DeltaTime, _armLengthSpeed);
 		}
@@ -192,16 +105,34 @@ void ATAPlayer::Tick(float DeltaTime)
 		}
 
 		const FRotator relativeRotation = _springArm->GetRelativeRotation();
-		if (relativeRotation != _toArmRotation)
+		bool armRelativeRotationUpdateComplete = false;
+		if (false == (_toArmRelativeRotation - relativeRotation).IsNearlyZero())
 		{
-			_springArm->SetRelativeRotation(FMath::RInterpTo(relativeRotation, _toArmRotation, DeltaTime, _armRotationSpeed));
+			_springArm->SetRelativeRotation(FMath::RInterpTo(relativeRotation, _toArmRelativeRotation, DeltaTime, _armRotationSpeed));
 		}
 		else
 		{
-			if (true == armLengthUpdateComplete)
-			{
-				_cameraDirtyFlag = false;
-			}
+			armRelativeRotationUpdateComplete = true;
+		}
+
+		const FVector relativePosition = _springArm->GetRelativeLocation();
+		bool armRelativePositionUpdateComplete = false;
+		if (false == (_toArmRelativePosition - relativePosition).IsNearlyZero())
+		{
+			_springArm->SetRelativeLocation(FMath::VInterpTo(relativePosition, _toArmRelativePosition, DeltaTime, _armRotationSpeed));
+		}
+		else
+		{
+			armRelativePositionUpdateComplete = true;
+		}
+
+		if (true == armLengthUpdateComplete
+			&& true == armRelativeRotationUpdateComplete
+			&& true == armRelativePositionUpdateComplete)
+		{
+			TA_LOG_DEV("(interp to) => complete");
+			_cameraDirtyFlag = false;
+			onViewChangedComplete();
 		}
 	}
 
@@ -301,6 +232,11 @@ void ATAPlayer::PostInitializeComponents()
 
 void ATAPlayer::moveAndRotateCharacterByInput(const CharacterBehaviorByInput& characterBehaviorByInput, const DirectionType& directionType, const float axisValue) noexcept
 {
+	if (ControlMode::FocusedAndControlBlocked == _currentControlMode)
+	{
+		return;
+	}
+
 	if (0.0f == axisValue)
 	{
 		if (CharacterBehaviorByInput::Move != characterBehaviorByInput)
@@ -490,6 +426,11 @@ void ATAPlayer::turn(const float axisValue) noexcept
 
 void ATAPlayer::attack() noexcept
 {
+	if (ControlMode::FocusedAndControlBlocked == _currentControlMode)
+	{
+		return;
+	}
+
 	if (true == _isAttacking)
 	{
 		if (false == FMath::IsWithinInclusive<int32>(_currentCombo, 1, _maxCombo))
@@ -714,24 +655,54 @@ bool ATAPlayer::postInteract(FHitResult& hitResult, const ta::InteractionType& i
 	return true;
 }
 
-void ATAPlayer::setControlMode(const ControlMode controlMode) noexcept
+void ATAPlayer::onViewChangedComplete(void) noexcept
 {
+	switch (_currentControlMode)
+	{
+	case ControlMode::PlayerThirdPerson:
+		{
+			// 보간이 완료되었으니 카메라가 이제 컨트롤로테이션이랑 같다.
+			// 이제 맘편히 따라가도록 설정해주자.
+			_springArm->bUsePawnControlRotation = true; // 이플래그 사용시 자체회전 x Pawn's ControlRotation을 받아옴
+		}
+		break;
+	case ControlMode::FocusedAndControlBlocked:
+		{
+		}
+		break;
+	default:
+		break;
+	}
+}
+
+bool ATAPlayer::setControlMode(const ControlMode controlMode) noexcept
+{
+	// PlayerThirdPerson : 카메라 컨트롤로테이션 상속, 액터 로테이션 상속 안받음
+	// PlayerFixedThirdPerson : 카메라 로테이션 고정, 액터 로테이션 상속 안받음
+	// FocusedAndControlBlocked : 카메라 액터 로테이션 상속
+
+	if (false == preSetControlMode(controlMode))
+	{
+		TA_ASSERT_DEV(false, "비정상입니다.");
+		return false;
+	}
 	// UCharacterMovementComponent : 캐릭터 움직임 관리
 	UCharacterMovementComponent* characterMovement = GetCharacterMovement();
 
 	switch (controlMode)
 	{
-	case ControlMode::PlayerThirdPerson:
+	case ControlMode::PlayerThirdPerson: 
 		{
-			//_springArm->TargetArmLength = 450.f;
-			//_springArm->SetRelativeRotation(FRotator::ZeroRotator);
+			// 액터로테이션 + 상대로테이션(원하는값) = 컨트롤 로테이션
+			_toArmRelativeRotation = GetController()->GetControlRotation() - GetActorRotation();
+			_toArmRelativePosition = FVector::ZeroVector;
 			_toArmLength = _thirdPersonToArmLength;//450.0f;
-
 			// 폰은 안따라가는데 컨트롤러 로테이션 카메라만 따라간다. 폰이 컨트롤러 로테이션 기준으로 움직이면 거기에 맞게 로테이션 
 
-			// GetViewRotation = GetControlRotation
-			_springArm->bUsePawnControlRotation = true; // 이플래그 사용시 자체회전 x 부모의 회전(pawn's controlRotation)을 받아옴
-			_springArm->bInheritPitch = true; // 해당 회전값을 부모로 부터 받을지 결정
+			// 상대위치 기준으로 보간이 완료되면 켜준다.
+			// _springArm->bUsePawnControlRotation = true; // 이플래그 사용시 자체회전 x Pawn's ControlRotation을 받아옴
+			
+			_springArm->bInheritPitch = true; // 해당 회전값을 부모로 부터 받을지 결정 이미 bUsePawnControlRotation 사용중이니까 필요없다
 			_springArm->bInheritRoll = true;
 			_springArm->bInheritYaw = true;
 			_springArm->bDoCollisionTest = true;
@@ -744,18 +715,14 @@ void ATAPlayer::setControlMode(const ControlMode controlMode) noexcept
 			if (nullptr != characterMovement)
 			{
 				characterMovement->bOrientRotationToMovement = true;
-				//characterMovement->bUseControllerDesiredRotation = false;
+				// 어차피 input에 따라서 움직이도록
+				//characterMovement->bUseControllerDesiredRotation = false; // If true, smoothly rotate the Character toward the Controller's desired rotation 
 				characterMovement->RotationRate = FRotator(0.0f, 720.0f, 0.0f);
 			}
 		}
 		break;
 	case ControlMode::PlayerFixedThirdPerson:
 		{
-			//_springArm->TargetArmLength = 800.f;
-			//_springArm->SetRelativeRotation(FRotator(-45.0f, 0.0f, 0.0f));
-			_toArmLength = _fixedThirdPersonToArmLength;//800.0f;
-			_toArmRotation = FRotator(-45.0f, 0.0f, 0.0f);
-
 			_springArm->bUsePawnControlRotation = false; // 부모의 영향(pawn's controlRotation)을 받지 않음
 			// 부모의 영향을 받지 않는다.
 			_springArm->bInheritPitch = false;
@@ -767,13 +734,64 @@ void ATAPlayer::setControlMode(const ControlMode controlMode) noexcept
 
 			if (nullptr != characterMovement)
 			{
-				//characterMovement->bOrientRotationToMovement = true;
-				//characterMovement->bUseControllerDesiredRotation = false;
-
 				characterMovement->bOrientRotationToMovement = false;
-				characterMovement->bUseControllerDesiredRotation = true;
+				characterMovement->bUseControllerDesiredRotation = true; // If true, smoothly rotate the Character toward the Controller's desired rotation 
 				characterMovement->RotationRate = FRotator(0.0f, 720.0f, 0.0f);
 			}
+
+			_toArmLength = _fixedThirdPersonToArmLength;
+			_toArmRelativePosition = FVector::ZeroVector;
+			_toArmRelativeRotation = _fixedThirdPersonRotator; // 로테이션 상속을 안받으니 무조건 Pitch -45로 고정이다.
+		}
+		break;
+	case ControlMode::FocusedAndControlBlocked:
+		{
+			_springArm->bUsePawnControlRotation = false; // Pawn's ControlRotation을 받지 않음
+			
+			_springArm->bInheritPitch = true; // 상대로테이션 값으로 처리해야하기 때문에 true로 해준다.
+			_springArm->bInheritRoll = true; // 상대로테이션 값으로 처리해야하기 때문에 true로 해준다.
+			_springArm->bInheritYaw = true; // 상대로테이션 값으로 처리해야하기 때문에 true로 해준다.
+			_springArm->bDoCollisionTest = true;
+			bUseControllerRotationYaw = false; // bUseControllerDesiredRotation이걸로 보간해줘서 false로 해야한다. true로하면 끊긴다.
+
+
+			const FVector targetActorPosition = _focusedCharacter->GetActorLocation();
+			//{
+			//	const float noise = 20.0f;
+			//	FVector finalPositionInWorld = targetActorPosition + _focusedCharacter->GetActorRightVector() * noise; // 오른쪽으로 좀더
+			//	finalPositionInWorld.Z += 50.0f; // 좀더 위쪽을 봐야하나?
+			//}
+			FVector finalPositionInWorld = targetActorPosition;
+
+			// 스프링 암까지 포함한 카메라 최종위치에서 타겟을 바라보는 방향 벡터를 구한다.
+			FVector lookAtVectorFromFinalPositionToTarget = targetActorPosition - (finalPositionInWorld + _focusedCharacter->GetActorForwardVector() * _focusedAndControlBlockedToArmLength);
+			lookAtVectorFromFinalPositionToTarget.Normalize();
+
+			FRotator finalRotationInWorld = lookAtVectorFromFinalPositionToTarget.Rotation();
+			TA_LOG_DEV("FocusedAndControlBlocked Mode => finalRotationInWorld : %.1f, %.1f, %.1f"
+					   , finalRotationInWorld.Roll
+					   , finalRotationInWorld.Pitch
+					   , finalRotationInWorld.Yaw);
+
+
+			// 현재 arm은 PlayerActor좌표계에 있기 때문에 모두 상대적으로 계산해야한다.
+			FRotator relativeStringArmRotation = finalRotationInWorld - GetActorRotation(); // 부모 액터 로테이션 + 컴포넌트 로테이션 => 최종 월드 로테이션
+			FVector relativeStringArmPosition = GetActorLocation() - finalPositionInWorld;
+
+
+			_toArmLength = _focusedAndControlBlockedToArmLength;
+			_toArmRelativePosition = relativeStringArmPosition;
+			_toArmRelativeRotation = relativeStringArmRotation;
+
+
+			TA_LOG_DEV("FocusedAndControlBlocked Mode => focused actor<%d> => to position : %.1f, %.1f, %.1f / to rotation : %.1f, %.1f, %.1f"
+					   , _focusedCharacter->getActorKey().getKeyValue()
+					   , _toArmRelativePosition.X
+					   , _toArmRelativePosition.Y
+					   , _toArmRelativePosition.Z
+					   , _toArmRelativeRotation.Roll
+					   , _toArmRelativeRotation.Pitch
+					   , _toArmRelativeRotation.Yaw);
 		}
 		break;
 	default:
@@ -783,38 +801,190 @@ void ATAPlayer::setControlMode(const ControlMode controlMode) noexcept
 		break;
 	}
 
+	if (false == postSetControlMode(controlMode))
+	{
+		TA_ASSERT_DEV(false, "비정상입니다.");
+		return false;
+	}
+
 	_currentControlMode = controlMode;
 	_cameraDirtyFlag = true;
+
+	return true;
 }
 
-void ATAPlayer::viewChange() noexcept
+
+bool ATAPlayer::preSetControlMode(const ControlMode controlMode) noexcept
 {
-	switch (_currentControlMode)
+	switch (controlMode)
 	{
 	case ControlMode::PlayerThirdPerson:
 		{
-			//_toArmRotation = GetActorRotation();
-
-			// GetActorRotation : 액터의 루트 컴포넌트의 로테이션 
-			// PlayerThirdPerson모드에서 마우스를 움직일때 변경 : Controll , Pawn 로테이션(액터의 루트 컴포넌트의 로테이션)
-			_springArm->SetRelativeRotation(GetController()->GetControlRotation());
-			// 원래 pawn's control rotation을 사용하고 있었다 > 하지만 이제 사용안할것이기 때문에 현재의 절대값의 컨트롤 로테이션을 받아서 보간을 준비한다.
-			// 만약 여기서 이처리를 해주지 않으면 상대값으로 사용하고 있던 카메라 로테이션값이 절대값으로 해석되면서 카메라가 튀게된다. 
-			GetController()->SetControlRotation(GetActorRotation()); // PlayerThirdPerson => PlayerFixedThirdPerson // 이제 컨트롤 로테이션값은 화면의 의미가 없어지고 오직 액터의 방향만 나타낸다 // 액터기준으로 한번 세팅해준다.
-			setControlMode(ControlMode::PlayerFixedThirdPerson);
 		}
 		break;
 	case ControlMode::PlayerFixedThirdPerson:
 		{
-			//_toArmRotation = _springArm->GetRelativeRotation();
-			// 현재 카메라가 보는 시점기준으로 한번세팅한다 // 이제 컨트롤러에 의해 카메라가 통제되기 때문에 싱크를 맞추기 위해서 카메라위치에 컨트롤러를 배치한다
-			GetController()->SetControlRotation(_springArm->GetRelativeRotation()); // PlayerFixedThirdPerson => PlayerThirdPerson
-			setControlMode(ControlMode::PlayerThirdPerson);
+		}
+		break;
+	case ControlMode::FocusedAndControlBlocked:
+		{
+			if (false == _focusedCharacter.IsValid())
+			{
+				TA_ASSERT_DEV(false, "비정상입니다.");
+				return false;
+			}
 		}
 		break;
 	default:
 		break;
 	}
+
+	return true;
+}
+
+
+bool ATAPlayer::postSetControlMode(const ControlMode controlMode) noexcept
+{
+	// PlayerThirdPerson : 카메라 컨트롤로테이션 상속, 액터 로테이션 상속 안받음
+	// PlayerFixedThirdPerson : 카메라 로테이션 고정, 액터 로테이션 상속 안받음
+	// FocusedAndControlBlocked : 카메라 액터 로테이션 상속 => 상대값으로 변경
+	switch (_currentControlMode)
+	{
+	case ControlMode::PlayerThirdPerson:
+		{
+			switch (controlMode)
+			{
+			case ControlMode::FocusedAndControlBlocked:
+				{
+					// <SpringArm> : 폰의 컨트롤로테이션 => 액터의 상대로테이션으로 변경
+					// GetActorRotation : 액터의 루트 컴포넌트의 로테이션 
+
+					// 액터로테이션 + 상대로테이션(원하는 값) = 컨트롤 로테이션이 되어야 한다.
+					_springArm->SetRelativeRotation(GetController()->GetControlRotation() - GetActorRotation());
+					// 원래 pawn's control rotation을 사용하고 있었다 > 하지만 이제 사용안할것이기 때문에 현재의 절대값의 컨트롤 로테이션을 받아서 보간을 준비한다.
+					// 만약 여기서 이처리를 해주지 않으면 상대값으로 사용하고 있던 카메라 로테이션값이 절대값으로 해석되면서 카메라가 튀게된다. 
+
+					// 컨트롤 로테이션은 현재 액터가 바라보고 있는 방향으로 설정해준다.
+					GetController()->SetControlRotation(GetActorRotation()); // PlayerThirdPerson => PlayerFixedThirdPerson // 이제 컨트롤 로테이션값은 화면의 의미가 없어지고 오직 액터의 방향만 나타낸다 // 액터기준으로 한번 세팅해준다.
+				}
+				break;
+			case ControlMode::PlayerFixedThirdPerson:
+				{
+				}
+				break;
+			default:
+				break;
+			}
+		}
+		break;
+	case ControlMode::PlayerFixedThirdPerson:
+		{
+			switch (controlMode)
+			{
+			case ControlMode::PlayerThirdPerson:
+				{
+					// <SpringArm> : 폰의 컨트롤로테이션 => 액터의 상대로테이션으로 변경
+					// GetActorRotation : 액터의 루트 컴포넌트의 로테이션 
+
+					// 액터로테이션 + 상대로테이션(원하는 값) = 컨트롤 로테이션이 되어야 한다.
+					_springArm->SetRelativeRotation(GetController()->GetControlRotation() - GetActorRotation());
+					// 원래 pawn's control rotation을 사용하고 있었다 > 하지만 이제 사용안할것이기 때문에 현재의 절대값의 컨트롤 로테이션을 받아서 보간을 준비한다.
+					// 만약 여기서 이처리를 해주지 않으면 상대값으로 사용하고 있던 카메라 로테이션값이 절대값으로 해석되면서 카메라가 튀게된다. 
+
+					// 컨트롤 로테이션은 현재 액터가 바라보고 있는 방향으로 설정해준다.
+					GetController()->SetControlRotation(GetActorRotation()); // PlayerThirdPerson => PlayerFixedThirdPerson // 이제 컨트롤 로테이션값은 화면의 의미가 없어지고 오직 액터의 방향만 나타낸다 // 액터기준으로 한번 세팅해준다.
+				}
+				break;
+			case ControlMode::FocusedAndControlBlocked:
+				{
+				}
+				break;
+			default:
+				break;
+			}
+		}
+		break;
+	case ControlMode::FocusedAndControlBlocked:
+		{
+			switch (controlMode)
+			{
+			case ControlMode::PlayerThirdPerson:
+				{
+					// <SpringArm> : 폰의 컨트롤로테이션 => 액터의 상대로테이션으로 변경
+					// GetActorRotation : 액터의 루트 컴포넌트의 로테이션 
+
+					// 액터로테이션 + 상대로테이션(원하는 값) = 컨트롤 로테이션이 되어야 한다.
+					_springArm->SetRelativeRotation(GetController()->GetControlRotation() - GetActorRotation());
+					// 원래 pawn's control rotation을 사용하고 있었다 > 하지만 이제 사용안할것이기 때문에 현재의 절대값의 컨트롤 로테이션을 받아서 보간을 준비한다.
+					// 만약 여기서 이처리를 해주지 않으면 상대값으로 사용하고 있던 카메라 로테이션값이 절대값으로 해석되면서 카메라가 튀게된다. 
+
+					// 컨트롤 로테이션은 현재 액터가 바라보고 있는 방향으로 설정해준다.
+					GetController()->SetControlRotation(GetActorRotation()); // PlayerThirdPerson => PlayerFixedThirdPerson // 이제 컨트롤 로테이션값은 화면의 의미가 없어지고 오직 액터의 방향만 나타낸다 // 액터기준으로 한번 세팅해준다.
+				}
+				break;
+			case ControlMode::PlayerFixedThirdPerson:
+				{
+				}
+				break;
+			default:
+				break;
+			}
+
+			// 현재 카메라가 보는 시점기준으로 한번세팅한다 // 이제 컨트롤러에 의해 카메라가 통제되기 때문에 싱크를 맞추기 위해서 카메라위치에 컨트롤러를 배치한다
+
+			if (ControlMode::PlayerThirdPerson == controlMode)
+			{
+				// FocusedAndControlBlocked => PlayerThirdPerson
+				// 아무것도 해주지않는다.
+			}
+
+			// 액터로테이션 + 상대로테이션(원하는 값) = 컨트롤 로테이션이 되어야 한다.
+			//GetController()->SetControlRotation(GetActorRotation() + _springArm->GetRelativeRotation());
+		}
+		break;
+	default:
+		break;
+	}
+
+	return true;
+}
+
+void ATAPlayer::viewChange() noexcept
+{
+	if (ControlMode::PlayerThirdPerson == _currentControlMode)
+	{
+		setControlMode(ControlMode::FocusedAndControlBlocked);
+	}
+	else if (ControlMode::FocusedAndControlBlocked == _currentControlMode)
+	{
+		setControlMode(ControlMode::PlayerThirdPerson);
+	}
+	//switch (_currentControlMode)
+	//{
+	//case ControlMode::PlayerThirdPerson:
+	//	{
+	//		//_toArmRelativeRotation = GetActorRotation();
+	//
+	//		// GetActorRotation : 액터의 루트 컴포넌트의 로테이션 
+	//		// PlayerThirdPerson모드에서 마우스를 움직일때 변경 : Controll , Pawn 로테이션(액터의 루트 컴포넌트의 로테이션)
+	//		_springArm->SetRelativeRotation(GetController()->GetControlRotation());
+	//		// 원래 pawn's control rotation을 사용하고 있었다 > 하지만 이제 사용안할것이기 때문에 현재의 절대값의 컨트롤 로테이션을 받아서 보간을 준비한다.
+	//		// 만약 여기서 이처리를 해주지 않으면 상대값으로 사용하고 있던 카메라 로테이션값이 절대값으로 해석되면서 카메라가 튀게된다. 
+	//		GetController()->SetControlRotation(GetActorRotation()); // PlayerThirdPerson => PlayerFixedThirdPerson // 이제 컨트롤 로테이션값은 화면의 의미가 없어지고 오직 액터의 방향만 나타낸다 // 액터기준으로 한번 세팅해준다.
+	//		setControlMode(ControlMode::FocusedAndControlBlocked);
+	//	}
+	//	break;
+	//case ControlMode::FocusedAndControlBlocked:
+	//	{
+	//		//_toArmRelativeRotation = _springArm->GetRelativeRotation();
+	//		// 현재 카메라가 보는 시점기준으로 한번세팅한다 // 이제 컨트롤러에 의해 카메라가 통제되기 때문에 싱크를 맞추기 위해서 카메라위치에 컨트롤러를 배치한다
+	//		GetController()->SetControlRotation(_springArm->GetRelativeRotation()); // PlayerFixedThirdPerson => PlayerThirdPerson
+	//		setControlMode(ControlMode::PlayerThirdPerson);
+	//	}
+	//	break;
+	//default:
+	//	break;
+	//}
 }
 
 void ATAPlayer::processSyncToServer(float deltaTime) noexcept

@@ -56,6 +56,7 @@ private:
 	{
 		PlayerThirdPerson = 0
 		, PlayerFixedThirdPerson
+		, FocusedAndControlBlocked
 		, Count
 	};
 
@@ -96,7 +97,11 @@ private:
 	bool doInteract(FHitResult& hitResult, const ta::InteractionType& interactionType) noexcept;
 	bool postInteract(FHitResult& hitResult, const ta::InteractionType& interactionType) noexcept;
 
-	void setControlMode(const ControlMode controlMode) noexcept;
+	void onViewChangedComplete(void) noexcept;
+	
+	bool setControlMode(const ControlMode controlMode) noexcept; // 플레그 세팅 등
+	bool preSetControlMode(const ControlMode controlMode) noexcept; // 시도할 수 있는지 판단하는 검증 등
+	bool postSetControlMode(const ControlMode controlMode) noexcept; // 보간시작전에 세팅해줘야할것들 등
 
 	UFUNCTION()
 	void viewChange() noexcept;
@@ -119,15 +124,29 @@ private:
 	// 카메라 전환시 보간 관련 변수
 	bool			_cameraDirtyFlag;
 	float			_toArmLength;
-	FRotator		_toArmRotation;
+	FRotator		_toArmRelativeRotation; // ATAPlayer에 붙어있기 때문에 상대적
+	FVector			_toArmRelativePosition; // ATAPlayer에 붙어있기 때문에 상대적
 	float			_armLengthSpeed;
 	float			_armRotationSpeed;
+	float			_armPositionSpeed;
+
+
+
+	// FocusedAndControlBlocked 모드를 위한 포커스 액터
+	UPROPERTY()
+	TWeakObjectPtr<ATACharacter> _focusedCharacter;
 
 	UPROPERTY(EditAnyWhere, Category = Camera)
 	float			_thirdPersonToArmLength;
 
 	UPROPERTY(EditAnyWhere, Category = Camera)
 	float			_fixedThirdPersonToArmLength;
+
+	UPROPERTY(EditAnyWhere, Category = Camera)
+	FRotator		_fixedThirdPersonRotator;
+
+	UPROPERTY(EditAnyWhere, Category = Camera)
+	float			_focusedAndControlBlockedToArmLength;
 
 	UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly, Category = Attack, Meta = (AllowPrivateAccess = true))
 	bool _isAttacking;

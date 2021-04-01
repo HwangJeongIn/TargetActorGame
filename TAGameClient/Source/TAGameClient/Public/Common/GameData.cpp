@@ -222,6 +222,15 @@ namespace ta
 
 	bool CharacterGameData::loadXml(XmlNode* xmlNode) noexcept
 	{
+
+		{
+			const std::string* value = xmlNode->getAttribute("Name");
+			if (nullptr != value) // 없을 수 있다.
+			{
+				_name = *value;
+			}
+		}
+
 		{
 			const std::string* value = xmlNode->getAttribute("ActorType");
 			if (nullptr == value)

@@ -14,6 +14,7 @@ class UTAInventoryUserWidget;
 class UTAInteractionMenuUserWidget;
 class UTAChunkUserWidget;
 class UTAInteractionButtonUserWidget;
+class UTADialogUserWidget;
 
 
 namespace ta
@@ -30,7 +31,6 @@ class TAGAMECLIENT_API ATAPlayerController : public APlayerController
 	GENERATED_BODY()
 	
 public:
-
 	// 안에 정의하지 못한다. ue4자체적으로 오버해드 때문에 막아둠
 	//UENUM(/*BlueprintType*/)
 	//enum class TAUiBoundaryType: uint8
@@ -38,7 +38,6 @@ public:
 	//	None = 0
 	//	, Inventory
 	//};
-
 
 	ATAPlayerController();
 
@@ -49,11 +48,17 @@ public:
 	UTAInventoryUserWidget* getInventoryUserWidget(void) const;
 
 	bool getInventoryVisibility(void) const noexcept;
-	void setInventoryVisibility(bool isVisible) const noexcept;
+	void setInventoryVisibility(const bool isVisible, const bool isForced = false) noexcept;
 
 	bool getInteractionMenuVisibility(void) const noexcept;
-	void setInteractionMenuVisibility(bool isVisible) const noexcept;
+	void setInteractionMenuVisibility(const bool isVisible, const bool isForced = false) noexcept;
 
+	bool getDialogVisibility(void) const noexcept;
+	void setDialogVisibility(const bool isVisible, const bool isForced = false) noexcept;
+	bool openDialog(const ta::ActorKey& targetActorKey) noexcept;
+	bool closeDialog(void) noexcept;
+
+public:
 	void onHoveredUi(UTAChunkUserWidget* input) noexcept;
 	void onUnhoveredUi(UTAChunkUserWidget* input) noexcept;
 	
@@ -65,9 +70,13 @@ public:
 
 	void setVisibleButtons(const int32& count) noexcept;
 
+
+
 protected:
 	virtual void BeginPlay() override final;
 	virtual void SetupInputComponent() override final;
+
+
 
 
 protected:
@@ -81,6 +90,9 @@ protected:
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = UI)
 	TSubclassOf<UTAInteractionMenuUserWidget> _interactionMenuUserWidgetClass;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = UI)
+	TSubclassOf<UTADialogUserWidget> _dialogUserWidgetClass;
 
 private:
 
@@ -96,4 +108,7 @@ private:
 
 	UPROPERTY()
 	UTAInteractionMenuUserWidget* _interactionMenuUserWidget;
+
+	UPROPERTY()
+	UTADialogUserWidget* _dialogUserWidget;
 };	

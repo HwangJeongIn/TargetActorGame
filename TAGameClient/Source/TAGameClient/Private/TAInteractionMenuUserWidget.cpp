@@ -7,13 +7,6 @@
 #include "Blueprint/WidgetTree.h"
 #include "TAPlayerController.h"
 
-//#include "Components/UniformGridPanel.h"
-//
-//#include "Common/CommonBase.h"
-//#include "Common/ScopedLock.h"
-//#include "Common/GetComponentAndSystem.h"
-//#include "Client/ClientInventoryActorComponent.h"
-
 
 
 UTAInteractionMenuUserWidget::UTAInteractionMenuUserWidget(const FObjectInitializer& ObjectInitializer)

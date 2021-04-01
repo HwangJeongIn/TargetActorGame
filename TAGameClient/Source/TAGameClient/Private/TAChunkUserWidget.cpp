@@ -59,21 +59,24 @@ const TAUiBoundaryType UTAChunkUserWidget::getBoundaryType(void) noexcept
 	return _boundaryType;
 }
 
-//const bool UTAChunkUserWidget::getVisibility(void) const noexcept
-//{
-//	return (ESlateVisibility::Visible == GetVisibility());
-//}
-//
-//void UTAChunkUserWidget::setVisibility(const bool isVisible) noexcept
-//{
-//	if (isVisible == getVisibility())
-//	{
-//		return;
-//	}
-//
-//	ESlateVisibility visibility = (true == isVisible) ? ESlateVisibility::Visible : ESlateVisibility::Hidden;
-//	SetVisibility(visibility);
-//}
+const bool UTAChunkUserWidget::getVisibility(void) const noexcept
+{
+	return (ESlateVisibility::Visible == GetVisibility());
+}
+
+void UTAChunkUserWidget::setVisibility(const bool isVisible, const bool isForced /*= false*/) noexcept
+{
+	if (false == isForced)
+	{
+		if (isVisible == getVisibility())
+		{
+			return;
+		}
+	}
+
+	ESlateVisibility visibility = (true == isVisible) ? ESlateVisibility::Visible : ESlateVisibility::Hidden;
+	SetVisibility(visibility);
+}
 
 void UTAChunkUserWidget::NativeOnMouseEnter(const FGeometry& InGeometry, const FPointerEvent& InMouseEvent)
 {

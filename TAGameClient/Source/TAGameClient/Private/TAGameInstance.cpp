@@ -896,15 +896,23 @@ void UTAGameInstance::processInteractionMenu(ATAPlayerController* playerControll
 		return;
 	}
 
-	ta::CommonActor* interactionClientActor = ta::GetActorManager()->getActor(_currentInteractionActorKey);
-	if (nullptr == interactionClientActor)
+	// 아래에서 컴포넌트 찾는것도 검증이 될 수 있어서 필요없음
+	//ta::CommonActor* interactionClientActor = ta::GetActorManager()->getActor(_currentInteractionActorKey);
+	//if (nullptr == interactionClientActor)
+	//{
+	//	_currentInteractionActorKey.clear();
+	//	playerController->setInteractionMenuVisibility(false);
+	//	return;
+	//}
+
+	ta::CommonCharacterActorComponent* characterCom = ta::GetActorComponent<ta::CommonCharacterActorComponent>(_currentInteractionActorKey);
+	if (nullptr == characterCom)
 	{
 		_currentInteractionActorKey.clear();
 		playerController->setInteractionMenuVisibility(false);
 		return;
 	}
 
-	ta::CommonCharacterActorComponent* characterCom = ta::GetActorComponent<ta::CommonCharacterActorComponent>(_currentInteractionActorKey);
 	const ta::CharacterGameData* characterGameData = nullptr;
 	// 한번 초기화되고 변할일이 없긴한데.. 그래도 일단 read 락걸고 가져오자
 	{

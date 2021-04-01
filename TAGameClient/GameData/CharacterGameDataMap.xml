@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <Root>
-    <CharacterGameData Key=""  Description=""  ActorType=""  InteractionType=""  OpenDialog=""  Strength=""  Agility=""  MaxHp=""  SkeletalMeshPath=""  AnimInstancePath=""  TestA="" />
-    <CharacterGameData Key=""  Description=""  ActorType=""  InteractionType=""  OpenDialog=""  Strength=""  Agility=""  MaxHp=""  SkeletalMeshPath=""  AnimInstancePath=""  TestA="" />
+    <CharacterGameData Key=""  Description=""  Name=""  ActorType=""  InteractionType=""  OpenDialog=""  Strength=""  Agility=""  MaxHp=""  SkeletalMeshPath=""  AnimInstancePath=""  TestA="" />
+    <CharacterGameData Key=""  Description=""  Name=""  ActorType=""  InteractionType=""  OpenDialog=""  Strength=""  Agility=""  MaxHp=""  SkeletalMeshPath=""  AnimInstancePath=""  TestA="" />
 </Root>

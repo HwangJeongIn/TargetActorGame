@@ -27,8 +27,9 @@ public:
 	const TAUiBoundaryType getBoundaryType(void) noexcept;
 
 	// UE4 자체적으로 버그있는것같다. 상속받은 객체를 여기서 Visibility 조절하면 비정상적인 상황이있다.(처음시작할때 Hidden으로 해놔도 가려지지않는다.)
-	//const bool getVisibility(void) const noexcept;
-	//void setVisibility(const bool isVisible) noexcept;
+	// 처음에(playercontroller(begine play) 에서 생성시) hidden으로 플래그가 되어있어서 hide를 안시켰는데, 나중에 보니까 visible로 되어있다. => 현재상황에 상관없이 켜고 끄는걸 만든다.
+	const bool getVisibility(void) const noexcept;
+	void setVisibility(const bool isVisible, const bool isForced = false) noexcept;
 
 protected:
 	//virtual void NativeConstruct() override final;
