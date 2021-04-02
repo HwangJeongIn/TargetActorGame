@@ -5,7 +5,7 @@
 #include "TAInteractionObject.h"
 #include "TAInteractionMenuUserWidget.h"
 #include "Components/Button.h"
-#include "Components/TextBlock.h"
+#include "Components/EditableText.h"
 #include "Components/Image.h"
 #include "Common/CommonBase.h"
 #include "Common/GameData.h"
@@ -111,7 +111,7 @@ void UTAInteractionButtonUserWidget::NativeConstruct()
 	_interactionImage = Cast<UImage>(GetWidgetFromName(TEXT("interactionImage")));
 	TA_ASSERT_DEV(nullptr != _interactionImage, "비정상")
 
-	_interactionName = Cast<UTextBlock>(GetWidgetFromName(TEXT("interactionName")));
+	_interactionName = Cast<UEditableText>(GetWidgetFromName(TEXT("interactionName")));
 	TA_ASSERT_DEV(nullptr != _interactionName, "비정상")
 }
 

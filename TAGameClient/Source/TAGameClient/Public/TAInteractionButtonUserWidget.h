@@ -9,7 +9,7 @@
 #include "TAInteractionButtonUserWidget.generated.h"
 
 
-class UTextBlock;
+class UEditableText;
 class UButton;
 class UImage;
 class UTAInteractionObject;
@@ -61,7 +61,7 @@ private:
 	UImage* _interactionImage;
 
 	UPROPERTY()
-	UTextBlock* _interactionName;
+	UEditableText* _interactionName;
 
 	UPROPERTY()
 	TArray<UTAInteractionObject*> _interactionObjects;

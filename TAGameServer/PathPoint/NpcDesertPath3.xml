@@ -1,6 +1,24 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <Root>
 	<NpcDesertPath3>
-		<Position X="-4850" Y="1130" Z="0"/>
+		<Position X="-27141.8" Y="11614.6" Z="8296.88"/>
+	</NpcDesertPath3>
+	<NpcDesertPath3>
+		<Position X="-26517.8" Y="11635.4" Z="8279.18"/>
+	</NpcDesertPath3>
+	<NpcDesertPath3>
+		<Position X="-25940.4" Y="11775.4" Z="8289.06"/>
+	</NpcDesertPath3>
+	<NpcDesertPath3>
+		<Position X="-25290.7" Y="12000.8" Z="8293.31"/>
+	</NpcDesertPath3>
+	<NpcDesertPath3>
+		<Position X="-24649.6" Y="12231.1" Z="8347.16"/>
+	</NpcDesertPath3>
+	<NpcDesertPath3>
+		<Position X="-23790" Y="12520" Z="8342.97"/>
+	</NpcDesertPath3>
+	<NpcDesertPath3>
+		<Position X="-23150" Y="12520" Z="8350.39"/>
 	</NpcDesertPath3>
 </Root>

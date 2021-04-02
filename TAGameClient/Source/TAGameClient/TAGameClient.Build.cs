@@ -8,7 +8,7 @@ public class TAGameClient : ModuleRules
 	{
 		//PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
 	
-		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore", "UMG", "SlateCore", "NavigationSystem", "Navmesh", "UnrealEd" });
+		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore", "UMG", "SlateCore", "NavigationSystem", "Navmesh" /*, "UnrealEd"*/ });
 
 		//"LevelEditor", "EditorStyle", "EditorWidgets",
 

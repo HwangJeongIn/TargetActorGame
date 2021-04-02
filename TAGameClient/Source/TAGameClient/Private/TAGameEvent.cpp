@@ -141,6 +141,7 @@ bool TAGameEventSpawnActor::processEvent(TAGameEventProcessParameter& parameter)
 		rotation.Yaw	= currentRotation._z;
 	}
 
+	TA_TEMP_DEV("임시 수정해야됨");
 	// 읽어와야한다.
 	position.Z += 88.0f;
 
@@ -178,7 +179,9 @@ bool TAGameEventSpawnActor::processEvent(TAGameEventProcessParameter& parameter)
 	{
 		return false;
 	}
-	characterMovement->MaxWalkSpeed = speed;
+
+	TA_TEMP_DEV("추후 수정해야함");
+	characterMovement->MaxWalkSpeed = speed * 0.9f;
 
 	ta::ClientCharacterActorComponent* characterCom = ta::GetActorComponent<ta::ClientCharacterActorComponent>(actorKey);
 	if (nullptr == characterCom)
@@ -414,8 +417,19 @@ bool TAGameEventMoveToLocation::processEvent(TAGameEventProcessParameter& parame
 			// 서버에서 길찾기 했기 떄문에 따로 길찾기 하지않는다.
 			FVector destination;
 			TAVectorToFVector(_destination, destination);
-			//character->SetActorLocation(destination);
+
+			TA_TEMP_DEV("임시 수정해야됨");
+			{
+				float factor = 0.1f;
+				FVector directionVector = (destination - character->GetActorLocation());
+				float distance = directionVector.Size();
+				directionVector.Normalize();
+				destination.X += directionVector.X * distance * factor;
+				destination.Y += directionVector.Y * distance * factor;
+			}
+
 			destination.Z += character->getCharacterHalfHeight();
+
 			aiController->MoveToLocation(destination, -1.0f, true, false);
 			
 #ifdef TA_MOVELOG

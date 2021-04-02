@@ -2,12 +2,13 @@
 
 
 #include "TAPlayerController.h"
-#include "TACharacter.h"
+#include "TAPlayer.h"
 #include "TAHudUserWidget.h"
 #include "TAInventoryUserWidget.h"
 #include "TAInteractionMenuUserWidget.h"
 #include "TAInteractionButtonUserWidget.h"
 #include "TADialogUserWidget.h"
+#include "TAGameInstance.h"
 #include "Components/CanvasPanelSlot.h"
 #include "Common/CommonBase.h"
 #include "Common/ScopedLock.h"
@@ -16,8 +17,8 @@
 #include "Client/ClientActor.h"
 #include "Client/ClientInventoryActorComponent.h"
 #include "Client/ClientInventoryActorSystem.h"
-#include "Engine.h"
 
+#include "TAAssets.h"
 
 ATAPlayerController::ATAPlayerController()
 {
@@ -118,24 +119,60 @@ void ATAPlayerController::setDialogVisibility(const bool isVisible, const bool i
 
 bool ATAPlayerController::openDialog(const ta::ActorKey& targetActorKey) noexcept
 {
-	TA_LOG_DEV("openDialog = %d", targetActorKey.getKeyValue());
-	setDialogVisibility(true);
+	// 검증
+	TWeakObjectPtr<ATACharacter> targetActor = TAGetTAActor(targetActorKey);
+	if (false == targetActor.IsValid())
+	{
+		TA_ASSERT_DEV(false, "비정상");
+		return false;
+	}
 
+	ATAPlayer* player = Cast<ATAPlayer>(GetPawn());
+	if (nullptr == player)
+	{
+		TA_ASSERT_DEV(false, "비정상");
+		return false;
+	}
+	
+	TA_LOG_DEV("openDialog = %d", targetActorKey.getKeyValue());
+
+	setInteractionMenuVisibility(false);
+	setDialogVisibility(true);
 	if (false == _dialogUserWidget->openDialog(targetActorKey))
 	{
 		TA_ASSERT_DEV(false, "비정상");
 		return false;
 	}
 
+	if (false == player->setFocusedActorAndChangeControlMode(targetActor))
+	{
+		TA_ASSERT_DEV(false, "비정상");
+		return false;
+	}
+	
 	return true;
 }
 
 bool ATAPlayerController::closeDialog(void) noexcept
 {
-	TA_LOG_DEV("closeDialog");
-	setDialogVisibility(false);
+	ATAPlayer* player = Cast<ATAPlayer>(GetPawn());
+	if (nullptr == player)
+	{
+		TA_ASSERT_DEV(false, "비정상");
+		return false;
+	}
 
+	TA_LOG_DEV("closeDialog");
+
+	setDialogVisibility(false);
 	_dialogUserWidget->closeDialog();
+
+	if (false == player->resetFocusedActorAndChangeControlMode())
+	{
+		TA_ASSERT_DEV(false, "비정상");
+		return false;
+	}
+
 	return true;
 }
 
@@ -278,6 +315,18 @@ void ATAPlayerController::BeginPlay()
 	ATACharacter* targetCharacter = Cast<ATACharacter>(GetPawn());
 	TA_ASSERT_DEV(nullptr != targetCharacter, "비정상");
 
+
+	//float inventoryFactor = 1.0f;
+	//float interactionMenuFactor = 1.0f;
+	//float dialogFactor = 1.0f;
+	//{
+	//	auto assets = GetDefault<UTAAssets>();
+	//	inventoryFactor = FCString::Atof(*assets->_skeletalMeshAssets[0].ToString());
+	//	interactionMenuFactor = FCString::Atof(*assets->_skeletalMeshAssets[1].ToString());
+	//	dialogFactor = FCString::Atof(*assets->_skeletalMeshAssets[2].ToString());
+	//	TA_ASSERT_DEV(false, "inventoryFactor : %.2f, inventoryFactor : %.2f, inventoryFactor : %.2f", inventoryFactor, interactionMenuFactor, dialogFactor);
+	//}
+
 	// 값똑같이 나온다.
 	//FVector2D viewportSize2(GEngine->GameViewport->Viewport->GetSizeXY());
 	//TA_LOG_DEV("viewport 2 : %.1f, %.1f", viewportSize2.X, viewportSize2.Y);
@@ -303,10 +352,12 @@ void ATAPlayerController::BeginPlay()
 			//float tempX2 = viewportSize.X / 4.0f;
 			//TA_LOG_DEV("%.1f, %.1f, %.1f", tempY, tempX, tempX2);
 
+			const float inventorySizeFactor = 0.25;
+
 			inventoryCanvasPanelSlot->SetAnchors(FAnchors(1.0f, 0.5f));
 			inventoryCanvasPanelSlot->SetAlignment(FVector2D(0.5f, 0.5f));
-			inventoryCanvasPanelSlot->SetPosition(FVector2D(-((viewportSize.X / 4.0f) / 2.0f), 0.0f)); // 화면의 1/4사이즈로 인벤토리 할 예정 피벗이 중앙이므로 2로 나눈값으로 위치를 잡는다.
-			inventoryCanvasPanelSlot->SetSize(FVector2D(viewportSize.X / 4.0f, viewportSize.Y / 2.0f));
+			inventoryCanvasPanelSlot->SetPosition(FVector2D(-((viewportSize.X * 0.2f) * 0.5f), 0.0f)); // 화면의 1/4사이즈로 인벤토리 할 예정 피벗이 중앙이므로 2로 나눈값으로 위치를 잡는다.
+			inventoryCanvasPanelSlot->SetSize(FVector2D(viewportSize.X * 0.2f, viewportSize.Y * 0.27f));
 
 			//_inventoryUserWidget->AddToViewport();
 			//_inventoryUserWidget->setInventorySlotCount(10);
@@ -328,9 +379,9 @@ void ATAPlayerController::BeginPlay()
 		{
 			interactionMenuCanvasPanelSlot->SetAnchors(FAnchors(0.5f, 0.5f)); // 중앙위치로
 			interactionMenuCanvasPanelSlot->SetAlignment(FVector2D(0.5f, 0.5f)); 
-			interactionMenuCanvasPanelSlot->SetPosition(FVector2D(0.0f, (viewportSize.X * 0.05f) )); // 화면의 1/4사이즈로 인벤토리 할 예정 피벗이 중앙이므로 2로 나눈값으로 위치를 잡는다.
+			interactionMenuCanvasPanelSlot->SetPosition(FVector2D(0.0f, -(viewportSize.X * 0.01f) )); // 화면의 1/4사이즈로 인벤토리 할 예정 피벗이 중앙이므로 2로 나눈값으로 위치를 잡는다.
 			//interactionMenuCanvasPanelSlot->SetSize(FVector2D(viewportSize.X / 2.0f, viewportSize.Y / 2.0f));
-			interactionMenuCanvasPanelSlot->SetSize(FVector2D(viewportSize.X * 0.3f, viewportSize.Y * 0.225f));
+			interactionMenuCanvasPanelSlot->SetSize(FVector2D(viewportSize.X * 0.1f, viewportSize.Y * 0.07f));
 
 			setInteractionMenuVisibility(false, true);
 		}
@@ -351,7 +402,7 @@ void ATAPlayerController::BeginPlay()
 			dialogCanvasPanelSlot->SetPosition(FVector2D(0, -(viewportSize.Y * 0.225f * 0.5f)));
 			dialogCanvasPanelSlot->SetSize(FVector2D(viewportSize.X, viewportSize.Y * 0.225f));
 
-			setDialogVisibility(true, true);
+			setDialogVisibility(false, true);
 		}
 	}
 

@@ -1,6 +1,54 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <Root>
 	<NpcDesertPath2>
-		<Position X="-4850" Y="1130" Z="0"/>
+		<Position X="-22938.1" Y="9281.49" Z="8405.33"/>
+	</NpcDesertPath2>
+	<NpcDesertPath2>
+		<Position X="-22938.1" Y="9281.49" Z="8405.33"/>
+	</NpcDesertPath2>
+	<NpcDesertPath2>
+		<Position X="-22744.2" Y="9874.96" Z="8375.76"/>
+	</NpcDesertPath2>
+	<NpcDesertPath2>
+		<Position X="-22678.4" Y="10465.4" Z="8333.39"/>
+	</NpcDesertPath2>
+	<NpcDesertPath2>
+		<Position X="-22667.9" Y="11153" Z="8325.62"/>
+	</NpcDesertPath2>
+	<NpcDesertPath2>
+		<Position X="-22665.1" Y="11834.2" Z="8299.4"/>
+	</NpcDesertPath2>
+	<NpcDesertPath2>
+		<Position X="-22642.6" Y="12740.8" Z="8338.55"/>
+	</NpcDesertPath2>
+	<NpcDesertPath2>
+		<Position X="-22750" Y="13460" Z="8305.86"/>
+	</NpcDesertPath2>
+	<NpcDesertPath2>
+		<Position X="-22760" Y="14000" Z="8285.16"/>
+	</NpcDesertPath2>
+	<NpcDesertPath2>
+		<Position X="-22900" Y="14950" Z="8292.98"/>
+	</NpcDesertPath2>
+	<NpcDesertPath2>
+		<Position X="-22990" Y="15460" Z="8256.64"/>
+	</NpcDesertPath2>
+	<NpcDesertPath2>
+		<Position X="-22960" Y="16260" Z="8242.97"/>
+	</NpcDesertPath2>
+	<NpcDesertPath2>
+		<Position X="-22500" Y="16800" Z="8222.66"/>
+	</NpcDesertPath2>
+	<NpcDesertPath2>
+		<Position X="-22220" Y="17450" Z="8212.5"/>
+	</NpcDesertPath2>
+	<NpcDesertPath2>
+		<Position X="-21780" Y="18190" Z="8241.8"/>
+	</NpcDesertPath2>
+	<NpcDesertPath2>
+		<Position X="-22000" Y="19000" Z="8296.88"/>
+	</NpcDesertPath2>
+	<NpcDesertPath2>
+		<Position X="-22840" Y="18780" Z="8297.66"/>
 	</NpcDesertPath2>
 </Root>

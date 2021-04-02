@@ -222,7 +222,7 @@ namespace ta
             return false;
         }
 
-        CommonActorDetailSpawnDataForUser spawnDataForUser(Vector(-2000, 900, 0), Vector(0, 0, 0), GroupGameDataKey(1));
+        CommonActorDetailSpawnDataForUser spawnDataForUser(Vector(-37282, 13528, 6477), Vector(0, 0, 0), GroupGameDataKey(1));
 
         return initializeActorComponentsFromData(targetActorKey, spawnDataForUser);
     }
@@ -343,7 +343,7 @@ namespace ta
                     // 임시
                     {
                         data._itemSetType = ItemSetType::ContainerType;
-                        data._capacity = 10;
+                        data._capacity = 15;
 
                         ItemElementData itemData;
                         itemData._baseKey = ItemGameDataKey(1);

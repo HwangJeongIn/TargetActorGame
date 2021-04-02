@@ -2,12 +2,37 @@
 <Root>
 	<SpawnData>
 		<GroupGameData Key="1000"/>
-		<Position X="-2490" Y="800" Z="0"/>
-		<Rotation X="0" Y="0" Z="-79.9999"/>
+		<Position X="-17840" Y="11080" Z="8296.88"/>
+		<Rotation X="0" Y="0" Z="130"/>
 	</SpawnData>
 	<SpawnData>
-		<GroupGameData Key="1005"/>
-		<Position X="-2700" Y="840" Z="0"/>
-		<Rotation X="0" Y="0" Z="-110"/>
+		<GroupGameData Key="1001"/>
+		<Position X="-23040" Y="9930" Z="8397.27"/>
+		<Rotation X="0" Y="0" Z="130"/>
+	</SpawnData>
+	<SpawnData>
+		<GroupGameData Key="1002"/>
+		<Position X="-27137.9" Y="11493.6" Z="8308.6"/>
+		<Rotation X="0" Y="0" Z="50.0001"/>
+	</SpawnData>
+	<SpawnData>
+		<GroupGameData Key="1003"/>
+		<Position X="-27450" Y="15720" Z="8253.91"/>
+		<Rotation X="0" Y="0" Z="180"/>
+	</SpawnData>
+	<SpawnData>
+		<GroupGameData Key="1004"/>
+		<Position X="-33680" Y="17860" Z="6789.07"/>
+		<Rotation X="0" Y="0" Z="180"/>
+	</SpawnData>
+	<SpawnData>
+		<GroupGameData Key="1006"/>
+		<Position X="-17860" Y="9930" Z="8296.88"/>
+		<Rotation X="0" Y="0" Z="160"/>
+	</SpawnData>
+	<SpawnData>
+		<GroupGameData Key="1007"/>
+		<Position X="-17580" Y="10350" Z="8296.88"/>
+		<Rotation X="0" Y="0" Z="150"/>
 	</SpawnData>
 </Root>

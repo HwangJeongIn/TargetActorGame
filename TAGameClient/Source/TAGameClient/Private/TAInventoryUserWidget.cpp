@@ -32,7 +32,9 @@ void UTAInventoryUserWidget::NativeConstruct()
 	Super::NativeConstruct();
 
 	_inventoryGrid = Cast<UUniformGridPanel>(GetWidgetFromName(TEXT("inventoryGrid")));
-	TA_ASSERT_DEV(nullptr != _inventoryGrid, "비정상")
+	TA_ASSERT_DEV(nullptr != _inventoryGrid, "비정상");
+
+	setInventorySlotCount(15);
 }
 
 bool UTAInventoryUserWidget::checkValid(void) const noexcept
@@ -104,7 +106,8 @@ bool UTAInventoryUserWidget::setInventorySlotCount(const int32 count) noexcept
 	if (true == checkValid())
 	{
 		TA_ASSERT_DEV(false, "비정상");
-		return false;
+		_inventoryGrid->ClearChildren();
+		_inventorySlots.Empty();
 	}
 
 	if (nullptr == WidgetTree)
@@ -136,6 +139,7 @@ bool UTAInventoryUserWidget::setInventorySlotCount(const int32 count) noexcept
 		currentSlot->setInfo(this, index);
 		_inventoryGrid->AddChildToUniformGrid(currentSlot, currentRow, currentColumn);
 		_inventorySlots.Add(currentSlot);
+
 
 		//UTAInventorySlotUserWidget* testSlot = WidgetTree->ConstructWidget<UTAInventorySlotUserWidget>(_inventorySlotClass, TEXT("test231")); 
 		////ExampleButton->OnClicked.AddDynamic(this, &MyUserWidget::OnButtonClicked); // Example click binding.

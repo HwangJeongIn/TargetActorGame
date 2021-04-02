@@ -3,6 +3,7 @@
 #include "Detour/DetourNavMeshQuery.h"
 
 #elif defined(TA_SERVER) && !defined(TA_CLIENT_IN_SERVER)
+
 #include "Common/CommonBase.h"
 #include "RecastNavigation/Detour/DetourNavMesh.h"
 #include "RecastNavigation/Detour/DetourNavMeshQuery.h"

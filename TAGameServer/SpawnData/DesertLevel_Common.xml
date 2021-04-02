@@ -1,0 +1,433 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<Root>
+	<SpawnData>
+		<GroupGameData Key="1005"/>
+		<Position X="-26990" Y="15720" Z="8272.27"/>
+		<Rotation X="0" Y="0" Z="180"/>
+	</SpawnData>
+	<SpawnData>
+		<GroupGameData Key="1005"/>
+		<Position X="-26990" Y="15110" Z="8272.27"/>
+		<Rotation X="0" Y="0" Z="-160"/>
+	</SpawnData>
+	<SpawnData>
+		<GroupGameData Key="1005"/>
+		<Position X="-23880" Y="15150" Z="8272.27"/>
+		<Rotation X="0" Y="0" Z="10.0001"/>
+	</SpawnData>
+	<SpawnData>
+		<GroupGameData Key="1005"/>
+		<Position X="-23880" Y="15820" Z="8272.27"/>
+		<Rotation X="0" Y="0" Z="-9.99992"/>
+	</SpawnData>
+	<SpawnData>
+		<GroupGameData Key="1005"/>
+		<Position X="-24300" Y="14800" Z="8949.9"/>
+		<Rotation X="0" Y="0" Z="-79.9999"/>
+	</SpawnData>
+	<SpawnData>
+		<GroupGameData Key="1005"/>
+		<Position X="-24310" Y="16100" Z="8949.9"/>
+		<Rotation X="0" Y="0" Z="90.0003"/>
+	</SpawnData>
+	<SpawnData>
+		<GroupGameData Key="1005"/>
+		<Position X="-25820" Y="17010" Z="9240"/>
+		<Rotation X="0" Y="0" Z="-170"/>
+	</SpawnData>
+	<SpawnData>
+		<GroupGameData Key="1005"/>
+		<Position X="-25820" Y="14030" Z="9240"/>
+		<Rotation X="0" Y="0" Z="-180"/>
+	</SpawnData>
+	<SpawnData>
+		<GroupGameData Key="1005"/>
+		<Position X="-24560" Y="10920" Z="8435.16"/>
+		<Rotation X="0" Y="0" Z="100"/>
+	</SpawnData>
+	<SpawnData>
+		<GroupGameData Key="1005"/>
+		<Position X="-24410" Y="3210" Z="10101.6"/>
+		<Rotation X="0" Y="0" Z="-90"/>
+	</SpawnData>
+	<SpawnData>
+		<GroupGameData Key="1005"/>
+		<Position X="-24250" Y="3210" Z="10101.6"/>
+		<Rotation X="0" Y="0" Z="-90"/>
+	</SpawnData>
+	<SpawnData>
+		<GroupGameData Key="1005"/>
+		<Position X="-24410" Y="3340" Z="10101.6"/>
+		<Rotation X="0" Y="0" Z="-90"/>
+	</SpawnData>
+	<SpawnData>
+		<GroupGameData Key="1005"/>
+		<Position X="-24250" Y="3340" Z="10101.6"/>
+		<Rotation X="0" Y="0" Z="-90"/>
+	</SpawnData>
+	<SpawnData>
+		<GroupGameData Key="1005"/>
+		<Position X="-24410" Y="3480" Z="10101.6"/>
+		<Rotation X="0" Y="0" Z="-90"/>
+	</SpawnData>
+	<SpawnData>
+		<GroupGameData Key="1005"/>
+		<Position X="-24250" Y="3480" Z="10101.6"/>
+		<Rotation X="0" Y="0" Z="-90"/>
+	</SpawnData>
+	<SpawnData>
+		<GroupGameData Key="1005"/>
+		<Position X="-24410" Y="3620" Z="10101.6"/>
+		<Rotation X="0" Y="0" Z="-90"/>
+	</SpawnData>
+	<SpawnData>
+		<GroupGameData Key="1005"/>
+		<Position X="-24250" Y="3620" Z="10101.6"/>
+		<Rotation X="0" Y="0" Z="-90"/>
+	</SpawnData>
+	<SpawnData>
+		<GroupGameData Key="1005"/>
+		<Position X="-24410" Y="3760" Z="10101.6"/>
+		<Rotation X="0" Y="0" Z="-90"/>
+	</SpawnData>
+	<SpawnData>
+		<GroupGameData Key="1005"/>
+		<Position X="-24250" Y="3760" Z="10101.6"/>
+		<Rotation X="0" Y="0" Z="-90"/>
+	</SpawnData>
+	<SpawnData>
+		<GroupGameData Key="1005"/>
+		<Position X="-23300" Y="1690" Z="10101.6"/>
+		<Rotation X="0" Y="0" Z="30.0001"/>
+	</SpawnData>
+	<SpawnData>
+		<GroupGameData Key="1005"/>
+		<Position X="-23660" Y="650" Z="10449.9"/>
+		<Rotation X="0" Y="0" Z="60.0002"/>
+	</SpawnData>
+	<SpawnData>
+		<GroupGameData Key="1005"/>
+		<Position X="-23660" Y="830" Z="10449.9"/>
+		<Rotation X="0" Y="0" Z="-90"/>
+	</SpawnData>
+	<SpawnData>
+		<GroupGameData Key="1005"/>
+		<Position X="-24740" Y="7550" Z="8940"/>
+		<Rotation X="0" Y="0" Z="80.0002"/>
+	</SpawnData>
+	<SpawnData>
+		<GroupGameData Key="1005"/>
+		<Position X="-24270" Y="7550" Z="8940"/>
+		<Rotation X="0" Y="0" Z="130"/>
+	</SpawnData>
+	<SpawnData>
+		<GroupGameData Key="1005"/>
+		<Position X="-20430" Y="7840" Z="8753.91"/>
+		<Rotation X="0" Y="0" Z="-10"/>
+	</SpawnData>
+	<SpawnData>
+		<GroupGameData Key="1005"/>
+		<Position X="-20260" Y="7720" Z="8753.91"/>
+		<Rotation X="0" Y="0" Z="140"/>
+	</SpawnData>
+	<SpawnData>
+		<GroupGameData Key="1005"/>
+		<Position X="-20350" Y="8040" Z="8753.91"/>
+		<Rotation X="0" Y="0" Z="-50.0001"/>
+	</SpawnData>
+	<SpawnData>
+		<GroupGameData Key="1005"/>
+		<Position X="-20140" Y="7870" Z="8753.91"/>
+		<Rotation X="0" Y="0" Z="-150"/>
+	</SpawnData>
+	<SpawnData>
+		<GroupGameData Key="1005"/>
+		<Position X="-21640" Y="11720" Z="8259.38"/>
+		<Rotation X="0" Y="0" Z="-10"/>
+	</SpawnData>
+	<SpawnData>
+		<GroupGameData Key="1005"/>
+		<Position X="-21460" Y="11600" Z="8261.73"/>
+		<Rotation X="0" Y="0" Z="140"/>
+	</SpawnData>
+	<SpawnData>
+		<GroupGameData Key="1005"/>
+		<Position X="-21550" Y="11920" Z="8250.01"/>
+		<Rotation X="0" Y="0" Z="-50.0001"/>
+	</SpawnData>
+	<SpawnData>
+		<GroupGameData Key="1005"/>
+		<Position X="-21280" Y="11690" Z="8261.73"/>
+		<Rotation X="0" Y="0" Z="-150"/>
+	</SpawnData>
+	<SpawnData>
+		<GroupGameData Key="1005"/>
+		<Position X="-21290" Y="11830" Z="8261.73"/>
+		<Rotation X="0" Y="0" Z="-150"/>
+	</SpawnData>
+	<SpawnData>
+		<GroupGameData Key="1005"/>
+		<Position X="-18200" Y="13560" Z="8311.73"/>
+		<Rotation X="0" Y="0" Z="20"/>
+	</SpawnData>
+	<SpawnData>
+		<GroupGameData Key="1005"/>
+		<Position X="-17710" Y="13580" Z="8304.7"/>
+		<Rotation X="0" Y="0" Z="-180"/>
+	</SpawnData>
+	<SpawnData>
+		<GroupGameData Key="1005"/>
+		<Position X="-18200" Y="13710" Z="8309.38"/>
+		<Rotation X="0" Y="0" Z="-50.0001"/>
+	</SpawnData>
+	<SpawnData>
+		<GroupGameData Key="1005"/>
+		<Position X="-17990" Y="13540" Z="8304.7"/>
+		<Rotation X="0" Y="0" Z="-9.99931"/>
+	</SpawnData>
+	<SpawnData>
+		<GroupGameData Key="1005"/>
+		<Position X="-18000" Y="13680" Z="8304.7"/>
+		<Rotation X="0" Y="0" Z="-19.9993"/>
+	</SpawnData>
+	<SpawnData>
+		<GroupGameData Key="1005"/>
+		<Position X="-18126.9" Y="14128.8" Z="8311.73"/>
+		<Rotation X="0" Y="0" Z="40.0001"/>
+	</SpawnData>
+	<SpawnData>
+		<GroupGameData Key="1005"/>
+		<Position X="-17673.3" Y="14315.2" Z="8304.7"/>
+		<Rotation X="0" Y="0" Z="-160"/>
+	</SpawnData>
+	<SpawnData>
+		<GroupGameData Key="1005"/>
+		<Position X="-18178.2" Y="14269.8" Z="8309.38"/>
+		<Rotation X="0" Y="0" Z="-30"/>
+	</SpawnData>
+	<SpawnData>
+		<GroupGameData Key="1005"/>
+		<Position X="-17922.7" Y="14181.9" Z="8304.7"/>
+		<Rotation X="0" Y="0" Z="10.0008"/>
+	</SpawnData>
+	<SpawnData>
+		<GroupGameData Key="1005"/>
+		<Position X="-17980" Y="14310" Z="8304.7"/>
+		<Rotation X="0" Y="0" Z="0.000732422"/>
+	</SpawnData>
+	<SpawnData>
+		<GroupGameData Key="1005"/>
+		<Position X="-22308.2" Y="15429.8" Z="8248.84"/>
+		<Rotation X="0" Y="0" Z="100"/>
+	</SpawnData>
+	<SpawnData>
+		<GroupGameData Key="1005"/>
+		<Position X="-22308.2" Y="15589.8" Z="8242.91"/>
+		<Rotation X="0" Y="0" Z="-100"/>
+	</SpawnData>
+	<SpawnData>
+		<GroupGameData Key="1005"/>
+		<Position X="-21838.2" Y="15489.8" Z="8242.91"/>
+		<Rotation X="0" Y="0" Z="-100"/>
+	</SpawnData>
+	<SpawnData>
+		<GroupGameData Key="1005"/>
+		<Position X="-21958.2" Y="15029.8" Z="8242.91"/>
+		<Rotation X="0" Y="0" Z="130"/>
+	</SpawnData>
+	<SpawnData>
+		<GroupGameData Key="1005"/>
+		<Position X="-22068.2" Y="15319.8" Z="8242.91"/>
+		<Rotation X="0" Y="0" Z="20.0001"/>
+	</SpawnData>
+	<SpawnData>
+		<GroupGameData Key="1005"/>
+		<Position X="-24008.2" Y="13759.8" Z="8304.57"/>
+		<Rotation X="0" Y="0" Z="100"/>
+	</SpawnData>
+	<SpawnData>
+		<GroupGameData Key="1005"/>
+		<Position X="-23538.2" Y="13819.8" Z="8292.98"/>
+		<Rotation X="0" Y="0" Z="-100"/>
+	</SpawnData>
+	<SpawnData>
+		<GroupGameData Key="1005"/>
+		<Position X="-23658.2" Y="13359.8" Z="8316.41"/>
+		<Rotation X="0" Y="0" Z="130"/>
+	</SpawnData>
+	<SpawnData>
+		<GroupGameData Key="1005"/>
+		<Position X="-23768.2" Y="13649.8" Z="8304.71"/>
+		<Rotation X="0" Y="0" Z="20.0001"/>
+	</SpawnData>
+	<SpawnData>
+		<GroupGameData Key="1005"/>
+		<Position X="-24548.2" Y="13919.8" Z="8304.57"/>
+		<Rotation X="0" Y="0" Z="100"/>
+	</SpawnData>
+	<SpawnData>
+		<GroupGameData Key="1005"/>
+		<Position X="-24078.2" Y="13979.8" Z="8292.98"/>
+		<Rotation X="0" Y="0" Z="-100"/>
+	</SpawnData>
+	<SpawnData>
+		<GroupGameData Key="1005"/>
+		<Position X="-24198.2" Y="13519.8" Z="8316.41"/>
+		<Rotation X="0" Y="0" Z="130"/>
+	</SpawnData>
+	<SpawnData>
+		<GroupGameData Key="1005"/>
+		<Position X="-24308.2" Y="13809.8" Z="8304.71"/>
+		<Rotation X="0" Y="0" Z="20.0001"/>
+	</SpawnData>
+	<SpawnData>
+		<GroupGameData Key="1005"/>
+		<Position X="-27093.4" Y="12416.5" Z="8311.87"/>
+		<Rotation X="0" Y="0" Z="130"/>
+	</SpawnData>
+	<SpawnData>
+		<GroupGameData Key="1005"/>
+		<Position X="-26716.4" Y="12703.4" Z="8308.6"/>
+		<Rotation X="0" Y="0" Z="-70"/>
+	</SpawnData>
+	<SpawnData>
+		<GroupGameData Key="1005"/>
+		<Position X="-26590.3" Y="12245.1" Z="8298.5"/>
+		<Rotation X="0" Y="0" Z="160"/>
+	</SpawnData>
+	<SpawnData>
+		<GroupGameData Key="1005"/>
+		<Position X="-26830.5" Y="12441.2" Z="8308.6"/>
+		<Rotation X="0" Y="0" Z="50.0001"/>
+	</SpawnData>
+	<SpawnData>
+		<GroupGameData Key="1005"/>
+		<Position X="-27641" Y="12285" Z="8308.6"/>
+		<Rotation X="0" Y="0" Z="130"/>
+	</SpawnData>
+	<SpawnData>
+		<GroupGameData Key="1005"/>
+		<Position X="-27264" Y="12572" Z="8308.6"/>
+		<Rotation X="0" Y="0" Z="-70"/>
+	</SpawnData>
+	<SpawnData>
+		<GroupGameData Key="1005"/>
+		<Position X="-27137.9" Y="12113.6" Z="8308.6"/>
+		<Rotation X="0" Y="0" Z="160"/>
+	</SpawnData>
+	<SpawnData>
+		<GroupGameData Key="1005"/>
+		<Position X="-27378.2" Y="12309.8" Z="8312.51"/>
+		<Rotation X="0" Y="0" Z="50.0001"/>
+	</SpawnData>
+	<SpawnData>
+		<GroupGameData Key="1005"/>
+		<Position X="-25490.3" Y="13585.1" Z="8298.5"/>
+		<Rotation X="0" Y="0" Z="160"/>
+	</SpawnData>
+	<SpawnData>
+		<GroupGameData Key="1005"/>
+		<Position X="-20023.1" Y="10271.2" Z="8286.73"/>
+		<Rotation X="0" Y="0" Z="-50.0001"/>
+	</SpawnData>
+	<SpawnData>
+		<GroupGameData Key="1005"/>
+		<Position X="-20120" Y="10070" Z="8296.88"/>
+		<Rotation X="0" Y="0" Z="100"/>
+	</SpawnData>
+	<SpawnData>
+		<GroupGameData Key="1005"/>
+		<Position X="-19833.3" Y="10373" Z="8285.16"/>
+		<Rotation X="0" Y="0" Z="-90"/>
+	</SpawnData>
+	<SpawnData>
+		<GroupGameData Key="1005"/>
+		<Position X="-19060" Y="10320" Z="8296.88"/>
+		<Rotation X="0" Y="0" Z="-150"/>
+	</SpawnData>
+	<SpawnData>
+		<GroupGameData Key="1005"/>
+		<Position X="-18970" Y="9970" Z="8296.88"/>
+		<Rotation X="0" Y="0" Z="-150"/>
+	</SpawnData>
+	<SpawnData>
+		<GroupGameData Key="1005"/>
+		<Position X="-18620" Y="13590" Z="8307.82"/>
+		<Rotation X="0" Y="0" Z="20"/>
+	</SpawnData>
+	<SpawnData>
+		<GroupGameData Key="1005"/>
+		<Position X="-18620" Y="13740" Z="8303.91"/>
+		<Rotation X="0" Y="0" Z="-50.0001"/>
+	</SpawnData>
+	<SpawnData>
+		<GroupGameData Key="1005"/>
+		<Position X="-18410" Y="13570" Z="8304.7"/>
+		<Rotation X="0" Y="0" Z="-9.99931"/>
+	</SpawnData>
+	<SpawnData>
+		<GroupGameData Key="1005"/>
+		<Position X="-18420" Y="13710" Z="8304.7"/>
+		<Rotation X="0" Y="0" Z="-19.9993"/>
+	</SpawnData>
+	<SpawnData>
+		<GroupGameData Key="1005"/>
+		<Position X="-18620" Y="14160" Z="8269.54"/>
+		<Rotation X="0" Y="0" Z="20"/>
+	</SpawnData>
+	<SpawnData>
+		<GroupGameData Key="1005"/>
+		<Position X="-18620" Y="14310" Z="8265.63"/>
+		<Rotation X="0" Y="0" Z="-50.0001"/>
+	</SpawnData>
+	<SpawnData>
+		<GroupGameData Key="1005"/>
+		<Position X="-18410" Y="14140" Z="8291.02"/>
+		<Rotation X="0" Y="0" Z="-9.99931"/>
+	</SpawnData>
+	<SpawnData>
+		<GroupGameData Key="1005"/>
+		<Position X="-18420" Y="14280" Z="8269.54"/>
+		<Rotation X="0" Y="0" Z="-19.9993"/>
+	</SpawnData>
+	<SpawnData>
+		<GroupGameData Key="1005"/>
+		<Position X="-24762.6" Y="11303.9" Z="8382.82"/>
+		<Rotation X="0" Y="0" Z="0.000133514"/>
+	</SpawnData>
+	<SpawnData>
+		<GroupGameData Key="1005"/>
+		<Position X="-24360" Y="11340" Z="8390.63"/>
+		<Rotation X="0" Y="0" Z="-170"/>
+	</SpawnData>
+	<SpawnData>
+		<GroupGameData Key="1005"/>
+		<Position X="-24290" Y="10950" Z="8429.7"/>
+		<Rotation X="0" Y="0" Z="99.9998"/>
+	</SpawnData>
+	<SpawnData>
+		<GroupGameData Key="1005"/>
+		<Position X="-24150" Y="10950" Z="8429.7"/>
+		<Rotation X="0" Y="0" Z="89.9998"/>
+	</SpawnData>
+	<SpawnData>
+		<GroupGameData Key="1005"/>
+		<Position X="-24850" Y="10950" Z="8431.65"/>
+		<Rotation X="0" Y="0" Z="99.9998"/>
+	</SpawnData>
+	<SpawnData>
+		<GroupGameData Key="1005"/>
+		<Position X="-24710" Y="10950" Z="8429.7"/>
+		<Rotation X="0" Y="0" Z="89.9998"/>
+	</SpawnData>
+	<SpawnData>
+		<GroupGameData Key="1005"/>
+		<Position X="-24990" Y="11160" Z="8431.65"/>
+		<Rotation X="0" Y="0" Z="39.9997"/>
+	</SpawnData>
+	<SpawnData>
+		<GroupGameData Key="1005"/>
+		<Position X="-24050" Y="11260" Z="8429.7"/>
+		<Rotation X="0" Y="0" Z="180"/>
+	</SpawnData>
+</Root>

@@ -26,6 +26,7 @@ void ATAExporter::BeginPlay()
 	
 }
 
+#ifdef FOR_EDITING
 void ATAExporter::PostEditChangeProperty(FPropertyChangedEvent& PropertyChangedEvent)
 {
 	Super::PostEditChangeProperty(PropertyChangedEvent);
@@ -59,4 +60,5 @@ void ATAExporter::PostEditChangeProperty(FPropertyChangedEvent& PropertyChangedE
 	}
 	
 }
+#endif
 

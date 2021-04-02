@@ -17,8 +17,10 @@
 #include "NavMesh/RecastNavMesh.h"
 #include "Runtime/Engine/Public/EngineUtils.h"
 #include "NavigationSystem.h"
+#ifdef FOR_EDITING
 #include "LevelEditor.h"
 #include "Editor.h"
+#endif
 #include "Engine/LevelStreaming.h"
 #include "TAAssets.h"
 #include "Misc/App.h"
@@ -66,6 +68,7 @@ UWorld* TAGetGameWorld(void) noexcept
 	if(nullptr == GEngine
 	   || nullptr == GEngine->GameViewport)
 	{
+#ifdef FOR_EDITING
 		TA_LOG_DEV("에디터에서 월드를 찾습니다.");
 		if (nullptr == GEditor)
 		{
@@ -82,6 +85,10 @@ UWorld* TAGetGameWorld(void) noexcept
 		}
 
 		return GEditor->PlayWorld;
+#else
+		TA_ASSERT_DEV(false, "비정상입니다.");
+		return nullptr;
+#endif
 	}
 
 	UWorld* world = GEngine->GameViewport->GetWorld();
@@ -831,6 +838,11 @@ void UTAGameInstance::processFindInteractionActor(float deltaTime) noexcept
 	ATAPlayer* player = Cast<ATAPlayer>(playerController->GetPawn());
 
 	if (nullptr == player)
+	{
+		return;
+	}
+
+	if (true == playerController->getDialogVisibility())
 	{
 		return;
 	}

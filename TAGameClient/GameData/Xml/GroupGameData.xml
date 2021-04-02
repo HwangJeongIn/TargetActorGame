@@ -6,12 +6,12 @@
 	<GroupGameData Key="100" Description="사막고블린 마을앞 공터 순회" CharacterGameDataKey="100" MoveGameDataKey="3" AiGameDataKey="100"/>
 	<GroupGameData Key="101" Description="사막고블린 마을앞 공터 순회" CharacterGameDataKey="100" MoveGameDataKey="3" AiGameDataKey="101"/>
 	<GroupGameData Key="102" Description="사막고블린 마을앞 공터 순회" CharacterGameDataKey="101" MoveGameDataKey="3" AiGameDataKey="102"/>
-	<GroupGameData Key="1000" Description="마을 순찰 경비병1" CharacterGameDataKey="1001" MoveGameDataKey="2" AiGameDataKey="1000"/>
-	<GroupGameData Key="1001" Description="마을 순찰 경비병2" CharacterGameDataKey="1001" MoveGameDataKey="2" AiGameDataKey="1001"/>
-	<GroupGameData Key="1002" Description="마을 순찰 경비병3" CharacterGameDataKey="1001" MoveGameDataKey="2" AiGameDataKey="1002"/>
-	<GroupGameData Key="1003" Description="마을 순찰 경비병4" CharacterGameDataKey="1001" MoveGameDataKey="2" AiGameDataKey="1003"/>
-	<GroupGameData Key="1004" Description="마을 순찰 경비병5" CharacterGameDataKey="1001" MoveGameDataKey="2" AiGameDataKey="1004"/>
+	<GroupGameData Key="1000" Description="마을 순찰 경비병1_내부1" CharacterGameDataKey="1001" MoveGameDataKey="3" AiGameDataKey="1000"/>
+	<GroupGameData Key="1001" Description="마을 순찰 경비병2_내부2" CharacterGameDataKey="1001" MoveGameDataKey="4" AiGameDataKey="1001"/>
+	<GroupGameData Key="1002" Description="마을 순찰 경비병3_내부3" CharacterGameDataKey="1001" MoveGameDataKey="3" AiGameDataKey="1002"/>
+	<GroupGameData Key="1003" Description="마을 순찰 경비병4_외부1" CharacterGameDataKey="1001" MoveGameDataKey="1" AiGameDataKey="1003"/>
+	<GroupGameData Key="1004" Description="마을 순찰 경비병5_외부2" CharacterGameDataKey="1001" MoveGameDataKey="2" AiGameDataKey="1004"/>
 	<GroupGameData Key="1005" Description="마을 경비병" CharacterGameDataKey="1000" MoveGameDataKey="1" AiGameDataKey="1005"/>
-	<GroupGameData Key="1006" Description="사막 마을 방어구 상인" CharacterGameDataKey="1002" MoveGameDataKey="1"/>
-	<GroupGameData Key="1007" Description="사막 마을 무기 상인" CharacterGameDataKey="1003" MoveGameDataKey="1"/>
+	<GroupGameData Key="1006" Description="사막 마을 방어구 상인" CharacterGameDataKey="1002" MoveGameDataKey="1" AiGameDataKey="1005"/>
+	<GroupGameData Key="1007" Description="사막 마을 무기 상인" CharacterGameDataKey="1003" MoveGameDataKey="1" AiGameDataKey="1005"/>
 </Root>

@@ -20,7 +20,9 @@ protected:
 	virtual void BeginPlay() override;
 
 private:
+#ifdef FOR_EDITING
 	virtual void PostEditChangeProperty(FPropertyChangedEvent& PropertyChangedEvent) override final;
+#endif
 
 public:
 	UPROPERTY(EditAnyWhere, Category = ExportMenu)

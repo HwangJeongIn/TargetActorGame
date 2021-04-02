@@ -7,6 +7,8 @@
 #include "Common/CommonBase.h"
 #include "TANotSpawnedActor.generated.h"
 
+// 에디팅시 켜고 작업
+//#define FOR_EDITING
 
 class UStaticMeshComponent;
 class USceneComponent;
@@ -16,6 +18,10 @@ class ULevel;
 template <typename T>
 int32 TAGetTargetLevelActorsInFolder(ULevel* level, const FString& targetFolderName, TArray<T*>& output) noexcept
 {
+#ifndef FOR_EDITING
+	TA_ASSERT_DEV(false, "에디터모드를 켜세요");
+	return 0;
+#else
 	T* current = nullptr;
 	FString currentFolderName;
 	FString currentFolderPath;
@@ -44,11 +50,16 @@ int32 TAGetTargetLevelActorsInFolder(ULevel* level, const FString& targetFolderN
 	}
 
 	return output.Num();
+#endif
 }
 
 template <typename T>
 void TAGetTargetLevelActorsByFolder(ULevel* level, TMap<FString, TArray<T*>>& output) noexcept
 {
+#ifndef FOR_EDITING
+	TA_ASSERT_DEV(false, "에디터모드를 켜세요");
+	return;
+#else
 	// FString은 operator==지원 / GetTypeHash지원하기 때문에 TMap에서 키타입으로 그대로 사용가능
 	// 2번조회하는 Contain -> []보다  Find으로 찾자
 
@@ -82,7 +93,7 @@ void TAGetTargetLevelActorsByFolder(ULevel* level, TMap<FString, TArray<T*>>& ou
 			currentFolderActors->Add(current);
 		}
 	}
-
+#endif
 }
 
 extern bool TAGetFolderName(const FString& folderPath, FString& folderName, uint8 depth = 0) noexcept;

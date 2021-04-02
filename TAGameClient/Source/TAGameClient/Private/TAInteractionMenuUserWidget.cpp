@@ -66,7 +66,7 @@ bool UTAInteractionMenuUserWidget::initializeInteractionButtons(void) noexcept
 		buttonString = FString::Printf(TEXT("interactionButton_%d"), index);
 
 		currentButton = WidgetTree->ConstructWidget<UTAInteractionButtonUserWidget>(_interactionButtonClass, *buttonString);
-		//currentButton->Padding = FMargin(3.0f);
+		currentButton->Padding = FMargin(5.0f);
 		currentButton->setInfo(this);
 		_interactionButtonWrap->AddChild(currentButton);
 	}
@@ -98,7 +98,7 @@ void UTAInteractionMenuUserWidget::setVisibleButtons(const int32& count) noexcep
 		for (int32 index = visibleButtonCount; index < buttonCount; ++index)
 		{
 			UTAInteractionButtonUserWidget* button = Cast<UTAInteractionButtonUserWidget>(_interactionButtonWrap->GetChildAt(index));
-			button->SetVisibility(ESlateVisibility::Hidden);
+			button->SetVisibility(ESlateVisibility::Collapsed);
 		}
 	}
 

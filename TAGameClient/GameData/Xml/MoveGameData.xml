@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <Root>
-	<MoveGameData Key="1" Speed="400"/>
-	<MoveGameData Key="2" Speed="500"/>
-	<MoveGameData Key="3" Speed="600"/>
+	<MoveGameData Key="1" Speed="100"/>
+	<MoveGameData Key="2" Speed="200"/>
+	<MoveGameData Key="3" Speed="300"/>
+	<MoveGameData Key="4" Speed="500"/>
+	<MoveGameData Key="5" Speed="800"/>
 	<MoveGameData Key="10" Speed="1000"/>
 </Root>

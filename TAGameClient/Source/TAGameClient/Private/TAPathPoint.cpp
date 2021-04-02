@@ -2,8 +2,9 @@
 
 
 #include "TAPathPoint.h"
-#include "Components/StaticMeshComponent.h"
 #include "DrawDebugHelpers.h"
+#include "Engine/World.h"
+#include "Components/StaticMeshComponent.h"
 #include "Common/CommonBase.h"
 
 
@@ -54,6 +55,7 @@ void ATAPathPoint::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 }
 
+#ifdef FOR_EDITING
 void ATAPathPoint::PostEditChangeProperty(FPropertyChangedEvent& PropertyChangedEvent)
 {
 	Super::PostEditChangeProperty(PropertyChangedEvent);
@@ -125,10 +127,60 @@ void ATAPathPoint::PostEditChangeProperty(FPropertyChangedEvent& PropertyChanged
 			}
 		}
 	}
+	else if (PropertyName == GET_MEMBER_NAME_CHECKED(ATAPathPoint, _attachToTheGround))
+	{
+		// next가 바뀌었을때 해당 next에 접근해서 prev도 바꿔주자
+		TA_LOG_DEV("_attachToTheGround is changed");
+
+
+		_attachToTheGround = false;
+
+		setDefaultPathPoint();
+		// ActorLineTraceSingle vs GetWorld()->LineTraceSingle
+		// ActorLineTraceSingle : 액터컴포넌트를 호출하는 경우 작동
+		// GetWorld()->LineTraceSingle : 전체월드
+
+		UWorld* world = GetWorld();
+		if (nullptr == world)
+		{
+			TA_ASSERT_DEV(false, "비정상입니다.");
+			return;
+		}
+
+		const FVector startPos = GetActorLocation();
+		const FVector endPos = startPos - (GetActorUpVector() * 1000);
+		DrawDebugLine(world, startPos, endPos, FColor::Red, false, 1, 0, 5);
+
+		FCollisionQueryParams traceParams(FName(TEXT("ToGroundTrace")), false, this);
+		FHitResult hitResult;
+		const bool rv = world->LineTraceSingleByChannel(hitResult
+														, startPos
+														, endPos
+														, ECollisionChannel::ECC_WorldStatic
+														, traceParams);
+
+		if (false == rv)
+		{
+			TA_LOG_DEV("LineTraceSingleByChannel 실패");
+			return;
+		}
+
+		if (false == hitResult.Actor.IsValid())
+		{
+			TA_LOG_DEV("LineTraceSingleByChannel 실패");
+			return;
+		}
+
+
+		SetActorLocation(hitResult.Location);
+	}
 }
+#endif
 
 void ATAPathPoint::setDefaultPathPoint(void) noexcept
 {
+	_staticMesh->SetRelativeLocation(FVector::ZeroVector);
+	_staticMesh->SetRelativeRotation(FQuat::Identity);
 	_staticMesh->SetStaticMesh(_sphere);
 	_staticMesh->SetRelativeScale3D(FVector(_defaultWidthScale / 2, _defaultWidthScale / 2, _defaultHeightScale / 2));
 	SetActorRotation(FQuat::Identity);

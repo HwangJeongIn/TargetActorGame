@@ -24,8 +24,9 @@ protected:
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
+#ifdef FOR_EDITING
 	virtual void PostEditChangeProperty(FPropertyChangedEvent& PropertyChangedEvent) override;
-
+#endif
 private:
 	void setDefaultPathPoint(void) noexcept;
 	void refreshPathPoint(void) noexcept;
@@ -38,6 +39,9 @@ private:
 	void setPrev(ATAPathPoint* input) noexcept;
 
 private:
+	UPROPERTY(EditAnyWhere, Category = ATAPathPoint)
+	bool _attachToTheGround;
+
 	UPROPERTY(EditAnyWhere, Category = ATAPathPoint)
 	bool _refreshCurrentPath;
 

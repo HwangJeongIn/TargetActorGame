@@ -19,8 +19,9 @@ public:
 	ATASpawnData();
 
 public:
+#ifdef FOR_EDITING
 	virtual void PostEditChangeProperty(FPropertyChangedEvent& PropertyChangedEvent) override final;
-
+#endif
 	const int getGroupGameDataKey(void) const noexcept;
 private:
 

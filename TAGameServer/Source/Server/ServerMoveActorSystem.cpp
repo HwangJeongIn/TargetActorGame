@@ -731,11 +731,11 @@ namespace ta
 		}
 
 		// test
-		if (true)
-		{
-			NavMeshPath path;
-			findPath(ActorKey(), Vector(-60, 260, 73), Vector(540, 260, 73), path);
-		}
+		//if (true)
+		//{
+		//	NavMeshPath path;
+		//	findPath(ActorKey(), Vector(-60, 260, 73), Vector(540, 260, 73), path);
+		//}
 
 		return true;
 	}

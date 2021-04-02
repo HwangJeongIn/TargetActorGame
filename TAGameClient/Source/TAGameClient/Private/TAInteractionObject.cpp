@@ -65,6 +65,7 @@ bool UTAInteractionObjectLookAt::execute(void) const noexcept
 	FVector myPos = myCharacter->GetActorLocation();
 	FVector targetPos = targetCharacter->GetActorLocation();
 
+	//TA_LOG_DEV("UTAInteractionObjectLookAt : me(%d), target(%d)", _myActorKey.getKeyValue(), _targetActorKey.getKeyValue());
 	targetCharacter->SetActorRotation(FRotationMatrix::MakeFromZ(myPos - targetPos).ToQuat());
 	return true;
 }
@@ -91,5 +92,12 @@ UTAInteractionObjectOpenDialog::UTAInteractionObjectOpenDialog()
 bool UTAInteractionObjectOpenDialog::execute(void) const noexcept
 {
 	TA_LOG_DEV("UTAInteractionObjectOpenDialog : me(%d), target(%d)", _myActorKey.getKeyValue(), _targetActorKey.getKeyValue());
+
+	if (false == TAGetFirstPlayerController()->openDialog(_targetActorKey))
+	{
+		TA_ASSERT_DEV(false, "비정상");
+		return false;
+	}
+
 	return true;
 }

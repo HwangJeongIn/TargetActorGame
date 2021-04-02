@@ -22,6 +22,7 @@ ATASpawnData::ATASpawnData()
 	}
 }
 
+#ifdef FOR_EDITING
 void ATASpawnData::PostEditChangeProperty(FPropertyChangedEvent& PropertyChangedEvent)
 {
 	Super::PostEditChangeProperty(PropertyChangedEvent);
@@ -74,6 +75,7 @@ void ATASpawnData::PostEditChangeProperty(FPropertyChangedEvent& PropertyChanged
 		SetActorLocation(hitResult.Location);
 	}
 }
+#endif
 
 const int ATASpawnData::getGroupGameDataKey(void) const noexcept
 {

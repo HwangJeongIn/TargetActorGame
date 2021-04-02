@@ -101,12 +101,14 @@ private:
 	
 	bool setControlMode(const ControlMode controlMode) noexcept; // 플레그 세팅 등
 	bool preSetControlMode(const ControlMode controlMode) noexcept; // 시도할 수 있는지 판단하는 검증 등
-	bool postSetControlMode(const ControlMode controlMode) noexcept; // 보간시작전에 세팅해줘야할것들 등
 
 	UFUNCTION()
 	void viewChange() noexcept;
 
 	void processSyncToServer(float deltaTime) noexcept;
+public:
+	bool setFocusedActorAndChangeControlMode(TWeakObjectPtr<ATACharacter>& focusedActor) noexcept;
+	bool resetFocusedActorAndChangeControlMode(void) noexcept;
 
 private:
 
@@ -120,21 +122,21 @@ private:
 	ControlMode		_currentControlMode;
 	FVector			_toMoveDirectionByInput;
 	bool			_moveAndRotationDirtyFlag;
-
+	
 	// 카메라 전환시 보간 관련 변수
 	bool			_cameraDirtyFlag;
 	float			_toArmLength;
-	FRotator		_toArmRelativeRotation; // ATAPlayer에 붙어있기 때문에 상대적
+	FRotator		_toArmAbsoluteRotation; // ATAPlayer에 붙어있기 때문에 상대적
 	FVector			_toArmRelativePosition; // ATAPlayer에 붙어있기 때문에 상대적
 	float			_armLengthSpeed;
 	float			_armRotationSpeed;
 	float			_armPositionSpeed;
 
-
+	bool			_isViewChanging;
 
 	// FocusedAndControlBlocked 모드를 위한 포커스 액터
 	UPROPERTY()
-	TWeakObjectPtr<ATACharacter> _focusedCharacter;
+	TWeakObjectPtr<ATACharacter> _focusedActor;
 
 	UPROPERTY(EditAnyWhere, Category = Camera)
 	float			_thirdPersonToArmLength;

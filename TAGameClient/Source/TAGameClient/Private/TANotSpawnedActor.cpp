@@ -52,9 +52,6 @@ ATANotSpawnedActor::ATANotSpawnedActor()
 void ATANotSpawnedActor::BeginPlay()
 {
 	Super::BeginPlay();
-	FVector actorLocation = GetActorLocation();
-	FVector staticMeshWorldLocation = actorLocation + FVector(0.0f, 0.0f, 10.0f);
-	_staticMesh->SetWorldLocation(staticMeshWorldLocation);
 }
 
 void ATANotSpawnedActor::setActorLocationAsStaticMeshBottom(const float staticMeshHeight) noexcept
