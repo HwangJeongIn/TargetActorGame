@@ -70,6 +70,7 @@ void ATAPlayerController::PostInitializeComponents(void)
 
 void ATAPlayerController::OnPossess(APawn* aPawn)
 {
+	GetHUD();
 	TA_LOG_DEV("player controller OnPossess");
 	Super::OnPossess(aPawn);
 }

@@ -458,7 +458,7 @@ namespace ta
 			canActivateAi = (1 == observerMoveCom->getViewListPlayerCount_());
 		}
 
-		TA_LOG_DEV("create actor<%d> to actor<%d>", targetActorKey.getKeyValue(), observerActorKey.getKeyValue());
+		//TA_LOG_DEV("create actor<%d> to actor<%d>", targetActorKey.getKeyValue(), observerActorKey.getKeyValue());
 
 		if (ActorType::Player != observerActorType) // observer 가 플레이어가 아닐때
 		{
