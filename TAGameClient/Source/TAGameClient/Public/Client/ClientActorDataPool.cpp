@@ -84,7 +84,7 @@ namespace ta
 	ActorComponent* ClientActorDataPool::getActorComponent(const ActorKey& actorKey, const ActorComponentType componentType) noexcept
 	{
 		const uint32 index = actorKey.getKeyValue();
-
+		 
 		ActorType actorType = ActorType::Count;
 		uint32 relativeGroupIndex = 0;
 		if (false == getRelativeGroupIndexAndActorType(actorKey, actorType, relativeGroupIndex))
