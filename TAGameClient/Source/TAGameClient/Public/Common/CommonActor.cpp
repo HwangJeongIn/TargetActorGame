@@ -3,7 +3,7 @@
 #include "Common/Socket.h"
 #include "Common/ScopedLock.h"
 #include "Common/ComponentData.h"
-#include "Common/ActorComponentTypeList.h"
+#include "Common/ActorDataGroups.h"
 #include "Common/CommonApp.h"
 #include "Common/CommonActorManager.h"
 #include "Common/GetComponentAndSystem.h"
