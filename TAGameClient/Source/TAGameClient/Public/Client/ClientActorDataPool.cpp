@@ -1,3 +1,5 @@
+﻿#include "Common/ActorComponentPool.h"
+#include "Common/ActorDataGroups.h"
 #include "Client/ClientActorDataPool.h"
 #include "Client/ClientActor.h"
 #include "Client/ClientMoveActorComponent.h"
@@ -22,14 +24,33 @@ namespace ta
 		if (false == ActorDataPool::initialize())
 		{
 			TA_ASSERT_DEV(false, "ActorDataPool initialize에 실패했습니다.");
+			return false;
 		}
 
-		_actorPoolValues = new ClientActor[_maxCount];
-		_moveComponentPoolValues = new ClientMoveActorComponent[_maxCount];
-		_actionComponentPoolValues = new ClientActionActorComponent[_maxCount];
-		_aiComponentPoolValues = new ClientAiActorComponent[_maxCount];
-		_characterComponentPoolValues = new ClientCharacterActorComponent[_maxCount];
-		_inventoryComponentPoolValues = new ClientInventoryActorComponent[_maxCount];
+		_actorPoolValues = new ClientActor[MaxActorDataPoolCapacity];
+		if (false == _moveComponentPool->allocatePoolFromInitializedCount<ClientActionActorComponent>())
+		{
+			TA_ASSERT_DEV(false, "비정상");
+			return false;
+		}
+
+		if (false == _actionComponentPool->allocatePoolFromInitializedCount<ClientAiActorComponent>())
+		{
+			TA_ASSERT_DEV(false, "비정상");
+			return false;
+		}
+
+		if (false == _characterComponentPool->allocatePoolFromInitializedCount<ClientCharacterActorComponent>())
+		{
+			TA_ASSERT_DEV(false, "비정상");
+			return false;
+		}
+
+		if (false == _inventoryComponentPool->allocatePoolFromInitializedCount<ClientInventoryActorComponent>())
+		{
+			TA_ASSERT_DEV(false, "비정상");
+			return false;
+		}
 
 		TA_COMPILE_DEV(5 == static_cast<uint8>(ActorComponentType::Count), "여기도 추가해주세요");
 
@@ -64,6 +85,16 @@ namespace ta
 	{
 		const uint32 index = actorKey.getKeyValue();
 
+		ActorType actorType = ActorType::Count;
+		uint32 relativeGroupIndex = 0;
+		if (false == getRelativeGroupIndexAndActorType(actorKey, actorType, relativeGroupIndex))
+		{
+			TA_ASSERT_DEV(false, "비정상적인 액터키입니다.");
+			return false;
+		}
+		
+		_moveComponentPool->getActorComponent<ClientMoveActorComponent>(actorType, relativeGroupIndex);
+
 		switch (componentType)
 		{
 #define RETURN_COMPONENTS(Type, PoolName)																								\
@@ -75,11 +106,11 @@ namespace ta
 			break;																														\
 
 
-			RETURN_COMPONENTS(Move, _moveComponentPoolValues)
-			RETURN_COMPONENTS(Action, _actionComponentPoolValues)
-			RETURN_COMPONENTS(Ai, _aiComponentPoolValues)
-			RETURN_COMPONENTS(Character, _characterComponentPoolValues)
-			RETURN_COMPONENTS(Inventory, _inventoryComponentPoolValues)
+			RETURN_COMPONENTS(Move, _moveComponentPool)
+			RETURN_COMPONENTS(Action, _actionComponentPool)
+			RETURN_COMPONENTS(Ai, _aiComponentPool)
+			RETURN_COMPONENTS(Character, _characterComponentPool)
+			RETURN_COMPONENTS(Inventory, _inventoryComponentPool)
 
 #undef RETURN_COMPONENTS
 

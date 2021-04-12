@@ -26,7 +26,7 @@
   <ItemGroup>
     <ClCompile Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\ActorComponent.cpp" />
     <ClCompile Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\ActorComponentPool.cpp" />
-    <ClCompile Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\ActorComponentTypeList.cpp" />
+    <ClCompile Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\ActorDataGroups.cpp" />
     <ClCompile Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\ActorDataPool.cpp" />
     <ClCompile Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\ActorDataPoolValue.cpp" />
     <ClCompile Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\ActorEvent.cpp" />
@@ -138,7 +138,7 @@
   <ItemGroup>
     <ClInclude Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\ActorComponent.h" />
     <ClInclude Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\ActorComponentPool.h" />
-    <ClInclude Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\ActorComponentTypeList.h" />
+    <ClInclude Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\ActorDataGroups.h" />
     <ClInclude Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\ActorDataPool.h" />
     <ClInclude Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\ActorDataPoolValue.h" />
     <ClInclude Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\ActorEvent.h" />

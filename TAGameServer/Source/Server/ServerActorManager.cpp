@@ -9,7 +9,7 @@
 #include "Server/ServerCharacterActorComponent.h"
 #include "Server/ServerInventoryActorComponent.h"
 #include "Common/ScopedLock.h"
-#include "Common/ActorComponentTypeList.h"
+#include "Common/ActorDataGroups.h"
 #include "Common/ComponentData.h"
 #include "Common/GetComponentAndSystem.h"
 #include "ServerActorManager.h"
@@ -255,7 +255,7 @@ namespace ta
             actorType = serverActor->getActorType_();
         }
 
-        const std::vector<ActorComponentType>& componentTypeList = ActorComponentGroups.at(actorType);
+        const std::vector<ActorComponentType>& componentTypeList = ActorDataGroups.at(actorType);
         // TODO : 유저인 경우 DB + 데이터로부터 로드해야합니다.
         const uint32 count = componentTypeList.size();
         for (uint32 index = 0; index < count; ++index)

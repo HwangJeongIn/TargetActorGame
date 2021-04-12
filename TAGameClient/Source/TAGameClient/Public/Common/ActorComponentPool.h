@@ -1,7 +1,7 @@
 ﻿#pragma once
 
 #include "Common/CommonBase.h"
-#include "Common/ActorComponentTypeList.h"
+#include "Common/ActorDataGroups.h"
 #include <unordered_map>
 
 
@@ -31,21 +31,21 @@ namespace ta
 			}
 
 			_isValid = true;
-			_actorComponents = new T(_count);
+			_actorComponents = new T[_count];
 			return true;
 		}
 
 		template <typename T>
 		T* getActorComponent(const ActorType& targetActorType, const uint32& relativeGroupIndex) noexcept
 		{
-			std::unordered_map<ActorType, ActorComponentGroupData>::const_iterator actorComponentGroupData = ActorComponentGroups.find(targetActorType);
-			if (ActorComponentGroups.end() == actorComponentGroupData)
+			std::unordered_map<ActorType, ActorGroup>::const_iterator actorGroup = ActorDataGroups.find(targetActorType);
+			if (ActorDataGroups.end() == actorGroup)
 			{
 				TA_ASSERT_DEV(false, "비정상");
 				return false;
 			}
 
-			if (actorComponentGroupData->second._countPerComponent <= relativeGroupIndex)
+			if (actorGroup->second._count <= relativeGroupIndex)
 			{
 				TA_ASSERT_DEV(false, "비정상적인 인덱스 입니다. ActorType : %d, Index : %d", static_cast<uint8>(targetActorType), relativeGroupIndex);
 				return false;

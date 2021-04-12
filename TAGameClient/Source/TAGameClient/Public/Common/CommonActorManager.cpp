@@ -1,6 +1,6 @@
-#include "Common/CommonActorManager.h"
+﻿#include "Common/CommonActorManager.h"
 #include "Common/KeyDefinition.h"
-#include "Common/ActorComponentTypeList.h"
+#include "Common/ActorDataGroups.h"
 #include "Common/ActorDataPool.h"
 #include "Common/Sector.h"
 #include "Common/ComponentData.h"

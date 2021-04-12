@@ -69,12 +69,41 @@ namespace ta
 
 		virtual ActorComponent* getActorComponent(const ActorKey& actorKey, const ActorComponentType componentType) noexcept = 0;
 
+
+		//template <typename T>
+		//T* getActorComponent(const ActorKey& actorKey, const ActorComponentType& componentType) noexcept
+		//{
+		//	getActorType();
+		//	std::unordered_map<ActorType, ActorGroup>::const_iterator ActorGroup = ActorDataGroups.find(targetActorType);
+		//	if (ActorDataGroups.end() == ActorGroup)
+		//	{
+		//		TA_ASSERT_DEV(false, "비정상");
+		//		return false;
+		//	}
+
+		//	if (ActorGroup->second._count <= relativeGroupIndex)
+		//	{
+		//		TA_ASSERT_DEV(false, "비정상적인 인덱스 입니다. ActorType : %d, Index : %d", static_cast<uint8>(targetActorType), relativeGroupIndex);
+		//		return false;
+		//	}
+
+		//	std::unordered_map<ActorType, uint32>::const_iterator it = _startIndexMap.find(targetActorType);
+		//	if (_startIndexMap.end() == it)
+		//	{
+		//		TA_ASSERT_DEV(false, "비정상");
+		//		return false;
+		//	}
+
+		//	return static_cast<T*>(_actorComponents[it->second + relativeGroupIndex]);
+		//}
+
 		void logTest(void) noexcept;
 
 		ActorType getActorType(const ActorKey& actorKey) noexcept;
 
 	protected:
 		const bool getRelativeGroupIndex(const ActorKey& actorKey, uint32& relativeGroupIndex) const noexcept;
+		const bool getRelativeGroupIndexAndActorType(const ActorKey& actorKey, ActorType& actorType, uint32& relativeGroupIndex) const noexcept;
 
 	private:
 		bool initializeAllComponentCountFromActorType(void) noexcept;

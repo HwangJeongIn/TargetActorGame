@@ -8,7 +8,7 @@
 #include "Common/CommonAiActorComponent.h"
 #include "Common/CommonCharacterActorComponent.h"
 #include "Common/CommonInventoryActorComponent.h"
-#include "Common/ActorComponentTypeList.h"
+#include "Common/ActorDataGroups.h"
 #include "Common/ActorComponentPool.h"
 
 
@@ -303,60 +303,52 @@ namespace ta
 
 	ActorType ActorDataPool::getActorType(const ActorKey& actorKey) noexcept
 	{
-		uint32 actorKeyValue = actorKey.getKeyValue();
-		if (MaxActorDataPoolCapacity <= actorKeyValue)
+		ActorType actorType = ActorType::Count;
+		uint32 relativeGroupIndex = 0;
+		if (false == getRelativeGroupIndexAndActorType(actorKey, actorType, relativeGroupIndex))
 		{
 			TA_ASSERT_DEV(false, "비정상적인 액터키입니다.");
 			return ActorType::Count;
 		}
 
-		if (MaxPlayerActorDataPoolCapacity <= actorKeyValue)
-		{
-			actorKeyValue -= MaxPlayerActorDataPoolCapacity;
-		}
-
-		if (MaxNpcActorDataPoolCapacity <= actorKeyValue)
-		{
-			actorKeyValue -= MaxNpcActorDataPoolCapacity;
-		}
-
-		// 들어올일 없다.
-		//if (MaxObjectActorDataPoolCapacity <= result)
-		//{
-		//	result -= MaxObjectActorDataPoolCapacity;
-		//}
-
-		return ActorType::Count;
+		return actorType;
 	}
 
 	const bool ActorDataPool::getRelativeGroupIndex(const ActorKey& actorKey, uint32& relativeGroupIndex) const noexcept
 	{
-		// 플레이어 => Npc => Object 순서대로 액터풀에 들어가있다.
-		// 각 그룹에서의 인덱스를 구해준다.
+		ActorType actorType = ActorType::Count;
+		return getRelativeGroupIndexAndActorType(actorKey, actorType, relativeGroupIndex);
+	}
+
+	const bool ActorDataPool::getRelativeGroupIndexAndActorType(const ActorKey& actorKey, ActorType& actorType, uint32& relativeGroupIndex) const noexcept
+	{
 		uint32 actorKeyValue = actorKey.getKeyValue();
-		if (MaxActorDataPoolCapacity <= actorKeyValue)
+
+		uint32 finalBoundary = 0;
+		ActorType finalActorType = ActorType::Count;
+		bool isValid = false;
+		for (std::unordered_map<ActorType, ActorGroup>::const_iterator it = ActorDataGroups.begin(); ActorDataGroups.end() != it; ++it)
+		{
+			// 0이 나오는 이유는 그 아래에 존재한다는 것이다.
+			// 이 액터의 ActorType와 Boundary는 이전에 설정해둔 ActorType과 Boundary다 => ActorType와 Boundary를 갱신하지 않고 빠져나온다.
+			if (0 == (actorKeyValue / (finalBoundary + it->second._count)))
+			{
+				isValid = true;
+				break;
+			}
+
+			finalBoundary += it->second._count;
+			actorType = it->first;
+		}
+
+		if (false == isValid)
 		{
 			TA_ASSERT_DEV(false, "비정상적인 액터키입니다.");
 			return false;
 		}
 
-		if (MaxPlayerActorDataPoolCapacity <= actorKeyValue)
-		{
-			actorKeyValue -= MaxPlayerActorDataPoolCapacity;
-		}
-
-		if (MaxNpcActorDataPoolCapacity <= actorKeyValue)
-		{
-			actorKeyValue -= MaxNpcActorDataPoolCapacity;
-		}
-
-		// 들어올일 없다.
-		//if (MaxObjectActorDataPoolCapacity <= result)
-		//{
-		//	result -= MaxObjectActorDataPoolCapacity;
-		//}
-
-		relativeGroupIndex = actorKeyValue;
+		relativeGroupIndex = actorKeyValue - finalBoundary;
+		actorType = finalActorType;
 
 		return true;
 	}
@@ -365,8 +357,8 @@ namespace ta
 	{
 #define INITIALIZE_COMPONENT_COUNT(OwnerActorType)																								\
 																																				\
-		std::unordered_map<ActorType, ActorComponentGroupData>::const_iterator it = ActorComponentGroups.find(OwnerActorType);					\
-		if (ActorComponentGroups.end() == it)																									\
+		std::unordered_map<ActorType, ActorGroup>::const_iterator it = ActorDataGroups.find(OwnerActorType);					\
+		if (ActorDataGroups.end() == it)																									\
 		{																																		\
 			TA_ASSERT_DEV(false, "비정상");																										\
 			return false;																														\
@@ -375,7 +367,7 @@ namespace ta
 		const uint32 componentTypeCount = componentTypeList.size();																				\
 		for (uint32 index = 0; index < componentTypeCount; ++index)																				\
 		{																																		\
-			if (false == addComponentCountFromActorType(OwnerActorType, componentTypeList[index], it->second._countPerComponent))				\
+			if (false == addComponentCountFromActorType(OwnerActorType, componentTypeList[index], it->second._count))				\
 			{																																	\
 				TA_ASSERT_DEV(false, "비정상");																									\
 				return false;																													\

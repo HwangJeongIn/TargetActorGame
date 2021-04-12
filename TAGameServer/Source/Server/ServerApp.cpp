@@ -10,7 +10,7 @@
 #include "Common/GetComponentAndSystem.h"
 #include "Common/ScopedLock.h"
 #include "Common/ActorEventTimer.h"
-#include "Common/ActorComponentTypeList.h"
+#include "Common/ActorDataGroups.h"
 #include "Common/ActorEvent.h"
 #include <thread>
 //test
@@ -195,7 +195,7 @@ namespace ta
 		ComponentData* componentData = nullptr;
 		ActorComponent* actorComponent = nullptr;
 		ActorComponentType currentType = ActorComponentType::Count;
-		const std::vector<ActorComponentType>& componentTypeList = ActorComponentGroups.at(actorToSend->getActorType());
+		const std::vector<ActorComponentType>& componentTypeList = ActorDataGroups.at(actorToSend->getActorType());
 		const uint32 count = componentTypeList.size();
 		for (uint32 index = 0; index < count; ++index)
 		{
