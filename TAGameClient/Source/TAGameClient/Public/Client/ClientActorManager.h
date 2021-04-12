@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 #include "Common/CommonBase.h"
 #include "Common/CommonActorManager.h"
@@ -28,11 +28,10 @@ namespace ta
 		ClientActorManager(void) noexcept;
 		virtual ~ClientActorManager(void) noexcept;
 
-		CommonActor* createDefaultActorForClient(const ActorKey& actorKeyReceived) noexcept;
 		CommonActor* createPlayerActorForClient(const ActorKey& actorKeyReceived) noexcept;
 		CommonActor* createControlledByPlayerActorForClient(const ActorKey& actorKeyReceived) noexcept;
-		CommonActor* createMonsterActorForClient(const ActorKey& actorKeyReceived) noexcept;
 		CommonActor* createNpcActorForClient(const ActorKey& actorKeyReceived) noexcept;
+		CommonActor* createObjectActorForClient(const ActorKey& actorKeyReceived) noexcept;
 
 
 	private:

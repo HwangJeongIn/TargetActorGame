@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 #include "Common/CommonBase.h"
 #include "Common/Uncopyable.h"
@@ -21,6 +21,8 @@ namespace ta
 	public:
 		const ActorComponentType getActorComponentType(void) const noexcept;
 
+		virtual ~ActorComponent(void) noexcept;
+
 		virtual void onToPool(void) noexcept {}
 		// 개별적으로 초기화되어야 한다. owner의 다른 컴포넌트는 초기화안되었을 수 있음
 		virtual void onFromPool(void) noexcept {}
@@ -39,10 +41,9 @@ namespace ta
 		virtual ComponentData* packData_(void) noexcept { return nullptr; }
 
 	protected:
-		// 자체로 생성, 삭제 못함 무조건 Common이상으로 올라감
+		// 자체로 생성 못함 무조건 Common이상으로 올라감
 		ActorComponent(const ActorComponentType& actorComponentType) noexcept;
-		virtual ~ActorComponent(void) noexcept;
-
+		
 	private:
 		// 이값은 일단 초기화되는 동안에는 true값이다.
 		// 특정 액터에 할당되었다는 뜻이다. // 실제로 사용하기 위해서는 ActorDataPoolValue의 state가 using이여야 한다.

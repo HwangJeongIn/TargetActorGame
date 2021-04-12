@@ -1,4 +1,4 @@
-#include "Client/ClientActorManager.h"
+﻿#include "Client/ClientActorManager.h"
 #include "Client/ClientActorDataPool.h"
 #include "Client/ClientComponentData.h"
 #include "Client/ClientSector.h"
@@ -62,11 +62,6 @@ namespace ta
     {
         switch (actorType)
         {
-        case ActorType::Default:
-            {
-                return createDefaultActorForClient(actorKeyReceived);
-            }
-            break;
         case ActorType::Player:
             {
                 return createPlayerActorForClient(actorKeyReceived);
@@ -77,19 +72,29 @@ namespace ta
                 return createControlledByPlayerActorForClient(actorKeyReceived);
             }
             break;
-        case ActorType::Monster:
-            {
-                return createMonsterActorForClient(actorKeyReceived);
-            }
-            break;
         case ActorType::Npc:
             {
                 return createNpcActorForClient(actorKeyReceived);
             }
             break;
+        case ActorType::Object:
+            {
+                return createObjectActorForClient(actorKeyReceived);
+            }
+            break;
+        //case ActorType::Monster:
+        //    {
+        //        return createMonsterActorForClient(actorKeyReceived);
+        //    }
+        //    break;
+        //case ActorType::Monster:
+        //    {
+        //        return createMonsterActorForClient(actorKeyReceived);
+        //    }
+        //    break;
         default:
             {
-                TA_COMPILE_DEV(6 == static_cast<uint8>(ActorType::Count), "여기도 추가해주세요");
+                TA_COMPILE_DEV(4 == static_cast<uint8>(ActorType::Count), "여기도 추가해주세요");
             }
             break;
         }
@@ -97,12 +102,19 @@ namespace ta
         return nullptr;
     }
 
-    CommonActor* ClientActorManager::createDefaultActorForClient(const ActorKey& actorKeyReceived) noexcept
-    {
-        CommonActorBasicSpawnData spawnData;
-        spawnData.initializeComponentsAsDefaultActor();
-        return _actorDataPool->fromPool(spawnData, true, actorKeyReceived);
-    }
+    //CommonActor* ClientActorManager::createDefaultActorForClient(const ActorKey& actorKeyReceived) noexcept
+    //{
+    //    CommonActorBasicSpawnData spawnData;
+    //    spawnData.initializeComponentsAsDefaultActor();
+    //    return _actorDataPool->fromPool(spawnData, true, actorKeyReceived);
+    //}
+
+    //CommonActor* ClientActorManager::createMonsterActorForClient(const ActorKey& actorKeyReceived) noexcept
+    //{
+    //    CommonActorBasicSpawnData spawnData;
+    //    spawnData.initializeComponentsAsMonster();
+    //    return _actorDataPool->fromPool(spawnData, true, actorKeyReceived);
+    //}
 
     CommonActor* ClientActorManager::createPlayerActorForClient(const ActorKey& actorKeyReceived) noexcept
     {
@@ -120,17 +132,17 @@ namespace ta
         return _actorDataPool->fromPool(spawnData, true, actorKeyReceived);
     }
     
-    CommonActor* ClientActorManager::createMonsterActorForClient(const ActorKey& actorKeyReceived) noexcept
-    {
-        CommonActorBasicSpawnData spawnData;
-        spawnData.initializeComponentsAsMonster();
-        return _actorDataPool->fromPool(spawnData, true, actorKeyReceived);
-    }
-
     CommonActor* ClientActorManager::createNpcActorForClient(const ActorKey& actorKeyReceived) noexcept
     {
         CommonActorBasicSpawnData spawnData;
         spawnData.initializeComponentsAsNpc();
+        return _actorDataPool->fromPool(spawnData, true, actorKeyReceived);
+    }
+
+    CommonActor* ClientActorManager::createObjectActorForClient(const ActorKey& actorKeyReceived) noexcept
+    {
+        CommonActorBasicSpawnData spawnData;
+        spawnData.initializeComponentsAsObject();
         return _actorDataPool->fromPool(spawnData, true, actorKeyReceived);
     }
     

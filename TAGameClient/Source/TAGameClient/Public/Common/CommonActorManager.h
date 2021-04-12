@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 #include "Common/CommonBase.h"
 #include "Common/Uncopyable.h"
@@ -39,11 +39,11 @@ namespace ta
 		CommonActor* createOwnerActor(void) noexcept;
 
 		// DB작업될때까지 액터 컴포넌트 데이터 초기화는 이함수로 대체
-
-		bool initializeDefaultActorComponents(const ActorKey& actorKey) noexcept;
-		bool initializeOwnerComponents(const ActorKey& actorKey) noexcept;
-		bool initializePlayerComponents(const ActorKey& actorKey) noexcept;
-		bool initializeMonsterComponents(const ActorKey& actorKey) noexcept;
+		// 이제 거의 쓸일이 없다. 스폰데이터로 스폰하는 기능 추가 / 임시 fake DB 코드사용중
+		//bool initializeDefaultActorFixedComponents(const ActorKey& actorKey) noexcept;
+		bool initializeOwnerFixedComponents(const ActorKey& actorKey) noexcept;
+		//bool initializePlayerFixedComponents(const ActorKey& actorKey) noexcept;
+		//bool initializeMonsterFixedComponents(const ActorKey& actorKey) noexcept;
 		ComponentData* createFixedComponentData(const ActorComponentType& actorComponent) noexcept;
 		
 		// DB작업될때까지 액터 컴포넌트 데이터 초기화는 이함수로 대체

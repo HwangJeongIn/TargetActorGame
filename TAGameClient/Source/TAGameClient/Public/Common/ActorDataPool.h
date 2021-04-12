@@ -60,42 +60,10 @@ namespace ta
 		CommonActor* fromPool(CommonActorBasicSpawnData& spawnData, const bool forceTo = false, const ActorKey& actorKey = ActorKey()) noexcept;
 		bool initializeActorComponent(const ActorKey& actorKey, const ComponentData* data, const bool needToBeDeleted) noexcept;
 		bool toPool(const ActorKey& actorKey, const bool forceTo = false) noexcept;
-		const bool isFull(void) noexcept;
-
+		const bool isFull(const ActorType& actorType) noexcept;
 
 		virtual CommonActor* getActor(const ActorKey& actorKey) noexcept = 0;
-
-		uint32 getMaxCount(void) const noexcept;
-
 		virtual ActorComponent* getActorComponent(const ActorKey& actorKey, const ActorComponentType componentType) noexcept = 0;
-
-
-		//template <typename T>
-		//T* getActorComponent(const ActorKey& actorKey, const ActorComponentType& componentType) noexcept
-		//{
-		//	getActorType();
-		//	std::unordered_map<ActorType, ActorGroup>::const_iterator ActorGroup = ActorDataGroups.find(targetActorType);
-		//	if (ActorDataGroups.end() == ActorGroup)
-		//	{
-		//		TA_ASSERT_DEV(false, "비정상");
-		//		return false;
-		//	}
-
-		//	if (ActorGroup->second._count <= relativeGroupIndex)
-		//	{
-		//		TA_ASSERT_DEV(false, "비정상적인 인덱스 입니다. ActorType : %d, Index : %d", static_cast<uint8>(targetActorType), relativeGroupIndex);
-		//		return false;
-		//	}
-
-		//	std::unordered_map<ActorType, uint32>::const_iterator it = _startIndexMap.find(targetActorType);
-		//	if (_startIndexMap.end() == it)
-		//	{
-		//		TA_ASSERT_DEV(false, "비정상");
-		//		return false;
-		//	}
-
-		//	return static_cast<T*>(_actorComponents[it->second + relativeGroupIndex]);
-		//}
 
 		void logTest(void) noexcept;
 
@@ -109,6 +77,7 @@ namespace ta
 		bool initializeAllComponentCountFromActorType(void) noexcept;
 		bool addComponentCountFromActorType(const ActorType& ownerActorType, const ActorComponentType& actorComponentType, const uint32& count) noexcept;
 
+		bool getFreeIndexesAndLock(const ActorType& actorType, LockableObject*& freeIndexesLock, std::vector<uint32>*& freeIndexes) noexcept;
 	protected:
 		
 

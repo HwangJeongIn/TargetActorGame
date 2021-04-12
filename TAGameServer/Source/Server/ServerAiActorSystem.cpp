@@ -79,7 +79,7 @@ namespace ta
 
 	bool ServerAiActorSystem::processDetectTargetMonster(CommonAiActorComponent* myAi, CommonMoveActorComponent* myMove) const noexcept
 	{
-		return detectTarget(myAi, myMove, ActorType::Monster);
+		return detectTarget(myAi, myMove, ActorType::Npc);
 	}
 
 	bool ServerAiActorSystem::processMoveToPathPoint(CommonAiActorComponent* myAi, CommonMoveActorComponent* myMove, const float deltaTime) const noexcept

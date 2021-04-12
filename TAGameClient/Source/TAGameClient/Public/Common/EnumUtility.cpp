@@ -1,17 +1,16 @@
 ﻿#include "Common/EnumUtility.h"
 
+
 namespace ta
 {
 	const std::unordered_map<std::string, ActorType> ActorTypeConverter
 	{
-		 {"Default", ActorType::Default}
-		, {"Owner", ActorType::Owner}
-		, {"Player", ActorType::Player}
-		, {"ControlledByPlayer", ActorType::ControlledByPlayer}
-		, {"Monster", ActorType::Monster}
+		 {"Player", ActorType::Player}
 		, {"Npc", ActorType::Npc}
+		, {"Object", ActorType::Object}
+		, {"ControlledByPlayer", ActorType::ControlledByPlayer}
 	};
-	TA_COMPILE_DEV(6 == static_cast<uint8>(ActorType::Count), "여기도 확인해주세요");
+	TA_COMPILE_DEV(4 == static_cast<uint8>(ActorType::Count), "여기도 확인해주세요");
 
 
 	const std::unordered_map<std::string, GameDataType> GameDataTypeConverter

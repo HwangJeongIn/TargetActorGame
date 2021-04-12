@@ -129,11 +129,11 @@ namespace ta
     {
         switch (actorType)
         {
-        case ActorType::Default:
-            {
-                return createDefaultActorForServer();
-            }
-            break;
+        //case ActorType::Default:
+        //    {
+        //        return createDefaultActorForServer();
+        //    }
+        //    break;
         case ActorType::Player:
             {
                 return createPlayerActorForServer();
@@ -144,11 +144,11 @@ namespace ta
                 //return createControlledByPlayerActorForServer();
             }
             break;
-        case ActorType::Monster:
-            {
-                return createMonsterActorForServer();
-            }
-            break;
+        //case ActorType::Monster:
+        //    {
+        //        return createMonsterActorForServer();
+        //    }
+        //    break;
         case ActorType::Npc:
             {
                 return createNpcActorForServer();
@@ -156,7 +156,7 @@ namespace ta
             break;
         default:
             {
-                TA_COMPILE_DEV(6 == static_cast<uint8>(ActorType::Count), "여기도 추가해주세요");
+                TA_COMPILE_DEV(4 == static_cast<uint8>(ActorType::Count), "여기도 추가해주세요");
             }
             break;
         }
@@ -164,12 +164,12 @@ namespace ta
         return nullptr;
     }
 
-    CommonActor* ServerActorManager::createDefaultActorForServer(void) noexcept
-    {
-        CommonActorBasicSpawnData spawnData;
-        spawnData.initializeComponentsAsDefaultActor();
-        return _actorDataPool->fromPool(spawnData);
-    }
+    //CommonActor* ServerActorManager::createDefaultActorForServer(void) noexcept
+    //{
+    //    CommonActorBasicSpawnData spawnData;
+    //    spawnData.initializeComponentsAsDefaultActor();
+    //    return _actorDataPool->fromPool(spawnData);
+    //}
 
     CommonActor* ServerActorManager::createPlayerActorForServer(void) noexcept
     {
@@ -179,12 +179,12 @@ namespace ta
         return _actorDataPool->fromPool(spawnData);
     }
 
-    CommonActor* ServerActorManager::createMonsterActorForServer(void) noexcept
-    {
-        CommonActorBasicSpawnData spawnData;
-        spawnData.initializeComponentsAsMonster();
-        return _actorDataPool->fromPool(spawnData);
-    }
+    //CommonActor* ServerActorManager::createMonsterActorForServer(void) noexcept
+    //{
+    //    CommonActorBasicSpawnData spawnData;
+    //    spawnData.initializeComponentsAsMonster();
+    //    return _actorDataPool->fromPool(spawnData);
+    //}
 
     CommonActor* ServerActorManager::createNpcActorForServer(void) noexcept
     {
@@ -249,13 +249,16 @@ namespace ta
             return false;
         }
 
-        ActorType actorType = ActorType::Count;
+        ActorType actorType = serverActor->getActorType();
+        std::unordered_map<ActorType, ActorGroup>::const_iterator it = ActorDataGroups.find(actorType);
+        if (ActorDataGroups.end() == it)
         {
-            ScopedLock actorLock(serverActor, true);
-            actorType = serverActor->getActorType_();
+            TA_ASSERT_DEV(false, "비정상입니다");
+            return false;
         }
 
-        const std::vector<ActorComponentType>& componentTypeList = ActorDataGroups.at(actorType);
+        const std::vector<ActorComponentType>& componentTypeList = it->second._componentTypeList;
+
         // TODO : 유저인 경우 DB + 데이터로부터 로드해야합니다.
         const uint32 count = componentTypeList.size();
         for (uint32 index = 0; index < count; ++index)

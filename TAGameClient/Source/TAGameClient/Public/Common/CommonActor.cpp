@@ -13,7 +13,7 @@ namespace ta
 {
 	CommonActor::CommonActor(void) noexcept
 		: _socket(nullptr)
-		, _actorType(ActorType::Default)
+		, _actorType(ActorType::Count)
 		, _networkOwner(nullptr)
 		, _countOfComponentsToInitialize(-1)
 	{
@@ -52,16 +52,22 @@ namespace ta
 		_actorKey = actorKey;
 	}
 
-	ActorType CommonActor::getActorType_(void) noexcept
-	{
-		return _actorType;
-	}
+	//ActorType CommonActor::getActorType_(void) noexcept
+	//{
+	//	return _actorType;
+	//}
 
 	ActorType CommonActor::getActorType(void) noexcept
 	{
-		ScopedLock lock(this, true);
+		// 이제 필요없다 // 액터키에 따른 액터타입은 고정 => 한번 초기화 되면 불변
+		//ScopedLock lock(this, true);
 
 		return _actorType;
+	}
+
+	void CommonActor::setActorType_(const ActorType& actorType) noexcept
+	{
+		_actorType = actorType;
 	}
 
 	bool CommonActor::isPlayer_(void) const noexcept
@@ -136,11 +142,19 @@ namespace ta
 
 		//	it->second.onToPool();
 		//}	
+		
+		std::unordered_map<ActorType, ActorGroup>::const_iterator it = ActorDataGroups.find(getActorType());
+		if (ActorDataGroups.end() == it)
+		{
+			TA_ASSERT_DEV(false, "비정상입니다");
+			return;
+		}
 
-		const uint32 count = static_cast<uint32>(ActorComponentType::Count);
+		const std::vector<ActorComponentType>& componentTypeList = it->second._componentTypeList;
+		const uint32 count = componentTypeList.size();
 		for (uint32 index = 0; index < count; ++index)
 		{
-			ActorComponent* actorComponent = GetActorComponent(this, static_cast<ActorComponentType>(index));
+			ActorComponent* actorComponent = GetActorComponent(this, componentTypeList[index]);
 			if (nullptr == actorComponent) // 실제 이 이 액터에 맞는 컴포넌트는 있지만 valid한 상태가 아니다
 			{
 				continue;
@@ -159,7 +173,9 @@ namespace ta
 			ScopedLock lock(this);
 			//_actorComponents.clear();
 			_countOfComponentsToInitialize = -1;
-			_actorType = ActorType::Default;
+			
+			// 어차피 액터키에 따른 액터타입은 고정이다. 의미없다.
+			//_actorType = ActorType::Count;
 			updateToPool_();
 		}
 	}
@@ -196,7 +212,8 @@ namespace ta
 			//}
 			_countOfComponentsToInitialize = count;
 
-			_actorType = spawnData._actorType;
+			// 어차피 액터키에 따른 액터타입은 고정이다. 의미없다.
+			//_actorType = spawnData._actorType;
 			//if (nullptr != _socket)
 			//{
 			//	delete _socket;
@@ -259,10 +276,18 @@ namespace ta
 		//	it->second.onActive();
 		//}
 
-		const uint32 count = static_cast<uint32>(ActorComponentType::Count);
+		std::unordered_map<ActorType, ActorGroup>::const_iterator it = ActorDataGroups.find(getActorType());
+		if (ActorDataGroups.end() == it)
+		{
+			TA_ASSERT_DEV(false, "비정상입니다");
+			return;
+		}
+
+		const std::vector<ActorComponentType>& componentTypeList = it->second._componentTypeList;
+		const uint32 count = componentTypeList.size();
 		for (uint32 index = 0; index < count; ++index)
 		{
-			ActorComponent* actorComponent = GetActorComponent(this, static_cast<ActorComponentType>(index));
+			ActorComponent* actorComponent = GetActorComponent(this, componentTypeList[index]);
 			if (nullptr == actorComponent) // 실제 이 이 액터에 맞는 컴포넌트는 있지만 valid한 상태가 아니다
 			{
 				continue;
@@ -363,7 +388,7 @@ namespace ta
 {
 	CommonActorBasicSpawnData::CommonActorBasicSpawnData(void) noexcept
 		: _networkOwnerType(NetworkOwnerType::None)
-		, _actorType(ActorType::Default)
+		, _actorType(ActorType::Count)
 	{
 	}
 
@@ -379,34 +404,64 @@ namespace ta
 		_actorType = actorType;
 	}
 
-	void CommonActorBasicSpawnData::initializeComponentsAsDefaultActor(void) noexcept
-	{
-		initializeComponents(DefaultActor, ActorType::Default);
-	}
+	//void CommonActorBasicSpawnData::initializeComponentsAsDefaultActor(void) noexcept
+	//{
+	//	initializeComponents(DefaultActor, ActorType::Default);
+	//}
 
 	void CommonActorBasicSpawnData::initializeComponentsAsOwner(void) noexcept
 	{
-		initializeComponents(OwnerActor, ActorType::Owner);
+		std::vector<ActorComponentType> emptyList;
+		initializeComponents(emptyList, ActorType::Player);
 	}
 
 	void CommonActorBasicSpawnData::initializeComponentsAsPlayer(void) noexcept
 	{
-		initializeComponents(PlayerActor, ActorType::Player);
+		std::unordered_map<ActorType, ActorGroup>::const_iterator it = ActorDataGroups.find(ActorType::Player);
+		if (ActorDataGroups.end() == it)
+		{
+			TA_ASSERT_DEV(false, "비정상입니다");
+		}
+
+		initializeComponents(it->second._componentTypeList, ActorType::Player);
 	}
 
 	void CommonActorBasicSpawnData::initializeComponentsAsControlledByPlayer(void) noexcept
 	{
-		initializeComponents(PlayerActor, ActorType::ControlledByPlayer);
+		std::unordered_map<ActorType, ActorGroup>::const_iterator it = ActorDataGroups.find(ActorType::Player);
+		if (ActorDataGroups.end() == it)
+		{
+			TA_ASSERT_DEV(false, "비정상입니다");
+		}
+
+		initializeComponents(it->second._componentTypeList, ActorType::ControlledByPlayer);
 	}
 
-	void CommonActorBasicSpawnData::initializeComponentsAsMonster(void) noexcept
-	{
-		initializeComponents(MonsterActor, ActorType::Monster);
-	}
+	//void CommonActorBasicSpawnData::initializeComponentsAsMonster(void) noexcept
+	//{
+	//	initializeComponents(MonsterActor, ActorType::Monster);
+	//}
 
 	void CommonActorBasicSpawnData::initializeComponentsAsNpc(void) noexcept
 	{
-		initializeComponents(NpcActor, ActorType::Npc);
+		std::unordered_map<ActorType, ActorGroup>::const_iterator it = ActorDataGroups.find(ActorType::Npc);
+		if (ActorDataGroups.end() == it)
+		{
+			TA_ASSERT_DEV(false, "비정상입니다");
+		}
+
+		initializeComponents(it->second._componentTypeList, ActorType::Npc);
+	}
+
+	void CommonActorBasicSpawnData::initializeComponentsAsObject(void) noexcept
+	{
+		std::unordered_map<ActorType, ActorGroup>::const_iterator it = ActorDataGroups.find(ActorType::Object);
+		if (ActorDataGroups.end() == it)
+		{
+			TA_ASSERT_DEV(false, "비정상입니다");
+		}
+
+		initializeComponents(it->second._componentTypeList, ActorType::Object);
 	}
 }
 

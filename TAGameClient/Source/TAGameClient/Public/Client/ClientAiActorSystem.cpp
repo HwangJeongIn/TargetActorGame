@@ -1,4 +1,4 @@
-#include "Client/ClientAiActorSystem.h"
+﻿#include "Client/ClientAiActorSystem.h"
 #include "Client/ClientAiActorComponent.h"
 #include "Client/AllPacketClient.h"
 #include "Common/CommonActor.h"
@@ -21,7 +21,7 @@ namespace ta
 
 	bool ClientAiActorSystem::processDetectTargetMonster(CommonAiActorComponent* myAi, CommonMoveActorComponent* myMove) const noexcept
 	{
-		return requestDetectTarget(myAi->getOwner(), ActorType::Monster);
+		return requestDetectTarget(myAi->getOwner(), ActorType::Npc);
 	}
 
 	bool ClientAiActorSystem::requestDetectTarget(CommonActor* myActor, const ActorType& targetActorType) const noexcept

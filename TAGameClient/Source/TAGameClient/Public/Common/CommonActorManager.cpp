@@ -132,25 +132,26 @@ namespace ta
 		return true;
 	}
 
-	bool CommonActorManager::initializeDefaultActorComponents(const ActorKey& actorKey) noexcept
-	{
-		return initializeFixedComponents(actorKey, DefaultActor);
-	}
+	//bool CommonActorManager::initializeDefaultActorFixedComponents(const ActorKey& actorKey) noexcept
+	//{
+	//	return initializeFixedComponents(actorKey, DefaultActor);
+	//}
 
-	bool CommonActorManager::initializeOwnerComponents(const ActorKey& actorKey) noexcept
+	bool CommonActorManager::initializeOwnerFixedComponents(const ActorKey& actorKey) noexcept
 	{
-		return initializeFixedComponents(actorKey, OwnerActor);
+		std::vector<ActorComponentType> emptyList;
+		return initializeFixedComponents(actorKey, emptyList);
 	}
 	
-	bool CommonActorManager::initializePlayerComponents(const ActorKey& actorKey) noexcept
-	{
-		return initializeFixedComponents(actorKey, PlayerActor);
-	}
+	//bool CommonActorManager::initializePlayerFixedComponents(const ActorKey& actorKey) noexcept
+	//{
+	//	return initializeFixedComponents(actorKey, PlayerActor);
+	//}
 
-	bool CommonActorManager::initializeMonsterComponents(const ActorKey& actorKey) noexcept
-	{
-		return initializeFixedComponents(actorKey, MonsterActor);
-	}
+	//bool CommonActorManager::initializeMonsterFixedComponents(const ActorKey& actorKey) noexcept
+	//{
+	//	return initializeFixedComponents(actorKey, MonsterActor);
+	//}
 
 	ComponentData* CommonActorManager::createFixedComponentData(const ActorComponentType& actorComponent) noexcept
 	{

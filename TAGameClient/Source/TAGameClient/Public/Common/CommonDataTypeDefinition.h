@@ -46,11 +46,10 @@ namespace ta
 {
 	enum class ActorType : uint8
 	{
-		Default = 0
-		, Owner
-		, Player
-		, ControlledByPlayer
+		Player = 0
 		, Npc
+		, Object
+		, ControlledByPlayer
 		, Count
 	};
 }

@@ -1,10 +1,12 @@
-﻿#include "Common/ActorComponentPool.h"
+﻿#include "Common/ActorComponent.h"
+#include "Common/ActorComponentPool.h"
 
 
 namespace ta
 {
-	ActorComponentPool::ActorComponentPool(void) noexcept
+	ActorComponentPool::ActorComponentPool(const ActorComponentType& actorComponentType) noexcept
 		: _actorComponents(nullptr)
+		, _actorComponentType(actorComponentType)
 	{
 		clear();
 	}
@@ -30,7 +32,7 @@ namespace ta
 			return false;
 		}
 
-		return false;
+		return true;
 	}
 	
 	void ActorComponentPool::clear(void) noexcept

@@ -54,7 +54,7 @@ namespace ta
 	void ClientActor::onActive(void) noexcept
 	{
 #ifndef TA_SERVER
-		ActorType actorType = ActorType::Count;
+		ActorType actorType = getActorType();
 		{
 			ScopedLock actorLock(this);
 			if (_unrealCharacter)
@@ -62,8 +62,6 @@ namespace ta
 				TA_ASSERT_DEV(false, "이미 액터가 존재합니다. 비정상입니다.");
 				return;
 			}
-
-			actorType = getActorType_();
 		}
 
 		

@@ -173,29 +173,36 @@ namespace ta
 		CommonActor* targetActor = GetActorManager()->getActor(targetActorKey);
 		if (nullptr == targetActor)
 		{
-			TA_ASSERT_DEV(false, "비정상입니다.")
-				return;
+			TA_ASSERT_DEV(false, "비정상입니다.");
+			return;
 		}
 
 		const ActorType targetActorType = targetActor->getActorType();
 		if (ActorType::Player != targetActorType)
 		{
-			TA_ASSERT_DEV(false, "비정상입니다.")
-				return;
+			TA_ASSERT_DEV(false, "비정상입니다.");
+			return;
 		}
 
 		CommonActor* actorToSend = GetActorManager()->getActor(actorKeyToSend);
 		if (nullptr == actorToSend)
 		{
-			TA_ASSERT_DEV(false, "비정상입니다.")
-				return;
+			TA_ASSERT_DEV(false, "비정상입니다.");
+			return;
 		}
 
-
+		std::unordered_map<ActorType, ActorGroup>::const_iterator it = ActorDataGroups.find(actorToSend->getActorType());
+		if (ActorDataGroups.end() == it)
+		{
+			TA_ASSERT_DEV(false, "비정상입니다");
+			return;
+		}
+		
+		const std::vector<ActorComponentType>& componentTypeList = it->second._componentTypeList;
 		ComponentData* componentData = nullptr;
 		ActorComponent* actorComponent = nullptr;
 		ActorComponentType currentType = ActorComponentType::Count;
-		const std::vector<ActorComponentType>& componentTypeList = ActorDataGroups.at(actorToSend->getActorType());
+		
 		const uint32 count = componentTypeList.size();
 		for (uint32 index = 0; index < count; ++index)
 		{

@@ -26,11 +26,11 @@ namespace ta
 	{
 		_actorPoolValues = nullptr;
 		
-		_moveComponentPool = new ActorComponentPool;
-		_actionComponentPool = new ActorComponentPool;
-		_aiComponentPool = new ActorComponentPool;
-		_characterComponentPool = new ActorComponentPool;
-		_inventoryComponentPool = new ActorComponentPool;
+		_moveComponentPool = new ActorComponentPool(ActorComponentType::Move);
+		_actionComponentPool = new ActorComponentPool(ActorComponentType::Action);
+		_aiComponentPool = new ActorComponentPool(ActorComponentType::Ai);
+		_characterComponentPool = new ActorComponentPool(ActorComponentType::Character);
+		_inventoryComponentPool = new ActorComponentPool(ActorComponentType::Inventory);
 
 		TA_COMPILE_DEV(5 == static_cast<uint8>(ActorComponentType::Count), "여기도 추가해주세요");
 
@@ -45,44 +45,49 @@ namespace ta
 
 	bool ActorDataPool::open(void) noexcept
 	{
-		MaxPlayerActorDataPoolCapacity;
-		MaxNpcActorDataPoolCapacity;
-		MaxObjectActorDataPoolCapacity;
-
-		ActorType OwnerActorType = ActorType::Player;
-		uint32 ActorTypeCount = MaxPlayerActorDataPoolCapacity;
-
-#define OPEN_ACTORTYPE(OwnerActorType, ActorTypeCount)																		
-
-
-		_freeIndex.reserve(_maxCount -1);
-
-
-		// 0번인덱스 제외
-		CommonActor* actor = nullptr;
-		for (uint32 index = ActorTypeCount - 1; index >= 0; --index)
+		std::unordered_map<ActorType, ActorGroup>::const_iterator it = ActorDataGroups.begin();
+		const std::unordered_map<ActorType, ActorGroup>::const_iterator end = ActorDataGroups.end();
+		int32 currentBoundary = 0;
+		for (; end != it; ++it)
 		{
-			actor = getActor(index);
-			actor->setActorKey_(index);
-
-			uint8 componentCount = static_cast<uint8>(ActorComponentType::Count);
-			for (uint8 componentIndex = 0; componentIndex < componentCount; ++componentIndex)
+			const int32 currentActorTypeActorCount = static_cast<int32>(it->second._count);
+			for (int32 actorIndex = (currentBoundary + currentActorTypeActorCount - 1); actorIndex >= currentBoundary; --actorIndex)
 			{
-				getActorComponent(index, static_cast<ActorComponentType>(componentIndex))->setOwner_(actor);
+				CommonActor* actor = getActor(actorIndex);
+
+				// 이 두개의 값은 불변
+				actor->setActorKey_(actorIndex);
+				actor->setActorType_(it->first);
+
+				uint8 componentCount = it->second._componentTypeList.size();
+				for (uint8 componentTypeIndex = 0; componentTypeIndex < componentCount; ++componentTypeIndex)
+				{
+					getActorComponent(actorIndex, it->second._componentTypeList[componentTypeIndex])->setOwner_(actor);
+				}
+
+				LockableObject* targetFreeIndexesLock = nullptr;
+				std::vector<uint32>* targetFreeIndexes = nullptr;
+				if (false == getFreeIndexesAndLock(it->first, targetFreeIndexesLock, targetFreeIndexes))
+				{
+					TA_ASSERT_DEV(false, "비정상");
+					return false;
+				}
+
+				targetFreeIndexes->push_back(actorIndex);
 			}
-			
-			_freeIndex.push_back(index);
+
+			currentBoundary += currentActorTypeActorCount;
 		}
 
-		_freeIndex.pop_back();
 
-		TA_COMPILE_DEV(5 == static_cast<uint8>(ActorComponentType::Count), "여기도 추가해주세요");
+		_playerFreeIndexes.pop_back();
+
 
 		// 0번 인덱스 바로 OwnerActor로 사용 //
 
 		// 액터매니저 객체자체는 초기화되어있는 상태 함수만 사용하니까 상관없을듯
 		CommonActor* ownerActor = g_app->getActorManager()->createOwnerActor();
-		g_app->getActorManager()->initializeOwnerComponents(ownerActor->getActorKey());
+		g_app->getActorManager()->initializeOwnerFixedComponents(ownerActor->getActorKey());
 
 		return true;
 	}
@@ -137,29 +142,34 @@ namespace ta
 										 , const bool forceTo /*= false*/
 										 , const ActorKey& actorKey/* = ActorKey()*/) noexcept
 	{
-		// freelist삭제 후 초기화
-
 		uint32 targetIndex = 0;
-		// 비어있는 인덱스 검증
-		if(false == forceTo)
+		if (true == forceTo) // 클라에서는 서버에서 내려주는 그대로 사용한다. 코드 바꿔야할듯..
 		{
-			// 잠깐 걸고 인덱스만 빼오는거라 괜찮을듯
-			ScopedLock lock(this);
-
-			if (true == _freeIndex.empty())
+			targetIndex = actorKey.getKeyValue();
+		}
+		else
+		{
+			LockableObject* targetFreeIndexesLock = nullptr;
+			std::vector<uint32>* targetFreeIndexes = nullptr;
+			if (false == getFreeIndexesAndLock(spawnData._actorType, targetFreeIndexesLock, targetFreeIndexes))
 			{
-				TA_ASSERT_DEV(false, "풀이 가득찼습니다 대책을 마련해야합니다.");
+				TA_ASSERT_DEV(false, "비정상");
+				return nullptr;
+			}
+
+			// 잠깐 걸고 인덱스만 빼오는거라 괜찮을듯
+			ScopedLock lock(targetFreeIndexesLock);
+
+			if (true == targetFreeIndexes->empty())
+			{
+				TA_ASSERT_DEV(false, "풀이 가득찼습니다 대책을 마련해야합니다. ActorType : %d", static_cast<uint8>(spawnData._actorType));
 				return nullptr;
 			}
 			else
 			{
-				targetIndex = _freeIndex.back();
-				_freeIndex.pop_back();
+				targetIndex = targetFreeIndexes->back();
+				targetFreeIndexes->pop_back();
 			}
-		}
-		else
-		{
-			targetIndex = actorKey.getKeyValue();
 		}
 
 		CommonActor* targetActor = nullptr;
@@ -258,47 +268,56 @@ namespace ta
 
 		if(false == forceTo)
 		{
-			ScopedLock lock(this);
-			_freeIndex.push_back(index);
+			LockableObject* targetFreeIndexesLock = nullptr;
+			std::vector<uint32>* targetFreeIndexes = nullptr;
+			if (false == getFreeIndexesAndLock(getActorType(actorKey), targetFreeIndexesLock, targetFreeIndexes))
+			{
+				TA_ASSERT_DEV(false, "비정상");
+				return false;
+			}
+
+			ScopedLock lock(targetFreeIndexesLock);
+			targetFreeIndexes->push_back(index);
 		}
 
 		return true;
 	}
 
-	const bool ActorDataPool::isFull(void) noexcept
+	const bool ActorDataPool::isFull(const ActorType& actorType) noexcept
 	{
+		LockableObject* targetFreeIndexesLock = nullptr;
+		std::vector<uint32>* targetFreeIndexes = nullptr;
+		if (false == getFreeIndexesAndLock(actorType, targetFreeIndexesLock, targetFreeIndexes))
 		{
-			ScopedLock lock(this);
-			return (false == _freeIndex.empty());
+			TA_ASSERT_DEV(false, "비정상");
+			return false;
 		}
-	}
-
-	uint32 ActorDataPool::getMaxCount(void) const noexcept
-	{
-		return _maxCount;
+		
+		ScopedLock lock(targetFreeIndexesLock, true);
+		return (false == targetFreeIndexes->empty());
 	}
 
 	void ActorDataPool::logTest(void) noexcept
 	{
-		uint32 freeIndexCount = 0;
-		{
-			ScopedLock lock(this, true);
-			freeIndexCount = _freeIndex.size();
-		}
+		//uint32 freeIndexCount = 0;
+		//{
+		//	ScopedLock lock(this, true);
+		//	freeIndexCount = _freeIndex.size();
+		//}
 
-		TA_LOG_DEV("FreeIndex Count : %d\n\n", freeIndexCount);
+		//TA_LOG_DEV("FreeIndex Count : %d\n\n", freeIndexCount);
 
-		bool rv = false;
-		for (uint32 index = 0; index < _maxCount; ++index)
-		{
-			CommonActor* actor = getActor(index);
-			{
-				ScopedLock lock(actor, true);
-				rv = actor->isActive_();
-			}
+		//bool rv = false;
+		//for (uint32 index = 0; index < _maxCount; ++index)
+		//{
+		//	CommonActor* actor = getActor(index);
+		//	{
+		//		ScopedLock lock(actor, true);
+		//		rv = actor->isActive_();
+		//	}
 
-			TA_LOG_DEV("ActorKey : %d is %d , ", index, rv);
-		}
+		//	TA_LOG_DEV("ActorKey : %d is %d , ", index, rv);
+		//}
 	}
 
 	ActorType ActorDataPool::getActorType(const ActorKey& actorKey) noexcept
@@ -334,11 +353,11 @@ namespace ta
 			if (0 == (actorKeyValue / (finalBoundary + it->second._count)))
 			{
 				isValid = true;
+				finalActorType = it->first;
 				break;
 			}
 
 			finalBoundary += it->second._count;
-			actorType = it->first;
 		}
 
 		if (false == isValid)
@@ -355,31 +374,32 @@ namespace ta
 
 	bool ActorDataPool::initializeAllComponentCountFromActorType(void) noexcept
 	{
-#define INITIALIZE_COMPONENT_COUNT(OwnerActorType)																								\
-																																				\
-		std::unordered_map<ActorType, ActorGroup>::const_iterator it = ActorDataGroups.find(OwnerActorType);					\
-		if (ActorDataGroups.end() == it)																									\
-		{																																		\
-			TA_ASSERT_DEV(false, "비정상");																										\
-			return false;																														\
-		}																																		\
-		const std::vector<ActorComponentType>& componentTypeList = it->second._componentTypeList;												\
-		const uint32 componentTypeCount = componentTypeList.size();																				\
-		for (uint32 index = 0; index < componentTypeCount; ++index)																				\
-		{																																		\
-			if (false == addComponentCountFromActorType(OwnerActorType, componentTypeList[index], it->second._count))				\
-			{																																	\
-				TA_ASSERT_DEV(false, "비정상");																									\
-				return false;																													\
-			}																																	\
-		}																																		\
+#define INITIALIZE_COMPONENT_COUNT(OwnerActorType)																				\
+		{																														\
+			std::unordered_map<ActorType, ActorGroup>::const_iterator it = ActorDataGroups.find(OwnerActorType);				\
+			if (ActorDataGroups.end() == it)																					\
+			{																													\
+				TA_ASSERT_DEV(false, "비정상");																					\
+				return false;																									\
+			}																													\
+			const std::vector<ActorComponentType>& componentTypeList = it->second._componentTypeList;							\
+			const uint32 componentTypeCount = componentTypeList.size();															\
+			for (uint32 index = 0; index < componentTypeCount; ++index)															\
+			{																													\
+				if (false == addComponentCountFromActorType(OwnerActorType, componentTypeList[index], it->second._count))		\
+				{																												\
+					TA_ASSERT_DEV(false, "비정상");																				\
+					return false;																								\
+				}																												\
+			}																													\
+		}																														\
 
 
 		INITIALIZE_COMPONENT_COUNT(ActorType::Player)
 		INITIALIZE_COMPONENT_COUNT(ActorType::Npc)
 		INITIALIZE_COMPONENT_COUNT(ActorType::Object)
 
-		TA_COMPILE_DEV(5 == static_cast<uint8>(ActorType::Count), "여기도 확인해주세요");
+		TA_COMPILE_DEV(4 == static_cast<uint8>(ActorType::Count), "여기도 확인해주세요");
 
 #undef INITIALIZE_COMPONENT_COUNT
 
@@ -416,6 +436,41 @@ namespace ta
 		default:
 			break;
 
+		}
+
+		return true;
+	}
+
+	bool ActorDataPool::getFreeIndexesAndLock(const ActorType& actorType, LockableObject*& freeIndexesLock, std::vector<uint32>*& freeIndexes) noexcept
+	{
+		switch (actorType)
+		{
+		case ActorType::Player:
+			{
+				freeIndexes = &_playerFreeIndexes;
+				freeIndexesLock = &_playerFreeIndexesLock;
+			}
+			break;
+		case ActorType::Npc:
+			{
+				freeIndexes = &_npcFreeIndexes;
+				freeIndexesLock = &_npcFreeIndexesLock;
+			}
+			break;
+		case ActorType::Object:
+			{
+				freeIndexes = &_objectFreeIndexes;
+				freeIndexesLock = &_objectFreeIndexesLock;
+			}
+			break;
+		default:
+			{
+				TA_ASSERT_DEV(false, "비정상");
+				return false;
+			}
+			break;
+
+			TA_COMPILE_DEV(4 == static_cast<uint8>(ActorType::Count), "여기도 확인해주세요");
 		}
 
 		return true;

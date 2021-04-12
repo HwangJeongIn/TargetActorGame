@@ -1,9 +1,19 @@
-#include "Common/ActorComponent.h"
+﻿#include "Common/ActorComponent.h"
 #include "Common/CommonActor.h"
 
 
 namespace ta
 {
+	ActorComponent::ActorComponent(const ActorComponentType& actorComponentType) noexcept
+		: _actorComponentType(actorComponentType)
+		, _componentValid(false)
+	{
+	}
+
+	ActorComponent::~ActorComponent(void) noexcept
+	{
+	}
+
 	const ActorComponentType ActorComponent::getActorComponentType(void) const noexcept
 	{
 		return _actorComponentType;
@@ -38,16 +48,6 @@ namespace ta
 	void ActorComponent::setComponentValid_(const bool value) noexcept
 	{
 		_componentValid = value;
-	}
-	
-	ActorComponent::ActorComponent(const ActorComponentType& actorComponentType) noexcept
-		: _actorComponentType(actorComponentType)
-		, _componentValid(false)
-	{
-	}
-
-	ActorComponent::~ActorComponent(void) noexcept
-	{
 	}
 }
 

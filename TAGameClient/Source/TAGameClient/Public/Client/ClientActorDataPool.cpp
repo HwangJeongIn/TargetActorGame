@@ -28,13 +28,19 @@ namespace ta
 		}
 
 		_actorPoolValues = new ClientActor[MaxActorDataPoolCapacity];
-		if (false == _moveComponentPool->allocatePoolFromInitializedCount<ClientActionActorComponent>())
+		if (false == _moveComponentPool->allocatePoolFromInitializedCount<ClientMoveActorComponent>())
 		{
 			TA_ASSERT_DEV(false, "비정상");
 			return false;
 		}
 
-		if (false == _actionComponentPool->allocatePoolFromInitializedCount<ClientAiActorComponent>())
+		if (false == _actionComponentPool->allocatePoolFromInitializedCount<ClientActionActorComponent>())
+		{
+			TA_ASSERT_DEV(false, "비정상");
+			return false;
+		}
+
+		if (false == _aiComponentPool->allocatePoolFromInitializedCount<ClientAiActorComponent>())
 		{
 			TA_ASSERT_DEV(false, "비정상");
 			return false;
@@ -83,28 +89,22 @@ namespace ta
 
 	ActorComponent* ClientActorDataPool::getActorComponent(const ActorKey& actorKey, const ActorComponentType componentType) noexcept
 	{
-		const uint32 index = actorKey.getKeyValue();
-		 
 		ActorType actorType = ActorType::Count;
 		uint32 relativeGroupIndex = 0;
 		if (false == getRelativeGroupIndexAndActorType(actorKey, actorType, relativeGroupIndex))
 		{
 			TA_ASSERT_DEV(false, "비정상적인 액터키입니다.");
-			return false;
+			return nullptr;
 		}
 		
-		_moveComponentPool->getActorComponent<ClientMoveActorComponent>(actorType, relativeGroupIndex);
-
 		switch (componentType)
 		{
 #define RETURN_COMPONENTS(Type, PoolName)																								\
 		case ActorComponentType::Type:																									\
 			{																															\
-				Client##Type##ActorComponent* indexPtr = static_cast<Client##Type##ActorComponent*>(PoolName);						\
-				return &indexPtr[index];																								\
+				return PoolName->getActorComponent<Client##Type##ActorComponent>(actorType, relativeGroupIndex);						\
 			}																															\
 			break;																														\
-
 
 			RETURN_COMPONENTS(Move, _moveComponentPool)
 			RETURN_COMPONENTS(Action, _actionComponentPool)

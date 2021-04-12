@@ -34,8 +34,9 @@ namespace ta
 
 		const ActorKey& getActorKey(void) const noexcept;
 		void setActorKey_(const ActorKey& actorKey) noexcept;
-		ActorType getActorType_(void) noexcept;
+		//ActorType getActorType_(void) noexcept;
 		ActorType getActorType(void) noexcept;
+		void setActorType_(const ActorType& actorType) noexcept;
 		
 		// 플레이어라면 항상 통신할 수 있음
 		bool isPlayer_(void) const noexcept;
@@ -111,13 +112,14 @@ namespace ta
 
 		void initializeComponents(const std::vector<ActorComponentType>& componentTypeList, const ActorType& actorType) noexcept;
 
-		void initializeComponentsAsDefaultActor(void) noexcept;
+		//void initializeComponentsAsDefaultActor(void) noexcept;
 		void initializeComponentsAsOwner(void) noexcept;
 		void initializeComponentsAsPlayer(void) noexcept;
 		void initializeComponentsAsControlledByPlayer(void) noexcept;
 
-		void initializeComponentsAsMonster(void) noexcept;
+		//void initializeComponentsAsMonster(void) noexcept;
 		void initializeComponentsAsNpc(void) noexcept;
+		void initializeComponentsAsObject(void) noexcept;
 	public:
 		// 풀에서 가지고 올때 사용하고 액터안에서 초기화할때는 사용되지 않는다.
 		std::vector<ActorComponentType> _componentTypeList;

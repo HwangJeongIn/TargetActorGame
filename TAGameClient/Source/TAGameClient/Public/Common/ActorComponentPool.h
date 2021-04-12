@@ -16,7 +16,7 @@ namespace ta
 	class ActorComponentPool
 	{
 	public:
-		ActorComponentPool(void) noexcept;
+		explicit ActorComponentPool(const ActorComponentType& actorComponentType) noexcept;
 		virtual ~ActorComponentPool(void) noexcept;
 
 		bool addComponentCountFromActorType(const ActorType& ownerActorType, const uint32& count) noexcept;
@@ -41,24 +41,32 @@ namespace ta
 			std::unordered_map<ActorType, ActorGroup>::const_iterator actorGroup = ActorDataGroups.find(targetActorType);
 			if (ActorDataGroups.end() == actorGroup)
 			{
-				TA_ASSERT_DEV(false, "비정상");
-				return false;
+				TA_LOG_DEV("해당 액터에 컴포넌트가 없습니다. ComponentType : %d, ActorType : %d"
+						   , static_cast<uint8>(_actorComponentType)
+						   , static_cast<uint8>(targetActorType));
+
+				return nullptr;
 			}
 
 			if (actorGroup->second._count <= relativeGroupIndex)
 			{
-				TA_ASSERT_DEV(false, "비정상적인 인덱스 입니다. ActorType : %d, Index : %d", static_cast<uint8>(targetActorType), relativeGroupIndex);
-				return false;
+				TA_ASSERT_DEV(false, "비정상적인 인덱스 입니다. ComponentType : %d, ActorType : %d, Index : %d"
+							  , static_cast<uint8>(_actorComponentType)
+							  , static_cast<uint8>(targetActorType)
+							  , relativeGroupIndex);
+
+				return nullptr;
 			}
 
 			std::unordered_map<ActorType, uint32>::const_iterator it = _startIndexMap.find(targetActorType);
 			if (_startIndexMap.end() == it)
 			{																																		
 				TA_ASSERT_DEV(false, "비정상");																										
-				return false;																														
+				return nullptr;
 			}
 
-			return static_cast<T*>(_actorComponents[it->second + relativeGroupIndex]);
+			T* indexPtr = static_cast<T*>(_actorComponents);
+			return &(indexPtr[it->second + relativeGroupIndex]);
 		}
 
 	private:
@@ -66,6 +74,7 @@ namespace ta
 
 	private:
 		bool _isValid;
+		const ActorComponentType _actorComponentType;
 		ActorComponent* _actorComponents;
 		uint32 _count;
 		std::unordered_map<ActorType, uint32> _startIndexMap;

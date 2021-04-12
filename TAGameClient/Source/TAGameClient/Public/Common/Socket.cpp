@@ -8,6 +8,7 @@
 #include "Common/ScopedLock.h"
 #include "Common/MessagePack.h"
 #include "Common/AllPacketCommon.h"
+#include "Common/ActorDataGroups.h"
 
 
 #ifdef _WIN32

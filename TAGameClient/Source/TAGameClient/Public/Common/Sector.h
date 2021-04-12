@@ -128,7 +128,5 @@ namespace ta
 		SectorKey _sectorKey;
 		// 성능 테스트 결과 vector보다 unordered_set가 더 좋다
 		std::unordered_set<ActorKey> _actors;
-		std::vector<ActorKey> _actors;
-
 	};
 }

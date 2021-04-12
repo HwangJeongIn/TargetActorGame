@@ -21,39 +21,32 @@ namespace ta
 
 	uint32 MaxActorDataPoolCapacity = MaxPlayerActorDataPoolCapacity + MaxNpcActorDataPoolCapacity + MaxObjectActorDataPoolCapacity;
 
-	TA_COMPILE_DEV(5 == static_cast<uint8>(ActorType::Count), "여기도 확인해주세요");
+	TA_COMPILE_DEV(4 == static_cast<uint8>(ActorType::Count), "여기도 확인해주세요");
 }
 
 
 namespace ta
 {
-	const std::vector<ActorComponentType> OwnerActorComponentList{};
-
-	//const std::vector<ActorComponentType> DefaultActor{ ActorComponentType::Move
-	//	, ActorComponentType::Action, ActorComponentType::Character };
-
-	const std::vector<ActorComponentType> PlayerActorComponentList{ ActorComponentType::Move
-		, ActorComponentType::Action, ActorComponentType::Character, ActorComponentType::Inventory };
+	//const std::vector<ActorComponentType> OwnerActorComponentList{};
 
 	//const std::vector<ActorComponentType> MonsterActor{ ActorComponentType::Move
 	//	, ActorComponentType::Action, ActorComponentType::Character, ActorComponentType::Ai };
 
-	const std::vector<ActorComponentType> NpcActorComponentList{ ActorComponentType::Move
-		, ActorComponentType::Action, ActorComponentType::Character, ActorComponentType::Ai };
-
-	const std::vector<ActorComponentType> ObjectActorComponentList{ ActorComponentType::Character };
-
 	//static ActorComponentType DefaultActorSet[] = { ActorComponentType::Move, ActorComponentType::Action };
 	//std::vector<ActorComponentType> DefaultActor(DefaultActorSet, DefaultActorSet + sizeof(DefaultActorSet) / sizeof(DefaultActorSet[0]));
 
+	const std::vector<ActorComponentType> PlayerActorComponentList{ ActorComponentType::Move
+	, ActorComponentType::Action, ActorComponentType::Character, ActorComponentType::Inventory };
+
+	const std::vector<ActorComponentType> NpcActorComponentList{ ActorComponentType::Move
+	, ActorComponentType::Action, ActorComponentType::Character, ActorComponentType::Ai };
+
+	const std::vector<ActorComponentType> ObjectActorComponentList{ ActorComponentType::Character };
 
 
 	const std::unordered_map<ActorType, ActorGroup> ActorDataGroups
 	{
-		//{ActorType::Owner, ActorGroup(OwnerActor, 1)}
-		//, {ActorType::Default, DefaultActor}
-		, {ActorType::Player, ActorGroup(PlayerActorComponentList, MaxPlayerActorDataPoolCapacity)}
-		//, {ActorType::Monster, MonsterActor}
+		{ActorType::Player, ActorGroup(PlayerActorComponentList, MaxPlayerActorDataPoolCapacity)}
 		, {ActorType::Npc, ActorGroup(NpcActorComponentList, MaxNpcActorDataPoolCapacity)}
 		, {ActorType::Object, ActorGroup(ObjectActorComponentList, MaxObjectActorDataPoolCapacity)}
 	};
