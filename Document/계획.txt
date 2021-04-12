@@ -8,8 +8,12 @@
 	 - interaction 기능 추가
 		- Looting) 아이템 줍기
 			- 아이템 월드 드롭 로직
-				- 같은 종류면 여러개라도 하나의 Mesh로 드롭, 다른종류면 종류별로 드롭
-				- 아이템마다 Icon Imange, Static Mesh 데이터가 존재
+				- 월드에 존재하는 섹터에 넣어주기
+				- 일단 채집가능 액터랑 똑같은 로직으로 처리하도록 설계하자
+				- 액터풀에서 플레이어액터, Npc액터, Object액터로 분리해야한다.
+				
+			- 같은 종류면 여러개라도 하나의 Mesh로 드롭, 다른종류면 종류별로 드롭
+			- 아이템마다 Icon Imange, Static Mesh 데이터가 존재
 				
 			- 아이템 루팅로직
 			- interaction UI
@@ -32,7 +36,10 @@
 	 - RPC통신에서 // Serialize, Deserialize 형식으로 구현 (현재 클래스 객체로 그대로 복사하는 형식)
 	 
 	 - IDL 컴파일러 수정(서버 <-> 쿼리서버 구조도 가능하도록 수정)
-			
+	
+	 - DB연동 // Table, SP, TRANSACTION
+		- 로그인시 DB Connection 되도록
+		- SP 사용할 수 있도록
 	
 	4월 15일 ~ 4월 21일
 	

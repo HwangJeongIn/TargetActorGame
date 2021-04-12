@@ -1,4 +1,4 @@
-#include "Common/ActorDataPool.h"
+﻿#include "Common/ActorDataPool.h"
 #include "Common/ScopedLock.h"
 #include "Common/CommonApp.h"
 #include "Common/CommonActorManager.h"
@@ -8,6 +8,8 @@
 #include "Common/CommonAiActorComponent.h"
 #include "Common/CommonCharacterActorComponent.h"
 #include "Common/CommonInventoryActorComponent.h"
+#include "Common/ActorComponentTypeList.h"
+#include "Common/ActorComponentPool.h"
 
 
 namespace ta
@@ -22,27 +24,43 @@ namespace ta
 
 	bool ActorDataPool::initialize(void) noexcept
 	{
-		_maxCount = MaxActorDataPoolCapacity;
 		_actorPoolValues = nullptr;
-		_moveComponentPoolValues = nullptr;
-		_actionComponentPoolValues = nullptr;
-		_aiComponentPoolValues = nullptr;
-		_characterComponentPoolValues = nullptr;
-		_inventoryComponentPoolValues = nullptr;
+		
+		_moveComponentPool = new ActorComponentPool;
+		_actionComponentPool = new ActorComponentPool;
+		_aiComponentPool = new ActorComponentPool;
+		_characterComponentPool = new ActorComponentPool;
+		_inventoryComponentPool = new ActorComponentPool;
 
 		TA_COMPILE_DEV(5 == static_cast<uint8>(ActorComponentType::Count), "여기도 추가해주세요");
+
+		if (false == initializeAllComponentCountFromActorType())
+		{
+			TA_ASSERT_DEV(false, "비정상입니다.");
+			return false;
+		}
 
 		return true;
 	}
 
 	bool ActorDataPool::open(void) noexcept
 	{
+		MaxPlayerActorDataPoolCapacity;
+		MaxNpcActorDataPoolCapacity;
+		MaxObjectActorDataPoolCapacity;
+
+		ActorType OwnerActorType = ActorType::Player;
+		uint32 ActorTypeCount = MaxPlayerActorDataPoolCapacity;
+
+#define OPEN_ACTORTYPE(OwnerActorType, ActorTypeCount)																		
+
+
 		_freeIndex.reserve(_maxCount -1);
 
 
 		// 0번인덱스 제외
 		CommonActor* actor = nullptr;
-		for (int32 index = _maxCount - 1; index >= 0; --index)
+		for (uint32 index = ActorTypeCount - 1; index >= 0; --index)
 		{
 			actor = getActor(index);
 			actor->setActorKey_(index);
@@ -71,7 +89,9 @@ namespace ta
 
 	void ActorDataPool::close(void) noexcept
 	{
-		_freeIndex.clear();
+		_playerFreeIndexes.clear();
+		_npcFreeIndexes.clear();
+		_objectFreeIndexes.clear();
 
 		// 클라 서버마다 있는 컴포넌트와 없는 컴포넌트가 있을 수 있음
 
@@ -80,29 +100,29 @@ namespace ta
 			delete[] _actorPoolValues;
 		}
 		
-		if (nullptr != _moveComponentPoolValues)
+		if (nullptr != _moveComponentPool)
 		{
-			delete[] _moveComponentPoolValues;
+			delete _moveComponentPool;
 		}
 		
-		if (nullptr != _actionComponentPoolValues)
+		if (nullptr != _actionComponentPool)
 		{
-			delete[] _actionComponentPoolValues;
+			delete _actionComponentPool;
 		}
 
-		if (nullptr != _aiComponentPoolValues)
+		if (nullptr != _aiComponentPool)
 		{
-			delete[] _aiComponentPoolValues;
+			delete _aiComponentPool;
 		}
 
-		if (nullptr != _characterComponentPoolValues)
+		if (nullptr != _characterComponentPool)
 		{
-			delete[] _characterComponentPoolValues;
+			delete _characterComponentPool;
 		}
 
-		if (nullptr != _inventoryComponentPoolValues)
+		if (nullptr != _inventoryComponentPool)
 		{
-			delete[] _inventoryComponentPoolValues;
+			delete _inventoryComponentPool;
 		}
 
 		TA_COMPILE_DEV(5 == static_cast<uint8>(ActorComponentType::Count), "여기도 추가해주세요");
@@ -279,6 +299,134 @@ namespace ta
 
 			TA_LOG_DEV("ActorKey : %d is %d , ", index, rv);
 		}
+	}
+
+	ActorType ActorDataPool::getActorType(const ActorKey& actorKey) noexcept
+	{
+		uint32 actorKeyValue = actorKey.getKeyValue();
+		if (MaxActorDataPoolCapacity <= actorKeyValue)
+		{
+			TA_ASSERT_DEV(false, "비정상적인 액터키입니다.");
+			return ActorType::Count;
+		}
+
+		if (MaxPlayerActorDataPoolCapacity <= actorKeyValue)
+		{
+			actorKeyValue -= MaxPlayerActorDataPoolCapacity;
+		}
+
+		if (MaxNpcActorDataPoolCapacity <= actorKeyValue)
+		{
+			actorKeyValue -= MaxNpcActorDataPoolCapacity;
+		}
+
+		// 들어올일 없다.
+		//if (MaxObjectActorDataPoolCapacity <= result)
+		//{
+		//	result -= MaxObjectActorDataPoolCapacity;
+		//}
+
+		return ActorType::Count;
+	}
+
+	const bool ActorDataPool::getRelativeGroupIndex(const ActorKey& actorKey, uint32& relativeGroupIndex) const noexcept
+	{
+		// 플레이어 => Npc => Object 순서대로 액터풀에 들어가있다.
+		// 각 그룹에서의 인덱스를 구해준다.
+		uint32 actorKeyValue = actorKey.getKeyValue();
+		if (MaxActorDataPoolCapacity <= actorKeyValue)
+		{
+			TA_ASSERT_DEV(false, "비정상적인 액터키입니다.");
+			return false;
+		}
+
+		if (MaxPlayerActorDataPoolCapacity <= actorKeyValue)
+		{
+			actorKeyValue -= MaxPlayerActorDataPoolCapacity;
+		}
+
+		if (MaxNpcActorDataPoolCapacity <= actorKeyValue)
+		{
+			actorKeyValue -= MaxNpcActorDataPoolCapacity;
+		}
+
+		// 들어올일 없다.
+		//if (MaxObjectActorDataPoolCapacity <= result)
+		//{
+		//	result -= MaxObjectActorDataPoolCapacity;
+		//}
+
+		relativeGroupIndex = actorKeyValue;
+
+		return true;
+	}
+
+	bool ActorDataPool::initializeAllComponentCountFromActorType(void) noexcept
+	{
+#define INITIALIZE_COMPONENT_COUNT(OwnerActorType)																								\
+																																				\
+		std::unordered_map<ActorType, ActorComponentGroupData>::const_iterator it = ActorComponentGroups.find(OwnerActorType);					\
+		if (ActorComponentGroups.end() == it)																									\
+		{																																		\
+			TA_ASSERT_DEV(false, "비정상");																										\
+			return false;																														\
+		}																																		\
+		const std::vector<ActorComponentType>& componentTypeList = it->second._componentTypeList;												\
+		const uint32 componentTypeCount = componentTypeList.size();																				\
+		for (uint32 index = 0; index < componentTypeCount; ++index)																				\
+		{																																		\
+			if (false == addComponentCountFromActorType(OwnerActorType, componentTypeList[index], it->second._countPerComponent))				\
+			{																																	\
+				TA_ASSERT_DEV(false, "비정상");																									\
+				return false;																													\
+			}																																	\
+		}																																		\
+
+
+		INITIALIZE_COMPONENT_COUNT(ActorType::Player)
+		INITIALIZE_COMPONENT_COUNT(ActorType::Npc)
+		INITIALIZE_COMPONENT_COUNT(ActorType::Object)
+
+		TA_COMPILE_DEV(5 == static_cast<uint8>(ActorType::Count), "여기도 확인해주세요");
+
+#undef INITIALIZE_COMPONENT_COUNT
+
+		return true;
+
+	}
+
+	bool ActorDataPool::addComponentCountFromActorType(const ActorType& ownerActorType, const ActorComponentType& actorComponentType, const uint32& count) noexcept
+	{
+		switch (actorComponentType)
+		{
+#define ADD_COMPONENT_COUNT(ComponentType, PoolName)													\
+			case ActorComponentType::ComponentType:														\
+				{																						\
+					if(false == PoolName->addComponentCountFromActorType(ownerActorType, count))		\
+					{																					\
+						TA_ASSERT_DEV(false, "비정상");													\
+						return false;																	\
+					}																					\
+				}																						\
+				break;																					\
+
+
+				ADD_COMPONENT_COUNT(Move, _moveComponentPool)
+				ADD_COMPONENT_COUNT(Action, _actionComponentPool)
+				ADD_COMPONENT_COUNT(Ai, _aiComponentPool)
+				ADD_COMPONENT_COUNT(Character, _characterComponentPool)
+				ADD_COMPONENT_COUNT(Inventory, _inventoryComponentPool)
+
+				TA_COMPILE_DEV(5 == static_cast<uint8>(ActorComponentType::Count), "여기도 추가해주세요");
+
+#undef INITIALIZE_COMPONENT_COUNT
+
+		default:
+			break;
+
+		}
+
+		return true;
 	}
 }
 

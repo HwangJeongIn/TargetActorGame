@@ -1,6 +1,7 @@
 ﻿#pragma once
 #include <functional>
 #include "Common/CommonTypeDefinition.h"
+#include "Common/CommonLog.h"
 
 
 
@@ -49,7 +50,6 @@ namespace ta
 		, Owner
 		, Player
 		, ControlledByPlayer
-		, Monster
 		, Npc
 		, Count
 	};
@@ -108,10 +108,16 @@ namespace ta
 	};
 }
 
-
 namespace ta
 {
-	constexpr uint32 MaxActorDataPoolCapacity = 100; //16384;//65536;
+	constexpr uint32 MaxPlayerActorDataPoolCapacity = 200;
+	constexpr uint32 MaxNpcActorDataPoolCapacity = 200;
+	constexpr uint32 MaxObjectActorDataPoolCapacity = 100;
+
+	constexpr uint32 MaxActorDataPoolCapacity = MaxPlayerActorDataPoolCapacity + MaxNpcActorDataPoolCapacity + MaxObjectActorDataPoolCapacity;
+
+	TA_COMPILE_DEV(5 == static_cast<uint8>(ActorType::Count), "여기도 확인해주세요");
+
 	constexpr uint32 MaxPacketBufferLength = 8192;
 	constexpr uint32 MaxStringPackBufferLength = 256;
 	constexpr uint32 MaxStringPathBufferLength = 512;

@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 #include "Common/CommonBase.h"
 #include "Common/CommonActor.h"
@@ -37,11 +37,14 @@ namespace ta
 	class CommonAiActorComponent;
 	class CommonCharacterActorComponent;
 	class CommonInventoryActorComponent;
+	class ActorComponentPool;
 }
+
+
 
 namespace ta
 {
-	class ActorDataPool : public Uncopyable, public Lockable
+	class ActorDataPool : public Uncopyable
 	{
 	public:
 		ActorDataPool(void) noexcept;
@@ -59,6 +62,7 @@ namespace ta
 		bool toPool(const ActorKey& actorKey, const bool forceTo = false) noexcept;
 		const bool isFull(void) noexcept;
 
+
 		virtual CommonActor* getActor(const ActorKey& actorKey) noexcept = 0;
 
 		uint32 getMaxCount(void) const noexcept;
@@ -67,21 +71,58 @@ namespace ta
 
 		void logTest(void) noexcept;
 
-	protected:
-		uint32 _maxCount;
+		ActorType getActorType(const ActorKey& actorKey) noexcept;
 
-		std::vector<uint32> _freeIndex;
+	protected:
+		const bool getRelativeGroupIndex(const ActorKey& actorKey, uint32& relativeGroupIndex) const noexcept;
+
+	private:
+		bool initializeAllComponentCountFromActorType(void) noexcept;
+		bool addComponentCountFromActorType(const ActorType& ownerActorType, const ActorComponentType& actorComponentType, const uint32& count) noexcept;
+
+	protected:
+		
+
+		LockableObject _playerFreeIndexesLock;
+		std::vector<uint32> _playerFreeIndexes;
+
+		LockableObject _npcFreeIndexesLock;
+		std::vector<uint32> _npcFreeIndexes;
+
+		LockableObject _objectFreeIndexesLock;
+		std::vector<uint32> _objectFreeIndexes;
 
 		// CommonActor인덱스와 Component 인덱스가 같다. 현재 사용하고 있는지는 CommonActor의 값을 보고 판단한다.
 		// 인덱스로 접근하면 안되네..
 		CommonActor* _actorPoolValues;
 
 		// ** 컴포넌트 관련 추가
-		CommonMoveActorComponent* _moveComponentPoolValues;
-		CommonActionActorComponent* _actionComponentPoolValues;
-		CommonAiActorComponent* _aiComponentPoolValues;
-		CommonCharacterActorComponent* _characterComponentPoolValues;
-		CommonInventoryActorComponent* _inventoryComponentPoolValues;
+		ActorComponentPool* _moveComponentPool;
+		ActorComponentPool* _actionComponentPool;
+		ActorComponentPool* _aiComponentPool;
+		ActorComponentPool* _characterComponentPool;
+		ActorComponentPool* _inventoryComponentPool;
+
+		//CommonMoveActorComponent*				_moveComponentPoolValues;
+		//uint32									_moveComponentPoolValuesCount;
+		//std::unordered_map<ActorType, uint32>	_moveComponentPoolValuesStartIndexMap;
+		//
+		//CommonActionActorComponent*				_actionComponentPoolValues;
+		//uint32									_actionComponentPoolValuesCount;
+		//std::unordered_map<ActorType, uint32>	_actionComponentPoolValuesStartIndexMap;
+		//
+		//CommonAiActorComponent*					_aiComponentPoolValues;
+		//uint32									_aiComponentPoolValuesCount;
+		//std::unordered_map<ActorType, uint32>	_aiComponentPoolValuesStartIndexMap;
+		//
+		//CommonCharacterActorComponent*			_characterComponentPoolValues;
+		//uint32									_characterComponentPoolValuesCount;
+		//std::unordered_map<ActorType, uint32>	_characterComponentPoolValuesStartIndexMap;
+		//
+		//CommonInventoryActorComponent*			_inventoryComponentPoolValues;
+		//uint32									_inventoryComponentPoolValuesCount;
+		//std::unordered_map<ActorType, uint32>	_inventoryComponentPoolValuesStartIndexMap;
+
 		TA_COMPILE_DEV(5 == static_cast<uint8>(ActorComponentType::Count), "여기도 추가해주세요");
 	};
 }
