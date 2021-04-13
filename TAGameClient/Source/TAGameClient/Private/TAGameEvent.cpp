@@ -196,8 +196,27 @@ bool TAGameEventSpawnActor::processEvent(TAGameEventProcessParameter& parameter)
 		TA_ASSERT_DEV(false, "character 게임데이터가 없습니다.");
 		return false;
 	}
+
+	if (false == characterGameData->_renderingGameDataKey.isValid())
+	{
+		TA_ASSERT_DEV(false, "비정상적인 RenderingGameDataKey 입니다.");
+		return false;
+	}
+
+	const ta::RenderingGameData* renderingGameData = ta::GetGameData<ta::RenderingGameData>(characterGameData->_renderingGameDataKey);
+	if (nullptr == renderingGameData)
+	{
+		TA_ASSERT_DEV(false, "RenderingGameData가 없습니다.");
+		return false;
+	}
 	
-	character->setSkeletalMeshAndAnimInstance(characterGameData->_skeletalMeshPath.c_str(), characterGameData->_animInstancePath.c_str());
+	if (ta::MeshType::Skeletal != renderingGameData->_meshType)
+	{
+		TA_ASSERT_DEV(false, "캐릭터액터인데 SkeletalMesh가 아닙니다.");
+		return false;
+	}
+
+	character->setSkeletalMeshAndAnimInstance(renderingGameData->_meshPath.c_str(), renderingGameData->_animInstancePath.c_str());
 
 	TA_LOG_DEV("<SpawnActor> => actorkey : %d, position : (%.1f, %.1f, %.1f), rotation : (%.1f, %.1f, %.1f), speed : %.1f", actorKey.getKeyValue()
 			   , position.X, position.Y, position.Z

@@ -141,14 +141,50 @@ namespace ta
 	class CommonActorDetailSpawnData
 	{
 	public:
-		explicit CommonActorDetailSpawnData(const Vector& position, const Vector& rotation, const GroupGameDataKey& groupKey) noexcept;
+		explicit CommonActorDetailSpawnData(const Vector& position, const Vector& rotation) noexcept;
 		virtual ~CommonActorDetailSpawnData(void) noexcept;
 
-		virtual bool isUser(void) const noexcept;
+		virtual const ActorType getActorType(void) const noexcept = 0;
 
 	public:
 		Vector _position;
 		Vector _rotation;
+	};
+}
+
+
+namespace ta
+{
+	class CommonActorDetailSpawnDataForObject : public CommonActorDetailSpawnData
+	{
+	public:
+		explicit CommonActorDetailSpawnDataForObject(const Vector& position
+													 , const Vector& rotation
+													 , const ItemGameDataKey& itemGameDataKey
+													 , const RenderingGameDataKey& renderingGameDataKey = RenderingGameDataKey()) noexcept;
+		virtual ~CommonActorDetailSpawnDataForObject(void) noexcept;
+
+		virtual const ActorType getActorType(void) const noexcept override;
+
+	public:
+		// 아이템이거나 아이템 기능 없는 오브젝트이거나..
+		ItemGameDataKey _itemGameDataKey;
+		RenderingGameDataKey _renderingGameDataKey;
+	};
+}
+
+
+namespace ta
+{
+	class CommonActorDetailSpawnDataForCharacter : public CommonActorDetailSpawnData
+	{
+	public:
+		explicit CommonActorDetailSpawnDataForCharacter(const Vector& position, const Vector& rotation, const GroupGameDataKey& groupKey) noexcept;
+		virtual ~CommonActorDetailSpawnDataForCharacter(void) noexcept;
+
+		virtual const ActorType getActorType(void) const noexcept override;
+
+	public:
 		GroupGameDataKey _groupGameDataKey;
 	};
 }
@@ -156,13 +192,13 @@ namespace ta
 
 namespace ta
 {
-	class CommonActorDetailSpawnDataForUser : public CommonActorDetailSpawnData
+	class CommonActorDetailSpawnDataForUser : public CommonActorDetailSpawnDataForCharacter
 	{
 	public:
 		explicit CommonActorDetailSpawnDataForUser(const Vector& position, const Vector& rotation, const GroupGameDataKey& groupKey) noexcept;
 		virtual ~CommonActorDetailSpawnDataForUser(void) noexcept;
 
-		virtual bool isUser(void) const noexcept override final;
+		virtual const ActorType getActorType(void) const noexcept override final;
 
 	public:
 		// DB에서 받은정보가 있으면 추가

@@ -170,8 +170,9 @@ namespace ta
 			CREATE_COMPONENT_DATA(Ai, CommonAiComponentData)
 			CREATE_COMPONENT_DATA(Character, CommonCharacterComponentData)
 			CREATE_COMPONENT_DATA(Inventory, CommonInventoryComponentData)
+			CREATE_COMPONENT_DATA(Object, CommonObjectComponentData)
 
-			TA_COMPILE_DEV(5 == static_cast<uint8>(ActorComponentType::Count), "여기도 추가해주세요");
+			TA_COMPILE_DEV(6 == static_cast<uint8>(ActorComponentType::Count), "여기도 추가해주세요");
 
 
 #undef CREATE_COMPONENT_DATA

@@ -9,7 +9,7 @@
 
 namespace ta
 {
-	TA_COMPILE_DEV(5 == static_cast<uint8>(ActorComponentType::Count), "여기도 추가해주세요");
+	TA_COMPILE_DEV(6 == static_cast<uint8>(ActorComponentType::Count), "여기도 추가해주세요");
 }
 
 // 패킷에도 사용되는 자료구조
@@ -113,7 +113,11 @@ namespace ta
 		ItemDetail _detail;
 		int32 _stackCount;
 	};
+}
 
+
+namespace ta
+{
 	//#pragma pack(push, 1)
 	class CommonInventoryComponentData : public ComponentData
 	{
@@ -129,5 +133,22 @@ namespace ta
 		ItemElementData _itemElementDataSet[MaxInventoryCapacity]; // 벡터 그대로 넘기면 안된다 구조 바뀌면 벡터에서 하나씩 빼서 serialize할 예정
 
 
+	};
+}
+
+
+namespace ta
+{
+//#pragma pack(push, 1)
+	class CommonObjectComponentData : public ComponentData
+	{
+	public:
+		explicit CommonObjectComponentData(void) noexcept;
+		virtual ~CommonObjectComponentData(void) noexcept;
+
+		void clear(void) noexcept;
+	public:
+		ItemGameDataKey _itemGameDataKey;
+		RenderingGameDataKey _renderingGameDataKey;
 	};
 }

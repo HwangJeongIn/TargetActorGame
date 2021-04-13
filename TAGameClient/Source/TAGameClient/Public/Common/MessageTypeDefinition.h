@@ -12,6 +12,7 @@ enum class MessageType : uint32
  AiComponentDataSTC,
  CharacterComponentDataSTC,
  InventoryComponentDataSTC,
+ ObjectComponentDataSTC,
  MoveActorSTC,
  ChangeHpSTC,
  KillActorSTC,

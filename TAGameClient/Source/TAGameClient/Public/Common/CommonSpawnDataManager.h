@@ -18,11 +18,6 @@ namespace ta
 }
 
 
-namespace ta
-{
-	class CommonActorDetailSpawnData;
-}
-
 
 namespace ta
 {

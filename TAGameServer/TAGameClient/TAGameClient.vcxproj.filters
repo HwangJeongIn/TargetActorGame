@@ -323,6 +323,12 @@
     <ClCompile Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\ActorDataGroups.cpp">
       <Filter>Common</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\CommonObjectActorComponent.cpp">
+      <Filter>Common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\TAGameClient\Source\TAGameClient\Public\Client\ClientObjectActorComponent.cpp">
+      <Filter>Client</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Common">
@@ -677,6 +683,12 @@
     </ClInclude>
     <ClInclude Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\ActorDataGroups.h">
       <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\CommonObjectActorComponent.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\TAGameClient\Source\TAGameClient\Public\Client\ClientObjectActorComponent.h">
+      <Filter>Client</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

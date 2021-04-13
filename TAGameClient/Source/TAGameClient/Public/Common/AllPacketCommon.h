@@ -241,6 +241,37 @@ InventoryComponentDataSTC::processInventoryComponentDataSTC
 
 namespace ta
 {
+	class ObjectComponentDataSTC : public MessagePack
+	{
+	public:
+		 explicit ObjectComponentDataSTC
+( const ActorKey& targetActorKey,
+ const CommonObjectComponentData& componentData) noexcept
+			: MessagePack(MessageType::ObjectComponentDataSTC),
+ 		 targetActorKey(targetActorKey),
+		 componentData(componentData)  {}
+		virtual ~ObjectComponentDataSTC(void) noexcept {}
+		static void processMessage(const ObjectComponentDataSTC* message) noexcept 
+{ 
+ObjectComponentDataSTC::processObjectComponentDataSTC
+( message->_networkActorKey,
+ message->targetActorKey,
+ message->componentData);
+}
+		static void processObjectComponentDataSTC
+( const ActorKey& networkActorKey,
+ const ActorKey& targetActorKey,
+ const CommonObjectComponentData& componentData) noexcept;
+
+	public:
+ 	 ActorKey targetActorKey;
+	 CommonObjectComponentData componentData; 
+	};
+}
+
+
+namespace ta
+{
 	class MoveActorSTC : public MessagePack
 	{
 	public:

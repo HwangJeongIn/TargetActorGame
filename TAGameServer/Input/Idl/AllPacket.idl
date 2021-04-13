@@ -20,6 +20,7 @@
 	AiComponentData(const ActorKey& targetActorKey, const CommonAiComponentData& componentData);
 	CharacterComponentData(const ActorKey& targetActorKey, const CommonCharacterComponentData& componentData);
 	InventoryComponentData(const ActorKey& targetActorKey, const CommonInventoryComponentData& componentData);
+	ObjectComponentData(const ActorKey& targetActorKey, const CommonObjectComponentData& componentData);
 	MoveActor(const ActorKey& targetActorKey, const Vector& position);
 	ChangeHp(const ActorKey& attacker, const ActorKey& targetActorKey, const float& hpValue);
 	KillActor(const ActorKey& targetActorKey);

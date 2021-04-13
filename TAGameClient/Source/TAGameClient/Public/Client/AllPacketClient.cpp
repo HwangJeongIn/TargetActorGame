@@ -91,6 +91,13 @@ namespace ta
 		GetActorManager()->initializeActorComponent(targetActorKey, &componentData, false);
 	}
 
+	void ObjectComponentDataSTC::processObjectComponentDataSTC(const ActorKey& networkActorKey,
+																	 const ActorKey& targetActorKey,
+																	 const CommonObjectComponentData& componentData) noexcept
+	{
+		GetActorManager()->initializeActorComponent(targetActorKey, &componentData, false);
+	}
+
 	void MoveActorSTC::processMoveActorSTC(const ActorKey& networkActorKey,
 										   const ActorKey& targetActorKey,
 										   const Vector& position) noexcept

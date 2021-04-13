@@ -10,7 +10,13 @@
 
 namespace ta
 {
-	typedef std::unordered_map<SpawnDataGroupKey, std::vector<CommonActorDetailSpawnData*>> SpawnDataGroupSet;
+	class CommonActorDetailSpawnDataForCharacter;
+}
+
+
+namespace ta
+{
+	typedef std::unordered_map<SpawnDataGroupKey, std::vector<CommonActorDetailSpawnDataForCharacter*>> SpawnDataGroupSet;
 
 	class ServerSpawnDataManager : public CommonSpawnDataManager
 	{

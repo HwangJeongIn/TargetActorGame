@@ -41,7 +41,7 @@ namespace ta
 	const std::vector<ActorComponentType> NpcActorComponentList{ ActorComponentType::Move
 	, ActorComponentType::Action, ActorComponentType::Character, ActorComponentType::Ai };
 
-	const std::vector<ActorComponentType> ObjectActorComponentList{ ActorComponentType::Character };
+	const std::vector<ActorComponentType> ObjectActorComponentList{ ActorComponentType::Object };
 
 
 	const std::unordered_map<ActorType, ActorGroup> ActorDataGroups

@@ -140,8 +140,8 @@ namespace ta
 
 		std::string _openDialog;
 
-		std::string _skeletalMeshPath;
-		std::string _animInstancePath;
+		RenderingGameDataKey _renderingGameDataKey;
+
 	};
 }
 
@@ -167,8 +167,35 @@ namespace ta
 		ItemGameDataKey _key;
 		ItemType _itemType;
 		std::string _name;
+
+		RenderingGameDataKey _renderingGameDataKey;
 		std::string _iconPath;
+
+	};
+}
+
+
+namespace ta
+{
+	class RenderingGameData : public GameData
+	{
+	public:
+		RenderingGameData(void) noexcept;
+		virtual ~RenderingGameData(void) noexcept;
+
+		static GameDataType getGameDataType(void) noexcept;
+
+		virtual bool loadXml(XmlNode* xmlNode) noexcept override final;
+
+	private:
+		virtual void clearDetail(void) noexcept override final;
+
+	public:
+		RenderingGameDataKey _key;
+
+		MeshType _meshType;
 		std::string _meshPath;
+		std::string _animInstancePath;
 
 	};
 }

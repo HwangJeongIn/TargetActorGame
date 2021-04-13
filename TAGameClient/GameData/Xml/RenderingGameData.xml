@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<Root>
+	<RenderingGameData Key="1" MeshType="Skeletal" MeshPath="SkeletalMesh'/Game/_Dev/_Characters/InfinityBladeWarriors/Character/CompleteCharacters/SK_CharM_Cardboard.SK_CharM_Cardboard'" AnimInstancePath="AnimBlueprint'/Game/_Dev/_Characters/Animations/TAAnimationBlueprint.TAAnimationBlueprint_C'" TestA="9999"/>
+	<RenderingGameData Key="2" MeshType="Skeletal" MeshPath="SkeletalMesh'/Game/_Characters/ParagonGideon/Characters/Heroes/Gideon/Meshes/Gideon.Gideon'" AnimInstancePath="AnimBlueprint'/Game/_Characters/ParagonGideon/Characters/Heroes/Gideon/TAGideonAnimationBlueprint.TAGideonAnimationBlueprint_C'" TestA="9999"/>
+	<RenderingGameData Key="3" MeshType="Skeletal" MeshPath="SkeletalMesh'/Game/_Characters/ParagonYin/Characters/Heroes/Yin/Meshes/Yin.Yin'" AnimInstancePath="AnimBlueprint'/Game/_Characters/ParagonYin/Characters/Heroes/Yin/TAYinAnimationBlueprint.TAYinAnimationBlueprint_C'" TestA="9999"/>
+	<RenderingGameData Key="4" MeshType="Skeletal" MeshPath="SkeletalMesh'/Game/_Characters/ParagonGreystone/Characters/Heroes/Greystone/Meshes/Greystone.Greystone'" AnimInstancePath="AnimBlueprint'/Game/_Characters/ParagonGreystone/Characters/Heroes/Greystone/TAGreystoneAnimationBlueprint.TAGreystoneAnimationBlueprint_C'" TestA="9999"/>
+	<RenderingGameData Key="5" MeshType="Skeletal" MeshPath="SkeletalMesh'/Game/_Dev/_Characters/InfinityBladeWarriors/Character/CompleteCharacters/SK_CharM_Cardboard.SK_CharM_Cardboard'" AnimInstancePath="AnimBlueprint'/Game/_Dev/_Characters/Animations/TAAnimationBlueprint.TAAnimationBlueprint_C'" TestA="9999"/>
+	<RenderingGameData Key="100" MeshType="Static" MeshPath="StaticMesh'/Game/_Dev/_Characters/InfinityBladeWarriors/Character/CompleteCharacters/BoxMan.BoxMan'" TestA="9999"/>
+</Root>

@@ -31,8 +31,9 @@ namespace ta
 		_aiComponentPool = new ActorComponentPool(ActorComponentType::Ai);
 		_characterComponentPool = new ActorComponentPool(ActorComponentType::Character);
 		_inventoryComponentPool = new ActorComponentPool(ActorComponentType::Inventory);
+		_objectComponentPool = new ActorComponentPool(ActorComponentType::Object);
 
-		TA_COMPILE_DEV(5 == static_cast<uint8>(ActorComponentType::Count), "여기도 추가해주세요");
+		TA_COMPILE_DEV(6 == static_cast<uint8>(ActorComponentType::Count), "여기도 추가해주세요");
 
 		if (false == initializeAllComponentCountFromActorType())
 		{
@@ -78,13 +79,9 @@ namespace ta
 
 			currentBoundary += currentActorTypeActorCount;
 		}
-
-
 		_playerFreeIndexes.pop_back();
 
-
-		// 0번 인덱스 바로 OwnerActor로 사용 //
-
+		// 0번 인덱스 바로 OwnerActor로 사용
 		// 액터매니저 객체자체는 초기화되어있는 상태 함수만 사용하니까 상관없을듯
 		CommonActor* ownerActor = g_app->getActorManager()->createOwnerActor();
 		g_app->getActorManager()->initializeOwnerFixedComponents(ownerActor->getActorKey());
@@ -130,7 +127,12 @@ namespace ta
 			delete _inventoryComponentPool;
 		}
 
-		TA_COMPILE_DEV(5 == static_cast<uint8>(ActorComponentType::Count), "여기도 추가해주세요");
+		if (nullptr != _objectComponentPool)
+		{
+			delete _objectComponentPool;
+		}
+
+		TA_COMPILE_DEV(6 == static_cast<uint8>(ActorComponentType::Count), "여기도 추가해주세요");
 	}
 
 	CommonActor* ActorDataPool::fromPool(const ActorKey& targetActorKey, CommonActorBasicSpawnData& spawnData) noexcept
@@ -428,8 +430,9 @@ namespace ta
 				ADD_COMPONENT_COUNT(Ai, _aiComponentPool)
 				ADD_COMPONENT_COUNT(Character, _characterComponentPool)
 				ADD_COMPONENT_COUNT(Inventory, _inventoryComponentPool)
+				ADD_COMPONENT_COUNT(Object, _objectComponentPool)
 
-				TA_COMPILE_DEV(5 == static_cast<uint8>(ActorComponentType::Count), "여기도 추가해주세요");
+				TA_COMPILE_DEV(6 == static_cast<uint8>(ActorComponentType::Count), "여기도 추가해주세요");
 
 #undef INITIALIZE_COMPONENT_COUNT
 

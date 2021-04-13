@@ -52,6 +52,7 @@
     <ClCompile Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\CommonInventoryActorSystem.cpp" />
     <ClCompile Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\CommonMoveActorComponent.cpp" />
     <ClCompile Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\CommonMoveActorSystem.cpp" />
+    <ClCompile Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\CommonObjectActorComponent.cpp" />
     <ClCompile Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\CommonSpawnDataManager.cpp" />
     <ClCompile Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\ComponentData.cpp" />
     <ClCompile Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\EndPoint.cpp" />
@@ -131,6 +132,7 @@
     <ClCompile Include="..\Source\Server\ServerInventoryActorSystem.cpp" />
     <ClCompile Include="..\Source\Server\ServerMoveActorComponent.cpp" />
     <ClCompile Include="..\Source\Server\ServerMoveActorSystem.cpp" />
+    <ClCompile Include="..\Source\Server\ServerObjectActorComponent.cpp" />
     <ClCompile Include="..\Source\Server\ServerSector.cpp" />
     <ClCompile Include="..\Source\Server\ServerSpawnDataManager.cpp" />
     <ClCompile Include="main.cpp" />
@@ -168,6 +170,7 @@
     <ClInclude Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\CommonLog.h" />
     <ClInclude Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\CommonMoveActorComponent.h" />
     <ClInclude Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\CommonMoveActorSystem.h" />
+    <ClInclude Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\CommonObjectActorComponent.h" />
     <ClInclude Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\CommonSpawnDataManager.h" />
     <ClInclude Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\CommonTypeDefinition.h" />
     <ClInclude Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\ComponentData.h" />
@@ -244,6 +247,7 @@
     <ClInclude Include="..\Source\Server\ServerInventoryActorSystem.h" />
     <ClInclude Include="..\Source\Server\ServerMoveActorComponent.h" />
     <ClInclude Include="..\Source\Server\ServerMoveActorSystem.h" />
+    <ClInclude Include="..\Source\Server\ServerObjectActorComponent.h" />
     <ClInclude Include="..\Source\Server\ServerSector.h" />
     <ClInclude Include="..\Source\Server\ServerSpawnDataManager.h" />
   </ItemGroup>

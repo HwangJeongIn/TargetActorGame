@@ -233,10 +233,11 @@ namespace ta
 				COMPONENTDATA_SEND(Ai)
 				COMPONENTDATA_SEND(Character)
 				COMPONENTDATA_SEND(Inventory)
+				COMPONENTDATA_SEND(Object)
 
 			default:
 					{
-						TA_COMPILE_DEV((5 == static_cast<uint8>(ActorComponentType::Count)), "여기도 추가해주세요")
+						TA_COMPILE_DEV((6 == static_cast<uint8>(ActorComponentType::Count)), "여기도 추가해주세요")
 					}
 					break;
 			}

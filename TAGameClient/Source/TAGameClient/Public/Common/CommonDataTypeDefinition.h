@@ -64,6 +64,7 @@ namespace ta
 		, Ai
 		, Character
 		, Inventory
+		, Object
 		, Count
 	};
 }
@@ -92,6 +93,7 @@ namespace ta
 		, AiGameData
 		, CharacterGameData
 		, ItemGameData
+		, RenderingGameData
 		, Count
 	};
 }
@@ -273,6 +275,17 @@ namespace ta
 		, Greet
 		, Gather
 		, Attack // 코드 정리되면 삭제될듯
+		, Count
+	};
+}
+
+
+namespace ta
+{
+	enum class MeshType : uint8
+	{
+		Skeletal = 0
+		, Static
 		, Count
 	};
 }

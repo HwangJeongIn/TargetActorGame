@@ -216,8 +216,7 @@ namespace ta
 		_agility = 0.0f;
 		_maxHp = 0.0f;
 		_openDialog.clear();
-		_skeletalMeshPath.clear();
-		_animInstancePath.clear();
+		_renderingGameDataKey.clear();
 	}
 
 	bool CharacterGameData::loadXml(XmlNode* xmlNode) noexcept
@@ -319,56 +318,16 @@ namespace ta
 		}
 
 		{
-			const std::string* value = xmlNode->getAttribute("SkeletalMeshPath");
+			const std::string* value = xmlNode->getAttribute("RenderingGameDataKey");
 			if (nullptr == value)
 			{
-				TA_ASSERT_DEV(false, "SkeletalMeshPath 로드 실패");
+				TA_ASSERT_DEV(false, "RenderingGameDataKey 로드 실패");
 				return false;
 			}
 
-			std::vector<std::string> splitedStrings;
-			Split(*value, "'", splitedStrings);
-			const uint32 count = splitedStrings.size();
-			if (1 == count)
-			{
-				_skeletalMeshPath = splitedStrings[0];
-			}
-			else if (4 == count)
-			{
-				_skeletalMeshPath = splitedStrings[2];
-			}
-			else
-			{
-				TA_ASSERT_DEV(false, "SkeletalMeshPath 로드 실패");
-				return false;
-			}
+			_renderingGameDataKey = FromStringCast<RenderingGameDataKeyType>(*value);
 		}
 
-		{
-			const std::string* value = xmlNode->getAttribute("AnimInstancePath");
-			if (nullptr == value)
-			{
-				TA_ASSERT_DEV(false, "AnimInstancePath 로드 실패");
-				return false;
-			}
-
-			std::vector<std::string> splitedStrings;
-			Split(*value, "'", splitedStrings);
-			const uint32 count = splitedStrings.size();
-			if (1 == count)
-			{
-				_animInstancePath = splitedStrings[0];
-			}
-			else if (4 == count)
-			{
-				_animInstancePath = splitedStrings[2];
-			}
-			else
-			{
-				TA_ASSERT_DEV(false, "SkeletalMeshPath 로드 실패");
-				return false;
-			}
-		}
 		return true;
 	}
 }
@@ -393,6 +352,7 @@ namespace ta
 	{
 		_key.clear();
 		_itemType = ItemType::Count;
+		_renderingGameDataKey.clear();
 	}
 
 	bool ItemGameData::loadXml(XmlNode* xmlNode) noexcept
@@ -435,18 +395,18 @@ namespace ta
 			}
 		}
 
-		// meshPath
+		
 		{
-			const std::string* value = xmlNode->getAttribute("MeshPath");
+			const std::string* value = xmlNode->getAttribute("RenderingGameDataKey");
 			if (nullptr == value)
 			{
-				TA_LOG_DEV("MeshPath 존재 X");
+				TA_ASSERT_DEV(false, "RenderingGameDataKey 로드 실패");
+				return false;
 			}
-			else
-			{
-				_meshPath = *value;
-			}
+
+			_renderingGameDataKey = FromStringCast<RenderingGameDataKeyType>(*value);
 		}
+		
 
 		return true;
 	}
@@ -454,5 +414,105 @@ namespace ta
 	const ItemType ItemGameData::getItemType(void) const noexcept
 	{
 		return _itemType;
+	}
+}
+
+
+namespace ta
+{
+	RenderingGameData::RenderingGameData(void) noexcept
+	{
+	}
+
+	RenderingGameData::~RenderingGameData(void) noexcept
+	{
+	}
+
+	GameDataType RenderingGameData::getGameDataType(void) noexcept
+	{
+		return GameDataType::RenderingGameData;
+	}
+
+	bool RenderingGameData::loadXml(XmlNode* xmlNode) noexcept
+	{
+		{
+			const std::string* value = xmlNode->getAttribute("MeshType");
+			if (nullptr == value)
+			{
+				TA_ASSERT_DEV(false, "MeshType 로드 실패");
+				return false;
+			}
+
+			_meshType = ConvertStringToEnum<MeshType>(*value);
+			if (MeshType::Count == _meshType)
+			{
+				TA_ASSERT_DEV(false, "MeshType 로드 실패 %s", ToTstring(*value).c_str());
+				return false;
+			}
+		}
+
+
+		{
+			const std::string* value = xmlNode->getAttribute("MeshPath");
+			if (nullptr == value)
+			{
+				TA_ASSERT_DEV(false, "MeshPath 로드 실패");
+				return false;
+			}
+
+			std::vector<std::string> splitedStrings;
+			Split(*value, "'", splitedStrings);
+			const uint32 count = splitedStrings.size();
+			if (1 == count)
+			{
+				_meshPath = splitedStrings[0];
+			}
+			else if (4 == count)
+			{
+				_meshPath = splitedStrings[2];
+			}
+			else
+			{
+				TA_ASSERT_DEV(false, "MeshPath 로드 실패");
+				return false;
+			}
+		}
+		
+		if(MeshType::Skeletal == _meshType)
+		{
+			const std::string* value = xmlNode->getAttribute("AnimInstancePath");
+			if (nullptr == value)
+			{
+				TA_ASSERT_DEV(false, "AnimInstancePath 로드 실패");
+				return false;
+			}
+
+			std::vector<std::string> splitedStrings;
+			Split(*value, "'", splitedStrings);
+			const uint32 count = splitedStrings.size();
+			if (1 == count)
+			{
+				_animInstancePath = splitedStrings[0];
+			}
+			else if (4 == count)
+			{
+				_animInstancePath = splitedStrings[2];
+			}
+			else
+			{
+				TA_ASSERT_DEV(false, "AnimInstancePath 로드 실패");
+				return false;
+			}
+		}
+
+		return true;
+	}
+
+	void RenderingGameData::clearDetail(void) noexcept
+	{
+		_key.clear();
+		_meshType = MeshType::Count;
+		_meshPath.clear();
+		_animInstancePath.clear();
 	}
 }

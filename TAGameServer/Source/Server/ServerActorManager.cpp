@@ -87,7 +87,7 @@ namespace ta
     //    return newActor;
     //}
 
-    CommonActor* ServerActorManager::createActorAndInitializeFromSpawnData(const CommonActorDetailSpawnData& detailSpawnData) noexcept
+    CommonActor* ServerActorManager::createCharacterActorAndInitializeComponentsFromSpawnData(const CommonActorDetailSpawnDataForCharacter& detailSpawnData) noexcept
     {
         const GroupGameData* groupGameData = GetGameData<GroupGameData>(detailSpawnData._groupGameDataKey);
         if (nullptr == groupGameData)
@@ -236,17 +236,38 @@ namespace ta
             return false;
         }
 
-        if (false == detailSpawnData._groupGameDataKey.isValid())
+        const ActorType spawnDataActorType = detailSpawnData.getActorType();
+        const GroupGameData* groupGameData = nullptr;
+        switch (spawnDataActorType)
         {
-            TA_ASSERT_DEV(false, "비정상입니다.");
-            return false;
-        }
+        case ActorType::Player:
+        case ActorType::Npc:
+            {
+                const CommonActorDetailSpawnDataForCharacter& temp = static_cast<const CommonActorDetailSpawnDataForCharacter&>(detailSpawnData);
+                if (false == temp._groupGameDataKey.isValid())
+                {
+                    TA_ASSERT_DEV(false, "비정상입니다.");
+                    return false;
+                }
 
-        const GroupGameData* groupGameData = GetGameData<GroupGameData>(detailSpawnData._groupGameDataKey);
-        if (nullptr == groupGameData)
-        {
-            TA_ASSERT_DEV(false, "데이터가 없습니다. GroupGameDataKey : %d", detailSpawnData._groupGameDataKey.getKeyValue());
-            return false;
+                groupGameData = GetGameData<GroupGameData>(temp._groupGameDataKey);
+                if (nullptr == groupGameData)
+                {
+                    TA_ASSERT_DEV(false, "데이터가 없습니다. GroupGameDataKey : %d", temp._groupGameDataKey.getKeyValue());
+                    return false;
+                }
+            }
+            break;
+        case ActorType::Object:
+            {
+                __noop;
+            }
+            break;
+        default:
+            {
+                TA_COMPILE_DEV(4 == static_cast<uint8>(ActorType::Count), "여기도 추가해주세요");
+            }
+            break;
         }
 
         ActorType actorType = serverActor->getActorType();
@@ -335,7 +356,7 @@ namespace ta
                 break;
             case ActorComponentType::Inventory:
                 {
-                    if (false == detailSpawnData.isUser())
+                    if (ActorType::Player != spawnDataActorType)
                     {
                         TA_ASSERT_DEV(false, "비정상입니다.");
                         return false;
@@ -366,9 +387,29 @@ namespace ta
                     }
                 }
                 break;
+            case ActorComponentType::Object:
+                {
+                    if (ActorType::Object != spawnDataActorType)
+                    {
+                        TA_ASSERT_DEV(false, "비정상입니다.");
+                        return false;
+                    }
+
+                    const CommonActorDetailSpawnDataForObject& temp = static_cast<const CommonActorDetailSpawnDataForObject&>(detailSpawnData);
+
+                    CommonObjectComponentData data;
+                    data._itemGameDataKey = temp._itemGameDataKey;
+                    data._renderingGameDataKey = temp._renderingGameDataKey;
+                    if (false == initializeActorComponent(targetActorKey, &data, false))
+                    {
+                        TA_ASSERT_DEV(false, "비정상입니다.");
+                        return false;
+                    }
+                }
+                break;
             default:
                 {
-                    TA_COMPILE_DEV((5 == static_cast<uint8>(ActorComponentType::Count)), "여기도 추가해주세요")
+                    TA_COMPILE_DEV((6 == static_cast<uint8>(ActorComponentType::Count)), "여기도 추가해주세요")
                 }
                 break;
             }

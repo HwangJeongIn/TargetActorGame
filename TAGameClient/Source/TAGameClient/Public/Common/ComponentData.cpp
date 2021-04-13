@@ -114,8 +114,11 @@ namespace ta
 		_detail.clear_();
 		_stackCount = 0;
 	}
+}
 
 
+namespace ta
+{
 	CommonInventoryComponentData::CommonInventoryComponentData(void) noexcept
 		: ComponentData(ActorComponentType::Inventory)
 	{
@@ -131,5 +134,25 @@ namespace ta
 		_itemSetType = ItemSetType::Count;
 		_capacity = 0;
 		//_itemElementDataSet.clear();
+	}
+}
+
+
+namespace ta
+{
+	CommonObjectComponentData::CommonObjectComponentData(void) noexcept
+		: ComponentData(ActorComponentType::Object)
+	{
+		clear();
+	}
+
+	CommonObjectComponentData::~CommonObjectComponentData(void) noexcept
+	{
+	}
+
+	void CommonObjectComponentData::clear(void) noexcept
+	{
+		_itemGameDataKey.clear();
+		_renderingGameDataKey.clear();
 	}
 }

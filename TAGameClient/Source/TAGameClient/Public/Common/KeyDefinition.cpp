@@ -73,5 +73,6 @@ KEY_DEFINITION(MoveGameDataKey, int32, -1)
 KEY_DEFINITION(AiGameDataKey, int32, -1)
 KEY_DEFINITION(CharacterGameDataKey, int32, -1)
 KEY_DEFINITION(ItemGameDataKey, int32, -1)
+KEY_DEFINITION(RenderingGameDataKey, int32, -1)
 																		 
 #undef KEY_DEFINITION

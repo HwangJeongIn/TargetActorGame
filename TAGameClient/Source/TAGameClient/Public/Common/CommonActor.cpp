@@ -468,10 +468,9 @@ namespace ta
 
 namespace ta
 {
-	CommonActorDetailSpawnData::CommonActorDetailSpawnData(const Vector& position, const Vector& rotation, const GroupGameDataKey& groupKey) noexcept
+	CommonActorDetailSpawnData::CommonActorDetailSpawnData(const Vector& position, const Vector& rotation) noexcept
 		: _position(position)
 		, _rotation(rotation)
-		, _groupGameDataKey(groupKey)
 	{
 
 	}
@@ -479,10 +478,47 @@ namespace ta
 	CommonActorDetailSpawnData::~CommonActorDetailSpawnData(void) noexcept
 	{
 	}
+}
 
-	bool CommonActorDetailSpawnData::isUser(void) const noexcept
+
+namespace ta
+{
+	CommonActorDetailSpawnDataForObject::CommonActorDetailSpawnDataForObject(const Vector& position
+																			 , const Vector& rotation
+																			 , const ItemGameDataKey& itemGameDataKey
+																			 , const RenderingGameDataKey& renderingGameDataKey) noexcept
+		: CommonActorDetailSpawnData(position, rotation)
+		, _itemGameDataKey(itemGameDataKey)
+		, _renderingGameDataKey(renderingGameDataKey)
 	{
-		return false;
+	}
+
+	CommonActorDetailSpawnDataForObject::~CommonActorDetailSpawnDataForObject(void) noexcept
+	{
+	}
+
+	const ActorType CommonActorDetailSpawnDataForObject::getActorType(void) const noexcept
+	{
+		return ActorType::Object;
+	}
+}
+
+
+namespace ta
+{
+	CommonActorDetailSpawnDataForCharacter::CommonActorDetailSpawnDataForCharacter(const Vector& position, const Vector& rotation, const GroupGameDataKey& groupKey) noexcept
+		: CommonActorDetailSpawnData(position, rotation)
+		, _groupGameDataKey(groupKey)
+	{
+	}
+
+	CommonActorDetailSpawnDataForCharacter::~CommonActorDetailSpawnDataForCharacter(void) noexcept
+	{
+	}
+
+	const ActorType CommonActorDetailSpawnDataForCharacter::getActorType(void) const noexcept
+	{
+		return ActorType::Npc;
 	}
 }
 
@@ -490,7 +526,7 @@ namespace ta
 namespace ta
 {
 	CommonActorDetailSpawnDataForUser::CommonActorDetailSpawnDataForUser(const Vector& position, const Vector& rotation, const GroupGameDataKey& groupKey) noexcept
-		: CommonActorDetailSpawnData(position, rotation, groupKey)
+		: CommonActorDetailSpawnDataForCharacter(position, rotation, groupKey)
 	{
 	}
 
@@ -498,8 +534,8 @@ namespace ta
 	{
 	}
 
-	bool CommonActorDetailSpawnDataForUser::isUser(void) const noexcept
+	const ActorType CommonActorDetailSpawnDataForUser::getActorType(void) const noexcept
 	{
-		return true;
+		return ActorType::Player;
 	}
 }

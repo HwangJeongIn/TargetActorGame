@@ -7,6 +7,7 @@
 #include "Server/ServerAiActorComponent.h"
 #include "Server/ServerCharacterActorComponent.h"
 #include "Server/ServerInventoryActorComponent.h"
+#include "Server/ServerObjectActorComponent.h"
 
 
 namespace ta
@@ -58,7 +59,13 @@ namespace ta
 			return false;
 		}
 
-		TA_COMPILE_DEV(5 == static_cast<uint8>(ActorComponentType::Count), "여기도 추가해주세요");
+		if (false == _objectComponentPool->allocatePoolFromInitializedCount<ServerObjectActorComponent>())
+		{
+			TA_ASSERT_DEV(false, "비정상");
+			return false;
+		}
+
+		TA_COMPILE_DEV(6 == static_cast<uint8>(ActorComponentType::Count), "여기도 추가해주세요");
 
 		return true;
 	}
@@ -111,6 +118,7 @@ namespace ta
 			RETURN_COMPONENTS(Ai, _aiComponentPool)
 			RETURN_COMPONENTS(Character, _characterComponentPool)
 			RETURN_COMPONENTS(Inventory, _inventoryComponentPool)
+			RETURN_COMPONENTS(Object, _objectComponentPool)
 
 #undef RETURN_COMPONENTS
 
@@ -125,7 +133,7 @@ namespace ta
 
 		}
 
-		TA_COMPILE_DEV(5 == static_cast<uint8>(ActorComponentType::Count), "여기도 추가해주세요");
+		TA_COMPILE_DEV(6 == static_cast<uint8>(ActorComponentType::Count), "여기도 추가해주세요");
 
 		return nullptr;
 	}

@@ -123,7 +123,7 @@ namespace ta
 		
 		hash_value fileNameHash = ComputeHash(fileName);
 
-		std::pair<SpawnDataGroupKey, std::vector<CommonActorDetailSpawnData*>> spawnDataGroupPair;
+		std::pair<SpawnDataGroupKey, std::vector<CommonActorDetailSpawnDataForCharacter*>> spawnDataGroupPair;
 		spawnDataGroupPair.first = fileNameHash;
 
 		const uint32 childElementCount = rootNode.getChildElementCount();
@@ -160,7 +160,7 @@ namespace ta
 				}
 			}
 
-			CommonActorDetailSpawnData* spawnData = new CommonActorDetailSpawnData(position, rotation, groupGameDataKey);
+			CommonActorDetailSpawnDataForCharacter* spawnData = new CommonActorDetailSpawnDataForCharacter(position, rotation, groupGameDataKey);
 			spawnDataGroupPair.second.push_back(spawnData);
 		}
 
@@ -242,7 +242,7 @@ namespace ta
 			const uint32 spawnDataCount = spawnDataGroupSetIt->second.size();
 			for (uint32 spawnDataIndex = 0; spawnDataIndex < spawnDataCount; ++spawnDataIndex)
 			{
-				if (nullptr == GetActorManager()->createActorAndInitializeFromSpawnData(*spawnDataGroupSetIt->second[spawnDataIndex]))
+				if (nullptr == GetActorManager()->createCharacterActorAndInitializeComponentsFromSpawnData(*spawnDataGroupSetIt->second[spawnDataIndex]))
 				{
 					TA_ASSERT_DEV(false, "비정상입니다.");
 					return false;

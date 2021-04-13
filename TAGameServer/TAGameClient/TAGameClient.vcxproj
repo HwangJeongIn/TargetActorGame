@@ -167,6 +167,7 @@
     <ClCompile Include="..\..\TAGameClient\Source\TAGameClient\Public\Client\ClientInventoryActorSystem.cpp" />
     <ClCompile Include="..\..\TAGameClient\Source\TAGameClient\Public\Client\ClientMoveActorComponent.cpp" />
     <ClCompile Include="..\..\TAGameClient\Source\TAGameClient\Public\Client\ClientMoveActorSystem.cpp" />
+    <ClCompile Include="..\..\TAGameClient\Source\TAGameClient\Public\Client\ClientObjectActorComponent.cpp" />
     <ClCompile Include="..\..\TAGameClient\Source\TAGameClient\Public\Client\ClientSector.cpp" />
     <ClCompile Include="..\..\TAGameClient\Source\TAGameClient\Public\Client\ClientSpawnDataManager.cpp" />
     <ClCompile Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\ActorComponent.cpp" />
@@ -197,6 +198,7 @@
     <ClCompile Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\CommonInventoryActorSystem.cpp" />
     <ClCompile Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\CommonMoveActorComponent.cpp" />
     <ClCompile Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\CommonMoveActorSystem.cpp" />
+    <ClCompile Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\CommonObjectActorComponent.cpp" />
     <ClCompile Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\ComponentData.cpp" />
     <ClCompile Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\EndPoint.cpp" />
     <ClCompile Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\EnumUtility.cpp" />
@@ -277,6 +279,7 @@
     <ClInclude Include="..\..\TAGameClient\Source\TAGameClient\Public\Client\ClientInventoryActorSystem.h" />
     <ClInclude Include="..\..\TAGameClient\Source\TAGameClient\Public\Client\ClientMoveActorComponent.h" />
     <ClInclude Include="..\..\TAGameClient\Source\TAGameClient\Public\Client\ClientMoveActorSystem.h" />
+    <ClInclude Include="..\..\TAGameClient\Source\TAGameClient\Public\Client\ClientObjectActorComponent.h" />
     <ClInclude Include="..\..\TAGameClient\Source\TAGameClient\Public\Client\ClientSector.h" />
     <ClInclude Include="..\..\TAGameClient\Source\TAGameClient\Public\Client\ClientSpawnDataManager.h" />
     <ClInclude Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\ActorComponent.h" />
@@ -312,6 +315,7 @@
     <ClInclude Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\CommonLog.h" />
     <ClInclude Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\CommonMoveActorComponent.h" />
     <ClInclude Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\CommonMoveActorSystem.h" />
+    <ClInclude Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\CommonObjectActorComponent.h" />
     <ClInclude Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\CommonTypeDefinition.h" />
     <ClInclude Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\ComponentData.h" />
     <ClInclude Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\EndPoint.h" />

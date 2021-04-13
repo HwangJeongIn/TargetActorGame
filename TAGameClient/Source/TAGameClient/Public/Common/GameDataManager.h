@@ -51,8 +51,9 @@ namespace ta
 		DECLARE_GAMEDATA(AiGameData)
 		DECLARE_GAMEDATA(CharacterGameData)
 		DECLARE_GAMEDATA(ItemGameData)
+		DECLARE_GAMEDATA(RenderingGameData)
 
-		TA_COMPILE_DEV(5 == static_cast<uint8>(GameDataType::Count), "여기도 확인해주세요")
+		TA_COMPILE_DEV(6 == static_cast<uint8>(GameDataType::Count), "여기도 확인해주세요")
 
 #undef DECLARE_GAMEDATA
 	};

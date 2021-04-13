@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 #include "Common/ComponentData.h"
 
@@ -6,7 +6,7 @@
 namespace ta
 {
 	// 여기 일단 사용안해서 그냥 갱신만 해줬음
-	TA_COMPILE_DEV(5 == static_cast<uint8>(ActorComponentType::Count), "여기도 추가해주세요");
+	TA_COMPILE_DEV(6 == static_cast<uint8>(ActorComponentType::Count), "여기도 추가해주세요");
 }
 
 namespace ta

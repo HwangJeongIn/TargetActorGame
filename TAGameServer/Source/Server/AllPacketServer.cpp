@@ -96,6 +96,13 @@ namespace ta
 		__noop;
 	}
 
+	void ObjectComponentDataSTC::processObjectComponentDataSTC(const ActorKey& networkActorKey,
+															   const ActorKey& targetActorKey,
+															   const CommonObjectComponentData& componentData) noexcept
+	{
+		__noop;
+	}
+
 	void MoveActorSTC::processMoveActorSTC(const ActorKey& networkActorKey,
 										   const ActorKey& targetActorKey,
 										   const Vector& position) noexcept

@@ -20,8 +20,9 @@ namespace ta
 		, {"AiGameData", GameDataType::AiGameData}
 		, {"CharacterGameData", GameDataType::CharacterGameData}
 		, {"ItemGameData", GameDataType::ItemGameData}
+		, {"RenderingGameData", GameDataType::RenderingGameData}
 	};
-	TA_COMPILE_DEV(5 == static_cast<uint8>(GameDataType::Count), "여기도 확인해주세요");
+	TA_COMPILE_DEV(6 == static_cast<uint8>(GameDataType::Count), "여기도 확인해주세요");
 
 
 	const std::unordered_map<std::string, AiClassType> AiClassTypeConverter
@@ -79,6 +80,14 @@ namespace ta
 	TA_COMPILE_DEV(4 == static_cast<uint8>(InteractionType::Count), "여기도 확인해주세요");
 
 
+	const std::unordered_map<std::string, MeshType> MeshTypeConverter
+	{
+		 { "Skeletal", MeshType::Skeletal }
+		,{ "Static", MeshType::Static }
+	};
+	TA_COMPILE_DEV(2 == static_cast<uint8>(MeshType::Count), "여기도 확인해주세요");
+
+
 
 #define CONVERT_FUNCTION_DEFINITION(EnumTypeName)											 \
 																							 \
@@ -119,6 +128,7 @@ namespace ta
 	CONVERT_FUNCTION_DEFINITION(ItemType)
 	CONVERT_FUNCTION_DEFINITION(TADataType)
 	CONVERT_FUNCTION_DEFINITION(InteractionType)
+	CONVERT_FUNCTION_DEFINITION(MeshType)
 
 
 

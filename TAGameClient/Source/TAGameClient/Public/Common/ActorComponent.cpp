@@ -33,8 +33,8 @@ namespace ta
 	{
 		if (nullptr == owner)
 		{
-			TA_ASSERT_DEV(false, "널포인터입니다.")
-				return;
+			TA_ASSERT_DEV(false, "널포인터입니다.");
+			return;
 		}
 
 		_owner = owner;

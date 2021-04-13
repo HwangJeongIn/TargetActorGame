@@ -65,6 +65,7 @@ KEY_DECLARATION(MoveGameDataKey, int32, -1)
 KEY_DECLARATION(AiGameDataKey, int32, -1)
 KEY_DECLARATION(CharacterGameDataKey, int32, -1)
 KEY_DECLARATION(ItemGameDataKey, int32, -1)
+KEY_DECLARATION(RenderingGameDataKey, int32, -1)
 
 
 

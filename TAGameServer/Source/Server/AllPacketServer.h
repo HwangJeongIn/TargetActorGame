@@ -219,6 +219,33 @@ namespace ta
 
 namespace ta
 {
+	static void SendObjectComponentDataSTC
+( const ActorKey& networkActorKey,
+ const ActorKey& targetActorKey,
+ const CommonObjectComponentData& componentData)
+	{
+		ObjectComponentDataSTC message
+( targetActorKey,
+ componentData);
+		message._length = sizeof(ObjectComponentDataSTC);
+		message._networkActorKey = networkActorKey;
+		CommonActor* target = GetActorManager()->getActor(networkActorKey);
+		if(nullptr == target)			
+		{
+			return;
+		}
+		Socket* network = target->getNetwork_();
+		if(nullptr == network)			
+		{
+			return;
+		}
+		network->sendOverlapped(&message);
+	}
+}
+
+
+namespace ta
+{
 	static void SendMoveActorSTC
 ( const ActorKey& networkActorKey,
  const ActorKey& targetActorKey,
