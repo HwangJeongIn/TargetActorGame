@@ -5,7 +5,7 @@
 #include "Common/CommonBase.h"
 #include "Common/KeyDefinition.h"
 #include "GameFramework/Character.h"
-#include "TAPawn.h"
+#include "TAActor.h"
 #include "TACharacter.generated.h"
 
 
@@ -19,7 +19,7 @@ namespace ta
 
 
 UCLASS()
-class TAGAMECLIENT_API ATACharacter : public ACharacter
+class TAGAMECLIENT_API ATACharacter : public ACharacter, public TAActor
 {
 	GENERATED_BODY()
 
@@ -46,11 +46,6 @@ public:
 	UFUNCTION()
 	void onAnimInstanceAssetLoadCompleted() noexcept;
 
-	void resetActorKey(void) noexcept;
-	bool setActorKey(const ta::ActorKey& actorKey) noexcept;
-	const ta::ActorKey& getActorKey(void) const noexcept;
-	ta::ClientActor* getActorFromActorManager(void) const noexcept;
-
 private:
 	void setDeadAnimation(void) noexcept;
 
@@ -65,8 +60,6 @@ public:
 	UTAAnimInstance* _animInstance;
 
 private:
-
-	ta::ActorKey _actorKey;
 
 	UPROPERTY()
 	float _characterHalfHeight;

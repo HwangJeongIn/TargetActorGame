@@ -121,9 +121,17 @@ void ATAPlayerController::setDialogVisibility(const bool isVisible, const bool i
 bool ATAPlayerController::openDialog(const ta::ActorKey& targetActorKey) noexcept
 {
 	// 검증
-	TWeakObjectPtr<ATACharacter> targetActor = TAGetTAActor(targetActorKey);
+	TWeakObjectPtr<AActor> targetActor = TAGetTAActor(targetActorKey);
 	if (false == targetActor.IsValid())
 	{
+		TA_ASSERT_DEV(false, "비정상");
+		return false;
+	}
+
+	TWeakObjectPtr<ATACharacter> targetCharacter = Cast<ATACharacter>(targetActor.Get());
+	if (nullptr == targetCharacter)
+	{
+		// 일단 캐릭터만 가능하도록 해주자
 		TA_ASSERT_DEV(false, "비정상");
 		return false;
 	}
@@ -145,7 +153,7 @@ bool ATAPlayerController::openDialog(const ta::ActorKey& targetActorKey) noexcep
 		return false;
 	}
 
-	if (false == player->setFocusedActorAndChangeControlMode(targetActor))
+	if (false == player->setFocusedActorAndChangeControlMode(targetCharacter))
 	{
 		TA_ASSERT_DEV(false, "비정상");
 		return false;

@@ -1,7 +1,7 @@
 ﻿#pragma once
 
 #ifndef TA_SERVER
-#include "TACharacter.h"
+class AActor;
 #endif
 
 #include "Common/CommonActor.h"
@@ -14,9 +14,9 @@ namespace ta
 		friend class ClientActorDataPool; // 풀에 만들때만 사용해야해서 프렌드 선언
 	public:
 #ifndef TA_SERVER
-		ATACharacter* getUnrealCharacter_(void) noexcept;
-		bool setUnrealCharacter_(ATACharacter* character) noexcept;
-		bool resetUnrealCharacter_(void) noexcept;
+		AActor* getUnrealActor_(void) noexcept;
+		bool setUnrealActor_(AActor* character) noexcept;
+		bool resetUnrealActor_(void) noexcept;
 #endif
 	
 	private:
@@ -29,8 +29,8 @@ namespace ta
 
 	private:
 #ifndef TA_SERVER
-		//TSharedPtr<ATACharacter> _unrealCharacter;
-		ATACharacter* _unrealCharacter;
+		//TSharedPtr<ATACharacter> _unrealActor;
+		AActor* _unrealActor;
 #endif
 	};
 }

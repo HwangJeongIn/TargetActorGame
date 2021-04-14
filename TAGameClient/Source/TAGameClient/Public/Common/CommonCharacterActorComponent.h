@@ -6,6 +6,7 @@
 namespace ta
 {
 	class CharacterGameData;
+	class RenderingGameData;
 }
 
 
@@ -22,6 +23,8 @@ namespace ta
 		static const ActorComponentType getActorComponentType(void) noexcept;
 
 		const CharacterGameData* getCharacterGameData_(void) const noexcept;
+		const RenderingGameData* getRenderingGameData_(void) const noexcept;
+
 		float getCurrentHp_(void) const noexcept;
 		bool setCurrentHp_(const float value) noexcept;
 

@@ -7,8 +7,7 @@
 #include "Common/CommonBase.h"
 #include "TANotSpawnedActor.generated.h"
 
-// 에디팅시 켜고 작업
-//#define FOR_EDITING
+
 
 class UStaticMeshComponent;
 class USceneComponent;

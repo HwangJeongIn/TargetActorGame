@@ -6,9 +6,6 @@
 #include "TAPawn.h"
 #include "TAGameInstance.h"
 #include "TAAIController.h"
-#include "Client/ClientApp.h"						  
-#include "Client/ClientActor.h"			  
-#include "Client/ClientActorManager.h"
 #include "DrawDebugHelpers.h"
 
 
@@ -55,7 +52,6 @@ ATACharacter::ATACharacter()
 
 	///////////////////////////////////////////////
 
-	_actorKey.clear();
 }
 
 // Called every frame
@@ -247,45 +243,6 @@ void ATACharacter::onAnimInstanceAssetLoadCompleted() noexcept
 	}
 	mesh->SetAnimationMode(EAnimationMode::AnimationBlueprint);
 	mesh->SetAnimInstanceClass(asset->GetClass());
-}
-
-void ATACharacter::resetActorKey(void) noexcept
-{
-	_actorKey.clear();
-}
-
-bool ATACharacter::setActorKey(const ta::ActorKey& actorKey) noexcept
-{
-	if (false == actorKey.isValid())
-	{
-		TA_ASSERT_DEV(false, "비정상");
-		return false;
-	}
-
-	if (true == _actorKey.isValid())
-	{
-		TA_ASSERT_DEV(false, "비정상");
-		return false;
-	}
-
-	_actorKey = actorKey;
-	return true;
-}
-
-const ta::ActorKey& ATACharacter::getActorKey(void) const noexcept
-{
-	return _actorKey;
-}
-
-ta::ClientActor* ATACharacter::getActorFromActorManager(void) const noexcept
-{
-	if (false == _actorKey.isValid())
-	{
-		TA_ASSERT_DEV(false, "비정상");
-		return nullptr;
-	}
-
-	return static_cast<ta::ClientActor*>(ta::GetActorManager()->getActor(_actorKey));
 }
 
 void ATACharacter::setDeadAnimation(void) noexcept

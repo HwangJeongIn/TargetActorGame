@@ -8,11 +8,13 @@
 #include "TAPlayerController.h"
 #include "TAAIController.h"
 #include "TAInventoryUserWidget.h"
+#include "TAObject.h"
 #include "Client/ClientApp.h"
 #include "Client/ClientActorManager.h"
 #include "Client/ClientActor.h"
 #include "Client/ClientMoveActorComponent.h"
 #include "Client/ClientCharacterActorComponent.h"
+#include "Client/ClientObjectActorComponent.h"
 #include "Common/ScopedLock.h"
 #include "Common/GetComponentAndSystem.h"
 #include "Common/GameData.h"
@@ -111,8 +113,8 @@ bool TAGameEventSpawnActor::processEvent(TAGameEventProcessParameter& parameter)
 	}
 
 	const ta::ActorKey actorKey = getActorKey();
-	ta::ClientActor* actor = static_cast<ta::ClientActor*>(ta::GetActorManager()->getActor(actorKey));
-	if (nullptr == actor)
+	ta::ClientActor* clientActor = static_cast<ta::ClientActor*>(ta::GetActorManager()->getActor(actorKey));
+	if (nullptr == clientActor)
 	{
 		TA_ASSERT_DEV(false, "비정상입니다.");
 		return false;
@@ -125,7 +127,7 @@ bool TAGameEventSpawnActor::processEvent(TAGameEventProcessParameter& parameter)
 		return false;
 	}
 
-	ATACharacter* character = nullptr;
+	AActor* aActor = nullptr;
 	FVector position;
 	FRotator rotation;
 	float speed;
@@ -147,8 +149,8 @@ bool TAGameEventSpawnActor::processEvent(TAGameEventProcessParameter& parameter)
 
 	if (false == _isMainPlayer)
 	{
-		character = TASpawnTAActor(actorKey, position, rotation);
-		if (nullptr == character)
+		aActor = TASpawnTAActor(actorKey, position, rotation);
+		if (nullptr == aActor)
 		{
 			TA_ASSERT_DEV(false, "비정상입니다.");
 			return false;
@@ -156,67 +158,109 @@ bool TAGameEventSpawnActor::processEvent(TAGameEventProcessParameter& parameter)
 	}
 	else
 	{
-		character = Cast<ATACharacter>(TAGetFirstPlayer());
+		ATAPlayer* player = (TAGetFirstPlayer());
+		if (nullptr == aActor)
+		{
+			TA_ASSERT_DEV(false, "비정상입니다.");
+			return false;
+		}
+		player->SetActorLocation(position);
+		player->SetActorRotation(rotation);
+
+		TAActor* taActor = static_cast<TAActor*>(player);
+		if (nullptr == taActor)
+		{
+			TA_ASSERT_DEV(false, "비정상입니다.");
+			return false;
+		}
+
+		taActor->setActorKey(actorKey);
+		{
+			ta::ScopedLock actorLock(clientActor);
+			clientActor->setUnrealActor_(player);
+		}
+
+		aActor = player;
+	}
+
+	const ta::ActorType actorType = clientActor->getActorType();
+	if (ta::ActorType::Object != actorType) // 캐릭터용 액터
+	{
+		ATACharacter* character = Cast<ATACharacter>(aActor);
 		if (nullptr == character)
 		{
 			TA_ASSERT_DEV(false, "비정상입니다.");
 			return false;
 		}
-		character->SetActorLocation(position);
-		character->SetActorRotation(rotation);
 
-		character->setActorKey(actorKey);
-
+		UCharacterMovementComponent* characterMovement = character->GetCharacterMovement();
+		if (nullptr == characterMovement)
 		{
-			ta::ScopedLock actorLock(actor);
-			actor->setUnrealCharacter_(character);
+			return false;
 		}
 
-	}
+		TA_TEMP_DEV("추후 수정해야함");
+		characterMovement->MaxWalkSpeed = speed * 0.9f;
 
-	UCharacterMovementComponent* characterMovement = character->GetCharacterMovement();
-	if (nullptr == characterMovement)
+		ta::ClientCharacterActorComponent* characterCom = ta::GetActorComponent<ta::ClientCharacterActorComponent>(actorKey);
+		if (nullptr == characterCom)
+		{
+			TA_ASSERT_DEV(false, "character 컴포넌트가 없습니다.");
+			return false;
+		}
+
+		const ta::RenderingGameData* renderingGameData = characterCom->getRenderingGameData_();
+		if (nullptr == renderingGameData)
+		{
+			TA_ASSERT_DEV(false, "RenderingGameData가 없습니다.");
+			return false;
+		}
+
+		if (ta::MeshType::Skeletal != renderingGameData->_meshType)
+		{
+			TA_ASSERT_DEV(false, "캐릭터액터인데 SkeletalMesh가 아닙니다.");
+			return false;
+		}
+
+		character->setSkeletalMeshAndAnimInstance(renderingGameData->_meshPath.c_str(), renderingGameData->_animInstancePath.c_str());
+	}
+	else // 오브젝트용 액터
 	{
-		return false;
+		ATAObject* object = Cast<ATAObject>(aActor);
+		if (nullptr == object)
+		{
+			TA_ASSERT_DEV(false, "비정상입니다.");
+			return false;
+		}
+
+		ta::ClientObjectActorComponent* objectCom = ta::GetActorComponent<ta::ClientObjectActorComponent>(actorKey);
+		if (nullptr == objectCom)
+		{
+			TA_ASSERT_DEV(false, "object 컴포넌트가 없습니다.");
+			return false;
+		}
+
+		const ta::RenderingGameData* renderingGameData = objectCom->getRenderingGameData_();
+		if (nullptr == renderingGameData)
+		{
+			TA_ASSERT_DEV(false, "RenderingGameData가 없습니다.");
+			return false;
+		}
+
+		if (ta::MeshType::Skeletal != renderingGameData->_meshType)
+		{
+			TA_ASSERT_DEV(false, "캐릭터액터인데 SkeletalMesh가 아닙니다.");
+			return false;
+		}
+
+		//object->setStaticMesh()
+		//character->setSkeletalMeshAndAnimInstance(renderingGameData->_meshPath.c_str(), renderingGameData->_animInstancePath.c_str());
+
 	}
 
-	TA_TEMP_DEV("추후 수정해야함");
-	characterMovement->MaxWalkSpeed = speed * 0.9f;
+	TA_COMPILE_DEV(4 == static_cast<uint8>(ta::ActorType::Count), "여기도 추가해주세요");
 
-	ta::ClientCharacterActorComponent* characterCom = ta::GetActorComponent<ta::ClientCharacterActorComponent>(actorKey);
-	if (nullptr == characterCom)
-	{
-		TA_ASSERT_DEV(false, "character 컴포넌트가 없습니다.");
-		return false;
-	}
 
-	const ta::CharacterGameData* characterGameData = characterCom->getCharacterGameData_();
-	if (nullptr == characterGameData)
-	{
-		TA_ASSERT_DEV(false, "character 게임데이터가 없습니다.");
-		return false;
-	}
-
-	if (false == characterGameData->_renderingGameDataKey.isValid())
-	{
-		TA_ASSERT_DEV(false, "비정상적인 RenderingGameDataKey 입니다.");
-		return false;
-	}
-
-	const ta::RenderingGameData* renderingGameData = ta::GetGameData<ta::RenderingGameData>(characterGameData->_renderingGameDataKey);
-	if (nullptr == renderingGameData)
-	{
-		TA_ASSERT_DEV(false, "RenderingGameData가 없습니다.");
-		return false;
-	}
-	
-	if (ta::MeshType::Skeletal != renderingGameData->_meshType)
-	{
-		TA_ASSERT_DEV(false, "캐릭터액터인데 SkeletalMesh가 아닙니다.");
-		return false;
-	}
-
-	character->setSkeletalMeshAndAnimInstance(renderingGameData->_meshPath.c_str(), renderingGameData->_animInstancePath.c_str());
 
 	TA_LOG_DEV("<SpawnActor> => actorkey : %d, position : (%.1f, %.1f, %.1f), rotation : (%.1f, %.1f, %.1f), speed : %.1f", actorKey.getKeyValue()
 			   , position.X, position.Y, position.Z
@@ -416,7 +460,7 @@ bool TAGameEventMoveToLocation::processEvent(TAGameEventProcessParameter& parame
 	}
 
 	{
-		ATACharacter* character = actor->getUnrealCharacter_();
+		ATACharacter* character = Cast<ATACharacter>(actor->getUnrealActor_());
 		if (nullptr == character)
 		{
 			TA_ASSERT_DEV(false, "비정상입니다.");
@@ -498,8 +542,8 @@ bool TAGameEventSetTransform::processEvent(TAGameEventProcessParameter& paramete
 
 	TA_LOG_DEV("<SetTransform> => actorkey : %d, current position (%.1f, %.1f, %.1f)", actorKey.getKeyValue(), _position._x, _position._y, _position._z);
 	{
-		ATACharacter* character = actor->getUnrealCharacter_();
-		if (nullptr == character)
+		AActor* unrealActor = actor->getUnrealActor_();
+		if (nullptr == unrealActor)
 		{
 			TA_ASSERT_DEV(false, "비정상입니다.");
 			return false;
@@ -513,8 +557,8 @@ bool TAGameEventSetTransform::processEvent(TAGameEventProcessParameter& paramete
 		rotation.Pitch = _rotation._y;
 		rotation.Yaw = _rotation._z;
 
-		character->SetActorLocation(position);
-		character->SetActorRotation(rotation);
+		unrealActor->SetActorLocation(position);
+		unrealActor->SetActorRotation(rotation);
 	}
 
 	return true;

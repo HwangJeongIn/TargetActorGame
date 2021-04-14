@@ -20,6 +20,8 @@ class ULevel;
 class TAGameEvent;
 class ATANonPlayer;
 class ATACharacter;
+class AActor;
+
 
 namespace ta
 {
@@ -39,9 +41,9 @@ extern void TAPrintAllStreamingLevelName(void) noexcept; // test
 extern ATAPlayerController* TAGetFirstPlayerController(void) noexcept;
 extern ATAPlayer* TAGetFirstPlayer(void) noexcept;
 
-extern ATACharacter* TASpawnTAActor(const ta::ActorKey& actorKey, const FVector& position, const FRotator& rotation) noexcept;
+extern AActor* TASpawnTAActor(const ta::ActorKey& actorKey, const FVector& position, const FRotator& rotation) noexcept;
 extern bool TADestroyTAActor(const ta::ActorKey& actorKey) noexcept;
-extern TWeakObjectPtr<ATACharacter> TAGetTAActor(const ta::ActorKey& actorKey) noexcept;
+extern TWeakObjectPtr<AActor> TAGetTAActor(const ta::ActorKey& actorKey) noexcept;
 
 extern bool TAExportRecastNavMesh(void) noexcept;
 
@@ -77,9 +79,9 @@ public:
 	bool registerGameEvent(TAGameEvent* gameEvent) noexcept;
 	void clearGameEvents(void) noexcept;
 
-	ATACharacter* spawnTAActor(const ta::ActorKey& actorKey, const FVector& position, const FRotator& rotation) noexcept;
+	AActor* spawnTAActor(const ta::ActorKey& actorKey, const FVector& position, const FRotator& rotation) noexcept;
 	bool destroyTAActor(const ta::ActorKey& actorKey) noexcept;
-	TWeakObjectPtr<ATACharacter> getTAActor(const ta::ActorKey& actorKey) noexcept;
+	TWeakObjectPtr<AActor> getTAActor(const ta::ActorKey& actorKey) noexcept;
 
 	FStreamableManager& getStreamableManager(void) noexcept;
 
@@ -100,7 +102,7 @@ private:
 
 
 	UPROPERTY()
-	TMap<uint32, ATANonPlayer*> _spawnedTAActors;
+	TMap<uint32, AActor*> _spawnedTAActors;
 
 	ta::ActorKey _currentInteractionActorKey;
 	

@@ -1,4 +1,4 @@
-
+﻿
 //C4100 : unreferenced formal parameter
 //C4189 : local variable is initialized but not referenced
 //C4267 : conversion from A to B, possible loss of data
@@ -7,3 +7,6 @@
 #pragma warning(disable: 4189)
 #pragma warning(disable: 4267)
 #pragma warning(disable: 4505)
+
+// 에디팅시 켜고 작업
+#define FOR_EDITING

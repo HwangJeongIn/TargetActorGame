@@ -4,13 +4,14 @@
 #ifndef TA_SERVER
 
 #include "TAGameEvent.h"
+#include "Actor.h"
 #endif
 
 namespace ta
 {
 	ClientActor::ClientActor(void) noexcept
 #ifndef TA_SERVER
-		: _unrealCharacter(nullptr)
+		: _unrealActor(nullptr)
 #endif
 	{
 	}
@@ -26,7 +27,7 @@ namespace ta
 #ifndef TA_SERVER
 		{
 			ScopedLock actorLock(this);
-			if (nullptr == _unrealCharacter)
+			if (nullptr == _unrealActor)
 			{
 				TA_ASSERT_DEV(false, "이미 액터가 존재하지 않습니다. 비정상입니다.");
 				return;
@@ -47,7 +48,7 @@ namespace ta
 		CommonActor::onFromPool(spawnData);
 
 #ifndef TA_SERVER
-		_unrealCharacter = nullptr;
+		_unrealActor = nullptr;
 #endif
 	}
 
@@ -57,7 +58,7 @@ namespace ta
 		ActorType actorType = getActorType();
 		{
 			ScopedLock actorLock(this);
-			if (_unrealCharacter)
+			if (_unrealActor)
 			{
 				TA_ASSERT_DEV(false, "이미 액터가 존재합니다. 비정상입니다.");
 				return;
@@ -84,36 +85,36 @@ namespace ta
 	}
 
 #ifndef TA_SERVER
-	ATACharacter* ClientActor::getUnrealCharacter_(void) noexcept
+	AActor* ClientActor::getUnrealActor_(void) noexcept
 	{
-		//if (!_unrealCharacter)
+		//if (!_unrealActor)
 		//{
 		//	return nullptr;
 		//}
 		//
-		//return _unrealCharacter.Get();
+		//return _unrealActor.Get();
 
-		return _unrealCharacter;
+		return _unrealActor;
 	}
 
-	bool ClientActor::setUnrealCharacter_(ATACharacter* character) noexcept
+	bool ClientActor::setUnrealActor_(AActor* actor) noexcept
 	{
-		//_unrealCharacter = MakeShareable(character);
-		_unrealCharacter = character;
+		//_unrealActor = MakeShareable(character);
+		_unrealActor = actor;
 		return true;
 	}
 	
-	bool ClientActor::resetUnrealCharacter_(void) noexcept
+	bool ClientActor::resetUnrealActor_(void) noexcept
 	{
-		//if (!_unrealCharacter)
+		//if (!_unrealActor)
 		//{
 		//	TA_ASSERT_DEV(false, "액터 삭제에 실패했습니다.");
 		//	return false;
 		//}
 		//
-		//_unrealCharacter.Reset();
+		//_unrealActor.Reset();
 		//return true;
-		_unrealCharacter = nullptr;
+		_unrealActor = nullptr;
 		return true;
 	}
 #endif

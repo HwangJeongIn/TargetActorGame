@@ -10,6 +10,7 @@
 //#include "TAConvertFunctions.h"
 #include "TAGameInstance.h"
 #include "TAPlayerController.h"
+
 //#include "TAAIController.h"
 //#include "TAInventoryUserWidget.h"
 //#include "Client/ClientApp.h"
@@ -48,14 +49,14 @@ UTAInteractionObjectLookAt::UTAInteractionObjectLookAt()
 bool UTAInteractionObjectLookAt::execute(void) const noexcept
 {
 	TA_LOG_DEV("UTAInteractionObjectLookAt : me(%d), target(%d)", _myActorKey.getKeyValue(), _targetActorKey.getKeyValue());
-	TWeakObjectPtr<ATACharacter> myCharacter = TAGetTAActor(_myActorKey);
+	TWeakObjectPtr<AActor> myCharacter = TAGetTAActor(_myActorKey);
 	if (false == myCharacter.IsValid())
 	{
 		TA_ASSERT_DEV(false, "nullptr == myCharacter");
 		return false;
 	}
 
-	TWeakObjectPtr<ATACharacter> targetCharacter = TAGetTAActor(_targetActorKey);
+	TWeakObjectPtr<AActor> targetCharacter = TAGetTAActor(_targetActorKey);
 	if (false == targetCharacter.IsValid())
 	{
 		TA_ASSERT_DEV(false, "nullptr == targetCharacter");

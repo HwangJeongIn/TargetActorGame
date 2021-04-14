@@ -75,5 +75,26 @@ namespace ta
 	{
 		return ActorComponentType::Object;
 	}
+
+	const RenderingGameData* CommonObjectActorComponent::getRenderingGameData_(void) const noexcept
+	{
+		if (nullptr != _itemGameData)
+		{
+			const RenderingGameData* renderingGameData = ta::GetGameData<RenderingGameData>(_itemGameData->_renderingGameDataKey);
+			if (nullptr == renderingGameData)
+			{
+				TA_ASSERT_DEV(false, "비정상입니다.");
+			}
+
+			return renderingGameData;
+		}
+		
+		if (nullptr == _renderingGameData)
+		{
+			TA_ASSERT_DEV(false, "둘중 하나는 유효해야합니다.");
+		}
+
+		return _renderingGameData;
+	}
 }
 

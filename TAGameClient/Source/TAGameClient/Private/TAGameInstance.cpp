@@ -12,6 +12,7 @@
 #include "TAPathPoint.h"
 #include "TASpawnData.h"
 #include "TAGameEvent.h"
+#include "TAObject.h"
 #include "TimerManager.h"
 #include "NavigationSystem.h"
 #include "NavMesh/RecastNavMesh.h"
@@ -253,7 +254,7 @@ ATAPlayer* TAGetFirstPlayer(void) noexcept
 	return player;
 }
 
-ATACharacter* TASpawnTAActor(const ta::ActorKey& actorKey, const FVector& position, const FRotator& rotation) noexcept
+AActor* TASpawnTAActor(const ta::ActorKey& actorKey, const FVector& position, const FRotator& rotation) noexcept
 {
 	UTAGameInstance* gameInstance = TAGetGameInstance();
 	if (nullptr == gameInstance)
@@ -277,7 +278,7 @@ bool TADestroyTAActor(const ta::ActorKey& actorKey) noexcept
 	return gameInstance->destroyTAActor(actorKey);
 }
 
-TWeakObjectPtr<ATACharacter> TAGetTAActor(const ta::ActorKey& actorKey) noexcept
+TWeakObjectPtr<AActor> TAGetTAActor(const ta::ActorKey& actorKey) noexcept
 {
 	UTAGameInstance* gameInstance = TAGetGameInstance();
 	if (nullptr == gameInstance)
@@ -975,7 +976,7 @@ void UTAGameInstance::clearGameEvents(void) noexcept
 	_gameEventQueue.clear();
 }
 
-ATACharacter* UTAGameInstance::spawnTAActor(const ta::ActorKey& actorKey, const FVector& position, const FRotator& rotation) noexcept
+AActor* UTAGameInstance::spawnTAActor(const ta::ActorKey& actorKey, const FVector& position, const FRotator& rotation) noexcept
 {
 	if (false == actorKey.isValid())
 	{
@@ -990,11 +991,28 @@ ATACharacter* UTAGameInstance::spawnTAActor(const ta::ActorKey& actorKey, const 
 		return nullptr;
 	}
 
-	ATANonPlayer* character = nullptr;
+	const ta::ActorType actorType = actor->getActorType();
+	AActor* spawnedActor = nullptr;
+	TAActor* spawnedTAActor = nullptr;
 	FActorSpawnParameters actorSpawnParameters;
 	actorSpawnParameters.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
-	character = GetWorld()->SpawnActor<ATANonPlayer>(ATANonPlayer::StaticClass(), position, rotation, actorSpawnParameters);
-	if (nullptr == character)
+	if (ta::ActorType::Object != actorType) // 캐릭터용 액터
+	{
+		ATACharacter* spawnedCharacter = GetWorld()->SpawnActor<ATANonPlayer>(ATANonPlayer::StaticClass(), position, rotation, actorSpawnParameters);
+		spawnedTAActor = static_cast<TAActor*>(spawnedCharacter);
+		spawnedActor = Cast<AActor>(spawnedCharacter);
+	}
+	else // 오브젝트용 액터
+	{
+		ATAObject* spawnedObject = GetWorld()->SpawnActor<ATAObject>(ATAObject::StaticClass(), position, rotation, actorSpawnParameters);
+		spawnedTAActor = static_cast<TAActor*>(spawnedObject);
+		spawnedActor = Cast<AActor>(spawnedObject);
+	}
+
+	TA_COMPILE_DEV(4 == static_cast<uint8>(ta::ActorType::Count), "여기도 추가해주세요");
+
+
+	if (nullptr == spawnedActor)
 	{
 		TA_ASSERT_DEV(false, "비정상입니다.");
 		return nullptr;
@@ -1006,18 +1024,21 @@ ATACharacter* UTAGameInstance::spawnTAActor(const ta::ActorKey& actorKey, const 
 		return nullptr;
 	}
 	
-	_spawnedTAActors.Emplace(actorKey.getKeyValue(), character);
+	_spawnedTAActors.Emplace(actorKey.getKeyValue(), spawnedActor);
 
-	character->setActorKey(actorKey);
+	if (nullptr == spawnedTAActor)
+	{
+		TA_ASSERT_DEV(false, "TAActor 인터페이스를 상속받았는지 확인하세요.");
+		return nullptr;
+	}
+	spawnedTAActor->setActorKey(actorKey);
 
 	{
 		ta::ScopedLock actorLock(actor);
-		ATACharacter* tempCharacter = Cast<ATACharacter>(character);
-		actor->setUnrealCharacter_(tempCharacter);
+		actor->setUnrealActor_(spawnedActor);
 	}
 
-
-	return character;
+	return spawnedActor;
 }
 
 bool UTAGameInstance::destroyTAActor(const ta::ActorKey& actorKey) noexcept
@@ -1028,25 +1049,46 @@ bool UTAGameInstance::destroyTAActor(const ta::ActorKey& actorKey) noexcept
 		return false;
 	}
 
-	ta::ClientActor* actor = static_cast<ta::ClientActor*>(ta::GetActorManager()->getActor(actorKey));
-	if (nullptr == actor)
+	ta::ClientActor* targetClientActor = static_cast<ta::ClientActor*>(ta::GetActorManager()->getActor(actorKey));
+	if (nullptr == targetClientActor)
 	{
-		TA_ASSERT_DEV(false, "비정상입니다.");
+		TA_ASSERT_DEV(false, "해당 액터를 찾을 수 없습니다.");
 		return false;
 	}
 
-	ATANonPlayer** character = _spawnedTAActors.Find(actorKey.getKeyValue());
-	if (nullptr == character)
+	AActor** targetAActor = _spawnedTAActors.Find(actorKey.getKeyValue());
+	if (nullptr == targetAActor)
 	{
 		TA_ASSERT_DEV(false, "해당 액터를 찾을 수 없습니다.");
 		return false;
 	}
 
 
-	(*character)->resetActorKey();
+	TAActor* tagetTAActor = nullptr;
+	const ta::ActorType targetActorType = targetClientActor->getActorType();
+	if (ta::ActorType::Object != targetActorType) // 캐릭터용 액터
 	{
-		ta::ScopedLock actorLock(actor);
-		actor->resetUnrealCharacter_();
+		ATACharacter* character = Cast<ATACharacter>(*targetAActor);
+		tagetTAActor = static_cast<TAActor*>(character);
+	}
+	else // 오브젝트용 액터
+	{
+		ATAObject* object = Cast<ATAObject>(*targetAActor);
+		tagetTAActor = static_cast<TAActor*>(object);
+	}
+
+	TA_COMPILE_DEV(4 == static_cast<uint8>(ta::ActorType::Count), "여기도 추가해주세요");
+
+	if (nullptr == tagetTAActor)
+	{
+		TA_ASSERT_DEV(false, "코드버그 TAActor 인터페이스를 상속 했는지 확인하세요");
+		return false;
+	}
+
+	tagetTAActor->resetActorKey();
+	{
+		ta::ScopedLock actorLock(targetClientActor);
+		targetClientActor->resetUnrealActor_();
 	}
 
 	if (actorKey == _currentInteractionActorKey)
@@ -1056,7 +1098,7 @@ bool UTAGameInstance::destroyTAActor(const ta::ActorKey& actorKey) noexcept
 
 	_spawnedTAActors.Remove(actorKey.getKeyValue());
 
-	if (false == (*character)->ConditionalBeginDestroy())
+	if (false == (*targetAActor)->ConditionalBeginDestroy())
 	{
 		TA_ASSERT_DEV(false, "비정상입니다.");
 		return false;
@@ -1065,7 +1107,7 @@ bool UTAGameInstance::destroyTAActor(const ta::ActorKey& actorKey) noexcept
 	return true;
 }
 
-TWeakObjectPtr<ATACharacter> UTAGameInstance::getTAActor(const ta::ActorKey& actorKey) noexcept
+TWeakObjectPtr<AActor> UTAGameInstance::getTAActor(const ta::ActorKey& actorKey) noexcept
 {
 	if (false == actorKey.isValid())
 	{
@@ -1073,14 +1115,14 @@ TWeakObjectPtr<ATACharacter> UTAGameInstance::getTAActor(const ta::ActorKey& act
 		return nullptr;
 	}
 
-	ATANonPlayer** character = _spawnedTAActors.Find(actorKey.getKeyValue());
-	if (nullptr == character)
+	AActor** targetActor = _spawnedTAActors.Find(actorKey.getKeyValue());
+	if (nullptr == targetActor)
 	{
 		TA_ASSERT_DEV(false, "해당 액터를 찾을 수 없습니다.");
 		return nullptr;
 	}
 
-	return *character;
+	return *targetActor;
 }
 
 FStreamableManager& UTAGameInstance::getStreamableManager(void) noexcept

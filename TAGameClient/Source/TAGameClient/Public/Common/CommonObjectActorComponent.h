@@ -22,6 +22,8 @@ namespace ta
 
 		static const ActorComponentType getActorComponentType(void) noexcept;
 
+		const RenderingGameData* getRenderingGameData_(void) const noexcept;
+
 	protected:
 		CommonObjectActorComponent(void) noexcept;
 
