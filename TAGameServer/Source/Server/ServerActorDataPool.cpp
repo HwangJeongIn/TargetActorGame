@@ -105,12 +105,12 @@ namespace ta
 
 		switch (componentType)
 		{
-#define RETURN_COMPONENTS(Type, PoolName)																								\
-		case ActorComponentType::Type:																									\
-			{																															\
-				return PoolName->getActorComponent<Server##Type##ActorComponent>(actorType, relativeGroupIndex);						\
-			}																															\
-			break;																														\
+#define RETURN_COMPONENTS(Type, PoolName)																			\
+		case ActorComponentType::Type:																				\
+			{																										\
+				return PoolName->getActorComponent<Server##Type##ActorComponent>(actorType, relativeGroupIndex);	\
+			}																										\
+			break;																									\
 
 
 			RETURN_COMPONENTS(Move, _moveComponentPool)
@@ -123,14 +123,10 @@ namespace ta
 #undef RETURN_COMPONENTS
 
 		case ActorComponentType::Count:
-				{
-					TA_ASSERT_DEV(false, "다른 타입이 들어왔습니다.");
-				}
 		default:
 				{
 					TA_ASSERT_DEV(false, "다른 타입이 들어왔습니다.");
 				}
-
 		}
 
 		TA_COMPILE_DEV(6 == static_cast<uint8>(ActorComponentType::Count), "여기도 추가해주세요");

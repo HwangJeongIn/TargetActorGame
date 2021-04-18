@@ -105,11 +105,6 @@ namespace ta
 
 	void AiBTNodeExecution::executeNode(const ActorKey& actorKey, const float& deltaTime) noexcept
 	{
-		if (false == checkCondition(actorKey))
-		{
-			return;
-		}
-
 		_currentTime += deltaTime;
 		if (_currentTime < _interval)
 		{
@@ -117,6 +112,11 @@ namespace ta
 		}
 
 		_currentTime = 0.0f;
+
+		if (false == checkCondition(actorKey))
+		{
+			return;
+		}
 
 		executeNodeDetail(actorKey, deltaTime);
 	}
