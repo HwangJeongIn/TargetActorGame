@@ -88,6 +88,35 @@ namespace ta
 	TA_COMPILE_DEV(2 == static_cast<uint8>(MeshType::Count), "여기도 확인해주세요");
 
 
+	const std::unordered_map<std::string, SectorZoneType> SectorZoneTypeConverter
+	{
+		 { "Forest", SectorZoneType::Forest }
+		,{ "Sea", SectorZoneType::Sea }
+		,{ "Desert", SectorZoneType::Desert }
+		,{ "Jungle", SectorZoneType::Jungle }
+	};
+	TA_COMPILE_DEV(4 == static_cast<uint8>(SectorZoneType::Count), "여기도 확인해주세요");
+
+
+	const std::unordered_map<std::string, SectorGroupType> SectorGroupTypeConverter
+	{
+		 { "ForestLevel1", SectorGroupType::ForestLevel1 }
+		,{ "ForestLevel2", SectorGroupType::ForestLevel2 }
+		,{ "ForestLevel3", SectorGroupType::ForestLevel3 }
+		,{ "SeaLevel1", SectorGroupType::SeaLevel1 }
+		,{ "SeaLevel2", SectorGroupType::SeaLevel2 }
+		,{ "SeaLevel3", SectorGroupType::SeaLevel3 }
+		,{ "DesertLevel1", SectorGroupType::DesertLevel1 }
+		,{ "DesertLevel2", SectorGroupType::DesertLevel2 }
+		,{ "DesertLevel3", SectorGroupType::DesertLevel3 }
+		,{ "JungleLevel1", SectorGroupType::JungleLevel1 }
+		,{ "JungleLevel2", SectorGroupType::JungleLevel2 }
+		,{ "JungleLevel3", SectorGroupType::JungleLevel3 }
+	};
+	TA_COMPILE_DEV(12 == static_cast<uint8>(SectorGroupType::Count), "여기도 확인해주세요");
+
+
+
 
 #define CONVERT_FUNCTION_DEFINITION(EnumTypeName)											 \
 																							 \
@@ -129,6 +158,8 @@ namespace ta
 	CONVERT_FUNCTION_DEFINITION(TADataType)
 	CONVERT_FUNCTION_DEFINITION(InteractionType)
 	CONVERT_FUNCTION_DEFINITION(MeshType)
+	CONVERT_FUNCTION_DEFINITION(SectorZoneType)
+	CONVERT_FUNCTION_DEFINITION(SectorGroupType)
 
 
 

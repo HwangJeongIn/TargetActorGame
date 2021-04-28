@@ -289,3 +289,50 @@ namespace ta
 		, Count
 	};
 }
+
+
+namespace ta
+{
+	enum class SectorZoneType : uint8
+	{
+		Forest = 0
+		, Sea
+		, Desert
+		, Jungle
+		, Count
+	};
+}
+
+
+namespace ta
+{
+	enum class SectorGroupType : uint8
+	{
+		ForestLevel1 = 0
+		, ForestLevel2
+		, ForestLevel3
+		, SeaLevel1
+		, SeaLevel2
+		, SeaLevel3
+		, DesertLevel1
+		, DesertLevel2
+		, DesertLevel3
+		, JungleLevel1
+		, JungleLevel2
+		, JungleLevel3
+		, Count
+	};
+}
+
+
+namespace ta
+{
+	enum class SectorEventType : uint8
+	{
+		SectorEventSpawnNpc = 0
+		, SectorEventSpawnObject
+		, Count
+	};
+
+	constexpr uint8 MaxActorCountSpawnedBySectorEvent = 30;
+}

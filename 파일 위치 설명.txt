@@ -51,7 +51,7 @@ Github 주소 : https://github.com/HwangJeongIn/TargetActorGame/tree/AllInOne
 * document
 
 	- Project TargetActor : TargetActorGame/Document/Project TargetActor.docx
-		=> 간단한 프로젝트 구조, 언리얼에 필요한 간단한 지식 등을 정리하고 있습니다. 프로젝트 구조는 계속 조금씩 바뀌기 때문에 소스코드가 정확합니다.
+		=> 프로젝트를 설명하고 있는 문서입니다.
 
 	- 일정관리 : TargetActorGame/Document/계획.txt
 		=> 간단한 구현일정, 구현완료, 구현예정 일정을 작성하는 텍스트 파일입니다.

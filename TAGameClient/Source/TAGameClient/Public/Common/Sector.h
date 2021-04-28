@@ -17,6 +17,7 @@ namespace ta
 	class CommonActor;
 	class Vector;
 	class Sector;
+	class SectorProcessor;
 }
 
 
@@ -96,7 +97,7 @@ namespace ta
 		bool enterSector(CommonActor* actor) noexcept;
 		bool exitSector(CommonActor* actor) noexcept;
 
-		const std::unordered_set<ActorKey>& getActors_(void) noexcept;
+		const std::unordered_set<ActorKey>& getActors_(void) const noexcept;
 		ActorKey getTargetActorFromSector(const std::vector<ActorType>& actorTypes) noexcept;
 
 		void getTargetActorsFromSector(const ActorType& actorType, std::unordered_set<ActorKey>& output) noexcept;
@@ -128,5 +129,8 @@ namespace ta
 		SectorKey _sectorKey;
 		// 성능 테스트 결과 vector보다 unordered_set가 더 좋다
 		std::unordered_set<ActorKey> _actors;
+
+		// SectorEvent / SectorProperty 등을 처리
+		SectorProcessor* _sectorProcessor;
 	};
 }

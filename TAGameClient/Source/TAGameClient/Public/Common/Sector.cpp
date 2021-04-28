@@ -5,6 +5,7 @@
 #include "Common/ScopedLock.h"
 #include "Common/CommonApp.h"
 #include "Common/CommonActorManager.h"
+#include "Common/SectorProcessor.h"
 
 
 namespace ta
@@ -262,11 +263,16 @@ namespace ta
 namespace ta
 {
 	Sector::Sector(void) noexcept
+		: _sectorProcessor(new SectorProcessor(this))
 	{
 	}
 
 	Sector::~Sector(void) noexcept
 	{
+		if (nullptr != _sectorProcessor)
+		{
+			delete _sectorProcessor;
+		}
 	}
 
 	void Sector::setSectorKey(const SectorKey& sectorKey) noexcept
@@ -305,7 +311,7 @@ namespace ta
 		return true;
 	}
 
-	const std::unordered_set<ActorKey>& Sector::getActors_(void) noexcept
+	const std::unordered_set<ActorKey>& Sector::getActors_(void) const noexcept
 	{
 		return _actors;
 	}
