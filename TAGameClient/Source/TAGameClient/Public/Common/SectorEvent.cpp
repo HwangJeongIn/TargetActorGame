@@ -124,6 +124,9 @@ namespace ta
 	void SectorEventSpawnNpc::clear(void) noexcept
 	{
 		SectorEvent::clear();
+
+		_maxActorCount = 0;
+		_npcGroup
 	}
 
 	bool SectorEventSpawnNpc::checkProperData(const SectorEventData* sectorEventData) const noexcept

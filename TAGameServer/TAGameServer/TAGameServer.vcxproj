@@ -222,6 +222,7 @@
     <ClInclude Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\NavigationSystem\RecastNavigation\Recast\RecastAlloc.h" />
     <ClInclude Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\NavigationSystem\RecastNavigation\Recast\RecastAssert.h" />
     <ClInclude Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\NonBlockingQueue.h" />
+    <ClInclude Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\Observer.h" />
     <ClInclude Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\PathPoint.h" />
     <ClInclude Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\PathPointPath.h" />
     <ClInclude Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\ScopedLock.h" />
@@ -232,6 +233,7 @@
     <ClInclude Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\Serializer.h" />
     <ClInclude Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\Socket.h" />
     <ClInclude Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\StringUtility.h" />
+    <ClInclude Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\Subject.h" />
     <ClInclude Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\ThreadLoadTaskManager.h" />
     <ClInclude Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\Uncopyable.h" />
     <ClInclude Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\Vector.h" />

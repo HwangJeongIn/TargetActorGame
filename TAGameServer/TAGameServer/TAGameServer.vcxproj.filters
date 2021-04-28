@@ -721,5 +721,7 @@
     <ClInclude Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\SectorProcessor.h">
       <Filter>Common</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\Observer.h" />
+    <ClInclude Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\Subject.h" />
   </ItemGroup>
 </Project>
