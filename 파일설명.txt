@@ -1,3 +1,7 @@
+
+핵심로직을 설명하는 문서입니다. 확인해주시면 감사하겠습니다.
+ : TargetActorGame/Document/Project TargetActor.docx, TargetActorGame/Document/Project TargetActor.pdf
+
 Github 주소 : https://github.com/HwangJeongIn/TargetActorGame/tree/AllInOne
 1차 게임개발영상 : https://youtu.be/HPNiLHJIKCY
 
