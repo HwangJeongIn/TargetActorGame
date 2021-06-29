@@ -1,4 +1,19 @@
 ﻿#pragma once
+#include <unordered_map>
+#include <filesystem>
+
+
+namespace fs = std::filesystem;
+
+
+namespace ta
+{
+#if defined(TA_SERVER) && !defined(TA_CLIENT_IN_SERVER)
+	extern const fs::path SectorDataFilePath;
+#elif !defined(TA_SERVER)
+	extern fs::path SectorDataFilePath;
+#endif
+}
 
 
 namespace ta

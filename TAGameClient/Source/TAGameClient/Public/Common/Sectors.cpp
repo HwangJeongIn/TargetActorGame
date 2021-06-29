@@ -3,6 +3,17 @@
 #include "Common/Sector.h"
 
 
+
+namespace ta
+{
+#if defined(TA_SERVER) && !defined(TA_CLIENT_IN_SERVER)
+	const fs::path SectorDataFilePath = fs::absolute(L"./../SectorData");
+#elif !defined(TA_SERVER)
+	fs::path SectorDataFilePath = "";
+#endif
+}
+
+
 namespace ta
 {
 	Sectors::Sectors(void) noexcept

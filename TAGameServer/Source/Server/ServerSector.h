@@ -14,7 +14,7 @@ namespace ta
 	{
 	public:
 		ServerSector(void) noexcept;
-		~ServerSector(void) noexcept;
+		virtual ~ServerSector(void) noexcept override final;
 
 	private:
 		// SectorEvent / SectorProperty 등을 처리

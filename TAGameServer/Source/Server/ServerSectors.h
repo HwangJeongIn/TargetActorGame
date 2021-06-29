@@ -1,6 +1,13 @@
 ﻿#pragma once
 #include "Common/Sectors.h"
+#include <unordered_map>
+#include <vector>
 
+
+namespace ta
+{
+	class SectorEventData;
+}
 
 
 namespace ta
@@ -16,6 +23,10 @@ namespace ta
 		virtual void close(void) noexcept override final;
 
 		virtual Sector* getSector(const SectorKey& sectorKey) noexcept override final;
+
+	private:
+		std::unordered_map<SectorKey, SectorZoneType> _sectorZoneData;
+		std::unordered_map<SectorZoneType, std::vector<SectorEventData*>> _sectorZoneEventData;
 
 	};
 }

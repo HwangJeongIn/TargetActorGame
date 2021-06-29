@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 #include "Common/Sector.h"
 
@@ -9,6 +9,6 @@ namespace ta
 	{
 	public:
 		ClientSector(void) noexcept;
-		~ClientSector(void) noexcept;
+		virtual ~ClientSector(void) noexcept override final;
 	};
 }
