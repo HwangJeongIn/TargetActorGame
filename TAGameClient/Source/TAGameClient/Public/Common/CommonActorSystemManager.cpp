@@ -1,4 +1,4 @@
-#include "Common/CommonActorSystemManager.h"
+﻿#include "Common/CommonActorSystemManager.h"
 #include "Common/KeyDefinition.h"
 #include "Common/ActorSystem.h"
 
@@ -27,6 +27,11 @@ namespace ta
 	}
 
 	bool CommonActorSystemManager::initialize(void) noexcept
+	{
+		return true;
+	}
+
+	bool CommonActorSystemManager::doInitialize(void) noexcept
 	{
 		const uint32 count = _actorSystems.size();
 		for (uint32 index = 0; index < count; ++index)

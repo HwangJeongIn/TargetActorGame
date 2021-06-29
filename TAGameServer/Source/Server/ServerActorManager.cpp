@@ -1,7 +1,7 @@
 ﻿#include "Server/ServerActorManager.h"
 #include "Server/ServerActorDataPool.h"
 #include "Server/ServerComponentData.h"
-#include "Server/ServerSector.h"
+#include "Server/ServerSectors.h"
 #include "Server/ServerActor.h"
 #include "Server/ServerMoveActorComponent.h"
 #include "Server/ServerActionActorComponent.h"
@@ -27,10 +27,16 @@ namespace ta
     
     bool ServerActorManager::initialize(void) noexcept
     {
-        _allSectors = new ServerSector[CountOfSectors];
-        _actorDataPool = new ServerActorDataPool;
-
         if (false == CommonActorManager::initialize())
+        {
+            TA_ASSERT_DEV(false, "비정상적인 상황입니다.");
+            return false;
+        }
+
+        _actorDataPool = new ServerActorDataPool;
+        _sectors = new ServerSectors;
+
+        if (false == doInitialize())
         {
             TA_ASSERT_DEV(false, "비정상적인 상황입니다.");
             return false;
@@ -53,20 +59,6 @@ namespace ta
     void ServerActorManager::close(void) noexcept
     {
         CommonActorManager::close();
-    }
-
-    Sector* ServerActorManager::getSector(const SectorKey& sectorKey) noexcept
-    {
-        if (false == checkSectorValid(sectorKey))
-        {
-            TA_ASSERT_DEV(false, "비정상입니다.");
-            return nullptr;
-        }
-
-        const int32 index = sectorKey.getKeyValue();
-        ServerSector* indexPtr = static_cast<ServerSector*>(_allSectors);
-
-        return &(indexPtr[index]);
     }
 
     //CommonActor* ServerActorManager::createActorAndInitializeFromDB(const ActorType& actorType, const CharacterDBNo& characterNo) noexcept

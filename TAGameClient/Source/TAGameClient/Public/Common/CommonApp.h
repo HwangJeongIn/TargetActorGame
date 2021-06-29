@@ -52,7 +52,7 @@ namespace ta
 
 		// 순서 : 가장 큰개념부터 initialize > open 호출 / 다끝나면 가장 작은개념부터 close호출
 		virtual bool initialize(void) noexcept;
-		virtual bool initializeDetail(void) noexcept;
+		bool doInitialize(void) noexcept;
 		virtual bool open(void) noexcept;
 		virtual bool beforeRun(void) noexcept;
 		virtual void close(void) noexcept;

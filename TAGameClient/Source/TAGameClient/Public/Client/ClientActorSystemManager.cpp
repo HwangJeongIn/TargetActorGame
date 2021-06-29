@@ -1,4 +1,4 @@
-#include "Client/ClientActorSystemManager.h"
+﻿#include "Client/ClientActorSystemManager.h"
 #include "Client/ClientMoveActorSystem.h"
 #include "Client/ClientActionActorSystem.h"
 #include "Client/ClientAiActorSystem.h"
@@ -18,6 +18,12 @@ namespace ta
 
     bool ClientActorSystemManager::initialize(void) noexcept
     {
+        if (false == CommonActorSystemManager::initialize())
+        {
+            TA_ASSERT_DEV(false, "비정상적인 상황입니다.");
+            return false;
+        }
+
         uint32 systemCount = static_cast<uint32>(ActorSystemType::Count);
         _actorSystems.reserve(systemCount);
 
@@ -55,7 +61,7 @@ namespace ta
             }
         }
 
-        if (false == CommonActorSystemManager::initialize())
+        if (false == CommonActorSystemManager::doInitialize())
         {
             TA_ASSERT_DEV(false, "비정상적인 상황입니다.");
             return false;

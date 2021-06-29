@@ -2,7 +2,7 @@
 #include "Common/KeyDefinition.h"
 #include "Common/ActorDataGroups.h"
 #include "Common/ActorDataPool.h"
-#include "Common/Sector.h"
+#include "Common/Sectors.h"
 #include "Common/ComponentData.h"
 #include "Common/ScopedLock.h"
 
@@ -19,7 +19,18 @@ namespace ta
 
 	bool CommonActorManager::initialize(void) noexcept
 	{
+		return true;
+	}
+
+	bool CommonActorManager::doInitialize(void) noexcept
+	{
 		if (false == _actorDataPool->initialize())
+		{
+			TA_ASSERT_DEV(false, "비정상적인 상황입니다.");
+			return false;
+		}
+
+		if (false == _sectors->initialize())
 		{
 			TA_ASSERT_DEV(false, "비정상적인 상황입니다.");
 			return false;
@@ -36,9 +47,10 @@ namespace ta
 			return false;
 		}
 
-		for (uint32 index = 0; index < CountOfSectors; ++index)
+		if (false == _sectors->open())
 		{
-			_allSectors[index].setSectorKey(SectorKey(index));
+			TA_ASSERT_DEV(false, "비정상적인 상황입니다.");
+			return false;
 		}
 
 		return true;
@@ -47,9 +59,10 @@ namespace ta
 	void CommonActorManager::close(void) noexcept
 	{
 		_actorDataPool->close();
+		_sectors->close();
 
 		delete _actorDataPool;
-		delete[] _allSectors;
+		delete _sectors;
 	}
 
 	CommonActor* CommonActorManager::getOwnerActor(void) noexcept
@@ -82,22 +95,9 @@ namespace ta
 		return _actorDataPool->getActorComponent(actorKey, componentType);
 	}
 
-	bool CommonActorManager::checkSectorValid(const SectorKey& sectorKey) const noexcept
+	Sector* CommonActorManager::getSector(const SectorKey& sectorKey) noexcept
 	{
-		if (false == sectorKey.isValid())
-		{
-			TA_ASSERT_DEV(false, "비정상입니다.");
-			return false;
-		}
-
-		const int32 index = sectorKey.getKeyValue();
-		if (CountOfSectors <= index)
-		{
-			TA_ASSERT_DEV(false, "비정상입니다.");
-			return false;
-		}
-
-		return true;
+		return _sectors->getSector(sectorKey);
 	}
 
 	CommonActor* CommonActorManager::createOwnerActor(void) noexcept

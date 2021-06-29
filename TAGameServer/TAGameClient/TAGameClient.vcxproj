@@ -169,6 +169,7 @@
     <ClCompile Include="..\..\TAGameClient\Source\TAGameClient\Public\Client\ClientMoveActorSystem.cpp" />
     <ClCompile Include="..\..\TAGameClient\Source\TAGameClient\Public\Client\ClientObjectActorComponent.cpp" />
     <ClCompile Include="..\..\TAGameClient\Source\TAGameClient\Public\Client\ClientSector.cpp" />
+    <ClCompile Include="..\..\TAGameClient\Source\TAGameClient\Public\Client\ClientSectors.cpp" />
     <ClCompile Include="..\..\TAGameClient\Source\TAGameClient\Public\Client\ClientSpawnDataManager.cpp" />
     <ClCompile Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\ActorComponent.cpp" />
     <ClCompile Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\ActorComponentPool.cpp" />
@@ -257,6 +258,7 @@
     <ClCompile Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\SectorEvent.cpp" />
     <ClCompile Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\SectorProcessor.cpp" />
     <ClCompile Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\SectorProperty.cpp" />
+    <ClCompile Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\Sectors.cpp" />
     <ClCompile Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\Serializer.cpp" />
     <ClCompile Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\Socket.cpp" />
     <ClCompile Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\CommonSpawnDataManager.cpp" />
@@ -284,6 +286,7 @@
     <ClInclude Include="..\..\TAGameClient\Source\TAGameClient\Public\Client\ClientMoveActorSystem.h" />
     <ClInclude Include="..\..\TAGameClient\Source\TAGameClient\Public\Client\ClientObjectActorComponent.h" />
     <ClInclude Include="..\..\TAGameClient\Source\TAGameClient\Public\Client\ClientSector.h" />
+    <ClInclude Include="..\..\TAGameClient\Source\TAGameClient\Public\Client\ClientSectors.h" />
     <ClInclude Include="..\..\TAGameClient\Source\TAGameClient\Public\Client\ClientSpawnDataManager.h" />
     <ClInclude Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\ActorComponent.h" />
     <ClInclude Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\ActorComponentPool.h" />
@@ -372,6 +375,7 @@
     <ClInclude Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\SectorEvent.h" />
     <ClInclude Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\SectorProcessor.h" />
     <ClInclude Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\SectorProperty.h" />
+    <ClInclude Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\Sectors.h" />
     <ClInclude Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\Serializer.h" />
     <ClInclude Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\Socket.h" />
     <ClInclude Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\CommonSpawnDataManager.h" />

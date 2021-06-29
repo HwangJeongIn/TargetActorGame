@@ -147,7 +147,7 @@ namespace ta
 		return true;
 	}
 
-	bool CommonApp::initializeDetail(void) noexcept
+	bool CommonApp::doInitialize(void) noexcept
 	{
 		if (false == _gameDataManager->initialize())
 		{

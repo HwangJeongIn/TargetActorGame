@@ -1,7 +1,7 @@
 ﻿#include "Client/ClientActorManager.h"
 #include "Client/ClientActorDataPool.h"
 #include "Client/ClientComponentData.h"
-#include "Client/ClientSector.h"
+#include "Client/ClientSectors.h"
 
 
 namespace ta
@@ -16,10 +16,16 @@ namespace ta
 
     bool ClientActorManager::initialize(void) noexcept
     {
-        _allSectors = new ClientSector[CountOfSectors];
-        _actorDataPool = new ClientActorDataPool;
-
         if (false == CommonActorManager::initialize())
+        {
+            TA_ASSERT_DEV(false, "비정상적인 상황입니다.");
+            return false;
+        }
+
+        _actorDataPool = new ClientActorDataPool;
+        _sectors = new ClientSectors;
+
+        if (false == doInitialize())
         {
             TA_ASSERT_DEV(false, "비정상적인 상황입니다.");
             return false;
@@ -42,20 +48,6 @@ namespace ta
     void ClientActorManager::close(void) noexcept
     {
         CommonActorManager::close();
-    }
-
-    Sector* ClientActorManager::getSector(const SectorKey& sectorKey) noexcept
-    {
-        if (false == checkSectorValid(sectorKey))
-        {
-            TA_ASSERT_DEV(false, "비정상입니다.");
-            return nullptr;
-        }
-
-        const int32 index = sectorKey.getKeyValue();
-        ClientSector* indexPtr = static_cast<ClientSector*>(_allSectors);
-
-        return &(indexPtr[index]);
     }
 
     CommonActor* ClientActorManager::createActorForClient(const ActorType& actorType, const ActorKey& actorKeyReceived) noexcept

@@ -23,8 +23,6 @@ namespace ta
 		virtual bool open(void) noexcept override final;
 		virtual void close(void) noexcept override final;
 
-		virtual Sector* getSector(const SectorKey& sectorKey) noexcept override final;
-
 		//CommonActor* createActorAndInitializeFromDB(const ActorType& actorType, const CharacterDBNo& characterNo) noexcept;
 		CommonActor* createCharacterActorAndInitializeComponentsFromSpawnData(const CommonActorDetailSpawnDataForCharacter& detailSpawnData) noexcept;
 

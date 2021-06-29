@@ -14,6 +14,7 @@ namespace ta
 	class ComponentData;
 	class ActorComponent;
 	class Sector;
+	class Sectors;
 	class SectorKey;
 }
 
@@ -24,6 +25,7 @@ namespace ta
 	{
 	public:
 		virtual bool initialize(void) noexcept;
+		bool doInitialize(void) noexcept;
 		virtual bool open(void) noexcept;
 		virtual void close(void) noexcept;
 
@@ -32,8 +34,7 @@ namespace ta
 		CommonActor* getActor(const ActorKey& actorKey, bool activeActorOnly = false) noexcept;
 		ActorComponent* getActorComponent(const ActorKey& actorKey, const ActorComponentType componentType) noexcept;
 		//ActorComponent* getActorComponents(const ActorComponentType componentType) noexcept;
-		virtual Sector* getSector(const SectorKey& sectorKey) noexcept = 0;
-		bool checkSectorValid(const SectorKey& sectorKey) const noexcept;
+		Sector* getSector(const SectorKey& sectorKey) noexcept;
 
 		// 서버 클라에서 오너액터 생성할때 사용
 		CommonActor* createOwnerActor(void) noexcept;
@@ -66,7 +67,7 @@ namespace ta
 
 	protected:
 		
-		Sector* _allSectors;
+		Sectors* _sectors;
 		
 		// NOTE : 만들어지는 리소스는 풀에 있는 값으로 정적으로 할당된 값이다. 무조건 CommonActorManager를 통해서 생성, 파괴한다.
 		// 액터키는 액터풀, 컴포넌트 풀의 인덱스로 정의하자

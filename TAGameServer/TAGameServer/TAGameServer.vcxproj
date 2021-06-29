@@ -112,6 +112,7 @@
     <ClCompile Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\SectorEvent.cpp" />
     <ClCompile Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\SectorProcessor.cpp" />
     <ClCompile Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\SectorProperty.cpp" />
+    <ClCompile Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\Sectors.cpp" />
     <ClCompile Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\Serializer.cpp" />
     <ClCompile Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\Socket.cpp" />
     <ClCompile Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\StringUtility.cpp" />
@@ -137,6 +138,7 @@
     <ClCompile Include="..\Source\Server\ServerMoveActorSystem.cpp" />
     <ClCompile Include="..\Source\Server\ServerObjectActorComponent.cpp" />
     <ClCompile Include="..\Source\Server\ServerSector.cpp" />
+    <ClCompile Include="..\Source\Server\ServerSectors.cpp" />
     <ClCompile Include="..\Source\Server\ServerSpawnDataManager.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
@@ -230,6 +232,7 @@
     <ClInclude Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\SectorEvent.h" />
     <ClInclude Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\SectorProcessor.h" />
     <ClInclude Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\SectorProperty.h" />
+    <ClInclude Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\Sectors.h" />
     <ClInclude Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\Serializer.h" />
     <ClInclude Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\Socket.h" />
     <ClInclude Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\StringUtility.h" />
@@ -257,6 +260,7 @@
     <ClInclude Include="..\Source\Server\ServerMoveActorSystem.h" />
     <ClInclude Include="..\Source\Server\ServerObjectActorComponent.h" />
     <ClInclude Include="..\Source\Server\ServerSector.h" />
+    <ClInclude Include="..\Source\Server\ServerSectors.h" />
     <ClInclude Include="..\Source\Server\ServerSpawnDataManager.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">

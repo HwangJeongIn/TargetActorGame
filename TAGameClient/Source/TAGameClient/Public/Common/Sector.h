@@ -91,7 +91,11 @@ namespace ta
 		//	삭제된 섹터 : 나한테 해당 섹터 액터들 삭제하도록 클라로 보내고 해당 섹터 액터들에게 나 삭제하도록 클라로 보내기 // 클라섹터 갱신 > 해당클라에서 액터 삭제
 	public:
 		Sector(void) noexcept;
-		~Sector(void) noexcept;
+		virtual ~Sector(void) noexcept;
+
+		virtual bool initialize(void) noexcept;
+		virtual bool open(void) noexcept;
+		virtual void close(void) noexcept;
 
 		void setSectorKey(const SectorKey& sectorKey) noexcept;
 		bool enterSector(CommonActor* actor) noexcept;
@@ -129,8 +133,5 @@ namespace ta
 		SectorKey _sectorKey;
 		// 성능 테스트 결과 vector보다 unordered_set가 더 좋다
 		std::unordered_set<ActorKey> _actors;
-
-		// SectorEvent / SectorProperty 등을 처리
-		SectorProcessor* _sectorProcessor;
 	};
 }

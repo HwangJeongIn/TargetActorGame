@@ -1,4 +1,4 @@
-#include "Server/ServerActorSystemManager.h"
+﻿#include "Server/ServerActorSystemManager.h"
 #include "Server/ServerMoveActorSystem.h"
 #include "Server/ServerActionActorSystem.h"
 #include "Server/ServerAiActorSystem.h"
@@ -18,6 +18,12 @@ namespace ta
     
     bool ServerActorSystemManager::initialize(void) noexcept
     {
+        if (false == CommonActorSystemManager::initialize())
+        {
+            TA_ASSERT_DEV(false, "비정상적인 상황입니다.");
+            return false;
+        }
+
         uint32 systemCount = static_cast<uint32>(ActorSystemType::Count);
         _actorSystems.reserve(systemCount);
 
@@ -56,7 +62,7 @@ namespace ta
             }
         }
 
-        if (false == CommonActorSystemManager::initialize())
+        if (false == doInitialize())
         {
             TA_ASSERT_DEV(false, "비정상적인 상황입니다.");
             return false;

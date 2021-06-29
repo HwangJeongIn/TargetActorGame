@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 #include "Common/CommonBase.h"
 #include "Common/Uncopyable.h"
@@ -18,6 +18,7 @@ namespace ta
 	{
 	public:
 		virtual bool initialize(void) noexcept;
+		bool doInitialize(void) noexcept;
 		virtual bool open(void) noexcept;
 		virtual void close(void) noexcept;
 

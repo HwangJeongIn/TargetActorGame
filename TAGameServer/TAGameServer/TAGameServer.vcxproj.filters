@@ -376,6 +376,12 @@
     <ClCompile Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\SectorProcessor.cpp">
       <Filter>Common</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\Sectors.cpp">
+      <Filter>Common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Source\Server\ServerSectors.cpp">
+      <Filter>Server</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\ActorComponent.h">
@@ -723,5 +729,11 @@
     </ClInclude>
     <ClInclude Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\Observer.h" />
     <ClInclude Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\Subject.h" />
+    <ClInclude Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\Sectors.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\Server\ServerSectors.h">
+      <Filter>Server</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

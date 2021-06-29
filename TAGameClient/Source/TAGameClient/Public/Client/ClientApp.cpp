@@ -1,4 +1,4 @@
-#include "Client/ClientApp.h"
+﻿#include "Client/ClientApp.h"
 #include "Client/ClientActorManager.h"
 #include "Client/ClientActorSystemManager.h"
 #include "Client/AllPacketClient.h"
@@ -207,7 +207,7 @@ namespace ta
 		_actorSystemManager = new ClientActorSystemManager(_actorManager);
 		_spawnDataManager = new ClientSpawnDataManager;
 
-		if (false == initializeDetail())
+		if (false == doInitialize())
 		{
 			TA_ASSERT_DEV(false, "비정상적인 상황입니다.");
 			return false;

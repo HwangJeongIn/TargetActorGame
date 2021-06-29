@@ -320,7 +320,7 @@ namespace ta
 		_actorSystemManager = new ServerActorSystemManager(_actorManager);
 		_spawnDataManager = new ServerSpawnDataManager;
 
-		if (false == initializeDetail())
+		if (false == doInitialize())
 		{
 			TA_ASSERT_DEV(false, "비정상적인 상황입니다.");
 			return false;

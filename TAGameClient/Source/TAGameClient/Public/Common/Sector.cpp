@@ -263,16 +263,26 @@ namespace ta
 namespace ta
 {
 	Sector::Sector(void) noexcept
-		: _sectorProcessor(new SectorProcessor(this))
 	{
 	}
 
 	Sector::~Sector(void) noexcept
 	{
-		if (nullptr != _sectorProcessor)
-		{
-			delete _sectorProcessor;
-		}
+
+	}
+
+	bool Sector::initialize(void) noexcept
+	{
+		return true;
+	}
+
+	bool Sector::open(void) noexcept
+	{
+		return true;
+	}
+
+	void Sector::close(void) noexcept
+	{
 	}
 
 	void Sector::setSectorKey(const SectorKey& sectorKey) noexcept

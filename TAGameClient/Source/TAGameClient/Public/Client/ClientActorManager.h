@@ -15,8 +15,6 @@ namespace ta
 		virtual bool open(void) noexcept override final;
 		virtual void close(void) noexcept override final;
 
-		virtual Sector* getSector(const SectorKey& sectorKey) noexcept override final;
-
 		// 클라에서 여러캐릭터 같은소켓 공유하려고 만든 함수
 		CommonActor* createActorForClient(const ActorType& actorType, const ActorKey& actorKeyReceived) noexcept;
 
