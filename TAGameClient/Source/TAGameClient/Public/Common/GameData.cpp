@@ -2,6 +2,7 @@
 #include "Common/StringUtility.h"
 #include "Common/FileLoader.h"
 #include "Common/EnumUtility.h"
+#include "Common/ConditionGameDataObject.h"
 
 
 namespace ta
@@ -22,8 +23,8 @@ namespace ta
 
 	void GameData::clear(void) noexcept
 	{
-		_isValid = false;
 		clearDetail();
+		_isValid = false;
 	}
 
 	void GameData::setIsValid(bool input) noexcept
@@ -514,5 +515,158 @@ namespace ta
 		_meshType = MeshType::Count;
 		_meshPath.clear();
 		_animInstancePath.clear();
+	}
+}
+
+namespace ta
+{
+	ConditionGameData::ConditionGameData(void) noexcept
+	{
+	}
+
+	ConditionGameData::~ConditionGameData(void) noexcept
+	{
+	}
+
+	GameDataType ConditionGameData::getGameDataType(void) noexcept
+	{
+		return GameDataType::ConditionGameData;
+	}
+
+	bool ConditionGameData::loadXml(XmlNode* xmlNode) noexcept
+	{
+		{
+			const std::string* value = xmlNode->getAttribute("ConditionString");
+			if (nullptr == value)
+			{
+				TA_ASSERT_DEV(false, "ConditionString 로드 실패");
+				return false;
+			}
+
+			std::vector<std::string> splitedStrings;
+			Split(*value, "()!,", splitedStrings);
+			const uint32 count = splitedStrings.size();
+			if (3 > count)
+			{
+				TA_ASSERT_DEV(false, "ConditionString 로드 실패");
+				return false;
+			}
+
+			std::string conditionGameDataObjectString;
+			bool isNot = false;
+			uint32 offset = 0;
+			if (0 == splitedStrings[0].compare("!"))
+			{
+				if (4 > count)
+				{
+					TA_ASSERT_DEV(false, "ConditionString 로드 실패");
+					return false;
+				}
+
+				conditionGameDataObjectString = splitedStrings[1];
+				isNot = true;
+				offset = 3;
+			}
+			else
+			{
+				conditionGameDataObjectString = splitedStrings[0];
+				isNot = false;
+				offset = 2;
+			}
+
+			std::vector <std::string> dataStrings;
+			const uint32 splitedStringsCount = splitedStrings.size();
+			for (uint32 index = offset; index < (splitedStringsCount - 1); ++index)
+			{
+				dataStrings.push_back(splitedStrings[index]);
+			}
+			
+			const ConditionGameDataObjectType objectType = ConvertStringToEnum<ConditionGameDataObjectType>(conditionGameDataObjectString);
+			ConditionGameDataObjectFactory factory;
+			_conditionObject = factory.generateConditionGameDataObject(dataStrings, objectType, isNot);
+			
+			if (nullptr == _conditionObject)
+			{
+				TA_ASSERT_DEV(false, "ConditionString 로드 실패");
+				return false;
+			}
+		}
+
+		return true;
+	}
+
+	bool ConditionGameData::checkCondition(ConditionGameDataObjectParameter& parameter) const noexcept
+	{
+		return _conditionObject->checkCondition(parameter);
+	}
+
+	void ConditionGameData::clearDetail(void) noexcept
+	{
+		_key.clear();
+		if (true == _isValid)
+		{
+			if (nullptr != _conditionObject)
+			{
+				delete _conditionObject;
+				_conditionObject = nullptr;
+			}
+		}
+		else
+		{
+			_conditionObject = nullptr;
+		}
+	}
+}
+
+
+namespace ta
+{
+
+	SectorEventGameData::SectorEventGameData(void) noexcept
+	{
+	}
+
+	SectorEventGameData::~SectorEventGameData(void) noexcept
+	{
+	}
+
+	GameDataType SectorEventGameData::getGameDataType(void) noexcept
+	{
+		return GameDataType::SectorEventGameData;
+	}
+
+	bool SectorEventGameData::loadXml(XmlNode* xmlNode) noexcept
+	{
+		return true;
+	}
+
+	void SectorEventGameData::clearDetail(void) noexcept
+	{
+	}
+}
+
+
+namespace ta
+{
+	SectorZoneGameData::SectorZoneGameData(void) noexcept
+	{
+	}
+
+	SectorZoneGameData::~SectorZoneGameData(void) noexcept
+	{
+	}
+
+	GameDataType SectorZoneGameData::getGameDataType(void) noexcept
+	{
+		return GameDataType::SectorZoneGameData;
+	}
+
+	bool SectorZoneGameData::loadXml(XmlNode* xmlNode) noexcept
+	{
+		return true;
+	}
+
+	void SectorZoneGameData::clearDetail(void) noexcept
+	{
 	}
 }

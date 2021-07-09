@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<Root>
+	<SectorZoneGameData Key="1" Description="사막 존 섹터에 대한 정보" ZoneType="Desert" BasicSectorEventGameDataKeySet="1,2" AdditionalSectorEventGameDataKeySet="3"/>
+</Root>

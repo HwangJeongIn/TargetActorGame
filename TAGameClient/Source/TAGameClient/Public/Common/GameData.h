@@ -9,6 +9,8 @@
 namespace ta
 {
 	class XmlNode;
+	class ConditionGameDataObjectParameter;
+	class ConditionGameDataObject;
 }
 
 
@@ -196,6 +198,73 @@ namespace ta
 		MeshType _meshType;
 		std::string _meshPath;
 		std::string _animInstancePath;
+
+	};
+}
+
+
+namespace ta
+{
+	class ConditionGameData : public GameData
+	{
+	public:
+		ConditionGameData(void) noexcept;
+		virtual ~ConditionGameData(void) noexcept;
+
+		static GameDataType getGameDataType(void) noexcept;
+
+		virtual bool loadXml(XmlNode* xmlNode) noexcept override final;
+
+		bool checkCondition(ConditionGameDataObjectParameter& parameter) const noexcept;
+
+	private:
+		virtual void clearDetail(void) noexcept override final;
+
+	public:
+		ConditionGameDataKey _key;
+		const ConditionGameDataObject* _conditionObject;
+	};
+}
+
+
+namespace ta
+{
+	class SectorEventGameData : public GameData
+	{
+	public:
+		SectorEventGameData(void) noexcept;
+		virtual ~SectorEventGameData(void) noexcept;
+
+		static GameDataType getGameDataType(void) noexcept;
+
+		virtual bool loadXml(XmlNode* xmlNode) noexcept override final;
+
+	private:
+		virtual void clearDetail(void) noexcept override final;
+
+	public:
+		SectorEventGameDataKey _key;
+
+	};
+}
+
+namespace ta
+{
+	class SectorZoneGameData : public GameData
+	{
+	public:
+		SectorZoneGameData(void) noexcept;
+		virtual ~SectorZoneGameData(void) noexcept;
+
+		static GameDataType getGameDataType(void) noexcept;
+
+		virtual bool loadXml(XmlNode* xmlNode) noexcept override final;
+
+	private:
+		virtual void clearDetail(void) noexcept override final;
+
+	public:
+		SectorZoneGameDataKey _key;
 
 	};
 }

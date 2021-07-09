@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<Root>
+	<SectorEventGameData Key="1" Description="100번 엔피씨 소환" ConditionGameDataKey="1" EventString="SpawnNpc(100)"/>
+	<SectorEventGameData Key="2" Description="" ConditionGameDataKey="2" EventString="SpawnNpc(101)"/>
+	<SectorEventGameData Key="3" Description="" ConditionGameDataKey="3" EventString="SpawnNpc(102)"/>
+</Root>

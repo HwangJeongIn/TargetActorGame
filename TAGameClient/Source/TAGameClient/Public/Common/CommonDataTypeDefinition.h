@@ -94,6 +94,19 @@ namespace ta
 		, CharacterGameData
 		, ItemGameData
 		, RenderingGameData
+		, ConditionGameData
+		, SectorEventGameData
+		, SectorZoneGameData
+		, Count
+	};
+}
+
+
+namespace ta
+{
+	enum class ConditionGameDataObjectType : uint8
+	{
+		LimitCount = 0
 		, Count
 	};
 }
@@ -304,25 +317,25 @@ namespace ta
 }
 
 
-namespace ta
-{
-	enum class SectorGroupType : uint8
-	{
-		ForestLevel1 = 0
-		, ForestLevel2
-		, ForestLevel3
-		, SeaLevel1
-		, SeaLevel2
-		, SeaLevel3
-		, DesertLevel1
-		, DesertLevel2
-		, DesertLevel3
-		, JungleLevel1
-		, JungleLevel2
-		, JungleLevel3
-		, Count
-	};
-}
+//namespace ta
+//{
+//	enum class SectorGroupType : uint8
+//	{
+//		ForestLevel1 = 0
+//		, ForestLevel2
+//		, ForestLevel3
+//		, SeaLevel1
+//		, SeaLevel2
+//		, SeaLevel3
+//		, DesertLevel1
+//		, DesertLevel2
+//		, DesertLevel3
+//		, JungleLevel1
+//		, JungleLevel2
+//		, JungleLevel3
+//		, Count
+//	};
+//}
 
 
 namespace ta

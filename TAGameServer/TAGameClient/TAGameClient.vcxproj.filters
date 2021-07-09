@@ -344,6 +344,9 @@
     <ClCompile Include="..\..\TAGameClient\Source\TAGameClient\Public\Client\ClientSectors.cpp">
       <Filter>Client</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\ConditionGameDataObject.cpp">
+      <Filter>Common</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Common">
@@ -719,6 +722,9 @@
     </ClInclude>
     <ClInclude Include="..\..\TAGameClient\Source\TAGameClient\Public\Client\ClientSectors.h">
       <Filter>Client</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\ConditionGameDataObject.h">
+      <Filter>Common</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

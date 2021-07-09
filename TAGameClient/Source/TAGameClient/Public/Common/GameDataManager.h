@@ -52,8 +52,12 @@ namespace ta
 		DECLARE_GAMEDATA(CharacterGameData)
 		DECLARE_GAMEDATA(ItemGameData)
 		DECLARE_GAMEDATA(RenderingGameData)
+		DECLARE_GAMEDATA(ConditionGameData)
+		DECLARE_GAMEDATA(SectorEventGameData)
+		DECLARE_GAMEDATA(SectorZoneGameData)
 
-		TA_COMPILE_DEV(6 == static_cast<uint8>(GameDataType::Count), "여기도 확인해주세요")
+
+		TA_COMPILE_DEV(9 == static_cast<uint8>(GameDataType::Count), "여기도 확인해주세요")
 
 #undef DECLARE_GAMEDATA
 	};

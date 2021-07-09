@@ -27,44 +27,42 @@ namespace ta
 
 		_allSectors = new ServerSector[CountOfSectors];
 
-		// do initialize
-		std::vector<fs::path> spawnDataFilePaths;
-		if (false == FileLoader::getFilePathsFromDirectory(SpawnDataFilePath, spawnDataFilePaths))
-		{
-			TA_ASSERT_DEV(false, "비정상입니다.");
-			return false;
-		}
+		//// do initialize
+		//std::vector<fs::path> sectorDataFilePaths;
+		//if (false == FileLoader::getFilePathsFromDirectory(SectorDataFilePath, spawnDataFilePaths))
+		//{
+		//	TA_ASSERT_DEV(false, "비정상입니다.");
+		//	return false;
+		//}
 
-		const uint32 count = spawnDataFilePaths.size();
-		std::string fileExtention;
-		for (uint32 index = 0; index < count; ++index)
-		{
-			Extension(spawnDataFilePaths[index].filename().string(), fileExtention);
+		//const uint32 count = spawnDataFilePaths.size();
+		//std::string fileExtention;
+		//for (uint32 index = 0; index < count; ++index)
+		//{
+		//	Extension(spawnDataFilePaths[index].filename().string(), fileExtention);
 
-			if (0 == fileExtention.compare("config"))
-			{
-				if (false == loadSpawnDataGroupConfig(spawnDataFilePaths[index]))
-				{
-					TA_ASSERT_DEV(false, "비정상입니다.");
-					return false;
-				}
-				continue;
-			}
+		//	if (0 == fileExtention.compare("config"))
+		//	{
+		//		if (false == loadSpawnDataGroupConfig(spawnDataFilePaths[index]))
+		//		{
+		//			TA_ASSERT_DEV(false, "비정상입니다.");
+		//			return false;
+		//		}
+		//		continue;
+		//	}
 
-			ThreadLoadTaskSpawnData* loadTaskSpawnData = new ThreadLoadTaskSpawnData;
-			loadTaskSpawnData->_spawnDataManager = this;
-			loadTaskSpawnData->_filePath = spawnDataFilePaths[index];
+		//	ThreadLoadTaskSpawnData* loadTaskSpawnData = new ThreadLoadTaskSpawnData;
+		//	loadTaskSpawnData->_spawnDataManager = this;
+		//	loadTaskSpawnData->_filePath = spawnDataFilePaths[index];
 
-			if (false == RegisterThreadLoadTask(loadTaskSpawnData))
-			{
-				TA_ASSERT_DEV(false, "비정상입니다.");
-				return false;
-			}
-		}
+		//	if (false == RegisterThreadLoadTask(loadTaskSpawnData))
+		//	{
+		//		TA_ASSERT_DEV(false, "비정상입니다.");
+		//		return false;
+		//	}
+		//}
 
-		StartRegisteredThreadLoadTasksAndWait();
-
-		return true;
+		//StartRegisteredThreadLoadTasksAndWait();
 
 		if (false == doInitialize())
 		{

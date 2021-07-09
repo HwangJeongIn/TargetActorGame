@@ -94,8 +94,11 @@ namespace ta
 		CLOSE_GAMEDATA(CharacterGameData)
 		CLOSE_GAMEDATA(ItemGameData)
 		CLOSE_GAMEDATA(RenderingGameData)
+		CLOSE_GAMEDATA(ConditionGameData)
+		CLOSE_GAMEDATA(SectorEventGameData)
+		CLOSE_GAMEDATA(SectorZoneGameData)
 
-		TA_COMPILE_DEV(6 == static_cast<uint8>(GameDataType::Count), "여기도 확인해주세요")
+		TA_COMPILE_DEV(9 == static_cast<uint8>(GameDataType::Count), "여기도 확인해주세요")
 #undef CLOSE_GAMEDATA
 	}
 	
@@ -132,8 +135,11 @@ namespace ta
 		RETURN_GAMEDATA(CharacterGameData)
 		RETURN_GAMEDATA(ItemGameData)
 		RETURN_GAMEDATA(RenderingGameData)
+		RETURN_GAMEDATA(ConditionGameData)
+		RETURN_GAMEDATA(SectorEventGameData)
+		RETURN_GAMEDATA(SectorZoneGameData)
 
-		TA_COMPILE_DEV(6 == static_cast<uint8>(GameDataType::Count), "여기도 확인해주세요")
+		TA_COMPILE_DEV(9 == static_cast<uint8>(GameDataType::Count), "여기도 확인해주세요")
 #undef RETURN_GAMEDATA
 		
 		default:
@@ -238,8 +244,11 @@ namespace ta
 				LOADXML(CharacterGameData)
 				LOADXML(ItemGameData)
 				LOADXML(RenderingGameData)
+				LOADXML(ConditionGameData)
+				LOADXML(SectorEventGameData)
+				LOADXML(SectorZoneGameData)
 
-				TA_COMPILE_DEV(6 == static_cast<uint8>(GameDataType::Count), "여기도 확인해주세요")
+				TA_COMPILE_DEV(9 == static_cast<uint8>(GameDataType::Count), "여기도 확인해주세요")
 #undef LOADXML
 
 			default:
