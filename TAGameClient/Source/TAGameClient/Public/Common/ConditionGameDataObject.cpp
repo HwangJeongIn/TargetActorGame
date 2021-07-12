@@ -1,17 +1,9 @@
 ﻿#include "Common/ConditionGameDataObject.h"
+#include "Common/StringUtility.h"
+#include "Common/Sector.h"
+#include "Common/ScopedLock.h"
+#include "Common/ContentParameter.h"
 
-namespace ta
-{
-	ConditionGameDataObjectParameter::ConditionGameDataObjectParameter(const ActorKey& myActorKey
-																	   , const ActorKey& targetActorKey
-																	   , const SectorKey& sectorKey) noexcept
-		: _myActorKey(myActorKey)
-		, _targetActorKey(targetActorKey)
-		, _sectorKey(sectorKey)
-	{
-
-	}
-}
 
 
 namespace ta
@@ -62,7 +54,7 @@ namespace ta
 	{
 	}
 
-	bool ConditionGameDataObject::checkCondition(ConditionGameDataObjectParameter& parameter) const noexcept
+	bool ConditionGameDataObject::checkCondition(ContentParameter& parameter) const noexcept
 	{
 		const bool rv = checkConditionDetail(parameter);
 
@@ -89,14 +81,37 @@ namespace ta
 	{
 	}
 
-	bool ConditionGameDataObjectLimitCount::checkConditionDetail(ConditionGameDataObjectParameter& parameter) const noexcept
+	bool ConditionGameDataObjectLimitCount::checkConditionDetail(ContentParameter& parameter) const noexcept
 	{
-		// 구현해야 합니다.
-		return true;
+		Sector* targetSector = GetSector(parameter._sectorKey);
+		if (nullptr == targetSector)
+		{
+			TA_ASSERT_DEV(false, "비정상입니다");
+			return false;
+		}
+
+		uint32 targetGroupGameDataKeyCount = 0;
+		{
+			ScopedLock sectorLock(targetSector, true);
+			targetGroupGameDataKeyCount = targetSector->getOwnedActorCountForServer_(_targetGroupGameDataKey);
+		}
+		
+		return targetGroupGameDataKeyCount < _maxCount ? true : false;
 	}
 	
 	bool ConditionGameDataObjectLimitCount::loadFromStrings(const std::vector<std::string>& strings) noexcept
 	{
-		return false;
+		// 100,3 => 100번 GroupGameDataKey를 가진 것을 3으로 제한 // 괄호는 빠져서 들어옴
+		const uint32 stringCount = strings.size();
+		if (3 != stringCount)
+		{
+			TA_ASSERT_DEV(false, "비정상입니다");
+			return false;
+		}
+		
+		_targetGroupGameDataKey = FromStringCast<GroupGameDataKeyType>(strings[0]);
+		_maxCount = FromStringCast<uint32>(strings[2]);
+
+		return true;
 	}
 }

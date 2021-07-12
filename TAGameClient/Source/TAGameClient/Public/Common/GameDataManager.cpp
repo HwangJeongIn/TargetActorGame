@@ -95,7 +95,7 @@ namespace ta
 		CLOSE_GAMEDATA(ItemGameData)
 		CLOSE_GAMEDATA(RenderingGameData)
 		CLOSE_GAMEDATA(ConditionGameData)
-		CLOSE_GAMEDATA(SectorEventGameData)
+		CLOSE_GAMEDATA(EventGameData)
 		CLOSE_GAMEDATA(SectorZoneGameData)
 
 		TA_COMPILE_DEV(9 == static_cast<uint8>(GameDataType::Count), "여기도 확인해주세요")
@@ -136,7 +136,7 @@ namespace ta
 		RETURN_GAMEDATA(ItemGameData)
 		RETURN_GAMEDATA(RenderingGameData)
 		RETURN_GAMEDATA(ConditionGameData)
-		RETURN_GAMEDATA(SectorEventGameData)
+		RETURN_GAMEDATA(EventGameData)
 		RETURN_GAMEDATA(SectorZoneGameData)
 
 		TA_COMPILE_DEV(9 == static_cast<uint8>(GameDataType::Count), "여기도 확인해주세요")
@@ -245,7 +245,7 @@ namespace ta
 				LOADXML(ItemGameData)
 				LOADXML(RenderingGameData)
 				LOADXML(ConditionGameData)
-				LOADXML(SectorEventGameData)
+				LOADXML(EventGameData)
 				LOADXML(SectorZoneGameData)
 
 				TA_COMPILE_DEV(9 == static_cast<uint8>(GameDataType::Count), "여기도 확인해주세요")

@@ -222,5 +222,10 @@ namespace ta
 	{
 		_actorDataPool->logTest();
 	}
+	
+	CommonActor* CommonActorManager::createCharacterActorAndInitializeComponentsForServer(const CommonActorDetailSpawnDataForCharacter& detailSpawnData) noexcept
+	{
+		return nullptr;
+	}
 }
 

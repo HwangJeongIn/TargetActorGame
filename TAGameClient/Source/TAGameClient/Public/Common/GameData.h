@@ -9,7 +9,7 @@
 namespace ta
 {
 	class XmlNode;
-	class ConditionGameDataObjectParameter;
+	class ContentParameter;
 	class ConditionGameDataObject;
 }
 
@@ -215,7 +215,7 @@ namespace ta
 
 		virtual bool loadXml(XmlNode* xmlNode) noexcept override final;
 
-		bool checkCondition(ConditionGameDataObjectParameter& parameter) const noexcept;
+		bool checkCondition(ContentParameter& parameter) const noexcept;
 
 	private:
 		virtual void clearDetail(void) noexcept override final;
@@ -229,11 +229,11 @@ namespace ta
 
 namespace ta
 {
-	class SectorEventGameData : public GameData
+	class EventGameData : public GameData
 	{
 	public:
-		SectorEventGameData(void) noexcept;
-		virtual ~SectorEventGameData(void) noexcept;
+		EventGameData(void) noexcept;
+		virtual ~EventGameData(void) noexcept;
 
 		static GameDataType getGameDataType(void) noexcept;
 
@@ -243,7 +243,11 @@ namespace ta
 		virtual void clearDetail(void) noexcept override final;
 
 	public:
-		SectorEventGameDataKey _key;
+		EventGameDataKey _key;
+
+
+		std::vector<const ConditionGameData*> _conditionGameData;
+		
 
 	};
 }

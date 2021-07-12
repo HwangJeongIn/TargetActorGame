@@ -7,6 +7,8 @@
 #include "Common/CommonActorManager.h"
 #include "Common/SectorProcessor.h"
 
+#include <cstdlib>
+
 
 namespace ta
 {
@@ -113,6 +115,24 @@ namespace ta
 
 		output._x = finalX;
 		output._y = finalY;
+
+		return true;
+	}
+
+	bool GetSectorRandomPosition(const SectorKey& sectorKey, Vector& output) noexcept
+	{
+		Vector temp;
+		if (false == GetSectorCenterPosition(sectorKey, temp))
+		{
+			TA_ASSERT_DEV(false, "비정상입니다.");
+			return false;
+		}
+
+		int32 offsetX = rand() % (int)(SectorHalfSize);
+		int32 offsetY = rand() % (int)(SectorHalfSize);
+
+		output._x = temp._x + (float)(offsetX);
+		output._y = temp._y + (float)(offsetY);
 
 		return true;
 	}
@@ -500,6 +520,26 @@ namespace ta
 			actorType = targetActor->getActorType();
 			output.insert(std::pair(*it, actorType));
 		}
+	}
+
+	uint32 Sector::getOwnedActorCountForServer_(const GroupGameDataKey& groupGameDataKey) const noexcept
+	{
+		return uint32();
+	}
+
+	bool Sector::checkOwnedActorExistenceForServer_(const GroupGameDataKey& groupGameDataKey) const noexcept
+	{
+		return false;
+	}
+
+	bool Sector::registerToOwnedActorsForServer_(const GroupGameDataKey& groupGameDataKey, const ActorKey& actorKey) noexcept
+	{
+		return false;
+	}
+
+	bool Sector::deregisterFromOwnedActorsForServer_(const GroupGameDataKey& groupGameDataKey, const ActorKey& actorKey) noexcept
+	{
+		return false;
 	}
 
     bool Sector::removeActor_(const ActorKey& actor) noexcept

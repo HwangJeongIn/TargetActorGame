@@ -67,7 +67,7 @@ KEY_DECLARATION(CharacterGameDataKey, int32, -1)
 KEY_DECLARATION(ItemGameDataKey, int32, -1)
 KEY_DECLARATION(RenderingGameDataKey, int32, -1)
 KEY_DECLARATION(ConditionGameDataKey, int32, -1)
-KEY_DECLARATION(SectorEventGameDataKey, int32, -1)
+KEY_DECLARATION(EventGameDataKey, int32, -1)
 KEY_DECLARATION(SectorZoneGameDataKey, int32, -1)
 
 

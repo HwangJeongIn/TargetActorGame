@@ -1,6 +1,5 @@
 ﻿#include "Server/ServerSectors.h"
 #include "Server/ServerSector.h"
-#include "Common/KeyDefinition.h"
 #include "Common/StringUtility.h"
 #include "Common/FileLoader.h"
 #include "Common/EnumUtility.h"

@@ -22,7 +22,7 @@ namespace ta
 		, {"ItemGameData", GameDataType::ItemGameData}
 		, {"RenderingGameData", GameDataType::RenderingGameData}
 		, {"ConditionGameData", GameDataType::ConditionGameData}
-		, {"SectorEventGameData", GameDataType::SectorEventGameData}
+		, {"EventGameData", GameDataType::EventGameData}
 		, {"SectorZoneGameData", GameDataType::SectorZoneGameData}
 	};
 	TA_COMPILE_DEV(9 == static_cast<uint8>(GameDataType::Count), "여기도 확인해주세요");

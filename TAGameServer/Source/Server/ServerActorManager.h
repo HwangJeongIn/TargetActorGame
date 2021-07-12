@@ -29,6 +29,9 @@ namespace ta
 		// 플레이어용도 // 한번에 처리못해서 분리했음
 		CommonActor* createActorForServer(const ActorType& actorType) noexcept;
 		bool initializeActorComponentsFromDB(const ActorKey& targetActorKey, const CharacterDBNo& characterDBNo) noexcept;
+
+		virtual CommonActor* createCharacterActorAndInitializeComponentsForServer(const CommonActorDetailSpawnDataForCharacter& detailSpawnData) noexcept override final;
+
 	private:
 		//CommonActor* createDefaultActorForServer(void) noexcept;
 		// 플레이어

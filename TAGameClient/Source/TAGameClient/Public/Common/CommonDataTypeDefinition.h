@@ -95,7 +95,7 @@ namespace ta
 		, ItemGameData
 		, RenderingGameData
 		, ConditionGameData
-		, SectorEventGameData
+		, EventGameData
 		, SectorZoneGameData
 		, Count
 	};
@@ -107,6 +107,16 @@ namespace ta
 	enum class ConditionGameDataObjectType : uint8
 	{
 		LimitCount = 0
+		, Count
+	};
+}
+
+
+namespace ta
+{
+	enum class EventGameDataObjectType : uint8
+	{
+		SpawnActor = 0
 		, Count
 	};
 }

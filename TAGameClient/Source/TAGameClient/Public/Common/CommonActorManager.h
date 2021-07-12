@@ -16,6 +16,7 @@ namespace ta
 	class Sector;
 	class Sectors;
 	class SectorKey;
+	class CommonActorDetailSpawnDataForCharacter;
 }
 
 
@@ -55,6 +56,8 @@ namespace ta
 		bool destroyActor(const CommonActor* actor) noexcept;
 
 		void logTest(void) noexcept;
+
+		virtual CommonActor* createCharacterActorAndInitializeComponentsForServer(const CommonActorDetailSpawnDataForCharacter& detailSpawnData) noexcept;
 
 		virtual ~CommonActorManager(void) noexcept;
 	protected:

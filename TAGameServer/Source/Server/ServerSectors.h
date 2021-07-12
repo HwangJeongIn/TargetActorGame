@@ -1,6 +1,7 @@
 ﻿#pragma once
 #include "Common/Sectors.h"
 #include "Common/CommonDataTypeDefinition.h"
+#include "Common/KeyDefinition.h"
 #include <unordered_map>
 #include <vector>
 

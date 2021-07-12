@@ -202,8 +202,10 @@
     <ClCompile Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\CommonObjectActorComponent.cpp" />
     <ClCompile Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\ComponentData.cpp" />
     <ClCompile Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\ConditionGameDataObject.cpp" />
+    <ClCompile Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\ContentParameter.cpp" />
     <ClCompile Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\EndPoint.cpp" />
     <ClCompile Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\EnumUtility.cpp" />
+    <ClCompile Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\EventGameDataObject.cpp" />
     <ClCompile Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\FileLoader.cpp" />
     <ClCompile Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\GameData.cpp" />
     <ClCompile Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\GameDataManager.cpp" />
@@ -326,8 +328,10 @@
     <ClInclude Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\CommonTypeDefinition.h" />
     <ClInclude Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\ComponentData.h" />
     <ClInclude Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\ConditionGameDataObject.h" />
+    <ClInclude Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\ContentParameter.h" />
     <ClInclude Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\EndPoint.h" />
     <ClInclude Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\EnumUtility.h" />
+    <ClInclude Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\EventGameDataObject.h" />
     <ClInclude Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\FileLoader.h" />
     <ClInclude Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\GameData.h" />
     <ClInclude Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\GameDataManager.h" />

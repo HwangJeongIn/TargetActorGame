@@ -595,7 +595,7 @@ namespace ta
 		return true;
 	}
 
-	bool ConditionGameData::checkCondition(ConditionGameDataObjectParameter& parameter) const noexcept
+	bool ConditionGameData::checkCondition(ContentParameter& parameter) const noexcept
 	{
 		return _conditionObject->checkCondition(parameter);
 	}
@@ -622,25 +622,25 @@ namespace ta
 namespace ta
 {
 
-	SectorEventGameData::SectorEventGameData(void) noexcept
+	EventGameData::EventGameData(void) noexcept
 	{
 	}
 
-	SectorEventGameData::~SectorEventGameData(void) noexcept
+	EventGameData::~EventGameData(void) noexcept
 	{
 	}
 
-	GameDataType SectorEventGameData::getGameDataType(void) noexcept
+	GameDataType EventGameData::getGameDataType(void) noexcept
 	{
-		return GameDataType::SectorEventGameData;
+		return GameDataType::EventGameData;
 	}
 
-	bool SectorEventGameData::loadXml(XmlNode* xmlNode) noexcept
+	bool EventGameData::loadXml(XmlNode* xmlNode) noexcept
 	{
 		return true;
 	}
 
-	void SectorEventGameData::clearDetail(void) noexcept
+	void EventGameData::clearDetail(void) noexcept
 	{
 	}
 }

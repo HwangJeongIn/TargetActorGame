@@ -56,8 +56,10 @@
     <ClCompile Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\CommonSpawnDataManager.cpp" />
     <ClCompile Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\ComponentData.cpp" />
     <ClCompile Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\ConditionGameDataObject.cpp" />
+    <ClCompile Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\ContentParameter.cpp" />
     <ClCompile Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\EndPoint.cpp" />
     <ClCompile Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\EnumUtility.cpp" />
+    <ClCompile Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\EventGameDataObject.cpp" />
     <ClCompile Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\GameData.cpp" />
     <ClCompile Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\GameDataManager.cpp" />
     <ClCompile Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\GetComponentAndSystem.cpp" />
@@ -181,6 +183,7 @@
     <ClInclude Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\CommonTypeDefinition.h" />
     <ClInclude Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\ComponentData.h" />
     <ClInclude Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\ConditionGameDataObject.h" />
+    <ClInclude Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\ContentParameter.h" />
     <ClInclude Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\EndPoint.h" />
     <ClInclude Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\ActorEventTimer.h" />
     <ClInclude Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\EnumUtility.h" />
@@ -232,6 +235,7 @@
     <ClInclude Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\ScopedLock.h" />
     <ClInclude Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\Sector.h" />
     <ClInclude Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\SectorEvent.h" />
+    <ClInclude Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\EventGameDataObject.h" />
     <ClInclude Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\SectorProcessor.h" />
     <ClInclude Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\SectorProperty.h" />
     <ClInclude Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\Sectors.h" />

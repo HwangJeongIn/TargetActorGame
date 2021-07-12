@@ -53,7 +53,7 @@ namespace ta
 		DECLARE_GAMEDATA(ItemGameData)
 		DECLARE_GAMEDATA(RenderingGameData)
 		DECLARE_GAMEDATA(ConditionGameData)
-		DECLARE_GAMEDATA(SectorEventGameData)
+		DECLARE_GAMEDATA(EventGameData)
 		DECLARE_GAMEDATA(SectorZoneGameData)
 
 

@@ -23,6 +23,7 @@ namespace ta
 namespace ta
 {
 	constexpr float SectorSize = 3000.0f;
+	constexpr float SectorHalfSize = SectorSize / 2;
 	constexpr uint32 CountOfOneSideSectors = 1000;
 	constexpr uint32 HalfCountOfOneSideSectors = (CountOfOneSideSectors / 2);
 	constexpr uint32 CountOfSectors = CountOfOneSideSectors * CountOfOneSideSectors;
@@ -65,6 +66,7 @@ namespace ta
 	// Sector의 멤버로하면 외부해서 필요할때마다 Sector객체 가져와서 사용해야해서 그냥 바로 사용할 수 있게 전역으로 했다
 	// 이 함수들은 Sector클래스 정보없이 계산 된다.
 	extern bool GetSectorCenterPosition(const SectorKey& sectorKey, Vector& output) noexcept;
+	extern bool GetSectorRandomPosition(const SectorKey& sectorKey, Vector& output) noexcept;
 
 	// 필요해지면 만들자 현재 MoveActorComponent에 캐싱하고 있어서 따로 필요없을것 같음
 	//extern bool GetNearSectors(const SectorKey& sectorKey, std::vector<SectorKey>& output) noexcept;
@@ -122,6 +124,10 @@ namespace ta
 		void getTargetActorsWithActorTypeFromSector(std::unordered_map<ActorKey, ActorType>& output) noexcept;
 
 
+		virtual uint32 getOwnedActorCountForServer_(const GroupGameDataKey& groupGameDataKey) const noexcept;
+		virtual bool checkOwnedActorExistenceForServer_(const GroupGameDataKey& groupGameDataKey) const noexcept;
+		virtual bool registerToOwnedActorsForServer_(const GroupGameDataKey& groupGameDataKey, const ActorKey& actorKey) noexcept;
+		virtual bool deregisterFromOwnedActorsForServer_(const GroupGameDataKey& groupGameDataKey, const ActorKey& actorKey) noexcept;
 
 
 	private:
