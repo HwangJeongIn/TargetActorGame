@@ -88,12 +88,7 @@ namespace ta
             return nullptr;
         }
 
-        const CharacterGameData* characterGameData = GetGameData<CharacterGameData>(groupGameData->_characterGameDataKey);
-        if (nullptr == characterGameData)
-        {
-            TA_ASSERT_DEV(false, "비정상입니다.");
-            return nullptr;
-        }
+        const CharacterGameData* characterGameData = groupGameData->_characterGameData;
 
         if (ActorType::Player == characterGameData->_actorType)
         {
@@ -284,18 +279,11 @@ namespace ta
             switch (componentTypeList[index])
             {
             case ActorComponentType::Move:
-                {
-                    const MoveGameData* moveGameData = GetGameData<MoveGameData>(groupGameData->_moveGameDataKey);
-                    if (nullptr == moveGameData)
-                    {
-                        TA_ASSERT_DEV(false, "데이터가 없습니다. MoveGameDataKey : %d", groupGameData->_moveGameDataKey.getKeyValue());
-                        return false;
-                    }
-                   
+                {  
                     CommonMoveComponentData data;
                     data._position = detailSpawnData._position;
                     data._rotation = detailSpawnData._rotation;
-                    data._speed = moveGameData->_speed;
+                    data._speed = groupGameData->_moveGameData->_speed;
                     if (false == initializeActorComponent(targetActorKey, &data, false))
                     {
                         TA_ASSERT_DEV(false, "비정상입니다.");
@@ -315,7 +303,7 @@ namespace ta
                 break;
             case ActorComponentType::Ai:
                 {
-                    const AiGameData* aiGameData = GetGameData<AiGameData>(groupGameData->_aiGameDataKey);
+                    const AiGameData* aiGameData = groupGameData->_aiGameData;
                     CommonAiComponentData data;
                     if (nullptr != aiGameData) // 없을 수 있다.
                     {
@@ -333,16 +321,11 @@ namespace ta
                 break;
             case ActorComponentType::Character:
                 {
-                    const CharacterGameData* characterGameData = GetGameData<CharacterGameData>(groupGameData->_characterGameDataKey);
-                    if (nullptr == characterGameData)
-                    {
-                        TA_ASSERT_DEV(false, "데이터가 없습니다. CharacterGameDataKey : %d", groupGameData->_characterGameDataKey.getKeyValue());
-                        return false;
-                    }
+                    const CharacterGameData* characterGameData = groupGameData->_characterGameData;
 
                     CommonCharacterComponentData data;
                     data._currentHp = characterGameData->_maxHp;
-                    data._characterGameDataKey = groupGameData->_characterGameDataKey;
+                    data._characterGameDataKey = characterGameData->_key;
 
                     if (false == initializeActorComponent(targetActorKey, &data, false))
                     {

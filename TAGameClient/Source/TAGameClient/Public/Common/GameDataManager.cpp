@@ -3,7 +3,7 @@
 #include "Common/FileLoader.h"
 #include "Common/GetComponentAndSystem.h"
 #include "Common/EnumUtility.h"
-#include "Common/ThreadLoadTaskManager.h"
+#include "Common/ThreadTaskManager.h"
 #include <thread>
 #include <sstream>
 
@@ -31,36 +31,83 @@ namespace ta
 
 	bool GameDataManager::initialize(void) noexcept
 	{
-		std::vector<fs::path> xmlFiles;
 
-//#ifdef TA_SERVER
-		if (false == FileLoader::getFilePathsFromDirectory(GameDataXmlFilePath, xmlFiles))
-//#else
-//		if (false == FileLoader::getFilePathsFromDirectory(*FPaths::GetProjectFilePath(), xmlFiles))
-//#endif
+		std::vector<std::vector<GameDataLoadHelper*>> gameDataLoadHelperSetGroup;
+		{ /* LoadFromXml */ }
 		{
-			TA_ASSERT_DEV(false, "비정상입니다.");
-			return false;
-		}
+			std::vector<fs::path> xmlFiles;
 
-		//std::vector<XmlNode*> rootList; // 인덱스 = GameDataType값
-		//rootList.resize(static_cast<uint8>(GameDataType::Count), nullptr);
+			const uint8 gameDataTypeCount = static_cast<uint8>(GameDataType::Count);
+			gameDataLoadHelperSetGroup.resize(gameDataTypeCount);
 
-		const uint32 count = xmlFiles.size();
-		for (uint32 index = 0; index < count; ++index)
-		{
-			ThreadLoadTaskGameData* loadTaskGameData = new ThreadLoadTaskGameData;
-			loadTaskGameData->_gameDataManager = this;
-			loadTaskGameData->_filePath = xmlFiles[index];
-
-			if (false == RegisterThreadLoadTask(loadTaskGameData))
+			//#ifdef TA_SERVER
+			if (false == FileLoader::getFilePathsFromDirectory(GameDataXmlFilePath, xmlFiles))
+				//#else
+				//		if (false == FileLoader::getFilePathsFromDirectory(*FPaths::GetProjectFilePath(), xmlFiles))
+				//#endif
 			{
 				TA_ASSERT_DEV(false, "비정상입니다.");
 				return false;
 			}
+
+			//std::vector<XmlNode*> rootList; // 인덱스 = GameDataType값
+			//rootList.resize(static_cast<uint8>(GameDataType::Count), nullptr);
+
+			const uint32 count = xmlFiles.size();
+			for (uint32 index = 0; index < count; ++index)
+			{
+				ThreadTaskLoadGameDataFromXml* threadTaskLoadGameDataFromXml = new ThreadTaskLoadGameDataFromXml;
+				threadTaskLoadGameDataFromXml->_gameDataManager = this;
+				threadTaskLoadGameDataFromXml->_filePath = xmlFiles[index];
+				threadTaskLoadGameDataFromXml->_gameDataLoadHelperSetGroup = &gameDataLoadHelperSetGroup;
+				if (false == RegisterThreadTask(threadTaskLoadGameDataFromXml))
+				{
+					TA_ASSERT_DEV(false, "비정상입니다.");
+					return false;
+				}
+			}
+
+			StartRegisteredThreadTasksAndWait();
 		}
 
-		StartRegisteredThreadLoadTasksAndWait();
+		{ /* FinishLoading */ }
+		{
+			const uint32 count = gameDataLoadHelperSetGroup.size();
+			for (uint32 index = 0; index < count; ++index)
+			{
+				const GameDataType currentGameDataType = static_cast<GameDataType>(index);
+				ThreadTaskFinishGameDataLoading* finishGameDataLoadingTask = new ThreadTaskFinishGameDataLoading;
+				finishGameDataLoadingTask->_gameDataManager = this;
+				finishGameDataLoadingTask->_gameDataType = currentGameDataType;
+				finishGameDataLoadingTask->_gameDataLoadHelperSet = &gameDataLoadHelperSetGroup[index];
+				if (false == RegisterThreadTask(finishGameDataLoadingTask))
+				{
+					TA_ASSERT_DEV(false, "비정상입니다.");
+					return false;
+				}
+			}
+
+			StartRegisteredThreadTasksAndWait();
+		}
+
+		{ /* CheckFinally */ }
+		{			
+			const uint8 gameDataTypeCount = static_cast<uint8>(GameDataType::Count);
+			for (uint32 index = 0; index < gameDataTypeCount; ++index)
+			{
+				const GameDataType currentGameDataType = static_cast<GameDataType>(index);
+				ThreadTaskCheckGameDataFinally* checkGameDataFinallyTask = new ThreadTaskCheckGameDataFinally;
+				checkGameDataFinallyTask->_gameDataManager = this;
+				checkGameDataFinallyTask->_gameDataType = currentGameDataType;
+				if (false == RegisterThreadTask(checkGameDataFinallyTask))
+				{
+					TA_ASSERT_DEV(false, "비정상입니다.");
+					return false;
+				}
+			}
+
+			StartRegisteredThreadTasksAndWait();
+		}
 
 		return true;
 	}
@@ -102,7 +149,243 @@ namespace ta
 #undef CLOSE_GAMEDATA
 	}
 	
-	const GameData* GameDataManager::getGameData(const int32 key, const GameDataType& gameDataType) const noexcept
+
+	bool GameDataManager::loadGameDataFromXml(const fs::path filePath, std::vector<std::vector<GameDataLoadHelper*>>* gameDataLoadHelperSet) noexcept
+	{
+		XmlNode rootNode("Root");
+		if (false == FileLoader::loadXml(filePath, &rootNode))
+		{
+			TA_ASSERT_DEV(false, "XmlObject생성을 실패했습니다.");
+			return false;
+		}
+
+		//// xml save test
+		//if (false)
+		//{
+		//	fs::path newFilePath = filePath;
+		//	newFilePath += ".test.xml";
+		//	FileLoader::saveXml(newFilePath, &rootNode);
+		//}
+
+		std::string fileName = filePath.filename().string();
+		TrimExtension(fileName);
+		// 파일이름으로 어떤타입인지 알아낸다.
+		const GameDataType gameDataType = ConvertStringToEnum<GameDataType>(fileName);
+		if (GameDataType::Count == gameDataType)
+		{
+			TA_ASSERT_DEV(false, "비정상");
+			return false;
+		}
+
+		std::vector<GameDataLoadHelper*>& gameDataLoadHelpers = gameDataLoadHelperSet->at(static_cast<uint8>(gameDataType));
+		const uint32 count = rootNode.getChildElementCount();
+		XmlNode* childElement = nullptr;
+		const std::string* keyString = nullptr;
+
+		//const std::unordered_map<std::string, XmlNode*>& childElements = rootNode.getChildElements();
+		//std::unordered_map<std::string, XmlNode*>::const_iterator it = childElements.begin();
+		//const std::unordered_map<std::string, XmlNode*>::const_iterator end = childElements.end();
+
+		for (uint32 index = 0; index < count; ++index)
+		{
+			childElement = rootNode.getChildElement(index);
+			keyString = childElement->getAttribute("Key");
+			if (nullptr == keyString)
+			{
+				TA_ASSERT_DEV(false, "Key값이 로드되지 않았습니다. type : %d", static_cast<uint8>(gameDataType));
+				return false;
+			}
+
+			std::wstringstream ss;
+			ss << std::this_thread::get_id();
+			TA_LOG_DEV("[LoadFromXml] => GameDataType : %d, Thread id : %s", static_cast<uint32>(gameDataType), ss.str().c_str());
+
+			//std::cout << "GameDataType : " << static_cast<uint32>(gameDataType) << ", Thread id : " << this_id << std::endl;
+			switch (gameDataType)
+			{
+				// _setOf##GameDataName 이 각각의 변수니까 공유하지 않는다 따로 락걸필요가 없다.
+
+#define LOAD_FROM_XML(GameDataName)																								\
+			case GameDataType::GameDataName:																					\
+				{																												\
+					const GameDataName##Key key(FromStringCast<GameDataName##KeyType>(*keyString));								\
+					GameDataName* gameData = new GameDataName;																	\
+					GameDataName##LoadHelper* gameDataLoadHelper = new GameDataName##LoadHelper(this);							\
+					gameData->clear();																							\
+					gameDataLoadHelper->clear();																				\
+																																\
+					gameData->_key = key;																						\
+					gameDataLoadHelper->_key = key;																				\
+					if (false == gameData->loadFromXml(childElement, gameDataLoadHelper))										\
+					{																											\
+						TA_ASSERT_DEV(false, "게임데이터 LoadFromXml에 실패했습니다. type : %d, key : %d"							\
+									  , static_cast<uint8>(gameDataType)														\
+									  , key.getKeyValue());																		\
+																																\
+						return false;																							\
+					}																											\
+					gameData->setIsValid(true);																					\
+					gameDataLoadHelpers.push_back(gameDataLoadHelper);															\
+																																\
+					std::pair<std::unordered_map<GameDataName##Key, GameDataName *>::iterator, bool> rv							\
+						= _setOf##GameDataName.insert(std::make_pair(key, gameData));											\
+																																\
+					if (false == rv.second)																						\
+					{																											\
+						TA_ASSERT_DEV(false, "Key값 중복됩니다.type : %d, key : %d"												\
+									  , static_cast<uint8>(gameDataType)														\
+									  , key.getKeyValue());																		\
+																																\
+						return false;																							\
+					}																											\
+				}																												\
+				break;																											\
+
+
+				LOAD_FROM_XML(GroupGameData)
+					LOAD_FROM_XML(MoveGameData)
+					LOAD_FROM_XML(AiGameData)
+					LOAD_FROM_XML(CharacterGameData)
+					LOAD_FROM_XML(ItemGameData)
+					LOAD_FROM_XML(RenderingGameData)
+					LOAD_FROM_XML(ConditionGameData)
+					LOAD_FROM_XML(EventGameData)
+					LOAD_FROM_XML(SectorZoneGameData)
+
+					TA_COMPILE_DEV(9 == static_cast<uint8>(GameDataType::Count), "여기도 확인해주세요")
+#undef LOAD_FROM_XML
+
+			default:
+				{
+					TA_ASSERT_DEV(false, "비정상");
+					return false;
+				}
+				break;
+			}
+		}
+		return true;
+	}
+
+	bool GameDataManager::finishGameDataLoading(const GameDataType& gameDataType, const std::vector<GameDataLoadHelper*>& gameDataLoadHelperSet) noexcept
+	{
+		if (GameDataType::Count <= gameDataType)
+		{
+			TA_ASSERT_DEV(false, "비정상");
+			return false;
+		}
+
+		std::wstringstream ss;
+		ss << std::this_thread::get_id();
+		TA_LOG_DEV("[FinishLoading] => GameDataType : %d, Thread id : %s", static_cast<uint32>(gameDataType), ss.str().c_str());
+
+		const uint32 count = gameDataLoadHelperSet.size();
+		for (uint32 index = 0; index < count; ++index)
+		{
+		
+			switch (gameDataType)
+			{
+
+#define FINISH_LOADING(GameDataName)																									\
+			case GameDataType::GameDataName:																							\
+				{																														\
+					GameDataName##LoadHelper* currentLoadHelper = static_cast<GameDataName##LoadHelper*>(gameDataLoadHelperSet[index]);	\
+					const GameDataName##KeyType currentKeyValue = currentLoadHelper->_key.getKeyValue();								\
+					GameDataName* currentData = static_cast<GameDataName*>(getGameData_(currentLoadHelper->_key.getKeyValue()			\
+																						 , GameDataName::getGameDataType()));			\
+																																		\
+					if (false == currentData->finishLoading(currentLoadHelper))															\
+					{																													\
+						TA_ASSERT_DEV(false, "게임데이터 FinishLoading에 실패했습니다. type : %d, key : %d"								\
+									  , static_cast<uint8>(gameDataType)																\
+									  , currentKeyValue);																				\
+																																		\
+						return false;																									\
+					}																													\
+				}																														\
+				break;																													\
+
+
+					FINISH_LOADING(GroupGameData)
+					FINISH_LOADING(MoveGameData)
+					FINISH_LOADING(AiGameData)
+					FINISH_LOADING(CharacterGameData)
+					FINISH_LOADING(ItemGameData)
+					FINISH_LOADING(RenderingGameData)
+					FINISH_LOADING(ConditionGameData)
+					FINISH_LOADING(EventGameData)
+					FINISH_LOADING(SectorZoneGameData)
+
+					TA_COMPILE_DEV(9 == static_cast<uint8>(GameDataType::Count), "여기도 확인해주세요")
+#undef FINISH_LOADING
+
+
+			default:
+				{
+					TA_ASSERT_DEV(false, "비정상");
+					return false;
+				}
+				break;
+			}
+
+		}
+
+		return true;
+	}
+
+	bool GameDataManager::checkGameDataFinally(const GameDataType& gameDataType) noexcept
+	{
+		if (GameDataType::Count <= gameDataType)
+		{
+			TA_ASSERT_DEV(false, "비정상");
+			return false;
+		}
+		switch (gameDataType)
+		{
+
+#define CHECK_FINALLY(GameDataName)								\
+		case GameDataType::GameDataName:						\
+			{													\
+				auto it = _setOf##GameDataName.begin();			\
+				const auto end = _setOf##GameDataName.end();	\
+				while (end != it)								\
+				{												\
+					it->second->checkFinally(this);				\
+					++it;										\
+				}												\
+			}													\
+			break;												\
+
+
+				CHECK_FINALLY(GroupGameData)
+				CHECK_FINALLY(MoveGameData)
+				CHECK_FINALLY(AiGameData)
+				CHECK_FINALLY(CharacterGameData)
+				CHECK_FINALLY(ItemGameData)
+				CHECK_FINALLY(RenderingGameData)
+				CHECK_FINALLY(ConditionGameData)
+				CHECK_FINALLY(EventGameData)
+				CHECK_FINALLY(SectorZoneGameData)
+
+				TA_COMPILE_DEV(9 == static_cast<uint8>(GameDataType::Count), "여기도 확인해주세요")
+#undef CHECK_FINALLY
+
+
+		default:
+				{
+					TA_ASSERT_DEV(false, "비정상");
+					return false;
+				}
+				break;
+		}
+		return true;
+	}
+
+	const GameData* GameDataManager::getGameData(const int32 key, const GameDataType& gameDataType) noexcept
+	{
+		return static_cast<const GameData*>(getGameData_(key, gameDataType));
+	}
+
+	GameData* GameDataManager::getGameData_(const int32 key, const GameDataType& gameDataType) noexcept
 	{
 		switch (gameDataType)
 		{
@@ -129,142 +412,28 @@ namespace ta
 				return (target->second);																							 \
 			}																														 \
 
-		RETURN_GAMEDATA(GroupGameData)
-		RETURN_GAMEDATA(MoveGameData)
-		RETURN_GAMEDATA(AiGameData)
-		RETURN_GAMEDATA(CharacterGameData)
-		RETURN_GAMEDATA(ItemGameData)
-		RETURN_GAMEDATA(RenderingGameData)
-		RETURN_GAMEDATA(ConditionGameData)
-		RETURN_GAMEDATA(EventGameData)
-		RETURN_GAMEDATA(SectorZoneGameData)
+			RETURN_GAMEDATA(GroupGameData)
+				RETURN_GAMEDATA(MoveGameData)
+				RETURN_GAMEDATA(AiGameData)
+				RETURN_GAMEDATA(CharacterGameData)
+				RETURN_GAMEDATA(ItemGameData)
+				RETURN_GAMEDATA(RenderingGameData)
+				RETURN_GAMEDATA(ConditionGameData)
+				RETURN_GAMEDATA(EventGameData)
+				RETURN_GAMEDATA(SectorZoneGameData)
 
-		TA_COMPILE_DEV(9 == static_cast<uint8>(GameDataType::Count), "여기도 확인해주세요")
+				TA_COMPILE_DEV(9 == static_cast<uint8>(GameDataType::Count), "여기도 확인해주세요")
 #undef RETURN_GAMEDATA
-		
+
 		default:
-			{
-				TA_ASSERT_DEV(false, "비정상입니다.")
-			}
-			break;
+				{
+					TA_ASSERT_DEV(false, "비정상입니다.")
+				}
+				break;
 		}
 
 		return nullptr;
 	}
 
-
-	bool GameDataManager::loadGameDataFromXml(const fs::path filePath, std::vector<GameDataLoadHelper*>& gameDataLoadHelper) noexcept
-	{
-		XmlNode rootNode("Root");
-		if (false == FileLoader::loadXml(filePath, &rootNode))
-		{
-			TA_ASSERT_DEV(false, "XmlObject생성을 실패했습니다.");
-			return false;
-		}
-
-		// xml save test
-		if (false)
-		{
-			fs::path newFilePath = filePath;
-			newFilePath += ".test.xml";
-			FileLoader::saveXml(newFilePath, &rootNode);
-		}
-
-		std::string fileName = filePath.filename().string();
-		TrimExtension(fileName);
-		// 파일이름으로 어떤타입인지 알아낸다.
-		const GameDataType gameDataType = ConvertStringToEnum<GameDataType>(fileName);
-
-		const uint32 count = rootNode.getChildElementCount();
-		XmlNode* childElement = nullptr;
-		const std::string* keyString = nullptr;
-
-		//const std::unordered_map<std::string, XmlNode*>& childElements = rootNode.getChildElements();
-		//std::unordered_map<std::string, XmlNode*>::const_iterator it = childElements.begin();
-		//const std::unordered_map<std::string, XmlNode*>::const_iterator end = childElements.end();
-
-		for (uint32 index = 0; index < count; ++index)
-		{
-			childElement = rootNode.getChildElement(index);
-			keyString = childElement->getAttribute("Key");
-			if (nullptr == keyString)
-			{
-				TA_ASSERT_DEV(false, "Key값이 로드되지 않았습니다. type : %d", static_cast<uint8>(gameDataType));
-				return false;
-			}
-
-			std::wstringstream ss;
-			ss << std::this_thread::get_id();
-			TA_LOG_DEV("GameDataType : %d, Thread id : %s", static_cast<uint32>(gameDataType), ss.str().c_str());
-
-			//std::cout << "GameDataType : " << static_cast<uint32>(gameDataType) << ", Thread id : " << this_id << std::endl;
-			switch (gameDataType)
-			{
-				// _setOf##GameDataName 이 각각의 변수니까 공유하지 않는다 따로 락걸필요가 없다.
-
-#define LOADXML(GameDataName)																									\
-			case GameDataType::GameDataName:																					\
-				{																												\
-					TA_LOG_DEV("Switch GameDataType : %d, Thread id : %s", static_cast<uint32>(GameDataType::GameDataName), ss.str().c_str());\
-					const GameDataName##Key key(FromStringCast<GameDataName##KeyType>(*keyString));								\
-					GameDataName* gameData = new GameDataName;																	\
-					GameDataName##LoadHelper* gameDataLoadHelper = new GameDataName##LoadHelper(this, key)						\
-					gameData->clear();																							\
-					gameDataLoadHelper->clear();																				\
-																																\
-					gameData->_key = key;																						\
-					gameDataLoadHelper->_key = key;																				\
-					if (false == gameData->loadXml(childElement, gameDataLoadHelper))											\
-					{																											\
-						TA_ASSERT_DEV(false, "게임데이터 loadXml에 실패했습니다. type : %d, key : %d"								\
-									  , static_cast<uint8>(gameDataType)														\
-									  , key.getKeyValue());																		\
-																																\
-						return false;																							\
-					}																											\
-					gameData->setIsValid(true);																					\
-																																\
-					std::pair<std::unordered_map<GameDataName##Key, GameDataName *>::iterator, bool> rv							\
-						= _setOf##GameDataName.insert(std::make_pair(key, gameData));											\
-																																\
-					if (false == rv.second)																						\
-					{																											\
-						TA_ASSERT_DEV(false, "Key값 중복됩니다.type : %d, key : %d"												\
-									  , static_cast<uint8>(gameDataType)														\
-									  , key.getKeyValue());																		\
-																																\
-						return false;																							\
-					}																											\
-				}																												\
-				break;																											\
-
-
-				LOADXML(GroupGameData)
-					LOADXML(MoveGameData)
-					LOADXML(AiGameData)
-					LOADXML(CharacterGameData)
-					LOADXML(ItemGameData)
-					LOADXML(RenderingGameData)
-					LOADXML(ConditionGameData)
-					LOADXML(EventGameData)
-					LOADXML(SectorZoneGameData)
-
-					TA_COMPILE_DEV(9 == static_cast<uint8>(GameDataType::Count), "여기도 확인해주세요")
-#undef LOADXML
-
-			default:
-					{
-
-					}
-					break;
-			}
-		}
-		return true;
-	}
-
-	bool GameDataManager::finishGameDataLoading(const std::vector<std::vector<GameDataLoadHelper*>> gameDataLoadHelperSet) noexcept
-	{
-		return false;
-	}
 }
 

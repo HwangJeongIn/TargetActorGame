@@ -42,9 +42,9 @@ namespace ta
 		bool isValid(void) const noexcept;
 		void clear(void) noexcept;
 
-		//virtual bool loadXml(XmlNode* xmlNode, GameDataLoadHelper* loadHelper) noexcept = 0;
+		//virtual bool loadFromXml(XmlNode* xmlNode, GameDataLoadHelper* loadHelper) noexcept = 0;
 		//virtual bool finishLoading(const GameDataLoadHelper* loadHelper) noexcept = 0;
-		//virtual bool finalCheck(const GameDataManager* gameDataManager) noexcept = 0;
+		//virtual bool checkFinally(const GameDataManager* gameDataManager) noexcept = 0;
 
 		void setIsValid(bool input) noexcept;
 
@@ -87,9 +87,9 @@ namespace ta
 
 		static GameDataType getGameDataType(void) noexcept;
 
-		bool loadXml(XmlNode* xmlNode, GroupGameDataLoadHelper* loadHelper) noexcept;
+		bool loadFromXml(XmlNode* xmlNode, GroupGameDataLoadHelper* loadHelper) noexcept;
 		bool finishLoading(const GroupGameDataLoadHelper* loadHelper) noexcept;
-		bool finalCheck(const GameDataManager* gameDataManager) noexcept;
+		bool checkFinally(const GameDataManager* gameDataManager) noexcept;
 
 	private:
 		virtual void clearDetail(void) noexcept override final;
@@ -127,9 +127,9 @@ namespace ta
 
 		static GameDataType getGameDataType(void) noexcept;
 
-		bool loadXml(XmlNode* xmlNode, MoveGameDataLoadHelper* loadHelper) noexcept;
+		bool loadFromXml(XmlNode* xmlNode, MoveGameDataLoadHelper* loadHelper) noexcept;
 		bool finishLoading(const MoveGameDataLoadHelper* loadHelper) noexcept;
-		bool finalCheck(const GameDataManager* gameDataManager) noexcept;
+		bool checkFinally(const GameDataManager* gameDataManager) noexcept;
 
 	private:
 		virtual void clearDetail(void) noexcept override final;
@@ -165,9 +165,9 @@ namespace ta
 
 		static GameDataType getGameDataType(void) noexcept;
 
-		bool loadXml(XmlNode* xmlNode, AiGameDataLoadHelper* loadHelper) noexcept;
+		bool loadFromXml(XmlNode* xmlNode, AiGameDataLoadHelper* loadHelper) noexcept;
 		bool finishLoading(const AiGameDataLoadHelper* loadHelper) noexcept;
-		bool finalCheck(const GameDataManager* gameDataManager) noexcept;
+		bool checkFinally(const GameDataManager* gameDataManager) noexcept;
 
 	private:
 		virtual void clearDetail(void) noexcept override final;
@@ -206,9 +206,9 @@ namespace ta
 
 		static GameDataType getGameDataType(void) noexcept;
 
-		bool loadXml(XmlNode* xmlNode, CharacterGameDataLoadHelper* loadHelper) noexcept;
+		bool loadFromXml(XmlNode* xmlNode, CharacterGameDataLoadHelper* loadHelper) noexcept;
 		bool finishLoading(const CharacterGameDataLoadHelper* loadHelper) noexcept;
-		bool finalCheck(const GameDataManager* gameDataManager) noexcept;
+		bool checkFinally(const GameDataManager* gameDataManager) noexcept;
 
 	private:
 		virtual void clearDetail(void) noexcept override final;
@@ -256,9 +256,9 @@ namespace ta
 
 		static GameDataType getGameDataType(void) noexcept;
 
-		bool loadXml(XmlNode* xmlNode, ItemGameDataLoadHelper* loadHelper) noexcept;
+		bool loadFromXml(XmlNode* xmlNode, ItemGameDataLoadHelper* loadHelper) noexcept;
 		bool finishLoading(const ItemGameDataLoadHelper* loadHelper) noexcept;
-		bool finalCheck(const GameDataManager* gameDataManager) noexcept;
+		bool checkFinally(const GameDataManager* gameDataManager) noexcept;
 
 		const ItemType getItemType(void) const noexcept;
 
@@ -300,9 +300,9 @@ namespace ta
 
 		static GameDataType getGameDataType(void) noexcept;
 
-		bool loadXml(XmlNode* xmlNode, RenderingGameDataLoadHelper* loadHelper) noexcept;
+		bool loadFromXml(XmlNode* xmlNode, RenderingGameDataLoadHelper* loadHelper) noexcept;
 		bool finishLoading(const RenderingGameDataLoadHelper* loadHelper) noexcept;
-		bool finalCheck(const GameDataManager* gameDataManager) noexcept;
+		bool checkFinally(const GameDataManager* gameDataManager) noexcept;
 
 	private:
 		virtual void clearDetail(void) noexcept override final;
@@ -341,9 +341,9 @@ namespace ta
 
 		static GameDataType getGameDataType(void) noexcept;
 
-		bool loadXml(XmlNode* xmlNode, ConditionGameDataLoadHelper* loadHelper) noexcept;
+		bool loadFromXml(XmlNode* xmlNode, ConditionGameDataLoadHelper* loadHelper) noexcept;
 		bool finishLoading(const ConditionGameDataLoadHelper* loadHelper) noexcept;
-		bool finalCheck(const GameDataManager* gameDataManager) noexcept;
+		bool checkFinally(const GameDataManager* gameDataManager) noexcept;
 
 		bool checkCondition(ContentParameter& parameter) const noexcept;
 
@@ -380,9 +380,9 @@ namespace ta
 
 		static GameDataType getGameDataType(void) noexcept;
 
-		bool loadXml(XmlNode* xmlNode, EventGameDataLoadHelper* loadHelper) noexcept;
+		bool loadFromXml(XmlNode* xmlNode, EventGameDataLoadHelper* loadHelper) noexcept;
 		bool finishLoading(const EventGameDataLoadHelper* loadHelper) noexcept;
-		bool finalCheck(const GameDataManager* gameDataManager) noexcept;
+		bool checkFinally(const GameDataManager* gameDataManager) noexcept;
 
 	private:
 		virtual void clearDetail(void) noexcept override final;
@@ -417,9 +417,9 @@ namespace ta
 
 		static GameDataType getGameDataType(void) noexcept;
 
-		bool loadXml(XmlNode* xmlNode, SectorZoneGameDataLoadHelper* loadHelper) noexcept;
+		bool loadFromXml(XmlNode* xmlNode, SectorZoneGameDataLoadHelper* loadHelper) noexcept;
 		bool finishLoading(const SectorZoneGameDataLoadHelper* loadHelper) noexcept;
-		bool finalCheck(const GameDataManager* gameDataManager) noexcept;
+		bool checkFinally(const GameDataManager* gameDataManager) noexcept;
 
 	private:
 		virtual void clearDetail(void) noexcept override final;

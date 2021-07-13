@@ -173,9 +173,6 @@
     <ClCompile Include="..\..\TAGameClient\Source\TAGameClient\Public\Client\ClientSpawnDataManager.cpp">
       <Filter>Client</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\ThreadLoadTaskManager.cpp">
-      <Filter>Common</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\CommonInventoryActorComponent.cpp">
       <Filter>Common</Filter>
     </ClCompile>
@@ -351,6 +348,9 @@
       <Filter>Common</Filter>
     </ClCompile>
     <ClCompile Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\EventGameDataObject.cpp">
+      <Filter>Common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\ThreadTaskManager.cpp">
       <Filter>Common</Filter>
     </ClCompile>
   </ItemGroup>
@@ -579,9 +579,6 @@
     <ClInclude Include="..\..\TAGameClient\Source\TAGameClient\Public\Client\ClientSpawnDataManager.h">
       <Filter>Client</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\ThreadLoadTaskManager.h">
-      <Filter>Common</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\CommonInventoryActorComponent.h">
       <Filter>Common</Filter>
     </ClInclude>
@@ -736,6 +733,9 @@
       <Filter>Common</Filter>
     </ClInclude>
     <ClInclude Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\EventGameDataObject.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\ThreadTaskManager.h">
       <Filter>Common</Filter>
     </ClInclude>
   </ItemGroup>

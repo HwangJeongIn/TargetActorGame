@@ -13,7 +13,7 @@
 #include "Common/FileLoader.h"
 #include "Common/StringUtility.h"
 #include "Common/PathPointPath.h"
-#include "Common/ThreadLoadTaskManager.h"
+#include "Common/ThreadTaskManager.h"
 #include "RecastNavigation/RecastNavigationSystemUtility.h"
 #include "RecastNavigation/NavMeshPoint.h"
 #include "RecastNavigation/NavMeshPath.h"
@@ -53,18 +53,18 @@ namespace ta
 		const uint32 count = pathPointFilePaths.size();
 		for (uint32 index = 0; index < count; ++index)
 		{
-			ThreadLoadTaskPathPoint* loadTaskPathPoint = new ThreadLoadTaskPathPoint;
+			ThreadTaskLoadPathPointFromXml* loadTaskPathPoint = new ThreadTaskLoadPathPointFromXml;
 			loadTaskPathPoint->_moveActorSystem = this;
 			loadTaskPathPoint->_filePath = pathPointFilePaths[index];
 
-			if (false == RegisterThreadLoadTask(loadTaskPathPoint))
+			if (false == RegisterThreadTask(loadTaskPathPoint))
 			{
 				TA_ASSERT_DEV(false, "비정상입니다.");
 				return false;
 			}
 		}
 
-		StartRegisteredThreadLoadTasksAndWait();
+		StartRegisteredThreadTasksAndWait();
 
 		return true;
 	}

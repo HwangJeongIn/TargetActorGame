@@ -3,7 +3,7 @@
 #include "Common/StringUtility.h"
 #include "Common/FileLoader.h"
 #include "Common/EnumUtility.h"
-#include "Common/ThreadLoadTaskManager.h"
+#include "Common/ThreadTaskManager.h"
 
 
 namespace ta
@@ -50,18 +50,18 @@ namespace ta
 		//		continue;
 		//	}
 
-		//	ThreadLoadTaskSpawnData* loadTaskSpawnData = new ThreadLoadTaskSpawnData;
+		//	ThreadTaskLoadSpawnDataFromXml* loadTaskSpawnData = new ThreadTaskLoadSpawnDataFromXml;
 		//	loadTaskSpawnData->_spawnDataManager = this;
 		//	loadTaskSpawnData->_filePath = spawnDataFilePaths[index];
 
-		//	if (false == RegisterThreadLoadTask(loadTaskSpawnData))
+		//	if (false == RegisterThreadTask(loadTaskSpawnData))
 		//	{
 		//		TA_ASSERT_DEV(false, "비정상입니다.");
 		//		return false;
 		//	}
 		//}
 
-		//StartRegisteredThreadLoadTasksAndWait();
+		//StartRegisteredThreadTasksAndWait();
 
 		if (false == doInitialize())
 		{

@@ -210,7 +210,7 @@
     <ClCompile Include="..\Source\Server\ServerSpawnDataManager.cpp">
       <Filter>Server</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\ThreadLoadTaskManager.cpp">
+    <ClCompile Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\ThreadTaskManager.cpp">
       <Filter>Common</Filter>
     </ClCompile>
     <ClCompile Include="..\Source\Server\ServerInventoryActorComponent.cpp">
@@ -591,7 +591,7 @@
     <ClInclude Include="..\Source\Server\ServerSpawnDataManager.h">
       <Filter>Server</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\ThreadLoadTaskManager.h">
+    <ClInclude Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\ThreadTaskManager.h">
       <Filter>Common</Filter>
     </ClInclude>
     <ClInclude Include="..\Source\Server\ServerInventoryActorComponent.h">

@@ -80,13 +80,13 @@ namespace ta
 	{
 		if (nullptr != _itemGameData)
 		{
-			const RenderingGameData* renderingGameData = ta::GetGameData<RenderingGameData>(_itemGameData->_renderingGameDataKey);
-			if (nullptr == renderingGameData)
+			if (nullptr == _itemGameData->_renderingGameData)
 			{
 				TA_ASSERT_DEV(false, "비정상입니다.");
+				return nullptr;
 			}
 
-			return renderingGameData;
+			return _itemGameData->_renderingGameData;
 		}
 		
 		if (nullptr == _renderingGameData)

@@ -20,7 +20,7 @@ namespace ta
 namespace ta
 {
 	class XmlNode;
-	class 
+	class GameDataLoadHelper;
 }
 
 
@@ -36,12 +36,14 @@ namespace ta
 		bool open(void) noexcept;
 		void close(void) noexcept;
 
-		const GameData* getGameData(const int32 key, const GameDataType& gameDataType) const noexcept;
+		bool loadGameDataFromXml(const fs::path filePath, std::vector<std::vector<GameDataLoadHelper*>>* gameDataLoadHelperSet) noexcept;
+		bool finishGameDataLoading(const GameDataType& gameDataType, const std::vector<GameDataLoadHelper*>& gameDataLoadHelperSet) noexcept;
+		bool checkGameDataFinally(const GameDataType& gameDataType) noexcept;
 
-		bool loadGameDataFromXml(const fs::path filePath, std::vector<GameDataLoadHelper*>& gameDataLoadHelper) noexcept;
-		bool finishGameDataLoading(const std::vector<std::vector<GameDataLoadHelper*>> gameDataLoadHelperSet) noexcept;
-		bool checkGameDataFinal(void) noexcept;
-		//bool makeDataSetWithXmlNode(const std::string)
+		const GameData* getGameData(const int32 key, const GameDataType& gameDataType) noexcept;
+
+	private:
+		GameData* getGameData_(const int32 key, const GameDataType& gameDataType) noexcept;
 
 	private:
 

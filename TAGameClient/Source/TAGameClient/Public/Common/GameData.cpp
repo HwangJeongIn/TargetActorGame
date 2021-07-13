@@ -79,7 +79,7 @@ namespace ta
 		return GameDataType::GroupGameData;
 	}
 
-	bool GroupGameData::loadXml(XmlNode* xmlNode, GroupGameDataLoadHelper* loadHelper) noexcept
+	bool GroupGameData::loadFromXml(XmlNode* xmlNode, GroupGameDataLoadHelper* loadHelper) noexcept
 	{
 		{
 			const std::string* value = xmlNode->getAttribute("MoveGameDataKey");
@@ -133,14 +133,15 @@ namespace ta
 		_aiGameData = GetGameData<AiGameData>(loadHelper->_aiGameDataKey);
 		if (nullptr == _aiGameData)
 		{
-			TA_ASSERT_DEV(false, "비정상");
-			return false;
+			// 없을 수 있다.
+			//TA_ASSERT_DEV(false, "비정상");
+			//return false;
 		}
 
 		return true;
 	}
 
-	bool GroupGameData::finalCheck(const GameDataManager* gameDataManager) noexcept
+	bool GroupGameData::checkFinally(const GameDataManager* gameDataManager) noexcept
 	{
 		return true;
 	}
@@ -185,7 +186,7 @@ namespace ta
 		return GameDataType::MoveGameData;
 	}
 
-	bool MoveGameData::loadXml(XmlNode* xmlNode, MoveGameDataLoadHelper* loadHelper) noexcept
+	bool MoveGameData::loadFromXml(XmlNode* xmlNode, MoveGameDataLoadHelper* loadHelper) noexcept
 	{
 		{
 			const std::string* value = xmlNode->getAttribute("Speed");
@@ -206,7 +207,7 @@ namespace ta
 		return true;
 	}
 
-	bool MoveGameData::finalCheck(const GameDataManager* gameDataManager) noexcept
+	bool MoveGameData::checkFinally(const GameDataManager* gameDataManager) noexcept
 	{
 		return true;
 	}
@@ -249,7 +250,7 @@ namespace ta
 		return GameDataType::AiGameData;
 	}
 
-	bool AiGameData::loadXml(XmlNode* xmlNode, AiGameDataLoadHelper* loadHelper) noexcept
+	bool AiGameData::loadFromXml(XmlNode* xmlNode, AiGameDataLoadHelper* loadHelper) noexcept
 	{
 		{
 			const std::string* value = xmlNode->getAttribute("AiClassType");
@@ -290,7 +291,7 @@ namespace ta
 		return true;
 	}
 
-	bool AiGameData::finalCheck(const GameDataManager* gameDataManager) noexcept
+	bool AiGameData::checkFinally(const GameDataManager* gameDataManager) noexcept
 	{
 		return true;
 	}
@@ -336,7 +337,7 @@ namespace ta
 		return GameDataType::CharacterGameData;
 	}
 
-	bool CharacterGameData::loadXml(XmlNode* xmlNode, CharacterGameDataLoadHelper* loadHelper) noexcept
+	bool CharacterGameData::loadFromXml(XmlNode* xmlNode, CharacterGameDataLoadHelper* loadHelper) noexcept
 	{
 
 		{
@@ -460,7 +461,7 @@ namespace ta
 		return true;
 	}
 
-	bool CharacterGameData::finalCheck(const GameDataManager* gameDataManager) noexcept
+	bool CharacterGameData::checkFinally(const GameDataManager* gameDataManager) noexcept
 	{
 		return false;
 	}
@@ -510,7 +511,7 @@ namespace ta
 		return GameDataType::ItemGameData;
 	}
 
-	bool ItemGameData::loadXml(XmlNode* xmlNode, ItemGameDataLoadHelper* loadHelper) noexcept
+	bool ItemGameData::loadFromXml(XmlNode* xmlNode, ItemGameDataLoadHelper* loadHelper) noexcept
 	{
 		// itemType
 		{
@@ -578,7 +579,7 @@ namespace ta
 		return true;
 	}
 
-	bool ItemGameData::finalCheck(const GameDataManager* gameDataManager) noexcept
+	bool ItemGameData::checkFinally(const GameDataManager* gameDataManager) noexcept
 	{
 		return true;
 	}
@@ -627,7 +628,7 @@ namespace ta
 		return GameDataType::RenderingGameData;
 	}
 
-	bool RenderingGameData::loadXml(XmlNode* xmlNode, RenderingGameDataLoadHelper* loadHelper) noexcept
+	bool RenderingGameData::loadFromXml(XmlNode* xmlNode, RenderingGameDataLoadHelper* loadHelper) noexcept
 	{
 		{
 			const std::string* value = xmlNode->getAttribute("MeshType");
@@ -707,7 +708,7 @@ namespace ta
 		return true;
 	}
 
-	bool RenderingGameData::finalCheck(const GameDataManager* gameDataManager) noexcept
+	bool RenderingGameData::checkFinally(const GameDataManager* gameDataManager) noexcept
 	{
 		return true;
 	}
@@ -751,7 +752,7 @@ namespace ta
 		return GameDataType::ConditionGameData;
 	}
 
-	bool ConditionGameData::loadXml(XmlNode* xmlNode, ConditionGameDataLoadHelper* loadHelper) noexcept
+	bool ConditionGameData::loadFromXml(XmlNode* xmlNode, ConditionGameDataLoadHelper* loadHelper) noexcept
 	{
 		{
 			const std::string* value = xmlNode->getAttribute("ConditionString");
@@ -819,7 +820,7 @@ namespace ta
 		return true;
 	}
 
-	bool ConditionGameData::finalCheck(const GameDataManager* gameDataManager) noexcept
+	bool ConditionGameData::checkFinally(const GameDataManager* gameDataManager) noexcept
 	{
 		return true;
 	}
@@ -878,7 +879,7 @@ namespace ta
 		return GameDataType::EventGameData;
 	}
 
-	bool EventGameData::loadXml(XmlNode* xmlNode, EventGameDataLoadHelper* loadHelper) noexcept
+	bool EventGameData::loadFromXml(XmlNode* xmlNode, EventGameDataLoadHelper* loadHelper) noexcept
 	{
 		return true;
 	}
@@ -888,7 +889,7 @@ namespace ta
 		return true;
 	}
 
-	bool EventGameData::finalCheck(const GameDataManager* gameDataManager) noexcept
+	bool EventGameData::checkFinally(const GameDataManager* gameDataManager) noexcept
 	{
 		return true;
 	}
@@ -929,7 +930,7 @@ namespace ta
 		return GameDataType::SectorZoneGameData;
 	}
 
-	bool SectorZoneGameData::loadXml(XmlNode* xmlNode, SectorZoneGameDataLoadHelper* loadHelper) noexcept
+	bool SectorZoneGameData::loadFromXml(XmlNode* xmlNode, SectorZoneGameDataLoadHelper* loadHelper) noexcept
 	{
 		return true;
 	}
@@ -939,7 +940,7 @@ namespace ta
 		return true;
 	}
 
-	bool SectorZoneGameData::finalCheck(const GameDataManager* gameDataManager) noexcept
+	bool SectorZoneGameData::checkFinally(const GameDataManager* gameDataManager) noexcept
 	{
 		return true;
 	}

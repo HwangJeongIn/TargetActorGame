@@ -63,20 +63,13 @@ namespace ta
 			return nullptr;
 		}
 
-		if (false == _characterGameData->_renderingGameDataKey.isValid())
+		if (nullptr == _characterGameData->_renderingGameData)
 		{
-			TA_ASSERT_DEV(false, "비정상적인 RenderingGameDataKey 입니다.");
+			TA_ASSERT_DEV(false, "비정상적인 RenderingGameData 입니다.");
 			return nullptr;
 		}
 
-		const ta::RenderingGameData* renderingGameData = ta::GetGameData<ta::RenderingGameData>(_characterGameData->_renderingGameDataKey);
-		if (nullptr == renderingGameData)
-		{
-			TA_ASSERT_DEV(false, "RenderingGameData가 없습니다.");
-			return nullptr;
-		}
-
-		return renderingGameData;
+		return _characterGameData->_renderingGameData;
 	}
 
 	float CommonCharacterActorComponent::getCurrentHp_(void) const noexcept

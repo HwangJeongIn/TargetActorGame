@@ -119,7 +119,7 @@
     <ClCompile Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\Serializer.cpp" />
     <ClCompile Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\Socket.cpp" />
     <ClCompile Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\StringUtility.cpp" />
-    <ClCompile Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\ThreadLoadTaskManager.cpp" />
+    <ClCompile Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\ThreadTaskManager.cpp" />
     <ClCompile Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\Vector.cpp" />
     <ClCompile Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\FileLoader.cpp" />
     <ClCompile Include="..\Source\Server\AllPacketServer.cpp" />
@@ -243,7 +243,7 @@
     <ClInclude Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\Socket.h" />
     <ClInclude Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\StringUtility.h" />
     <ClInclude Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\Subject.h" />
-    <ClInclude Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\ThreadLoadTaskManager.h" />
+    <ClInclude Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\ThreadTaskManager.h" />
     <ClInclude Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\Uncopyable.h" />
     <ClInclude Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\Vector.h" />
     <ClInclude Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\FileLoader.h" />
