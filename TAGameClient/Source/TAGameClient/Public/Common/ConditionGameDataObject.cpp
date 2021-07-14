@@ -54,7 +54,7 @@ namespace ta
 	{
 	}
 
-	bool ConditionGameDataObject::checkCondition(ContentParameter& parameter) const noexcept
+	bool ConditionGameDataObject::checkCondition(const ContentParameter& parameter) const noexcept
 	{
 		const bool rv = checkConditionDetail(parameter);
 
@@ -81,7 +81,7 @@ namespace ta
 	{
 	}
 
-	bool ConditionGameDataObjectLimitCount::checkConditionDetail(ContentParameter& parameter) const noexcept
+	bool ConditionGameDataObjectLimitCount::checkConditionDetail(const ContentParameter& parameter) const noexcept
 	{
 		Sector* targetSector = GetSector(parameter._sectorKey);
 		if (nullptr == targetSector)

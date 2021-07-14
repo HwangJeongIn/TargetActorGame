@@ -30,10 +30,10 @@ namespace ta
 		explicit ConditionGameDataObject(const ConditionGameDataObjectType& objectType, bool isNot) noexcept;
 		virtual ~ConditionGameDataObject(void) noexcept;
 		
-		virtual bool checkConditionDetail(ContentParameter& parameter) const noexcept = 0;
+		virtual bool checkConditionDetail(const ContentParameter& parameter) const noexcept = 0;
 		virtual bool loadFromStrings(const std::vector<std::string>& strings) noexcept = 0;
 	
-		bool checkCondition(ContentParameter& parameter) const noexcept;
+		bool checkCondition(const ContentParameter& parameter) const noexcept;
 	public:
 		ConditionGameDataObjectType _objectType;
 		bool _isNot;
@@ -49,7 +49,7 @@ namespace ta
 		explicit ConditionGameDataObjectLimitCount(bool isNot) noexcept;
 		virtual ~ConditionGameDataObjectLimitCount(void) noexcept;
 		
-		virtual bool checkConditionDetail(ContentParameter& parameter) const noexcept override final;
+		virtual bool checkConditionDetail(const ContentParameter& parameter) const noexcept override final;
 		virtual bool loadFromStrings(const std::vector<std::string>& strings) noexcept override final;
 	
 	public:

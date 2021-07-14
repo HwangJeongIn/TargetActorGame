@@ -367,7 +367,7 @@
     <ClCompile Include="..\Source\Server\ServerObjectActorComponent.cpp">
       <Filter>Server</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\SectorEvent.cpp">
+    <ClCompile Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\SectorEventSet.cpp">
       <Filter>Common</Filter>
     </ClCompile>
     <ClCompile Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\SectorProperty.cpp">
@@ -727,7 +727,7 @@
     <ClInclude Include="..\Source\Server\ServerObjectActorComponent.h">
       <Filter>Server</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\SectorEvent.h">
+    <ClInclude Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\SectorEventSet.h">
       <Filter>Common</Filter>
     </ClInclude>
     <ClInclude Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\SectorProperty.h">

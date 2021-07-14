@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <Root>
-	<EventGameData Key="1" Description="100번 엔피씨 소환" Interval="3000" ConditionGameDataKey="1" EventString="SpawnActor(100)"/>
-	<EventGameData Key="2" Description="" Interval="3000" ConditionGameDataKey="2" EventString="SpawnActor(101)"/>
-	<EventGameData Key="3" Description="" Interval="3000" ConditionGameDataKey="3" EventString="SpawnActor(102)"/>
+	<EventGameData Key="1" Description="100번 엔피씨 소환" Interval="3000" ConditionGameDataKeySet="1" EventString="SpawnActor(100)"/>
+	<EventGameData Key="2" Description="" Interval="3000" ConditionGameDataKeySet="2" EventString="SpawnActor(101)"/>
+	<EventGameData Key="3" Description="" Interval="3000" ConditionGameDataKeySet="3" EventString="SpawnActor(102)"/>
+	<EventGameData Key="4" Description="" Interval="3000" ConditionGameDataKeySet="3" EventString="SpawnActor(103)"/>
 </Root>

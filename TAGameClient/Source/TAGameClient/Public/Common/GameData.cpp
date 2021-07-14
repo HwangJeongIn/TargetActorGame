@@ -3,6 +3,7 @@
 #include "Common/FileLoader.h"
 #include "Common/EnumUtility.h"
 #include "Common/ConditionGameDataObject.h"
+#include "Common/EventGameDataObject.h"
 #include "Common/GameDataManager.h"
 #include "Common/GetComponentAndSystem.h"
 
@@ -825,7 +826,7 @@ namespace ta
 		return true;
 	}
 
-	bool ConditionGameData::checkCondition(ContentParameter& parameter) const noexcept
+	bool ConditionGameData::checkCondition(const ContentParameter& parameter) const noexcept
 	{
 		return _conditionObject->checkCondition(parameter);
 	}
@@ -863,6 +864,7 @@ namespace ta
 	void EventGameDataLoadHelper::clear(void) noexcept
 	{
 		_key.clear();
+		_conditionGameDataKeySet.clear();
 	}
 
 
@@ -881,11 +883,98 @@ namespace ta
 
 	bool EventGameData::loadFromXml(XmlNode* xmlNode, EventGameDataLoadHelper* loadHelper) noexcept
 	{
+		// EventString
+		{
+			const std::string* value = xmlNode->getAttribute("EventString");
+			if (nullptr == value)
+			{
+				TA_ASSERT_DEV(false, "EventString 로드 실패");
+				return false;
+			}
+
+			std::vector<std::string> splitedStrings;
+			Split(*value, "()!,", splitedStrings);
+			const uint32 count = splitedStrings.size();
+			if (3 > count)
+			{
+				TA_ASSERT_DEV(false, "EventString 로드 실패");
+				return false;
+			}
+
+			std::string eventGameDataObjectString = splitedStrings[0];
+
+			std::vector <std::string> dataStrings;
+			const uint32 splitedStringsCount = splitedStrings.size();
+			for (uint32 index = 2; index < (splitedStringsCount - 1); ++index)
+			{
+				dataStrings.push_back(splitedStrings[index]);
+			}
+
+			const EventGameDataObjectType objectType = ConvertStringToEnum<EventGameDataObjectType>(eventGameDataObjectString);
+			EventGameDataObjectFactory factory;
+			_eventObject = factory.generateConditionGameDataObject(dataStrings, objectType);
+
+			if (nullptr == _eventObject)
+			{
+				TA_ASSERT_DEV(false, "EventString 로드 실패");
+				return false;
+			}
+		}
+
+		// ConditionGameDataKeySet
+		{
+			const std::string* value = xmlNode->getAttribute("ConditionGameDataKeySet");
+			if (nullptr != value) // 없을 수 있다.
+			{
+				std::vector<std::string> splitedStrings;
+				Split(*value, ",", splitedStrings);
+				const uint32 count = splitedStrings.size();
+				if (0 == count)
+				{
+					TA_ASSERT_DEV(false, "ConditionGameDataKeySet 로드 실패");
+					return false;
+				}
+
+				for (uint32 index = 0; index < count; index += 2)
+				{
+					loadHelper->_conditionGameDataKeySet.push_back(FromStringCast<ConditionGameDataKeyType>(splitedStrings[index]));
+				}
+			}
+		}
+
+		// interval
+		{
+			const std::string* value = xmlNode->getAttribute("Interval");
+			if (nullptr == value)
+			{
+				TA_ASSERT_DEV(false, "Interval 로드 실패");
+				return false;
+			}
+
+			_interval = FromStringCast<uint32>(*value);
+		}
+
 		return true;
 	}
 
 	bool EventGameData::finishLoading(const EventGameDataLoadHelper* loadHelper) noexcept
 	{
+		const uint32 count = loadHelper->_conditionGameDataKeySet.size();
+		for (uint32 index = 0; index < count; ++index)
+		{
+			const ConditionGameData* conditionGameData = GetGameData<ConditionGameData>(loadHelper->_conditionGameDataKeySet[index]);
+			if (nullptr == conditionGameData)
+			{
+				TA_ASSERT_DEV(false, "[FinishLoading] EventGameData => ConditionGameDataKeySet 로드 실패 Key : %d, ConditionGameDataKey : %d"
+								  , _key.getKeyValue()
+								  , loadHelper->_conditionGameDataKeySet[index].getKeyValue());
+
+				return false;
+			}
+			
+			_conditionGameDataSet.push_back(conditionGameData);
+		}
+
 		return true;
 	}
 
@@ -894,58 +983,30 @@ namespace ta
 		return true;
 	}
 
+	bool EventGameData::checkAndExecute(const ContentParameter& parameter) const noexcept
+	{
+		const uint32 conditionCount = _conditionGameDataSet.size();
+		for (uint32 conditionIndex = 0; conditionIndex < conditionCount; ++conditionIndex)
+		{
+			if (false == _conditionGameDataSet[conditionIndex]->checkCondition(parameter))
+			{
+				return false;
+			}
+		}
+
+		if (false == _eventObject->execute(parameter))
+		{
+			TA_ASSERT_DEV(false, "비정상");
+			return false;
+		}
+
+		return true;
+	}
+
 	void EventGameData::clearDetail(void) noexcept
 	{
-	}
-}
-
-
-namespace ta
-{
-	SectorZoneGameDataLoadHelper::SectorZoneGameDataLoadHelper(const GameDataManager* gameDataManager) noexcept
-		: GameDataLoadHelper(gameDataManager)
-	{
-	}
-	
-	SectorZoneGameDataLoadHelper::~SectorZoneGameDataLoadHelper(void) noexcept
-	{
-	}
-
-	void SectorZoneGameDataLoadHelper::clear(void) noexcept
-	{
 		_key.clear();
-	}
-
-
-	SectorZoneGameData::SectorZoneGameData(void) noexcept
-	{
-	}
-
-	SectorZoneGameData::~SectorZoneGameData(void) noexcept
-	{
-	}
-
-	GameDataType SectorZoneGameData::getGameDataType(void) noexcept
-	{
-		return GameDataType::SectorZoneGameData;
-	}
-
-	bool SectorZoneGameData::loadFromXml(XmlNode* xmlNode, SectorZoneGameDataLoadHelper* loadHelper) noexcept
-	{
-		return true;
-	}
-
-	bool SectorZoneGameData::finishLoading(const SectorZoneGameDataLoadHelper* loadHelper) noexcept
-	{
-		return true;
-	}
-
-	bool SectorZoneGameData::checkFinally(const GameDataManager* gameDataManager) noexcept
-	{
-		return true;
-	}
-
-	void SectorZoneGameData::clearDetail(void) noexcept
-	{
+		_interval = 0;
+		_conditionGameDataSet.clear();
 	}
 }

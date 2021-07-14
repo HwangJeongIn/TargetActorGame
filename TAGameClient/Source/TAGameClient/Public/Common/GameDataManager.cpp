@@ -88,6 +88,21 @@ namespace ta
 			}
 
 			StartRegisteredThreadTasksAndWait();
+
+			// 사용했던 Helper 클래스의 메모리를 지워준다.
+			{
+				const uint32 helperSetGroupSize = gameDataLoadHelperSetGroup.size();
+				for (uint32 setGroupIndex = 0; setGroupIndex < helperSetGroupSize; ++setGroupIndex)
+				{
+					const uint32 helperSetSize = gameDataLoadHelperSetGroup[setGroupIndex].size();
+					for (uint32 setIndex = 0; setIndex < helperSetSize; ++setIndex)
+					{
+						delete gameDataLoadHelperSetGroup[setGroupIndex][setIndex];
+					}
+				}
+
+				gameDataLoadHelperSetGroup.clear();
+			}
 		}
 
 		{ /* CheckFinally */ }
@@ -186,6 +201,10 @@ namespace ta
 		//std::unordered_map<std::string, XmlNode*>::const_iterator it = childElements.begin();
 		//const std::unordered_map<std::string, XmlNode*>::const_iterator end = childElements.end();
 
+		std::wstringstream ss;
+		ss << std::this_thread::get_id();
+		TA_LOG_DEV("[LoadFromXml] => GameDataType : %d, Thread id : %s", static_cast<uint32>(gameDataType), ss.str().c_str());
+
 		for (uint32 index = 0; index < count; ++index)
 		{
 			childElement = rootNode.getChildElement(index);
@@ -195,10 +214,6 @@ namespace ta
 				TA_ASSERT_DEV(false, "Key값이 로드되지 않았습니다. type : %d", static_cast<uint8>(gameDataType));
 				return false;
 			}
-
-			std::wstringstream ss;
-			ss << std::this_thread::get_id();
-			TA_LOG_DEV("[LoadFromXml] => GameDataType : %d, Thread id : %s", static_cast<uint32>(gameDataType), ss.str().c_str());
 
 			//std::cout << "GameDataType : " << static_cast<uint32>(gameDataType) << ", Thread id : " << this_id << std::endl;
 			switch (gameDataType)
@@ -339,9 +354,13 @@ namespace ta
 			TA_ASSERT_DEV(false, "비정상");
 			return false;
 		}
+
+		std::wstringstream ss;
+		ss << std::this_thread::get_id();
+		TA_LOG_DEV("[CheckFinally] => GameDataType : %d, Thread id : %s", static_cast<uint32>(gameDataType), ss.str().c_str());
+
 		switch (gameDataType)
 		{
-
 #define CHECK_FINALLY(GameDataName)								\
 		case GameDataType::GameDataName:						\
 			{													\

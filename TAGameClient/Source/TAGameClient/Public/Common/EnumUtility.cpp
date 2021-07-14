@@ -94,9 +94,15 @@ namespace ta
 	const std::unordered_map<std::string, ConditionGameDataObjectType> ConditionGameDataObjectTypeConverter
 	{
 		 { "LimitCount", ConditionGameDataObjectType::LimitCount }
-
 	};
 	TA_COMPILE_DEV(1 == static_cast<uint8>(ConditionGameDataObjectType::Count), "여기도 확인해주세요");
+
+
+	const std::unordered_map<std::string, EventGameDataObjectType> EventGameDataObjectTypeConverter
+	{
+		 { "SpawnActor", EventGameDataObjectType::SpawnActor }
+	};
+	TA_COMPILE_DEV(1 == static_cast<uint8>(EventGameDataObjectType::Count), "여기도 확인해주세요");
 
 
 	const std::unordered_map<std::string, SectorZoneType> SectorZoneTypeConverter
@@ -170,6 +176,7 @@ namespace ta
 	CONVERT_FUNCTION_DEFINITION(InteractionType)
 	CONVERT_FUNCTION_DEFINITION(MeshType)
 	CONVERT_FUNCTION_DEFINITION(ConditionGameDataObjectType)
+	CONVERT_FUNCTION_DEFINITION(EventGameDataObjectType)
 	CONVERT_FUNCTION_DEFINITION(SectorZoneType)
 	//CONVERT_FUNCTION_DEFINITION(SectorGroupType)
 

@@ -55,11 +55,6 @@ namespace ta
 	EventGameDataObject::~EventGameDataObject(void) noexcept
 	{
 	}
-
-	void EventGameDataObject::setConditioinGameDataList(const std::vector<const ConditionGameData*> input) noexcept
-	{
-		_conditions = input;
-	}
 }
 
 
@@ -74,18 +69,8 @@ namespace ta
 	{
 	}
 
-	bool EventGameDataObjectSpawnActor::execute(ContentParameter& parameter) const noexcept
+	bool EventGameDataObjectSpawnActor::execute(const ContentParameter& parameter) const noexcept
 	{
-		const uint32 conditionCount = _conditions.size();
-		for (uint32 index = 0; index < conditionCount; ++index)
-		{
-			if (false == _conditions[index]->checkCondition(parameter))
-			{
-				TA_ASSERT_DEV(false, "비정상입니다");
-				return false;
-			}
-		}
-
 		Sector* targetSector = GetSector(parameter._sectorKey);
 		if (nullptr == targetSector)
 		{

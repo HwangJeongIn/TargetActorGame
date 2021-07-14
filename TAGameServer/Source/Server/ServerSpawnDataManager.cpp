@@ -231,8 +231,10 @@ namespace ta
 		std::unordered_map<GameWorldType, SpawnDataGroupSet>::iterator target = _spawnDataGroupWorldSet.find(worldType);
 		if (_spawnDataGroupWorldSet.end() == target)
 		{
-			TA_ASSERT_DEV(false, "비정상입니다.");
-			return false;
+			// 없을 수 있다.
+			TA_LOG_DEV("RealWorld 액터가 없어서 스폰하지 않습니다.");
+			//TA_ASSERT_DEV(false, "비정상입니다.");
+			return true;
 		}
 
 		SpawnDataGroupSet::iterator spawnDataGroupSetIt = target->second.begin();

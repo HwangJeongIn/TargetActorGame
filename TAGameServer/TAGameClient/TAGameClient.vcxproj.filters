@@ -326,9 +326,6 @@
     <ClCompile Include="..\..\TAGameClient\Source\TAGameClient\Public\Client\ClientObjectActorComponent.cpp">
       <Filter>Client</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\SectorEvent.cpp">
-      <Filter>Common</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\SectorProperty.cpp">
       <Filter>Common</Filter>
     </ClCompile>
@@ -351,6 +348,9 @@
       <Filter>Common</Filter>
     </ClCompile>
     <ClCompile Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\ThreadTaskManager.cpp">
+      <Filter>Common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\SectorEventSet.cpp">
       <Filter>Common</Filter>
     </ClCompile>
   </ItemGroup>
@@ -714,9 +714,6 @@
     <ClInclude Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\SectorProperty.h">
       <Filter>Common</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\SectorEvent.h">
-      <Filter>Common</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\SectorProcessor.h">
       <Filter>Common</Filter>
     </ClInclude>
@@ -736,6 +733,9 @@
       <Filter>Common</Filter>
     </ClInclude>
     <ClInclude Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\ThreadTaskManager.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\SectorEventSet.h">
       <Filter>Common</Filter>
     </ClInclude>
   </ItemGroup>

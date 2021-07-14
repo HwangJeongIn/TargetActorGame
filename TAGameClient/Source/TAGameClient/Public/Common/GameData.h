@@ -11,6 +11,7 @@ namespace ta
 	class XmlNode;
 	class ContentParameter;
 	class ConditionGameDataObject;
+	class EventGameDataObject;
 	class GameDataManager;
 	class MoveGameData;
 	class GroupGameData;
@@ -345,7 +346,7 @@ namespace ta
 		bool finishLoading(const ConditionGameDataLoadHelper* loadHelper) noexcept;
 		bool checkFinally(const GameDataManager* gameDataManager) noexcept;
 
-		bool checkCondition(ContentParameter& parameter) const noexcept;
+		bool checkCondition(const ContentParameter& parameter) const noexcept;
 
 	private:
 		virtual void clearDetail(void) noexcept override final;
@@ -369,6 +370,7 @@ namespace ta
 
 	public:
 		EventGameDataKey _key;
+		std::vector<ConditionGameDataKey> _conditionGameDataKeySet;
 	};
 
 
@@ -384,48 +386,16 @@ namespace ta
 		bool finishLoading(const EventGameDataLoadHelper* loadHelper) noexcept;
 		bool checkFinally(const GameDataManager* gameDataManager) noexcept;
 
+		bool checkAndExecute(const ContentParameter& parameter) const noexcept;
+
 	private:
 		virtual void clearDetail(void) noexcept override final;
 
 	public:
 		EventGameDataKey _key;
+
+		const EventGameDataObject* _eventObject;
 		uint32 _interval;
-		std::vector<const ConditionGameData*> _conditionGameData;
-	};
-}
-
-namespace ta
-{
-	class SectorZoneGameDataLoadHelper : public GameDataLoadHelper
-	{
-	public:
-		explicit SectorZoneGameDataLoadHelper(const GameDataManager* gameDataManager) noexcept;
-		virtual ~SectorZoneGameDataLoadHelper(void) noexcept;
-
-		void clear(void) noexcept;
-
-	public:
-		SectorZoneGameDataKey _key;
-	};
-
-
-	class SectorZoneGameData : public GameData
-	{
-	public:
-		SectorZoneGameData(void) noexcept;
-		virtual ~SectorZoneGameData(void) noexcept;
-
-		static GameDataType getGameDataType(void) noexcept;
-
-		bool loadFromXml(XmlNode* xmlNode, SectorZoneGameDataLoadHelper* loadHelper) noexcept;
-		bool finishLoading(const SectorZoneGameDataLoadHelper* loadHelper) noexcept;
-		bool checkFinally(const GameDataManager* gameDataManager) noexcept;
-
-	private:
-		virtual void clearDetail(void) noexcept override final;
-
-	public:
-		SectorZoneGameDataKey _key;
-
+		std::vector<const ConditionGameData*> _conditionGameDataSet;
 	};
 }

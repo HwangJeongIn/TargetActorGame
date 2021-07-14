@@ -96,7 +96,6 @@ namespace ta
 		, RenderingGameData
 		, ConditionGameData
 		, EventGameData
-		, SectorZoneGameData
 		, Count
 	};
 }
@@ -346,16 +345,3 @@ namespace ta
 //		, Count
 //	};
 //}
-
-
-namespace ta
-{
-	enum class SectorEventType : uint8
-	{
-		SectorEventSpawnNpc = 0
-		, SectorEventSpawnObject
-		, Count
-	};
-
-	constexpr uint8 MaxActorCountSpawnedBySectorEvent = 30;
-}

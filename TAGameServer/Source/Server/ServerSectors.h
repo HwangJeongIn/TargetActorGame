@@ -8,7 +8,7 @@
 
 namespace ta
 {
-	class SectorEventData;
+	class SectorEventSetData;
 }
 
 
@@ -26,9 +26,11 @@ namespace ta
 
 		virtual Sector* getSector(const SectorKey& sectorKey) noexcept override final;
 
+		bool loadSectorZoneEventDataConfig(const fs::path& filePath) noexcept;
+
 	private:
-		std::unordered_map<SectorKey, SectorZoneType> _sectorZoneData;
-		std::unordered_map<SectorZoneType, std::vector<SectorEventData*>> _sectorZoneEventData;
+		std::unordered_map<SectorKey, SectorZoneType> _sectorZoneTypeData;
+		std::unordered_map<SectorZoneType, SectorEventSetData*> _sectorZoneEventDataSetData;
 
 	};
 }
