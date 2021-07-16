@@ -17,9 +17,10 @@ namespace ta
 	{
 	public:
 		SpecialSectorEvent(void) noexcept;
+		explicit SpecialSectorEvent(const EventGameData* eventGameData, const ConditionGameData* conditionGameData) noexcept;
 		virtual ~SpecialSectorEvent(void) noexcept;
 
-		bool canOccur(const ContentParameter& parameter) noexcept;
+		bool canOccur(const ContentParameter& parameter) const noexcept;
 		void setData(const EventGameData* eventGameData, const ConditionGameData* conditionGameData) noexcept;
 	
 	private:
@@ -37,7 +38,7 @@ namespace ta
 		SectorEventSetData(void) noexcept;
 		virtual ~SectorEventSetData(void) noexcept;
 
-		void makeSetFromSetData(SectorEventSet& sectorEventSet) noexcept;
+		SectorEventSet* makeSetFromSetData(void) noexcept;
 
 	public:
 		std::vector<const EventGameData*> _basicEventGameDataSetData;
@@ -56,6 +57,8 @@ namespace ta
 								, const std::vector<const SpecialSectorEvent*>& specialEventGameDataSetData) noexcept;
 
 		virtual ~SectorEventSet(void) noexcept;
+
+		void onChangeSector(const ContentParameter& parameter) noexcept;
 
 	public:
 		const std::vector<const EventGameData*> _basicEventGameDataSet;

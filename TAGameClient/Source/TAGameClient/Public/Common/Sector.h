@@ -63,6 +63,7 @@ namespace ta
 	extern SectorKey GetSectorIndex(const Vector& position) noexcept;
 
 	extern bool GetSectorIndexXY(const SectorKey& sectorKey, int32& indexX, int32& indexY) noexcept;
+	extern SectorKey GetSectorKey(const int32& indexX, const int32& indexY) noexcept;
 	// Sector의 멤버로하면 외부해서 필요할때마다 Sector객체 가져와서 사용해야해서 그냥 바로 사용할 수 있게 전역으로 했다
 	// 이 함수들은 Sector클래스 정보없이 계산 된다.
 	extern bool GetSectorCenterPosition(const SectorKey& sectorKey, Vector& output) noexcept;

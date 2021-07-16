@@ -17,6 +17,8 @@ namespace ta
 	class CommonSpawnDataManager;
 	class CommonMoveActorSystem;
 	class GameDataLoadHelper;
+	class Sectors;
+	class SectorZoneMappingData;
 }
 
 
@@ -146,5 +148,25 @@ namespace ta
 	public:
 		CommonMoveActorSystem* _moveActorSystem;
 		fs::path _filePath;
+	};
+}
+
+
+namespace ta
+{
+	
+	class ThreadTaskLoadSectorEventSetDataFromXml : public ThreadTask
+	{
+	public:
+		ThreadTaskLoadSectorEventSetDataFromXml(void) noexcept;
+		virtual ~ThreadTaskLoadSectorEventSetDataFromXml(void) noexcept;
+
+		virtual void processThreadTaskInNewThread(std::vector<std::thread>& output) noexcept override final;
+
+	public:
+		Sectors* _sectors;
+
+		fs::path _filePath;
+		SectorZoneMappingData* _sectorZoneMappingData;
 	};
 }

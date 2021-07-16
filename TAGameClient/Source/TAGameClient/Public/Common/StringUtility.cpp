@@ -101,7 +101,10 @@ namespace ta
 		}
 	}
 
-	void Split(const std::string& input, const std::string& delimiters, std::vector<std::string>& output) noexcept
+	void Split(const std::string& input
+			   , const std::string& delimiters
+			   , std::vector<std::string>& output
+			   , const bool pushDelimiters) noexcept
 	{
 		//std::vector<std::string> strings;
 		//std::istringstream f("denmark;sweden;india;us");
@@ -136,10 +139,13 @@ namespace ta
 			{
 				output.push_back(targetString.substr(prevPos, pos - prevPos));
 			}
-
-			// 구분자도 같이 푸시해야한다.
-			delimiter[0] = targetString[pos];
-			output.push_back(std::string(delimiter));
+			
+			if (true == pushDelimiters)
+			{
+				// 구분자도 같이 푸시해야한다.
+				delimiter[0] = targetString[pos];
+				output.push_back(std::string(delimiter));
+			}
 
 			prevPos = pos + 1;
 		}

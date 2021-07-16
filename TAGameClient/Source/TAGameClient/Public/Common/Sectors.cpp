@@ -16,6 +16,25 @@ namespace ta
 
 namespace ta
 {
+	SectorZoneMappingData::SectorZoneMappingData(void) noexcept
+		: _sectorZoneType(SectorZoneType::Count)
+	{
+	}
+
+	SectorZoneMappingData::~SectorZoneMappingData(void) noexcept
+	{
+	}
+
+	void SectorZoneMappingData::setData(const SectorKey& sectorKey, const SectorZoneType& sectorZoneType) noexcept
+	{
+		_sectorZoneType = sectorZoneType;
+		_sectorKey = sectorKey;
+	}
+}
+
+
+namespace ta
+{
 	Sectors::Sectors(void) noexcept
 		: _allSectors(nullptr)
 	{
@@ -91,6 +110,11 @@ namespace ta
 		}
 
 		delete[] _allSectors;
+	}
+
+	bool Sectors::loadSectorEventSetDataFromXml(const fs::path& filePath, SectorZoneMappingData* sectorZoneMappingData) noexcept
+	{
+		return false;
 	}
 
 	bool Sectors::checkSectorValid(const SectorKey& sectorKey) const noexcept

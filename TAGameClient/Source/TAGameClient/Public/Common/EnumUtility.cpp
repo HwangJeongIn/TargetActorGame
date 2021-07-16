@@ -23,9 +23,8 @@ namespace ta
 		, {"RenderingGameData", GameDataType::RenderingGameData}
 		, {"ConditionGameData", GameDataType::ConditionGameData}
 		, {"EventGameData", GameDataType::EventGameData}
-		, {"SectorZoneGameData", GameDataType::SectorZoneGameData}
 	};
-	TA_COMPILE_DEV(9 == static_cast<uint8>(GameDataType::Count), "여기도 확인해주세요");
+	TA_COMPILE_DEV(8 == static_cast<uint8>(GameDataType::Count), "여기도 확인해주세요");
 
 
 	const std::unordered_map<std::string, AiClassType> AiClassTypeConverter

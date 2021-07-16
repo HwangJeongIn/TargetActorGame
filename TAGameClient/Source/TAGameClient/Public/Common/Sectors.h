@@ -1,6 +1,8 @@
 ﻿#pragma once
 #include <unordered_map>
 #include <filesystem>
+#include "Common/CommonDataTypeDefinition.h"
+#include "Common/KeyDefinition.h"
 
 
 namespace fs = std::filesystem;
@@ -25,6 +27,23 @@ namespace ta
 
 namespace ta
 {
+	class SectorZoneMappingData
+	{
+	public:
+		SectorZoneMappingData(void) noexcept;
+		virtual ~SectorZoneMappingData(void) noexcept;
+
+		void setData(const SectorKey& sectorKey, const SectorZoneType& sectorZoneType) noexcept;
+
+	public:
+		SectorKey _sectorKey;
+		SectorZoneType _sectorZoneType;
+	};
+}
+
+
+namespace ta
+{
 	class Sectors
 	{
 	public:
@@ -37,6 +56,7 @@ namespace ta
 		virtual void close(void) noexcept;
 
 		virtual Sector* getSector(const SectorKey& sectorKey) noexcept = 0;
+		virtual bool loadSectorEventSetDataFromXml(const fs::path& filePath, SectorZoneMappingData* sectorZoneMappingData) noexcept;
 
 	protected:
 		bool checkSectorValid(const SectorKey& sectorKey) const noexcept;

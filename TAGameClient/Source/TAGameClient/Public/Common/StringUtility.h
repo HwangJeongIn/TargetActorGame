@@ -24,7 +24,10 @@ namespace ta
 	extern void TrimEmpty(const std::string& input, std::string& output) noexcept;
 	extern void TrimExtension(std::string& inOut) noexcept;
 	extern void Extension(const std::string& input, std::string& output) noexcept;
-	extern void Split(const std::string& input, const std::string& delimiters, std::vector<std::string>& output) noexcept;
+	extern void Split(const std::string& input
+					  , const std::string& delimiters
+					  , std::vector<std::string>& output 
+					  , const bool pushDelimiters = true) noexcept;
 
 	extern void MakeStringWithBracket(const std::vector<std::string>& items
 									  , const std::string& itemHeader
@@ -61,6 +64,20 @@ namespace ta
 	}
 
 	template<> bool FromStringCast(const std::string& input) noexcept;
+
+	template<typename T> void LoadListFromString(const std::string& input
+												 , std::vector<T>& output
+												 , const std::string& delimiters = ",") noexcept
+	{
+		std::vector<std::string> splitedStrings;
+		Split(input, delimiters, splitedStrings, false);
+		const uint32 splitedStringCount = splitedStrings.size();
+
+		for (uint32 index = 0; index < splitedStringCount; ++index)
+		{
+			output.push_back(FromStringCast<T>(splitedStrings[index]));
+		}
+	}
 
 	//extern int8 Atoi8(const std::string& input) noexcept;
 	//extern int32 Atoi(const std::string& input) noexcept;

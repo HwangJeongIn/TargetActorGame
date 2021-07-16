@@ -94,6 +94,19 @@ namespace ta
 		return true;
 	}
 
+	SectorKey GetSectorKey(const int32& indexX, const int32& indexY) noexcept
+	{
+		if (((int32)HalfCountOfOneSideSectors <= indexX)
+			|| ((int32)HalfCountOfOneSideSectors <= indexY)
+			|| (-(int32)HalfCountOfOneSideSectors > indexX)
+			|| (-(int32)HalfCountOfOneSideSectors > indexY))
+		{
+			return SectorKey();
+		}
+
+		return SectorKey(indexX * CountOfOneSideSectors + indexY);
+	}
+
 	bool GetSectorCenterPosition(const SectorKey& sectorKey, Vector& output) noexcept
 	{
 		int32 indexX = -1;

@@ -3,6 +3,7 @@
 #include "Common/GameDataManager.h"
 #include "Common/CommonSpawnDataManager.h"
 #include "Common/CommonMoveActorSystem.h"
+#include "Common/Sectors.h"
 
 
 namespace ta
@@ -203,6 +204,25 @@ namespace ta
 	void ThreadTaskLoadPathPointFromXml::processThreadTaskInNewThread(std::vector<std::thread>& output) noexcept
 	{
 		output.emplace_back(std::bind(&CommonMoveActorSystem::loadPathPointPathSetFromXml, _moveActorSystem, _filePath));
+	}
+}
+
+
+namespace ta
+{
+	ThreadTaskLoadSectorEventSetDataFromXml::ThreadTaskLoadSectorEventSetDataFromXml(void) noexcept
+		: _sectors(nullptr)
+		, _sectorZoneMappingData(nullptr)
+	{
+	}
+
+	ThreadTaskLoadSectorEventSetDataFromXml::~ThreadTaskLoadSectorEventSetDataFromXml(void) noexcept
+	{
+	}
+
+	void ThreadTaskLoadSectorEventSetDataFromXml::processThreadTaskInNewThread(std::vector<std::thread>& output) noexcept
+	{
+		output.emplace_back(std::bind(&Sectors::loadSectorEventSetDataFromXml, _sectors, _filePath, _sectorZoneMappingData));
 	}
 }
 
