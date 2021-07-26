@@ -162,6 +162,7 @@
     <ClCompile Include="..\..\TAGameClient\Source\TAGameClient\Public\Client\ClientAiActorSystem.cpp" />
     <ClCompile Include="..\..\TAGameClient\Source\TAGameClient\Public\Client\ClientApp.cpp" />
     <ClCompile Include="..\..\TAGameClient\Source\TAGameClient\Public\Client\ClientCharacterActorComponent.cpp" />
+    <ClCompile Include="..\..\TAGameClient\Source\TAGameClient\Public\Client\ClientCharacterActorSystem.cpp" />
     <ClCompile Include="..\..\TAGameClient\Source\TAGameClient\Public\Client\ClientComponentData.cpp" />
     <ClCompile Include="..\..\TAGameClient\Source\TAGameClient\Public\Client\ClientInventoryActorComponent.cpp" />
     <ClCompile Include="..\..\TAGameClient\Source\TAGameClient\Public\Client\ClientInventoryActorSystem.cpp" />
@@ -194,6 +195,7 @@
     <ClCompile Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\CommonAiActorSystem.cpp" />
     <ClCompile Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\CommonApp.cpp" />
     <ClCompile Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\CommonCharacterActorComponent.cpp" />
+    <ClCompile Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\CommonCharacterActorSystem.cpp" />
     <ClCompile Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\CommonDataTypeDefinition.cpp" />
     <ClCompile Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\CommonInventoryActorComponent.cpp" />
     <ClCompile Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\CommonInventoryActorSystem.cpp" />
@@ -216,6 +218,7 @@
     <ClCompile Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\ItemDetail.cpp" />
     <ClCompile Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\ItemSet.cpp" />
     <ClCompile Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\KeyDefinition.cpp" />
+    <ClCompile Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\KeyStringUtility.cpp" />
     <ClCompile Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\Lockable.cpp" />
     <ClCompile Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\MessagePack.cpp" />
     <ClCompile Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\NavigationSystem\RecastNavigation\DebugUtils\DebugDraw.cpp" />
@@ -282,6 +285,7 @@
     <ClInclude Include="..\..\TAGameClient\Source\TAGameClient\Public\Client\ClientAiActorSystem.h" />
     <ClInclude Include="..\..\TAGameClient\Source\TAGameClient\Public\Client\ClientApp.h" />
     <ClInclude Include="..\..\TAGameClient\Source\TAGameClient\Public\Client\ClientCharacterActorComponent.h" />
+    <ClInclude Include="..\..\TAGameClient\Source\TAGameClient\Public\Client\ClientCharacterActorSystem.h" />
     <ClInclude Include="..\..\TAGameClient\Source\TAGameClient\Public\Client\ClientComponentData.h" />
     <ClInclude Include="..\..\TAGameClient\Source\TAGameClient\Public\Client\ClientInventoryActorComponent.h" />
     <ClInclude Include="..\..\TAGameClient\Source\TAGameClient\Public\Client\ClientInventoryActorSystem.h" />
@@ -318,6 +322,7 @@
     <ClInclude Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\CommonApp.h" />
     <ClInclude Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\CommonBase.h" />
     <ClInclude Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\CommonCharacterActorComponent.h" />
+    <ClInclude Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\CommonCharacterActorSystem.h" />
     <ClInclude Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\CommonDataTypeDefinition.h" />
     <ClInclude Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\CommonInventoryActorComponent.h" />
     <ClInclude Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\CommonInventoryActorSystem.h" />
@@ -342,6 +347,7 @@
     <ClInclude Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\ItemDetail.h" />
     <ClInclude Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\ItemSet.h" />
     <ClInclude Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\KeyDefinition.h" />
+    <ClInclude Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\KeyStringUtility.h" />
     <ClInclude Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\Lockable.h" />
     <ClInclude Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\MessagePack.h" />
     <ClInclude Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\MessageTypeDefinition.h" />

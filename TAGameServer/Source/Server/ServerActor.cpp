@@ -1,4 +1,4 @@
-#include "Server/ServerActor.h"
+﻿#include "Server/ServerActor.h"
 #include "ServerActor.h"
 
 
@@ -22,14 +22,14 @@ namespace ta
 		__super::onFromPool(spawnData);
 	}
 	
-	const CharacterDBNo& ServerActor::getCharacterDBNo_(void) const noexcept
+	const CharacterDBNoKey& ServerActor::getCharacterDBNoKey_(void) const noexcept
 	{
-		return _characterDBNo;
+		return _characterDBNoKey;
 	}
 
-	void ServerActor::setCharacterDBNo_(const CharacterDBNo& characterDBNo) noexcept
+	void ServerActor::setCharacterDBNoKey_(const CharacterDBNoKey& characterDBNoKey) noexcept
 	{
-		_characterDBNo = characterDBNo;
+		_characterDBNoKey = characterDBNoKey;
 	}
 }
 

@@ -399,3 +399,43 @@ namespace ta
 		std::vector<const ConditionGameData*> _conditionGameDataSet;
 	};
 }
+
+
+namespace ta
+{
+	class BuffGameDataLoadHelper : public GameDataLoadHelper
+	{
+	public:
+		explicit BuffGameDataLoadHelper(const GameDataManager* gameDataManager) noexcept;
+		virtual ~BuffGameDataLoadHelper(void) noexcept;
+
+		void clear(void) noexcept;
+
+	public:
+		BuffGameDataKey _key;
+		std::vector<ConditionGameDataKey> _conditionGameDataKeySet;
+	};
+
+
+	class BuffGameData : public GameData
+	{
+	public:
+		BuffGameData(void) noexcept;
+		virtual ~BuffGameData(void) noexcept;
+
+		static GameDataType getGameDataType(void) noexcept;
+
+		bool loadFromXml(XmlNode* xmlNode, BuffGameDataLoadHelper* loadHelper) noexcept;
+		bool finishLoading(const BuffGameDataLoadHelper* loadHelper) noexcept;
+		bool checkFinally(const GameDataManager* gameDataManager) noexcept;
+
+	private:
+		virtual void clearDetail(void) noexcept override final;
+
+	public:
+		BuffGameDataKey _key;
+
+		//const EventGameDataObject* _eventObject;
+		std::vector<const ConditionGameData*> _conditionGameDataSet;
+	};
+}

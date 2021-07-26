@@ -17,7 +17,7 @@ namespace ta
 		ClientActionActorSystem(void) noexcept;
 		virtual ~ClientActionActorSystem(void) noexcept;
 
-		virtual void update(const ActorSystemUpdateParameter& updateParameter) const noexcept;
+		virtual void update(const ActorSystemUpdateParameter& updateParameter) const noexcept override final;
 
 		virtual bool processAttackTarget(CommonCharacterActorComponent* myCom, CommonCharacterActorComponent* targetCom) const noexcept override final;
 

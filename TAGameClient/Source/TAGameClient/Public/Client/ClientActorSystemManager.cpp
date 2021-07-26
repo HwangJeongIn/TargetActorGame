@@ -3,6 +3,7 @@
 #include "Client/ClientActionActorSystem.h"
 #include "Client/ClientAiActorSystem.h"
 #include "Client/ClientInventoryActorSystem.h"
+#include "Client/ClientCharacterActorSystem.h"
 
 
 namespace ta
@@ -46,12 +47,12 @@ namespace ta
                 CREATE_SYSTEM(ActionSystem, ClientActionActorSystem)
                 CREATE_SYSTEM(MoveSystem, ClientMoveActorSystem)
                 CREATE_SYSTEM(AiSystem, ClientAiActorSystem)
-                //CREATE_SYSTEM(CharacterSystem, ClientCharacterActorSystem)
+                CREATE_SYSTEM(CharacterSystem, ClientCharacterActorSystem)
                 CREATE_SYSTEM(InventorySystem, ClientInventoryActorSystem)
 
 #undef CREATE_SYSTEM
 
-             TA_COMPILE_DEV(4 == static_cast<uint8>(ActorSystemType::Count), "여기도 추가해주세요");
+             TA_COMPILE_DEV(5 == static_cast<uint8>(ActorSystemType::Count), "여기도 추가해주세요");
 
             default:
                 {

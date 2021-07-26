@@ -65,6 +65,7 @@ namespace ta
 
 	template<> bool FromStringCast(const std::string& input) noexcept;
 
+
 	template<typename T> void LoadListFromString(const std::string& input
 												 , std::vector<T>& output
 												 , const std::string& delimiters = ",") noexcept

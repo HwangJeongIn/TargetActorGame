@@ -61,7 +61,7 @@ namespace ta
         CommonActorManager::close();
     }
 
-    //CommonActor* ServerActorManager::createActorAndInitializeFromDB(const ActorType& actorType, const CharacterDBNo& characterNo) noexcept
+    //CommonActor* ServerActorManager::createActorAndInitializeFromDB(const ActorType& actorType, const CharacterDBNoKey& characterNo) noexcept
     //{
     //    ServerActor* newActor = static_cast<ServerActor*>(createActorForServer(actorType));
     //    if (nullptr == newActor)
@@ -180,7 +180,7 @@ namespace ta
         return _actorDataPool->fromPool(spawnData);
     }
 
-    bool ServerActorManager::initializeActorComponentsFromDB(const ActorKey& targetActorKey, const CharacterDBNo& characterDBNo) noexcept
+    bool ServerActorManager::initializeActorComponentsFromDB(const ActorKey& targetActorKey, const CharacterDBNoKey& characterDBNoKey) noexcept
     {
         ServerActor* serverActor = static_cast<ServerActor*>(getActor(targetActorKey));
         if (nullptr == serverActor)
@@ -189,7 +189,7 @@ namespace ta
             return false;
         }        
         
-        if (false == characterDBNo.isValid())
+        if (false == characterDBNoKey.isValid())
         {
             TA_ASSERT_DEV(false, "비정상입니다.");
             return false;
@@ -197,7 +197,7 @@ namespace ta
 
         {
             ScopedLock actorLock(serverActor);
-            serverActor->setCharacterDBNo_(characterDBNo);
+            serverActor->setCharacterDBNoKey_(characterDBNoKey);
         }
 
         // 임시로 그룹키 1로 스폰시킨다.

@@ -30,8 +30,8 @@ namespace ta
 		}
 
 		// TODO : DB에서 받아온 캐릭터 번호
-		CharacterDBNo characterDBNo(1);
-		if (false == GetActorManager()->initializeActorComponentsFromDB(serverActor->getActorKey(), characterDBNo))
+		CharacterDBNoKey characterDBNoKey(1);
+		if (false == GetActorManager()->initializeActorComponentsFromDB(serverActor->getActorKey(), characterDBNoKey))
 		{
 			TA_ASSERT_DEV(false, "비정상입니다.");
 			return;

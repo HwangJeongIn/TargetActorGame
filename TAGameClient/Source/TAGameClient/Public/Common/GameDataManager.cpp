@@ -158,8 +158,9 @@ namespace ta
 		CLOSE_GAMEDATA(RenderingGameData)
 		CLOSE_GAMEDATA(ConditionGameData)
 		CLOSE_GAMEDATA(EventGameData)
+		CLOSE_GAMEDATA(BuffGameData)
 
-		TA_COMPILE_DEV(8 == static_cast<uint8>(GameDataType::Count), "여기도 확인해주세요")
+		TA_COMPILE_DEV(9 == static_cast<uint8>(GameDataType::Count), "여기도 확인해주세요")
 #undef CLOSE_GAMEDATA
 	}
 	
@@ -264,8 +265,9 @@ namespace ta
 					LOAD_FROM_XML(RenderingGameData)
 					LOAD_FROM_XML(ConditionGameData)
 					LOAD_FROM_XML(EventGameData)
+					LOAD_FROM_XML(BuffGameData)
 
-					TA_COMPILE_DEV(8 == static_cast<uint8>(GameDataType::Count), "여기도 확인해주세요")
+					TA_COMPILE_DEV(9 == static_cast<uint8>(GameDataType::Count), "여기도 확인해주세요")
 #undef LOAD_FROM_XML
 
 			default:
@@ -326,8 +328,9 @@ namespace ta
 					FINISH_LOADING(RenderingGameData)
 					FINISH_LOADING(ConditionGameData)
 					FINISH_LOADING(EventGameData)
+					FINISH_LOADING(BuffGameData)
 
-					TA_COMPILE_DEV(8 == static_cast<uint8>(GameDataType::Count), "여기도 확인해주세요")
+					TA_COMPILE_DEV(9 == static_cast<uint8>(GameDataType::Count), "여기도 확인해주세요")
 #undef FINISH_LOADING
 
 
@@ -380,8 +383,9 @@ namespace ta
 				CHECK_FINALLY(RenderingGameData)
 				CHECK_FINALLY(ConditionGameData)
 				CHECK_FINALLY(EventGameData)
+				CHECK_FINALLY(BuffGameData)
 
-				TA_COMPILE_DEV(8 == static_cast<uint8>(GameDataType::Count), "여기도 확인해주세요")
+				TA_COMPILE_DEV(9 == static_cast<uint8>(GameDataType::Count), "여기도 확인해주세요")
 #undef CHECK_FINALLY
 
 
@@ -435,8 +439,9 @@ namespace ta
 				RETURN_GAMEDATA(RenderingGameData)
 				RETURN_GAMEDATA(ConditionGameData)
 				RETURN_GAMEDATA(EventGameData)
+				RETURN_GAMEDATA(BuffGameData)
 
-				TA_COMPILE_DEV(8 == static_cast<uint8>(GameDataType::Count), "여기도 확인해주세요")
+				TA_COMPILE_DEV(9 == static_cast<uint8>(GameDataType::Count), "여기도 확인해주세요")
 #undef RETURN_GAMEDATA
 
 		default:

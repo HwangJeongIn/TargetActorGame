@@ -1,5 +1,6 @@
 ﻿#include "Common/StringUtility.h"
 #include "Common/Vector.h"
+#include "Common/KeyDefinition.h"
 #include <cstdlib>
 #include <unordered_map>
 #include <locale>
@@ -323,6 +324,7 @@ namespace ta
 		
 		return rv;
 	}
+
 	
 	//int8 Atoi8(const std::string& input) noexcept
 	//{

@@ -78,6 +78,7 @@ namespace ta
 		MoveSystem = 0
 		, ActionSystem
 		, AiSystem
+		, CharacterSystem
 		, InventorySystem
 		, Count
 	};
@@ -96,6 +97,7 @@ namespace ta
 		, RenderingGameData
 		, ConditionGameData
 		, EventGameData
+		, BuffGameData
 		, Count
 	};
 }

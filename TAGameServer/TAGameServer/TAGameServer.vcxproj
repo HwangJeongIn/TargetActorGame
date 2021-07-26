@@ -47,6 +47,7 @@
     <ClCompile Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\CommonAiActorSystem.cpp" />
     <ClCompile Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\CommonApp.cpp" />
     <ClCompile Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\CommonCharacterActorComponent.cpp" />
+    <ClCompile Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\CommonCharacterActorSystem.cpp" />
     <ClCompile Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\CommonDataTypeDefinition.cpp" />
     <ClCompile Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\CommonInventoryActorComponent.cpp" />
     <ClCompile Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\CommonInventoryActorSystem.cpp" />
@@ -69,6 +70,7 @@
     <ClCompile Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\ItemDetail.cpp" />
     <ClCompile Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\ItemSet.cpp" />
     <ClCompile Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\KeyDefinition.cpp" />
+    <ClCompile Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\KeyStringUtility.cpp" />
     <ClCompile Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\Lockable.cpp" />
     <ClCompile Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\MessagePack.cpp" />
     <ClCompile Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\NavigationSystem\RecastNavigation\DebugUtils\DebugDraw.cpp" />
@@ -134,6 +136,7 @@
     <ClCompile Include="..\Source\Server\ServerAiActorSystem.cpp" />
     <ClCompile Include="..\Source\Server\ServerApp.cpp" />
     <ClCompile Include="..\Source\Server\ServerCharacterActorComponent.cpp" />
+    <ClCompile Include="..\Source\Server\ServerCharacterActorSystem.cpp" />
     <ClCompile Include="..\Source\Server\ServerComponentData.cpp" />
     <ClCompile Include="..\Source\Server\ServerInventoryActorComponent.cpp" />
     <ClCompile Include="..\Source\Server\ServerInventoryActorSystem.cpp" />
@@ -172,6 +175,7 @@
     <ClInclude Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\CommonApp.h" />
     <ClInclude Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\CommonBase.h" />
     <ClInclude Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\CommonCharacterActorComponent.h" />
+    <ClInclude Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\CommonCharacterActorSystem.h" />
     <ClInclude Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\CommonDataTypeDefinition.h" />
     <ClInclude Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\CommonInventoryActorComponent.h" />
     <ClInclude Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\CommonInventoryActorSystem.h" />
@@ -196,6 +200,7 @@
     <ClInclude Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\ItemDetail.h" />
     <ClInclude Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\ItemSet.h" />
     <ClInclude Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\KeyDefinition.h" />
+    <ClInclude Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\KeyStringUtility.h" />
     <ClInclude Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\Lockable.h" />
     <ClInclude Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\MessagePack.h" />
     <ClInclude Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\MessageTypeDefinition.h" />
@@ -259,6 +264,7 @@
     <ClInclude Include="..\Source\Server\ServerAiActorSystem.h" />
     <ClInclude Include="..\Source\Server\ServerApp.h" />
     <ClInclude Include="..\Source\Server\ServerCharacterActorComponent.h" />
+    <ClInclude Include="..\Source\Server\ServerCharacterActorSystem.h" />
     <ClInclude Include="..\Source\Server\ServerComponentData.h" />
     <ClInclude Include="..\Source\Server\ServerInventoryActorComponent.h" />
     <ClInclude Include="..\Source\Server\ServerInventoryActorSystem.h" />

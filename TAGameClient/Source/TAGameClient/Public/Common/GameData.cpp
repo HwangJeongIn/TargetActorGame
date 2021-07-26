@@ -1,5 +1,5 @@
 ﻿#include "Common/GameData.h"
-#include "Common/StringUtility.h"
+#include "Common/KeyStringUtility.h"
 #include "Common/FileLoader.h"
 #include "Common/EnumUtility.h"
 #include "Common/ConditionGameDataObject.h"
@@ -926,18 +926,11 @@ namespace ta
 			const std::string* value = xmlNode->getAttribute("ConditionGameDataKeySet");
 			if (nullptr != value) // 없을 수 있다.
 			{
-				std::vector<std::string> splitedStrings;
-				Split(*value, ",", splitedStrings);
-				const uint32 count = splitedStrings.size();
-				if (0 == count)
+				LoadListFromString<ConditionGameDataKey>(*value, loadHelper->_conditionGameDataKeySet);
+				if (0 == loadHelper->_conditionGameDataKeySet.size())
 				{
 					TA_ASSERT_DEV(false, "ConditionGameDataKeySet 로드 실패");
 					return false;
-				}
-
-				for (uint32 index = 0; index < count; index += 2)
-				{
-					loadHelper->_conditionGameDataKeySet.push_back(FromStringCast<ConditionGameDataKeyType>(splitedStrings[index]));
 				}
 			}
 		}
@@ -1007,6 +1000,130 @@ namespace ta
 	{
 		_key.clear();
 		_interval = 0;
+		_conditionGameDataSet.clear();
+	}
+}
+
+
+namespace ta
+{
+	BuffGameDataLoadHelper::BuffGameDataLoadHelper(const GameDataManager* gameDataManager) noexcept
+		: GameDataLoadHelper(gameDataManager)
+	{
+	}
+	
+	BuffGameDataLoadHelper::~BuffGameDataLoadHelper(void) noexcept
+	{
+	}
+
+	void BuffGameDataLoadHelper::clear(void) noexcept
+	{
+		_key.clear();
+		_conditionGameDataKeySet.clear();
+	}
+
+
+	BuffGameData::BuffGameData(void) noexcept
+	{
+	}
+
+	BuffGameData::~BuffGameData(void) noexcept
+	{
+	}
+
+	GameDataType BuffGameData::getGameDataType(void) noexcept
+	{
+		return GameDataType::BuffGameData;
+	}
+
+	bool BuffGameData::loadFromXml(XmlNode* xmlNode, BuffGameDataLoadHelper* loadHelper) noexcept
+	{
+		// BuffString
+		{
+			const std::string* value = xmlNode->getAttribute("BuffString");
+			if (nullptr == value)
+			{
+				TA_ASSERT_DEV(false, "BuffString 로드 실패");
+				return false;
+			}
+
+			std::vector<std::string> splitedStrings;
+			Split(*value, "()!,", splitedStrings);
+			const uint32 count = splitedStrings.size();
+			if (3 > count)
+			{
+				TA_ASSERT_DEV(false, "BuffString 로드 실패");
+				return false;
+			}
+
+			std::string buffGameDataObjectString = splitedStrings[0];
+
+			std::vector <std::string> dataStrings;
+			const uint32 splitedStringsCount = splitedStrings.size();
+			for (uint32 index = 2; index < (splitedStringsCount - 1); ++index)
+			{
+				dataStrings.push_back(splitedStrings[index]);
+			}
+
+
+			// 추가해야한다
+			//const EventGameDataObjectType objectType = ConvertStringToEnum<EventGameDataObjectType>(eventGameDataObjectString);
+			//EventGameDataObjectFactory factory;
+			//_eventObject = factory.generateConditionGameDataObject(dataStrings, objectType);
+
+			//if (nullptr == _eventObject)
+			//{
+			//	TA_ASSERT_DEV(false, "EventString 로드 실패");
+			//	return false;
+			//}
+		}
+
+		// ConditionGameDataKeySet
+		{
+			const std::string* value = xmlNode->getAttribute("ConditionGameDataKeySet");
+			if (nullptr != value) // 없을 수 있다.
+			{
+				LoadListFromString<ConditionGameDataKey>(*value, loadHelper->_conditionGameDataKeySet);
+				if (0 == loadHelper->_conditionGameDataKeySet.size())
+				{
+					TA_ASSERT_DEV(false, "ConditionGameDataKeySet 로드 실패");
+					return false;
+				}
+			}
+		}
+
+		return true;
+	}
+
+	bool BuffGameData::finishLoading(const BuffGameDataLoadHelper* loadHelper) noexcept
+	{
+		const uint32 count = loadHelper->_conditionGameDataKeySet.size();
+		for (uint32 index = 0; index < count; ++index)
+		{
+			const ConditionGameData* conditionGameData = GetGameData<ConditionGameData>(loadHelper->_conditionGameDataKeySet[index]);
+			if (nullptr == conditionGameData)
+			{
+				TA_ASSERT_DEV(false, "[FinishLoading] BuffGameData => ConditionGameDataKeySet 로드 실패 Key : %d, ConditionGameDataKey : %d"
+							  , _key.getKeyValue()
+							  , loadHelper->_conditionGameDataKeySet[index].getKeyValue());
+
+				return false;
+			}
+
+			_conditionGameDataSet.push_back(conditionGameData);
+		}
+
+		return true;
+	}
+
+	bool BuffGameData::checkFinally(const GameDataManager* gameDataManager) noexcept
+	{
+		return true;
+	}
+
+	void BuffGameData::clearDetail(void) noexcept
+	{
+		_key.clear();
 		_conditionGameDataSet.clear();
 	}
 }

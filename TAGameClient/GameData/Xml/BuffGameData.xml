@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<Root>
+	<BuffGameData Key="1" Name="1단계 체력회복 버프" ConditionGameDataKeySet="" BuffString="RecoverHp(500)"/>
+</Root>

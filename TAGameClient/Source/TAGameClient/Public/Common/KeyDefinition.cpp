@@ -57,12 +57,18 @@ namespace ta																	\
 																				\
 
 
+
+namespace ta
+{
+	TA_COMPILE_DEV(15 == static_cast<uint8>(KeyType::Count), "여기도 추가하세요");
+}
+
 // operator==은 같은 네임스페이스에 있어야한다.
 
 
 // 여기에 추가하세요
 KEY_DEFINITION(ActorKey, uint32, 0)
-KEY_DEFINITION(CharacterDBNo, int32, -1) // DB에 저장되는 값
+KEY_DEFINITION(CharacterDBNoKey, int32, -1) // DB에 저장되는 값
 KEY_DEFINITION(SectorKey, int32, -1)
 KEY_DEFINITION(PathPointPathKey, hash_value, 0)
 KEY_DEFINITION(SpawnDataGroupKey, hash_value, 0) // 파일이름 해시값
@@ -77,5 +83,6 @@ KEY_DEFINITION(RenderingGameDataKey, int32, -1)
 KEY_DEFINITION(ConditionGameDataKey, int32, -1)
 KEY_DEFINITION(EventGameDataKey, int32, -1)
 KEY_DEFINITION(SectorZoneGameDataKey, int32, -1)
+KEY_DEFINITION(BuffGameDataKey, int32, -1)
 																		 
 #undef KEY_DEFINITION
