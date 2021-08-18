@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<Root>
+	<ConditionGameData Key="1" Description="" ConditionString="LimitCount(100,3)"/>
+	<ConditionGameData Key="2" Description="" ConditionString="LimitCount(101,4)"/>
+	<ConditionGameData Key="3" Description="" ConditionString="LimitCount(102,5)"/>
+	<ConditionGameData Key="4" Description="" ConditionString="LimitCount(103,5)"/>
+</Root>
