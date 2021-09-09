@@ -95,8 +95,19 @@ namespace ta
 			ScopedLock sectorLock(targetSector, true);
 			targetGroupGameDataKeyCount = targetSector->getOwnedActorCountForServer_(_targetGroupGameDataKey);
 		}
+
+		if (targetGroupGameDataKeyCount >= _maxCount)
+		{
+			TA_LOG_DEV("[ConditionGameDataObjectLimitCount] 최대치에 도달했습니다. 더 이상 스폰할 수 없습니다. SectorKey : %d , TargetKey : %d (%d/%d)"
+					   , parameter._sectorKey.getKeyValue()
+					   , _targetGroupGameDataKey.getKeyValue()
+					   , targetGroupGameDataKeyCount
+					   , _maxCount);
+
+			return false;
+		}
 		
-		return targetGroupGameDataKeyCount < _maxCount ? true : false;
+		return true;
 	}
 	
 	bool ConditionGameDataObjectLimitCount::loadFromStrings(const std::vector<std::string>& strings) noexcept

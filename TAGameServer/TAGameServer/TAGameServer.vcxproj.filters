@@ -150,9 +150,6 @@
     <ClCompile Include="..\Source\Server\ServerSector.cpp">
       <Filter>Server</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\ActorEventTimer.cpp">
-      <Filter>Common</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\CommonAiActorComponent.cpp">
       <Filter>Common</Filter>
     </ClCompile>
@@ -196,9 +193,6 @@
       <Filter>Common</Filter>
     </ClCompile>
     <ClCompile Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\FileLoader.cpp">
-      <Filter>Common</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\ActorEvent.cpp">
       <Filter>Common</Filter>
     </ClCompile>
     <ClCompile Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\EnumUtility.cpp">
@@ -400,6 +394,12 @@
     <ClCompile Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\KeyStringUtility.cpp">
       <Filter>Common</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\ContentEventTimer.cpp">
+      <Filter>Common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\ContentEvent.cpp">
+      <Filter>Common</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\ActorComponent.h">
@@ -540,9 +540,6 @@
     <ClInclude Include="..\Source\Server\ServerSector.h">
       <Filter>Server</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\ActorEventTimer.h">
-      <Filter>Common</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\CommonAiActorSystem.h">
       <Filter>Common</Filter>
     </ClInclude>
@@ -586,9 +583,6 @@
       <Filter>Common</Filter>
     </ClInclude>
     <ClInclude Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\FileLoader.h">
-      <Filter>Common</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\ActorEvent.h">
       <Filter>Common</Filter>
     </ClInclude>
     <ClInclude Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\EnumUtility.h">
@@ -769,6 +763,12 @@
       <Filter>Common</Filter>
     </ClInclude>
     <ClInclude Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\KeyStringUtility.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\ContentEvent.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\ContentEventTimer.h">
       <Filter>Common</Filter>
     </ClInclude>
   </ItemGroup>

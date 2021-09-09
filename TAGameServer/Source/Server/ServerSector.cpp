@@ -1,10 +1,14 @@
 ﻿#include "Server/ServerSector.h"
 #include "Common/SectorProcessor.h"
+#include "Common/SectorEventSet.h"
+#include "Common/ContentParameter.h"
+
 
 namespace ta
 {
 	ServerSector::ServerSector(void) noexcept
 		: _sectorProcessor(new SectorProcessor(this))
+		, _sectorEvents(nullptr)
 	{
 	}
 
@@ -13,6 +17,11 @@ namespace ta
 		if (nullptr != _sectorProcessor)
 		{
 			delete _sectorProcessor;
+		}
+
+		if (nullptr != _sectorEvents)
+		{
+			delete _sectorEvents;
 		}
 	}
 
@@ -85,5 +94,34 @@ namespace ta
 		}
 
 		return true;
+	}
+	
+	bool ServerSector::initializeSectorEvents(SectorEventSet* sectorEvents) noexcept
+	{
+		if (nullptr != _sectorEvents)
+		{
+			TA_ASSERT_DEV(false, "이미 초기화 되었습니다.");
+			return false;
+		}
+
+		if (nullptr == sectorEvents)
+		{
+			TA_ASSERT_DEV(false, "비정상");
+			return false;
+		}
+
+		_sectorEvents = sectorEvents;
+
+		return true;
+	}
+
+	bool ServerSector::startSectorEvents(const ContentParameter& parameter) noexcept
+	{
+		return _sectorEvents->startBasicSectorEvents(parameter);
+	}
+	
+	bool ServerSector::startSectorEventForServer(const ContentParameter& parameter, uint32 sectorEventIndex, bool isBasicSectorEvent) noexcept
+	{
+		return _sectorEvents->startSectorEvent(parameter, sectorEventIndex, isBasicSectorEvent);
 	}
 }

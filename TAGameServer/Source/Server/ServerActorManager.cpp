@@ -219,6 +219,11 @@ namespace ta
         return createCharacterActorAndInitializeComponentsFromSpawnData(detailSpawnData);
     }
 
+    bool ServerActorManager::startSectorEvents(void) noexcept
+    {
+        return static_cast<ServerSectors*>(_sectors)->startSectorEvents();
+    }
+
     bool ServerActorManager::initializeActorComponentsFromData(const ActorKey& targetActorKey, const CommonActorDetailSpawnData& detailSpawnData) noexcept
     {
         ServerActor* serverActor = static_cast<ServerActor*>(getActor(targetActorKey));

@@ -7,7 +7,6 @@
 #include "RecastNavigation/Detour/DetourNavMesh.h"
 #include "RecastNavigation/Detour/DetourNavMeshQuery.h"
 
-
 #endif
 
 #include "Common/CommonMoveActorSystem.h"

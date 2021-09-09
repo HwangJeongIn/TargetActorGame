@@ -33,7 +33,10 @@ namespace ta
 		//void setConditioinGameDataList(const std::vector<const ConditionGameData*> input) noexcept;
 
 		virtual bool execute(const ContentParameter& parameter) const noexcept = 0;
+		virtual bool registerEventDetail(const ContentParameter& parameter) const noexcept = 0;
 		virtual bool loadFromStrings(const std::vector<std::string>& strings) noexcept = 0;
+
+		bool registerEvent(const ContentParameter& parameter) const noexcept;
 
 	public:
 		EventGameDataObjectType _objectType;
@@ -54,6 +57,7 @@ namespace ta
 		virtual ~EventGameDataObjectSpawnActor(void) noexcept;
 
 		virtual bool execute(const ContentParameter& parameter) const noexcept override final;
+		virtual bool registerEventDetail(const ContentParameter& parameter) const noexcept override final;
 		virtual bool loadFromStrings(const std::vector<std::string>& strings) noexcept override final;
 
 	public:

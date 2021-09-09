@@ -17,6 +17,7 @@ namespace ta
 	class Vector;
 	class Sector;
 	class SectorProcessor;
+	class ContentParameter;
 }
 
 
@@ -130,6 +131,7 @@ namespace ta
 		virtual bool registerToOwnedActorsForServer_(const GroupGameDataKey& groupGameDataKey, const ActorKey& actorKey) noexcept;
 		virtual bool deregisterFromOwnedActorsForServer_(const GroupGameDataKey& groupGameDataKey, const ActorKey& actorKey) noexcept;
 
+		virtual bool startSectorEventForServer(const ContentParameter& parameter, uint32 sectorEventIndex, bool isBasicSectorEvent) noexcept;
 
 	private:
 		bool removeActor_(const ActorKey& actor) noexcept;

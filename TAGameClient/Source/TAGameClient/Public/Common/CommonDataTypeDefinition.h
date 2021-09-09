@@ -173,7 +173,7 @@ namespace ta
 		, SocketReceive
 		, SocketEventEnd
 		//, SocketFirstReceiveForClient // 처음 액터키 받을때 컴플리션 키 변경하기 위해서
-		, ActorEvent
+		, ContentEvent
 		, ThreadEnd
 		, Count
 	};
@@ -213,9 +213,10 @@ namespace ta
 
 namespace ta
 {
-	enum class ActorEventType : uint8
+	enum class ContentEventType : uint8
 	{
 		AiEvent = 0
+		, SectorEvent
 		, LogTest
 		, ThreadEnd
 		, Count

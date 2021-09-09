@@ -20,7 +20,8 @@ namespace ta
 	bool CheckIsInSector(const Vector& position) noexcept
 	{
 #ifdef GetNearSector_v1
-		return (abs(position._x) < MaxPositionValueExcludingSideSector) && (abs(position._y) < MaxPositionValueExcludingSideSector);
+		//return (abs(position._x) < MaxPositionValueExcludingSideSector) && (abs(position._y) < MaxPositionValueExcludingSideSector);
+		return (abs(position._x) < MaxPositionValue) && (abs(position._y) < MaxPositionValue);
 #endif
 
 #ifdef GetNearSector_v2
@@ -44,6 +45,8 @@ namespace ta
 				-x
 		*/
 
+		// 인덱스는 섹터 사격형의 왼쪽아래 기준이다.
+
 		uint32 indexX = 0;
 		uint32 indexY = 0;
 		// 인덱스는 무조건 올려야한다. ex) SectorSize = 300일때, // 좀 더 계산이 들어가지만 기본적으로 다음과 같다.
@@ -54,20 +57,20 @@ namespace ta
 		if (0.0f < position._x)
 		{
 			// x값이 클수록 높아지기 때문에 x인덱스는 작아진다. // 남으면 올림해야한다.
-			indexX = (HalfCountOfOneSideSectors)+(uint32)ceil(position._x / SectorSize);
+			indexX = (HalfCountOfOneSideSectors)+(uint32)floor(position._x / SectorSize);
 		}
 		else
 		{
-			indexX = (HalfCountOfOneSideSectors)-(uint32)abs(ceil(position._x / SectorSize));
+			indexX = (HalfCountOfOneSideSectors)-(uint32)abs(floor(position._x / SectorSize));
 		}
 
 		if (0.0f < position._y)
 		{
-			indexY = (HalfCountOfOneSideSectors)+(uint32)ceil(position._y / SectorSize);
+			indexY = (HalfCountOfOneSideSectors)+(uint32)floor(position._y / SectorSize);
 		}
 		else
 		{
-			indexY = (HalfCountOfOneSideSectors)-(uint32)abs(ceil(position._y / SectorSize));
+			indexY = (HalfCountOfOneSideSectors)-(uint32)abs(floor(position._y / SectorSize));
 		}
 
 		return SectorKey(indexX * CountOfOneSideSectors + indexY);
@@ -121,10 +124,16 @@ namespace ta
 		// 0번인덱스를 0,0로 보고 해당 인덱스 오른쪽 아래 좌표 구하고 섹터 중앙 좌표 구하고 // x는 음수값 y는 양수값이 나온다.
 		// 좌표평면으로 이동시키자  최종 좌표 = (finalX + SectorSize * HalfCountOfOneSideSectors, finalY - SectorSize * HalfCountOfOneSideSectors)
 
+		////float finalX = (-indexX * SectorSize) + (HalfCountOfOneSideSectors * SectorSize) + (0.5f * SectorSize);
+		//float finalX = (-indexX + 0.5f + HalfCountOfOneSideSectors ) * SectorSize;
+		////float finalY = (indexY * SectorSize) - (HalfCountOfOneSideSectors * SectorSize) - (0.5f * SectorSize);
+		//float finalY = (indexY - 0.5f - HalfCountOfOneSideSectors) * SectorSize;
+
+
 		//float finalX = (-indexX * SectorSize) + (HalfCountOfOneSideSectors * SectorSize) + (0.5f * SectorSize);
-		float finalX = (-indexX + 0.5f + HalfCountOfOneSideSectors ) * SectorSize;
+		float finalX = (indexX + 0.5f - HalfCountOfOneSideSectors) * SectorSize;
 		//float finalY = (indexY * SectorSize) - (HalfCountOfOneSideSectors * SectorSize) - (0.5f * SectorSize);
-		float finalY = (indexY - 0.5f - HalfCountOfOneSideSectors) * SectorSize;
+		float finalY = (indexY + 0.5f - HalfCountOfOneSideSectors) * SectorSize;
 
 		output._x = finalX;
 		output._y = finalY;
@@ -171,16 +180,62 @@ namespace ta
 
 		// 액터는 경계에 못들어간다
 #ifdef GetNearSector_v1
+
+		//const int32 indexX_p1 = indexX + 1;
+		//const int32 indexX_m1 = indexX - 1;
+
+		//const int32 indexY_p1 = indexY + 1;
+		//const int32 indexY_m1 = indexY - 1;
+
+
+		const bool isOnLowerBoundX = indexX <= 0;
+		const bool isOnUpperBoundX = indexX >= CountOfOneSideSectors;
+
+		const bool isOnLowerBoundY = indexY <= 0;
+		const bool isOnUpperBoundY = indexY >= CountOfOneSideSectors; 
+
 		
-		output.insert((indexX - 1) * CountOfOneSideSectors + (indexY - 1));		// 0
-		output.insert((indexX - 1) * CountOfOneSideSectors + (indexY));			// 1
-		output.insert((indexX - 1) * CountOfOneSideSectors + (indexY + 1));		// 2
-		output.insert((indexX)*CountOfOneSideSectors + (indexY - 1));			// 3
-		output.insert((indexX)*CountOfOneSideSectors + (indexY));				// 4
-		output.insert((indexX)*CountOfOneSideSectors + (indexY + 1));			// 5
-		output.insert((indexX + 1) * CountOfOneSideSectors + (indexY - 1));		// 6
-		output.insert((indexX + 1) * CountOfOneSideSectors + (indexY));			// 7
-		output.insert((indexX + 1) * CountOfOneSideSectors + (indexY + 1));		// 8
+		if (false == isOnLowerBoundX)
+		{
+			output.insert((indexX - 1) * CountOfOneSideSectors + (indexY));
+
+			if (false == isOnLowerBoundY)
+			{
+				output.insert((indexX - 1) * CountOfOneSideSectors + (indexY - 1));
+			}
+			
+			if (false == isOnUpperBoundY)
+			{
+				output.insert((indexX - 1) * CountOfOneSideSectors + (indexY + 1));
+			}
+		}
+		
+		if (false == isOnUpperBoundX)
+		{
+			output.insert((indexX + 1) * CountOfOneSideSectors + (indexY));
+
+			if (false == isOnLowerBoundY)
+			{
+				output.insert((indexX + 1) * CountOfOneSideSectors + (indexY - 1));
+			}
+
+			if (false == isOnUpperBoundY)
+			{
+				output.insert((indexX + 1) * CountOfOneSideSectors + (indexY + 1));
+			}
+		}
+
+
+		output.insert((indexX)*CountOfOneSideSectors + (indexY));
+		if (false == isOnLowerBoundY)
+		{
+			output.insert((indexX) * CountOfOneSideSectors + (indexY - 1));
+		}
+
+		if (false == isOnUpperBoundY)
+		{
+			output.insert((indexX) * CountOfOneSideSectors + (indexY + 1));
+		}
 
 		return true;
 #endif
@@ -551,6 +606,11 @@ namespace ta
 	}
 
 	bool Sector::deregisterFromOwnedActorsForServer_(const GroupGameDataKey& groupGameDataKey, const ActorKey& actorKey) noexcept
+	{
+		return false;
+	}
+
+	bool Sector::startSectorEventForServer(const ContentParameter& parameter, uint32 sectorEventIndex, bool isBasicSectorEvent) noexcept
 	{
 		return false;
 	}

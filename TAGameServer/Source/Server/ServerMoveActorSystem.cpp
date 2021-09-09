@@ -356,8 +356,8 @@ namespace ta
 		{
 			if (false == processPostMove(target, newPos))
 			{
-				TA_ASSERT_DEV(false, "processPostMove 단계에서 실패했습니다.")
-					return false;
+				TA_ASSERT_DEV(false, "processPostMove 단계에서 실패했습니다.");
+				return false;
 			}
 		}
 
@@ -365,8 +365,8 @@ namespace ta
 		{
 			if (false == processNearSectors(target, oldSectors, newSectors))
 			{
-				TA_ASSERT_DEV(false, "processNearSectors 단계에서 실패했습니다.")
-					return false;
+				TA_ASSERT_DEV(false, "processNearSectors 단계에서 실패했습니다.");
+				return false;
 			}
 		}
 

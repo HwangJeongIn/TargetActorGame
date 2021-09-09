@@ -3,12 +3,17 @@
 namespace ta
 {
 	ContentParameter::ContentParameter(const ActorKey& myActorKey
-																	   , const ActorKey& targetActorKey
-																	   , const SectorKey& sectorKey) noexcept
+									   , const ActorKey& targetActorKey
+									   , const SectorKey& sectorKey) noexcept
 		: _myActorKey(myActorKey)
 		, _targetActorKey(targetActorKey)
 		, _sectorKey(sectorKey)
 	{
 
+	}
+
+	ContentParameter::ContentParameter(const SectorKey& sectorKey) noexcept
+		: _sectorKey(sectorKey)
+	{
 	}
 }

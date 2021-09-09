@@ -31,14 +31,20 @@ namespace ta
 		//virtual bool loadSectorEventSetDataFromXml(const fs::path& filePath, SectorZoneMappingData& sectorZoneMappingData) noexcept override final;
 		virtual bool loadSectorEventSetDataFromXml(const fs::path& filePath, SectorZoneMappingData* sectorZoneMappingData) noexcept override final;
 
+
+		bool startSectorEvents(void) noexcept;
+
 	private:
 
 		bool loadSectorZoneEventDataConfig(const fs::path& filePath) noexcept;
 		bool loadSectorEventSetData(const XmlNode* sectorZoneElement, SectorEventSetData* output) noexcept;
 		
 	private:
-		std::unordered_map<SectorKey, SectorZoneType> _sectorZoneTypeData;
-		std::unordered_map<SectorZoneType, const SectorEventSetData*> _sectorZoneEventDataSetData;
+		std::unordered_map<SectorKey, SectorZoneType> _sectorZoneTypeDataMap;
+
+		const SectorEventSetData* _sectorZoneEventSetDataMap[static_cast<uint8>(SectorZoneType::Count)];
+
+		//std::unordered_map<SectorZoneType, const SectorEventSetData*> _sectorZoneEventSetDataMap;
 
 	};
 }

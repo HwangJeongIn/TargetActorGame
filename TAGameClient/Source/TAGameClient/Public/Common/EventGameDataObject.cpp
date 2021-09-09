@@ -55,6 +55,12 @@ namespace ta
 	EventGameDataObject::~EventGameDataObject(void) noexcept
 	{
 	}
+	
+	bool EventGameDataObject::registerEvent(const ContentParameter& parameter) const noexcept
+	{
+		 
+		return true;
+	}
 }
 
 
@@ -104,7 +110,16 @@ namespace ta
 			}
 		}
 
+		TA_LOG_DEV("[EventGameDataObjectSpawnActor] 섹터에 액터를 소환합니다. SectorKey : %d , TargetKey : %d"
+				   , parameter._sectorKey.getKeyValue()
+				   , _targetGroupGameDataKey.getKeyValue());
+
 		return true;
+	}
+
+	bool EventGameDataObjectSpawnActor::registerEventDetail(const ContentParameter& parameter) const noexcept
+	{
+		return false;
 	}
 
 	bool EventGameDataObjectSpawnActor::loadFromStrings(const std::vector<std::string>& strings) noexcept

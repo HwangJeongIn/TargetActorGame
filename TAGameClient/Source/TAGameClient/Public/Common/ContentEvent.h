@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 #include "Common/CommonBase.h"
 #include "Common/KeyDefinition.h"
@@ -8,23 +8,29 @@
 
 namespace ta
 {
-	class ActorEventObject
+	class ContentEventObject
 	{
 	public:
-		ActorEventObject(void) noexcept;
-		~ActorEventObject(void) noexcept;
+		ContentEventObject(void) noexcept;
+		~ContentEventObject(void) noexcept;
 
 		void clear(void) noexcept;
 
-		constexpr bool operator<(const ActorEventObject& _left) const noexcept;
+		constexpr bool operator<(const ContentEventObject& _left) const noexcept;
 		void setWakeupTime(const long long delayMilliSec) noexcept;
 
 	public:
-		ActorEventType _actorEventType;
+		ContentEventType _contentEventType;
 		AiCommandType _aiCommandType; // ActorEventType::AiEvent일때만 유효
 
 		ActorKey _myActorKey;
 		ActorKey _targetActorKey;
+
+		// 섹터 관련 이벤트에서 사용
+		SectorKey _sectorKey;
+		bool _sectorEventIndex;
+		bool _isBasicSectorEvent;
+
 
 		// 자동으로 채워진다.
 	public:
@@ -36,15 +42,15 @@ namespace ta
 
 namespace ta
 {
-	class ActorEventOverlappedStruct : public OverlappedStructBase
+	class ContentEventOverlappedStruct : public OverlappedStructBase
 	{
 	public:
-		ActorEventOverlappedStruct(void) noexcept;
-		virtual ~ActorEventOverlappedStruct(void) noexcept;
+		ContentEventOverlappedStruct(void) noexcept;
+		virtual ~ContentEventOverlappedStruct(void) noexcept;
 
 		void clear(void) noexcept;
 
 	public:
-		ActorEventObject* _actorEventObject;
+		ContentEventObject* _contentEventObject;
 	};
 }

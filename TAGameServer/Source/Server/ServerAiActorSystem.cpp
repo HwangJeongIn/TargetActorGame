@@ -6,7 +6,7 @@
 #include "Common/GetComponentAndSystem.h"
 #include "Common/ScopedLock.h"
 #include "Common/CommonApp.h"
-#include "Common/ActorEvent.h"
+#include "Common/ContentEvent.h"
 #include "Common/AiPathPointPath.h"
 
 
@@ -58,12 +58,12 @@ namespace ta
 		}
 
 
-		ActorEventObject* aiEvent = new ActorEventObject;
-		aiEvent->_actorEventType = ActorEventType::AiEvent;
+		ContentEventObject* aiEvent = new ContentEventObject;
+		aiEvent->_contentEventType = ContentEventType::AiEvent;
 		aiEvent->_aiCommandType = AiCommandType::TickAi;
 		aiEvent->_myActorKey = targetActorKey;
 
-		if (false == RegisterActorEvent(aiEvent, AiTickIntervalMilliSec))
+		if (false == RegisterContentEvent(aiEvent, AiTickIntervalMilliSec))
 		{
 			TA_ASSERT_DEV(false, "이벤트 등록에 실패했습니다.");
 			return false;
@@ -167,14 +167,14 @@ namespace ta
 			targetAi->setCurrentAiState_(AiState::None);
 		}
 
-		ActorEventObject* aiEvent = new ActorEventObject;
-		aiEvent->_actorEventType = ActorEventType::AiEvent;
+		ContentEventObject* aiEvent = new ContentEventObject;
+		aiEvent->_contentEventType = ContentEventType::AiEvent;
 		aiEvent->_aiCommandType = AiCommandType::TickAi;
 		aiEvent->_myActorKey = targetAi->getOwnerActorKey();
 
 		TA_LOG_DEV("Activate Ai , OwnerActorKey : %d", aiEvent->_myActorKey.getKeyValue());
 
-		if (false == RegisterActorEvent(aiEvent, AiTickIntervalMilliSec))
+		if (false == RegisterContentEvent(aiEvent, AiTickIntervalMilliSec))
 		{
 			TA_ASSERT_DEV(false, "이벤트 등록에 실패했습니다.");
 			return false;

@@ -7,6 +7,7 @@
 #include "Common/SectorEventSet.h"
 #include "Common/GameData.h"
 #include "Common/GetComponentAndSystem.h"
+#include "Common/ContentParameter.h"
 
 
 namespace ta
@@ -28,6 +29,13 @@ namespace ta
 		}
 
 		_allSectors = new ServerSector[CountOfSectors];
+
+		// SectorZoneEventSetDataMap
+		const uint32 zoneCount = static_cast<uint8>(SectorZoneType::Count);
+		for (uint32 zoneIndex = 0; zoneIndex < zoneCount; ++zoneIndex)
+		{
+			_sectorZoneEventSetDataMap[zoneIndex] = nullptr;
+		}
 
 		// do initialize
 		std::vector<fs::path> sectorDataFilePaths;
@@ -76,7 +84,7 @@ namespace ta
 			const uint32 count = sectorZoneMappingDataSet.size();
 			for (uint32 index = 0; index < count; ++index)
 			{
-				auto rv = _sectorZoneTypeData.insert(std::pair<SectorKey, SectorZoneType>(sectorZoneMappingDataSet[index]._sectorKey
+				auto rv = _sectorZoneTypeDataMap.insert(std::pair<SectorKey, SectorZoneType>(sectorZoneMappingDataSet[index]._sectorKey
 																						  , sectorZoneMappingDataSet[index]._sectorZoneType));
 
 				if (false == rv.second)
@@ -103,22 +111,23 @@ namespace ta
 			return false;
 		}
 
+		
+
 		return true;
 	}
 
 	void ServerSectors::close(void) noexcept
 	{
-		auto it = _sectorZoneEventDataSetData.begin();
-		const auto end = _sectorZoneEventDataSetData.end();
-
-		while (end != it)
+		uint8 zoneCount = static_cast<uint8>(SectorZoneType::Count);
+		for (uint8 zoneIndex = 0; zoneIndex < zoneCount; ++zoneIndex)
 		{
-			delete (it->second);
-			++it;
+			if (nullptr != _sectorZoneEventSetDataMap[zoneIndex])
+			{
+				delete _sectorZoneEventSetDataMap[zoneIndex];
+			}
 		}
 
-		_sectorZoneEventDataSetData.clear();
-		_sectorZoneTypeData.clear();
+		_sectorZoneTypeDataMap.clear();
 
 		Sectors::close();
 	}
@@ -179,6 +188,64 @@ namespace ta
 
 		sectorZoneMappingData->setData(sectorKey, sectorZoneType);
 
+		// 해당 섹터를 해당 존타입의 이벤트로 초기화 해주자
+		ServerSector* targetSector = static_cast<ServerSector*>(getSector(sectorKey));
+		if (nullptr == targetSector)
+		{
+			TA_ASSERT_DEV(false, "해당 섹터가 존재하지 않습니다. %d", sectorKey.getKeyValue());
+			return false;
+		}
+
+		const uint8 targetSectorZoneType = static_cast<uint8>(sectorZoneType);
+		if (static_cast<uint8>(SectorZoneType::Count) <= targetSectorZoneType)
+		{
+			TA_ASSERT_DEV(false, "해당 존타입이 로드되지 않았습니다 %d", targetSectorZoneType);
+			return false;
+		}
+
+		const SectorEventSetData* targetSecterEventSetData = _sectorZoneEventSetDataMap[targetSectorZoneType];
+		if (nullptr == targetSecterEventSetData)
+		{
+			TA_ASSERT_DEV(false, "해당 존타입이 로드되지 않았습니다 %d", targetSectorZoneType);
+			return false;
+		}
+
+		if (false == targetSector->initializeSectorEvents(targetSecterEventSetData->makeSetFromSetData()))
+		{
+			TA_ASSERT_DEV(false, "비정상");
+			return false;
+		}
+
+		return true;
+	}
+
+	bool ServerSectors::startSectorEvents(void) noexcept
+	{
+		auto it = _sectorZoneTypeDataMap.begin();
+		const auto end = _sectorZoneTypeDataMap.end();
+
+		ActorKey myActorKey; ActorKey targetActorKey; SectorKey tempSectorKey;
+		ContentParameter parameter(myActorKey, targetActorKey, tempSectorKey);
+		while (end != it)
+		{
+			const SectorKey targetSectorKey = it->first;
+
+			ServerSector* targetServerSector = static_cast<ServerSector*>(getSector(targetSectorKey));
+			if (nullptr == targetServerSector)
+			{
+				TA_ASSERT_DEV(false, "해당 섹터가 존재하지 않습니다.");
+				return false;
+			}
+
+			parameter._sectorKey = targetSectorKey;
+			if (false == targetServerSector->startSectorEvents(parameter))
+			{
+				TA_ASSERT_DEV(false, "처음 서버가 시작할때 섹터이벤트를 시작하지 못했습니다. SectorKey : %d", targetSectorKey.getKeyValue());
+				return false;
+			}
+
+			++it;
+		}
 
 		return true;
 	}
@@ -219,14 +286,23 @@ namespace ta
 				return false;
 			}
 
-			auto rv = _sectorZoneEventDataSetData.insert(std::pair<SectorZoneType, const SectorEventSetData*>(currentSectorZoneType, sectorEventSetData));
-			if (false == rv.second)
+			const uint8 targetZoneIndex = static_cast<uint8>(currentSectorZoneType);
+			if (static_cast<uint8>(SectorZoneType::Count) <= targetZoneIndex)
 			{
-				TA_ASSERT_DEV(false, "Config 파일에 SectorZoneType이 여러번 정의되었습니다. %d", static_cast<uint8>(currentSectorZoneType));
+				TA_ASSERT_DEV(false, "ZoneType 비정상 %d", targetZoneIndex);
+				return false;
+			}
+
+			if (nullptr != _sectorZoneEventSetDataMap[targetZoneIndex])
+			{
+				TA_ASSERT_DEV(false, "Config 파일에 SectorZoneType이 여러번 정의되었습니다. %d", targetZoneIndex);
 				delete sectorEventSetData;
 				return false;
 			}
+
+			_sectorZoneEventSetDataMap[targetZoneIndex] = sectorEventSetData;
 		}
+
 		return true;
 	}
 	

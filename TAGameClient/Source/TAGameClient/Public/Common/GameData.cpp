@@ -983,7 +983,8 @@ namespace ta
 		{
 			if (false == _conditionGameDataSet[conditionIndex]->checkCondition(parameter))
 			{
-				return false;
+				TA_LOG_DEV("조건 불만족");
+				return true; // 있을 수 있는 상황이다.
 			}
 		}
 
@@ -993,6 +994,8 @@ namespace ta
 			return false;
 		}
 
+
+		
 		return true;
 	}
 

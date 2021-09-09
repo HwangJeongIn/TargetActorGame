@@ -1,6 +1,8 @@
 ﻿#pragma once
 #include "Common/CommonBase.h"
 #include "Common/KeyDefinition.h"
+#include "Common/Lockable.h"
+
 
 namespace ta
 {
@@ -8,6 +10,7 @@ namespace ta
 	class ConditionGameData;
 	class ContentParameter;
 	class SectorEventSet;
+	class ContentParameter;
 }
 
 
@@ -16,16 +19,22 @@ namespace ta
 	class SpecialSectorEvent
 	{
 	public:
-		SpecialSectorEvent(void) noexcept;
 		explicit SpecialSectorEvent(const EventGameData* eventGameData, const ConditionGameData* conditionGameData) noexcept;
+		explicit SpecialSectorEvent(const SpecialSectorEvent* specialSectorEvent) noexcept;
 		virtual ~SpecialSectorEvent(void) noexcept;
 
 		bool canOccur(const ContentParameter& parameter) const noexcept;
 		void setData(const EventGameData* eventGameData, const ConditionGameData* conditionGameData) noexcept;
+
+		bool getIsActivated(void) const noexcept;
+		void setIsActivated(const bool flag) noexcept;
 	
+		bool checkAndExecute(const ContentParameter& parameter) const noexcept;
+		uint32 getInterval(void) const noexcept;
 	private:
 		const EventGameData* _eventGameData;
 		const ConditionGameData* _conditionGameData;
+		bool _isActivated;
 	};
 }
 
@@ -38,7 +47,7 @@ namespace ta
 		SectorEventSetData(void) noexcept;
 		virtual ~SectorEventSetData(void) noexcept;
 
-		SectorEventSet* makeSetFromSetData(void) noexcept;
+		SectorEventSet* makeSetFromSetData(void) const noexcept;
 
 	public:
 		std::vector<const EventGameData*> _basicEventGameDataSetData;
@@ -50,7 +59,7 @@ namespace ta
 
 namespace ta
 {
-	class SectorEventSet
+	class SectorEventSet : public Lockable
 	{
 	public:
 		explicit SectorEventSet(const std::vector<const EventGameData*>& basicEventGameDataSetData
@@ -59,11 +68,12 @@ namespace ta
 		virtual ~SectorEventSet(void) noexcept;
 
 		void onChangeSector(const ContentParameter& parameter) noexcept;
+		bool startBasicSectorEvents(const ContentParameter& parameter) noexcept;
+		bool startSectorEvent(const ContentParameter& parameter, uint32 eventIndex, bool isBasic = true) noexcept;
 
 	public:
 		const std::vector<const EventGameData*> _basicEventGameDataSet;
-		std::vector<const SpecialSectorEvent*> _activatedSpecialEventGameDataSet;
-		std::vector<const SpecialSectorEvent*> _specialEventGameDataCandidates;
+		std::vector<SpecialSectorEvent*> _specialEventGameDataSet;
 
 	};
 }

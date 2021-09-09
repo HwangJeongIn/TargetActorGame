@@ -13,8 +13,8 @@ namespace ta
 	class CommonActorSystemManager;
 	class Iocp;
 	class CommonApp;
-	class ActorEventTimer;
-	class ActorEventObject;
+	class ContentEventTimer;
+	class ContentEventObject;
 	class ActorKey;
 	class GameDataManager;
 	class CommonSpawnDataManager;
@@ -28,8 +28,8 @@ namespace ta
 	extern void WorkerThread(Iocp* iocp) noexcept;
 
 	// Common에 존재
-	extern bool RegisterActorEvent(ActorEventObject* actorEventObject, const long long delayMilliSec) noexcept;
-	extern bool ProcessActorEvent(ActorKey& targetActorKey, const ActorEventObject* actorEvent) noexcept;
+	extern bool RegisterContentEvent(ContentEventObject* actorEventObject, const long long delayMilliSec) noexcept;
+	extern bool ProcessContentEvent(ActorKey& targetActorKey, const ContentEventObject* actorEvent) noexcept;
 }
 
 
@@ -44,7 +44,7 @@ namespace ta
 		CommonActorSystemManager* getActorSystemManager(void) noexcept;
 		GameDataManager* getGameDataManager(void) noexcept;
 
-		bool registerActorEvent(ActorEventObject* actorEventObject, const long long delayMilliSec) noexcept;
+		bool registerContentEvent(ContentEventObject* actorEventObject, const long long delayMilliSec) noexcept;
 
 		~CommonApp(void) noexcept;
 	protected:
@@ -64,7 +64,7 @@ namespace ta
 
 	protected:
 		Iocp* _iocp;
-		ActorEventTimer* _actorEventTimer;
+		ContentEventTimer* _actorEventTimer;
 		CommonActorManager* _actorManager;
 		CommonActorSystemManager* _actorSystemManager;
 		GameDataManager* _gameDataManager;

@@ -8,8 +8,10 @@ namespace ta
 	{
 	public:
 		explicit ContentParameter(const ActorKey& myActorKey
-												  , const ActorKey& targetActorKey
-												  , const SectorKey& sectorKey) noexcept;
+								  , const ActorKey& targetActorKey
+								  , const SectorKey& sectorKey) noexcept;
+
+		explicit ContentParameter(const SectorKey& sectorKey) noexcept;
 
 	public:
 		ActorKey _myActorKey;

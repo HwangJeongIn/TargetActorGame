@@ -9,7 +9,7 @@ namespace ta
 	class ServerActorManager;
 	class ServerActorSystemManager;
 	class ActorKey;
-	class ActorEventObject;
+	class ContentEventObject;
 }
 
 // 다른곳에서 사용할떄 이 해더만 인클루드하면 사용할 수 있음

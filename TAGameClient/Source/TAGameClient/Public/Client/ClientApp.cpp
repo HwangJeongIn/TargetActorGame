@@ -10,8 +10,8 @@
 #include "Common/EndPoint.h"
 #include "Common/CommonActorManager.h"
 #include "Common/AllPacketCommon.h"
-#include "Common/ActorEventTimer.h"
-#include "Common/ActorEvent.h"
+#include "Common/ContentEventTimer.h"
+#include "Common/ContentEvent.h"
 #include <thread>
 
 
@@ -119,10 +119,10 @@ namespace ta
 					delete overlappedStructBase;
 				}
 				break;
-			case ThreadWorkType::ActorEvent:
+			case ThreadWorkType::ContentEvent:
 				{
-					ActorEventOverlappedStruct* actorEventOverlappedStruct = static_cast<ActorEventOverlappedStruct*>(overlappedStructBase);
-					ProcessActorEvent(targetActorKey, actorEventOverlappedStruct->_actorEventObject);
+					ContentEventOverlappedStruct* actorEventOverlappedStruct = static_cast<ContentEventOverlappedStruct*>(overlappedStructBase);
+					ProcessContentEvent(targetActorKey, actorEventOverlappedStruct->_contentEventObject);
 
 					delete actorEventOverlappedStruct;
 				}

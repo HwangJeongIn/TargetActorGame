@@ -9,9 +9,9 @@
 #include "Common/EndPoint.h"
 #include "Common/GetComponentAndSystem.h"
 #include "Common/ScopedLock.h"
-#include "Common/ActorEventTimer.h"
 #include "Common/ActorDataGroups.h"
-#include "Common/ActorEvent.h"
+#include "Common/ContentEvent.h"
+#include "Common/ContentEventTimer.h"
 #include <thread>
 //test
 #include "Common/Serializer.h"
@@ -146,12 +146,12 @@ namespace ta
 					delete overlappedStructBase;
 				}
 				break;
-			case ThreadWorkType::ActorEvent:
+			case ThreadWorkType::ContentEvent:
 				{
-					ActorEventOverlappedStruct* actorEventOverlappedStruct = static_cast<ActorEventOverlappedStruct*>(overlappedStructBase);
-					ProcessActorEvent(targetActorKey, actorEventOverlappedStruct->_actorEventObject);
+					ContentEventOverlappedStruct* contentEventOverlappedStruct = static_cast<ContentEventOverlappedStruct*>(overlappedStructBase);
+					ProcessContentEvent(targetActorKey, contentEventOverlappedStruct->_contentEventObject);
 
-					delete actorEventOverlappedStruct;
+					delete contentEventOverlappedStruct;
 				}
 				break;
 			case ThreadWorkType::ThreadEnd:
@@ -348,8 +348,15 @@ namespace ta
 			return false;
 		}
 
-		//스폰 데이터로 스폰
+		// 스폰 데이터로 스폰
 		if (false == static_cast<ServerSpawnDataManager*>(_spawnDataManager)->spawnRealWorldActors())
+		{
+			TA_ASSERT_DEV(false, "비정상적인 상황입니다.");
+			return false;
+		}
+
+		// 섹터 이벤트 시작
+		if (false == static_cast<ServerActorManager*>(_actorManager)->startSectorEvents())
 		{
 			TA_ASSERT_DEV(false, "비정상적인 상황입니다.");
 			return false;
@@ -365,10 +372,10 @@ namespace ta
 	
 	void ServerApp::logTest(void) noexcept
 	{
-		ActorEventObject* logEvent = new ActorEventObject;
-		logEvent->_actorEventType = ActorEventType::LogTest;
+		ContentEventObject* logEvent = new ContentEventObject;
+		logEvent->_contentEventType = ContentEventType::LogTest;
 		logEvent->_myActorKey = 1;
-		if (false == RegisterActorEvent(logEvent, 3000))
+		if (false == RegisterContentEvent(logEvent, 3000))
 		{
 			TA_ASSERT_DEV(false, "이벤트 등록에 실패했습니다.");
 		}

@@ -5,33 +5,37 @@
 #include "Common/CommonActorSystemManager.h"
 #include "Common/GameDataManager.h"
 #include "Common/CommonSpawnDataManager.h"
-#include "Common/ActorEventTimer.h"
+#include "Common/ContentEventTimer.h"
+#include "Common/ContentEvent.h"
 #include "Common/CommonActor.h"
 #include "Common/CommonAiActorSystem.h"
 #include "Common/GetComponentAndSystem.h"
-#include "Common/ActorEvent.h"
 #include "Common/AiBehaviorTree.h"
+#include "Common/Sector.h"
+#include "Common/ContentParameter.h"
 
 
 
 namespace ta
 {
-	bool RegisterActorEvent(ActorEventObject* actorEventObject, const long long delayMilliSec) noexcept
+	bool RegisterContentEvent(ContentEventObject* actorEventObject, const long long delayMilliSec) noexcept
 	{
-		return g_app->registerActorEvent(actorEventObject, delayMilliSec);
+		return g_app->registerContentEvent(actorEventObject, delayMilliSec);
 	}
 
 
-	bool ProcessActorEvent(ActorKey& targetActorKey, const ActorEventObject* actorEvent) noexcept
+	bool ProcessContentEvent(ActorKey& targetActorKey, const ContentEventObject* contentEvent) noexcept
 	{
-		CommonActor* targetActor = g_app->getActorManager()->getActor(targetActorKey, true);
-		bool rv = true;
-		TA_ASSERT_DEV((nullptr != targetActor), "비정상입니다.");
 
-		switch (actorEvent->_actorEventType)
+		bool rv = true;
+
+		switch (contentEvent->_contentEventType)
 		{
-		case ActorEventType::AiEvent:
+		case ContentEventType::AiEvent:
 			{
+				CommonActor* targetActor = g_app->getActorManager()->getActor(targetActorKey, true);
+				TA_ASSERT_DEV((nullptr != targetActor), "비정상입니다.");
+
 				if (ActorType::Player == targetActor->getActorType())
 				{
 					break;
@@ -39,11 +43,11 @@ namespace ta
 
 				CommonAiActorSystem* aiActorSystem = GetActorSystem<CommonAiActorSystem>();
 
-				switch (actorEvent->_aiCommandType)
+				switch (contentEvent->_aiCommandType)
 				{
 				case AiCommandType::TickAi:
 					{
-						rv = aiActorSystem->processCommandTickAi(targetActor, actorEvent->_deltaTime);
+						rv = aiActorSystem->processCommandTickAi(targetActor, contentEvent->_deltaTime);
 					}
 					break;
 				case AiCommandType::Move:
@@ -63,15 +67,34 @@ namespace ta
 				TA_COMPILE_DEV(3 == static_cast<uint8>(AiCommandType::Count), "여기도 추가해주세요")
 			}
 			break;
-		case ActorEventType::LogTest:
+		case ContentEventType::SectorEvent:
+			{
+				Sector* targetSector = GetSector(contentEvent->_sectorKey);
+				if (nullptr == targetSector)
+				{
+					TA_ASSERT_DEV(false, "비정상입니다");
+					break;
+				}
+
+				ContentParameter parameter(contentEvent->_myActorKey, contentEvent->_targetActorKey, contentEvent->_sectorKey);
+
+				if (false == targetSector->startSectorEventForServer(parameter, contentEvent->_sectorEventIndex, contentEvent->_isBasicSectorEvent))
+				{
+					rv = false;
+					TA_ASSERT_DEV(false, "비정상입니다");
+				}
+
+			}
+			break;		
+		case ContentEventType::LogTest:
 			{
 				g_app->getActorManager()->logTest();
 
-				ActorEventObject* logEvent = new ActorEventObject;
-				logEvent->_actorEventType = ActorEventType::LogTest;
+				ContentEventObject* logEvent = new ContentEventObject;
+				logEvent->_contentEventType = ContentEventType::LogTest;
 				logEvent->_myActorKey = targetActorKey;
 
-				if (false == RegisterActorEvent(logEvent, 3000))
+				if (false == RegisterContentEvent(logEvent, 3000))
 				{
 					TA_ASSERT_DEV(false, "이벤트 등록에 실패했습니다.");
 				}
@@ -87,8 +110,8 @@ namespace ta
 			break;
 		}
 
-		TA_COMPILE_DEV(3 == static_cast<uint8>(ActorEventType::Count), "여기도 추가해주세요");
-			return rv;
+		TA_COMPILE_DEV(4 == static_cast<uint8>(ContentEventType::Count), "여기도 추가해주세요");
+		return rv;
 	}
 }
 
@@ -107,7 +130,7 @@ namespace ta
 	void CommonApp::run(void) noexcept
 	{
 		_threads.reserve(_maxThreadNum);
-		_threads.emplace_back(ActorEventTimerThread, _actorEventTimer);
+		_threads.emplace_back(ContentEventTimerThread, _actorEventTimer);
 
 		for (uint32 threadIndex = _threads.size(); threadIndex < _maxThreadNum; ++threadIndex)
 		{
@@ -130,7 +153,7 @@ namespace ta
 		return _gameDataManager;
 	}
 
-	bool CommonApp::registerActorEvent(ActorEventObject* actorEventObject, const long long delayMilliSec) noexcept
+	bool CommonApp::registerContentEvent(ContentEventObject* actorEventObject, const long long delayMilliSec) noexcept
 	{
 		return _actorEventTimer->addEvent(actorEventObject, delayMilliSec);
 	}
@@ -139,7 +162,7 @@ namespace ta
 	{
 		_iocp = new Iocp;
 		_gameDataManager = new GameDataManager();
-		_actorEventTimer = new ActorEventTimer(_iocp);
+		_actorEventTimer = new ContentEventTimer(_iocp);
 		_actorManager = nullptr;
 		_actorSystemManager = nullptr;
 		_spawnDataManager = nullptr;
@@ -257,16 +280,16 @@ namespace ta
 	void CommonApp::sendThreadEndEventToAllThread(void) noexcept
 	{
 		// 이벤트 타이머 스레드한테도 보내고
-		ActorEventObject* actorEventObject = new ActorEventObject;
-		actorEventObject->_actorEventType = ActorEventType::ThreadEnd;
-		registerActorEvent(actorEventObject, 0);
+		ContentEventObject* actorEventObject = new ContentEventObject;
+		actorEventObject->_contentEventType = ContentEventType::ThreadEnd;
+		registerContentEvent(actorEventObject, 0);
 
 		// 나머지 스레드한테도 보낸다.
 		uint32 workerCount = _threads.size() -1;
 		for (uint32 index = 0; index < workerCount; ++index)
 		{
 			OverlappedStructBase* overlappedStruct = new OverlappedStructBase;
-			overlappedStruct->_workType = ThreadWorkType::ActorEvent;
+			overlappedStruct->_workType = ThreadWorkType::ContentEvent;
 
 			PostQueuedCompletionStatus(_iocp->_handle, 1, 0, &overlappedStruct->_wsaOverlapped);
 		}

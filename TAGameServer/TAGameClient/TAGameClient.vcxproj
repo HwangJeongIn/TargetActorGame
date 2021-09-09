@@ -177,8 +177,6 @@
     <ClCompile Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\ActorDataGroups.cpp" />
     <ClCompile Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\ActorDataPool.cpp" />
     <ClCompile Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\ActorDataPoolValue.cpp" />
-    <ClCompile Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\ActorEvent.cpp" />
-    <ClCompile Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\ActorEventTimer.cpp" />
     <ClCompile Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\ActorNetwork.cpp" />
     <ClCompile Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\ActorSystem.cpp" />
     <ClCompile Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\AiBehaviorTree.cpp" />
@@ -204,6 +202,8 @@
     <ClCompile Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\CommonObjectActorComponent.cpp" />
     <ClCompile Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\ComponentData.cpp" />
     <ClCompile Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\ConditionGameDataObject.cpp" />
+    <ClCompile Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\ContentEvent.cpp" />
+    <ClCompile Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\ContentEventTimer.cpp" />
     <ClCompile Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\ContentParameter.cpp" />
     <ClCompile Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\EndPoint.cpp" />
     <ClCompile Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\EnumUtility.cpp" />
@@ -300,8 +300,6 @@
     <ClInclude Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\ActorDataGroups.h" />
     <ClInclude Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\ActorDataPool.h" />
     <ClInclude Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\ActorDataPoolValue.h" />
-    <ClInclude Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\ActorEvent.h" />
-    <ClInclude Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\ActorEventTimer.h" />
     <ClInclude Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\ActorNetwork.h" />
     <ClInclude Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\ActorSystem.h" />
     <ClInclude Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\AiBehaviorTree.h" />
@@ -333,6 +331,8 @@
     <ClInclude Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\CommonTypeDefinition.h" />
     <ClInclude Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\ComponentData.h" />
     <ClInclude Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\ConditionGameDataObject.h" />
+    <ClInclude Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\ContentEvent.h" />
+    <ClInclude Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\ContentEventTimer.h" />
     <ClInclude Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\ContentParameter.h" />
     <ClInclude Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\EndPoint.h" />
     <ClInclude Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\EnumUtility.h" />

@@ -32,6 +32,8 @@ namespace ta
 
 		virtual CommonActor* createCharacterActorAndInitializeComponentsForServer(const CommonActorDetailSpawnDataForCharacter& detailSpawnData) noexcept override final;
 
+		bool startSectorEvents(void) noexcept;
+
 	private:
 		//CommonActor* createDefaultActorForServer(void) noexcept;
 		// 플레이어
