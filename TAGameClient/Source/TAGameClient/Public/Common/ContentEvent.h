@@ -15,27 +15,74 @@ namespace ta
 		~ContentEventObject(void) noexcept;
 
 		void clear(void) noexcept;
+		virtual void clearDetail(void) noexcept;
 
 		constexpr bool operator<(const ContentEventObject& _left) const noexcept;
 		void setWakeupTime(const long long delayMilliSec) noexcept;
 
 	public:
+		
+		// 공통 정보	
 		ContentEventType _contentEventType;
-		AiCommandType _aiCommandType; // ActorEventType::AiEvent일때만 유효
 
 		ActorKey _myActorKey;
 		ActorKey _targetActorKey;
-
-		// 섹터 관련 이벤트에서 사용
-		SectorKey _sectorKey;
-		bool _sectorEventIndex;
-		bool _isBasicSectorEvent;
-
 
 		// 자동으로 채워진다.
 	public:
 		std::chrono::high_resolution_clock::time_point _wakeupTime;
 		float _deltaTime;
+	};
+}
+
+
+namespace ta
+{
+	class ContentEventAiObject : public ContentEventObject
+	{
+	public:
+		ContentEventAiObject(void) noexcept;
+		~ContentEventAiObject(void) noexcept;
+
+		virtual void clearDetail(void) noexcept override final;
+
+	public:
+		AiCommandType _aiCommandType;
+	};
+}
+
+
+namespace ta
+{
+	class ContentEventBuffObject : public ContentEventObject
+	{
+	public:
+		ContentEventBuffObject(void) noexcept;
+		~ContentEventBuffObject(void) noexcept;
+
+		virtual void clearDetail(void) noexcept override final;
+
+	public:
+		BuffGameDataKey _buffGameDataKey;
+	};
+}
+
+
+namespace ta
+{
+	class ContentEventSectorObject : public ContentEventObject
+	{
+	public:
+		ContentEventSectorObject(void) noexcept;
+		~ContentEventSectorObject(void) noexcept;
+
+		virtual void clearDetail(void) noexcept override final;
+
+	public:
+
+		SectorKey _sectorKey;
+		bool _sectorEventIndex;
+		bool _isBasicSectorEvent;
 	};
 }
 

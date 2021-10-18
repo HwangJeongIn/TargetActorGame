@@ -12,7 +12,7 @@
 
 namespace ta
 {
-	EventGameDataObject* EventGameDataObjectFactory::generateConditionGameDataObject(const std::vector<std::string>& strings
+	EventGameDataObject* EventGameDataObjectFactory::generateEventGameDataObject(const std::vector<std::string>& strings
 																					 , const EventGameDataObjectType& objectType) const noexcept
 	{
 		EventGameDataObject* rv = nullptr;
@@ -26,7 +26,7 @@ namespace ta
 			break;
 		default:
 			{
-				TA_COMPILE_DEV(1 == static_cast<uint8>(ConditionGameDataObjectType::Count), "여기도 추가해주세요");
+				TA_COMPILE_DEV(1 == static_cast<uint8>(EventGameDataObjectType::Count), "여기도 추가해주세요");
 				TA_ASSERT_DEV(false, "비정상");
 				return nullptr;
 			}
@@ -54,12 +54,6 @@ namespace ta
 
 	EventGameDataObject::~EventGameDataObject(void) noexcept
 	{
-	}
-	
-	bool EventGameDataObject::registerEvent(const ContentParameter& parameter) const noexcept
-	{
-		 
-		return true;
 	}
 }
 
@@ -115,11 +109,6 @@ namespace ta
 				   , _targetGroupGameDataKey.getKeyValue());
 
 		return true;
-	}
-
-	bool EventGameDataObjectSpawnActor::registerEventDetail(const ContentParameter& parameter) const noexcept
-	{
-		return false;
 	}
 
 	bool EventGameDataObjectSpawnActor::loadFromStrings(const std::vector<std::string>& strings) noexcept

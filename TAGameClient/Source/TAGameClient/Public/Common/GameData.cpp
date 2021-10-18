@@ -4,6 +4,7 @@
 #include "Common/EnumUtility.h"
 #include "Common/ConditionGameDataObject.h"
 #include "Common/EventGameDataObject.h"
+#include "Common/BuffGameDataObject.h"
 #include "Common/GameDataManager.h"
 #include "Common/GetComponentAndSystem.h"
 
@@ -403,7 +404,7 @@ namespace ta
 				return false;
 			}
 
-			_strength = FromStringCast<float>(*value);
+			_stats[static_cast<uint8>(CharacterStatType::Strength)] = FromStringCast<float>(*value);
 		}
 
 		{
@@ -414,7 +415,7 @@ namespace ta
 				return false;
 			}
 
-			_agility = FromStringCast<float>(*value);
+			_stats[static_cast<uint8>(CharacterStatType::Agility)] = FromStringCast<float>(*value);
 		}
 
 		{
@@ -425,7 +426,24 @@ namespace ta
 				return false;
 			}
 
-			_maxHp = FromStringCast<float>(*value);
+			const float maxHp = FromStringCast<float>(*value);
+
+			_stats[static_cast<uint8>(CharacterStatType::MaxHp)] = maxHp;
+			_stats[static_cast<uint8>(CharacterStatType::Hp)] = maxHp;
+		}
+
+		{
+			const std::string* value = xmlNode->getAttribute("MaxMp");
+			if (nullptr == value)
+			{
+				TA_ASSERT_DEV(false, "MaxMp 로드 실패");
+				return false;
+			}
+
+			const float maxMp = FromStringCast<float>(*value);
+
+			_stats[static_cast<uint8>(CharacterStatType::MaxMp)] = maxMp;
+			_stats[static_cast<uint8>(CharacterStatType::Mp)] = maxMp;
 		}
 
 		{
@@ -466,17 +484,31 @@ namespace ta
 	{
 		return false;
 	}
+
+	float CharacterGameData::getStat(const CharacterStatType statType) const noexcept
+	{
+		if (CharacterStatType::Count <= statType)
+		{
+			TA_ASSERT_DEV(false, "비정상");
+			return 0.0f;
+		}
+
+		return _stats[static_cast<uint8>(statType)];
+	}
 	
 	void CharacterGameData::clearDetail(void) noexcept
 	{
 		_key.clear();
 		_actorType = ActorType::Count;
 		_interactionTypes.clear();
-		_strength = 0.0f;
-		_agility = 0.0f;
-		_maxHp = 0.0f;
 		_openDialog.clear();
 		_renderingGameData = nullptr;
+
+		const uint8 count = static_cast<uint8>(CharacterStatType::Count);
+		for (uint8 index = 0; index < count; ++index)
+		{
+			_stats[index] = 0.0f;
+		}
 	}
 }
 
@@ -912,7 +944,7 @@ namespace ta
 
 			const EventGameDataObjectType objectType = ConvertStringToEnum<EventGameDataObjectType>(eventGameDataObjectString);
 			EventGameDataObjectFactory factory;
-			_eventObject = factory.generateConditionGameDataObject(dataStrings, objectType);
+			_eventObject = factory.generateEventGameDataObject(dataStrings, objectType);
 
 			if (nullptr == _eventObject)
 			{
@@ -1068,17 +1100,16 @@ namespace ta
 				dataStrings.push_back(splitedStrings[index]);
 			}
 
+			const BuffGameDataObjectType objectType = ConvertStringToEnum<BuffGameDataObjectType>(buffGameDataObjectString);
+			BuffGameDataObjectFactory factory;
+			_buffObject = factory.generateBuffGameDataObject(dataStrings, objectType);
 
-			// 추가해야한다
-			//const EventGameDataObjectType objectType = ConvertStringToEnum<EventGameDataObjectType>(eventGameDataObjectString);
-			//EventGameDataObjectFactory factory;
-			//_eventObject = factory.generateConditionGameDataObject(dataStrings, objectType);
+			if (nullptr == _buffObject)
+			{
+				TA_ASSERT_DEV(false, "BuffString 로드 실패");
+				return false;
+			}
 
-			//if (nullptr == _eventObject)
-			//{
-			//	TA_ASSERT_DEV(false, "EventString 로드 실패");
-			//	return false;
-			//}
 		}
 
 		// ConditionGameDataKeySet
@@ -1122,6 +1153,54 @@ namespace ta
 	bool BuffGameData::checkFinally(const GameDataManager* gameDataManager) noexcept
 	{
 		return true;
+	}
+
+	BuffState BuffGameData::checkAndDoBuff(const ContentParameter& parameter) const noexcept
+	{
+		const uint32 conditionCount = _conditionGameDataSet.size();
+		for (uint32 conditionIndex = 0; conditionIndex < conditionCount; ++conditionIndex)
+		{
+			if (false == _conditionGameDataSet[conditionIndex]->checkCondition(parameter))
+			{
+				TA_LOG_DEV("조건 불만족");
+				return BuffState::Unable; // 있을 수 있는 상황이다.
+			}
+		}
+
+		if (false == _buffObject->doBuff(parameter))
+		{
+			TA_ASSERT_DEV(false, "비정상");
+			return BuffState::Unable;
+		}
+
+		if (true == _buffObject->isOneTime())
+		{
+			return BuffState::Unsustainable;
+		}
+
+		// 지속가능한 경우 다음에 버프를 확인할 시간에 이벤트를 등록해준다.
+		return BuffState::Sustainable;
+	}
+
+	bool BuffGameData::undoBuff(const ContentParameter& parameter) const noexcept
+	{
+		if (false == _buffObject->undoBuff(parameter))
+		{
+			TA_ASSERT_DEV(false, "비정상");
+			return false;
+		}
+
+		return true;
+	}
+
+	uint32 BuffGameData::getInterval(void) const noexcept
+	{
+		return _buffObject->getInterval();
+	}
+
+	bool BuffGameData::isOneTime(void) const noexcept
+	{
+		return _buffObject->isOneTime();
 	}
 
 	void BuffGameData::clearDetail(void) noexcept

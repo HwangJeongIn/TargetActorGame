@@ -7,9 +7,9 @@ namespace ta
 	class ContentParameter
 	{
 	public:
-		explicit ContentParameter(const ActorKey& myActorKey
-								  , const ActorKey& targetActorKey
-								  , const SectorKey& sectorKey) noexcept;
+		explicit ContentParameter(const ActorKey& myActorKey = ActorKey()
+								  , const ActorKey& targetActorKey = ActorKey()
+								  , const SectorKey& sectorKey = SectorKey()) noexcept;
 
 		explicit ContentParameter(const SectorKey& sectorKey) noexcept;
 

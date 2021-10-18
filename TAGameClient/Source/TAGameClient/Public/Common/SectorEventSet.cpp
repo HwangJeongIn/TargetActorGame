@@ -218,7 +218,7 @@ namespace ta
 			interval = _specialEventGameDataSet[sectorEventIndex]->getInterval();
 		}
 
-		ContentEventObject* sectorEvent = new ContentEventObject;
+		ContentEventSectorObject* sectorEvent = new ContentEventSectorObject;
 		sectorEvent->_contentEventType = ContentEventType::SectorEvent;
 		sectorEvent->_sectorKey = parameter._sectorKey;
 		sectorEvent->_sectorEventIndex = sectorEventIndex;

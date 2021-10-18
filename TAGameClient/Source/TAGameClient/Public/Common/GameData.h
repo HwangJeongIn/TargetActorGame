@@ -18,6 +18,7 @@ namespace ta
 	class CharacterGameData;
 	class AiGameData;
 	class RenderingGameData;
+	class BuffGameDataObject;
 }
 
 
@@ -211,6 +212,8 @@ namespace ta
 		bool finishLoading(const CharacterGameDataLoadHelper* loadHelper) noexcept;
 		bool checkFinally(const GameDataManager* gameDataManager) noexcept;
 
+		float getStat(const CharacterStatType statType) const noexcept;
+
 	private:
 		virtual void clearDetail(void) noexcept override final;
 
@@ -222,9 +225,8 @@ namespace ta
 		//AiGameDataKey _aiGameDataKey;
 		std::vector<InteractionType> _interactionTypes;
 
-		float _strength;
-		float _agility;
-		float _maxHp;
+		float _stats[static_cast<uint8>(CharacterStatType::Count)];
+
 
 		std::string _openDialog;
 
@@ -429,13 +431,19 @@ namespace ta
 		bool finishLoading(const BuffGameDataLoadHelper* loadHelper) noexcept;
 		bool checkFinally(const GameDataManager* gameDataManager) noexcept;
 
+		BuffState checkAndDoBuff(const ContentParameter& parameter) const noexcept;
+		bool undoBuff(const ContentParameter& parameter) const noexcept;
+
+		uint32 getInterval(void) const noexcept;
+		bool isOneTime(void) const noexcept;
+
 	private:
 		virtual void clearDetail(void) noexcept override final;
 
 	public:
 		BuffGameDataKey _key;
 
-		//const EventGameDataObject* _eventObject;
+		const BuffGameDataObject* _buffObject;
 		std::vector<const ConditionGameData*> _conditionGameDataSet;
 	};
 }

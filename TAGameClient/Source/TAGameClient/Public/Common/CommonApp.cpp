@@ -9,6 +9,8 @@
 #include "Common/ContentEvent.h"
 #include "Common/CommonActor.h"
 #include "Common/CommonAiActorSystem.h"
+#include "Common/CommonCharacterActorSystem.h"
+#include "Common/CommonCharacterActorComponent.h"
 #include "Common/GetComponentAndSystem.h"
 #include "Common/AiBehaviorTree.h"
 #include "Common/Sector.h"
@@ -33,6 +35,8 @@ namespace ta
 		{
 		case ContentEventType::AiEvent:
 			{
+				const ContentEventAiObject* targetContentEvent = static_cast<const ContentEventAiObject*>(contentEvent);
+
 				CommonActor* targetActor = g_app->getActorManager()->getActor(targetActorKey, true);
 				TA_ASSERT_DEV((nullptr != targetActor), "비정상입니다.");
 
@@ -43,7 +47,7 @@ namespace ta
 
 				CommonAiActorSystem* aiActorSystem = GetActorSystem<CommonAiActorSystem>();
 
-				switch (contentEvent->_aiCommandType)
+				switch (targetContentEvent->_aiCommandType)
 				{
 				case AiCommandType::TickAi:
 					{
@@ -67,18 +71,44 @@ namespace ta
 				TA_COMPILE_DEV(3 == static_cast<uint8>(AiCommandType::Count), "여기도 추가해주세요")
 			}
 			break;
+		case ContentEventType::BuffEvent:
+			{
+				const ContentEventBuffObject* targetContentEvent = static_cast<const ContentEventBuffObject*>(contentEvent);
+
+				CommonCharacterActorComponent* myCharacterComponent = GetActorComponent<CommonCharacterActorComponent>(targetContentEvent->_myActorKey);
+				if (nullptr == myCharacterComponent)
+				{
+					rv = false;
+					TA_ASSERT_DEV(false, "비정상입니다");
+					break;
+				}
+
+				ContentParameter parameter(targetContentEvent->_myActorKey, targetContentEvent->_targetActorKey);
+
+				CommonCharacterActorSystem* characterActorSystem = GetActorSystem<CommonCharacterActorSystem>();
+				if (false == characterActorSystem->doBuff(myCharacterComponent, targetContentEvent->_buffGameDataKey, parameter))
+				{
+					rv = false;
+					TA_ASSERT_DEV(false, "비정상입니다");
+					break;
+				}
+
+			}
+			break;		
 		case ContentEventType::SectorEvent:
 			{
-				Sector* targetSector = GetSector(contentEvent->_sectorKey);
+				const ContentEventSectorObject* targetContentEvent = static_cast<const ContentEventSectorObject*>(contentEvent);
+
+				Sector* targetSector = GetSector(targetContentEvent->_sectorKey);
 				if (nullptr == targetSector)
 				{
 					TA_ASSERT_DEV(false, "비정상입니다");
 					break;
 				}
 
-				ContentParameter parameter(contentEvent->_myActorKey, contentEvent->_targetActorKey, contentEvent->_sectorKey);
+				ContentParameter parameter(targetContentEvent->_myActorKey, targetContentEvent->_targetActorKey, targetContentEvent->_sectorKey);
 
-				if (false == targetSector->startSectorEventForServer(parameter, contentEvent->_sectorEventIndex, contentEvent->_isBasicSectorEvent))
+				if (false == targetSector->startSectorEventForServer(parameter, targetContentEvent->_sectorEventIndex, targetContentEvent->_isBasicSectorEvent))
 				{
 					rv = false;
 					TA_ASSERT_DEV(false, "비정상입니다");
@@ -110,7 +140,7 @@ namespace ta
 			break;
 		}
 
-		TA_COMPILE_DEV(4 == static_cast<uint8>(ContentEventType::Count), "여기도 추가해주세요");
+		TA_COMPILE_DEV(5 == static_cast<uint8>(ContentEventType::Count), "여기도 추가해주세요");
 		return rv;
 	}
 }

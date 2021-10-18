@@ -42,7 +42,7 @@ namespace ta
 				return false;
 			}
 
-			myStrength = characterGameData->_strength;
+			myStrength = characterGameData->getStat(CharacterStatType::Strength);
 		}
 
 		float currentHp = 0;

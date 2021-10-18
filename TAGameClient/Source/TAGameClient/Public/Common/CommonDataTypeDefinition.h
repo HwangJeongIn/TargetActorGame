@@ -125,6 +125,54 @@ namespace ta
 
 namespace ta
 {
+	enum class BuffGameDataObjectType : uint8
+	{
+		// 일반
+		Stat = 0
+		
+		// 씨씨
+		, Stun
+
+		// 착용
+		, Equip 
+
+		, Count
+	};
+}
+
+
+namespace ta
+{
+	enum class BuffState : uint8
+	{
+		Unable // 버프 조건에 중촉시키지 못해서 버프적용 불가능한 상황 => ex. 기절 상태에서는 체력회복 버프를 가진 체력물약을 마실 수 없다.
+		, Unsustainable // 1회성 버프인 경우 => ex. 체력회복
+		, Sustainable // 지속가능한 버프인 경우 => ex. 10분동안 힘 30 증가
+		, Count
+	};
+}
+
+
+namespace ta
+{
+	enum class CharacterStatType : uint8
+	{
+		Hp = 0    // 순서 유지
+		, MaxHp	  // 순서 유지
+		, Mp	  // 순서 유지
+		, MaxMp	  // 순서 유지
+
+		, Strength
+		, Defense
+		, Agility
+
+		, Count
+	};
+}
+
+
+namespace ta
+{
 	enum class GameWorldType : uint8
 	{
 		RealWorld = 0
@@ -216,6 +264,7 @@ namespace ta
 	enum class ContentEventType : uint8
 	{
 		AiEvent = 0
+		, BuffEvent
 		, SectorEvent
 		, LogTest
 		, ThreadEnd

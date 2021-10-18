@@ -458,6 +458,78 @@ UseItemSTC::processUseItemSTC
 
 namespace ta
 {
+	class DoBuffSTC : public MessagePack
+	{
+	public:
+		 explicit DoBuffSTC
+( const ActorKey& myActorKey,
+ const BuffGameDataKey& buffGameDataKey,
+ const ContentParameter& parameter) noexcept
+			: MessagePack(MessageType::DoBuffSTC),
+ 		 myActorKey(myActorKey),
+		 buffGameDataKey(buffGameDataKey),
+		 parameter(parameter)  {}
+		virtual ~DoBuffSTC(void) noexcept {}
+		static void processMessage(const DoBuffSTC* message) noexcept 
+{ 
+DoBuffSTC::processDoBuffSTC
+( message->_networkActorKey,
+ message->myActorKey,
+ message->buffGameDataKey,
+ message->parameter);
+}
+		static void processDoBuffSTC
+( const ActorKey& networkActorKey,
+ const ActorKey& myActorKey,
+ const BuffGameDataKey& buffGameDataKey,
+ const ContentParameter& parameter) noexcept;
+
+	public:
+ 	 ActorKey myActorKey;
+	 BuffGameDataKey buffGameDataKey;
+	 ContentParameter parameter; 
+	};
+}
+
+
+namespace ta
+{
+	class UndoBuffSTC : public MessagePack
+	{
+	public:
+		 explicit UndoBuffSTC
+( const ActorKey& myActorKey,
+ const BuffGameDataKey& buffGameDataKey,
+ const ContentParameter& parameter) noexcept
+			: MessagePack(MessageType::UndoBuffSTC),
+ 		 myActorKey(myActorKey),
+		 buffGameDataKey(buffGameDataKey),
+		 parameter(parameter)  {}
+		virtual ~UndoBuffSTC(void) noexcept {}
+		static void processMessage(const UndoBuffSTC* message) noexcept 
+{ 
+UndoBuffSTC::processUndoBuffSTC
+( message->_networkActorKey,
+ message->myActorKey,
+ message->buffGameDataKey,
+ message->parameter);
+}
+		static void processUndoBuffSTC
+( const ActorKey& networkActorKey,
+ const ActorKey& myActorKey,
+ const BuffGameDataKey& buffGameDataKey,
+ const ContentParameter& parameter) noexcept;
+
+	public:
+ 	 ActorKey myActorKey;
+	 BuffGameDataKey buffGameDataKey;
+	 ContentParameter parameter; 
+	};
+}
+
+
+namespace ta
+{
 	class LoginCTS : public MessagePack
 	{
 	public:

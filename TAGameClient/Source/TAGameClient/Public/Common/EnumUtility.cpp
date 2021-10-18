@@ -105,6 +105,30 @@ namespace ta
 	TA_COMPILE_DEV(1 == static_cast<uint8>(EventGameDataObjectType::Count), "여기도 확인해주세요");
 
 
+	const std::unordered_map<std::string, BuffGameDataObjectType> BuffGameDataObjectTypeConverter
+	{
+		 { "Stat", BuffGameDataObjectType::Stat }
+		 ,{ "Stun", BuffGameDataObjectType::Stun }
+		 ,{ "Equip", BuffGameDataObjectType::Equip }
+
+	};
+	TA_COMPILE_DEV(3 == static_cast<uint8>(BuffGameDataObjectType::Count), "여기도 확인해주세요");
+
+	
+	const std::unordered_map<std::string, CharacterStatType> CharacterStatTypeConverter
+	{
+		 { "Hp", CharacterStatType::Hp }
+		 ,{ "MaxHp", CharacterStatType::MaxHp }
+		 ,{ "Mp", CharacterStatType::Mp }
+		 ,{ "MaxMp", CharacterStatType::MaxMp }
+		 ,{ "Strength", CharacterStatType::Strength }
+		 ,{ "Defense", CharacterStatType::Defense }
+		 ,{ "Agility", CharacterStatType::Agility }
+
+	};
+	TA_COMPILE_DEV(7 == static_cast<uint8>(CharacterStatType::Count), "여기도 확인해주세요");
+
+
 	const std::unordered_map<std::string, SectorZoneType> SectorZoneTypeConverter
 	{
 		 { "Forest", SectorZoneType::Forest }
@@ -177,9 +201,10 @@ namespace ta
 	CONVERT_FUNCTION_DEFINITION(MeshType)
 	CONVERT_FUNCTION_DEFINITION(ConditionGameDataObjectType)
 	CONVERT_FUNCTION_DEFINITION(EventGameDataObjectType)
+	CONVERT_FUNCTION_DEFINITION(BuffGameDataObjectType)
+	CONVERT_FUNCTION_DEFINITION(CharacterStatType)
 	CONVERT_FUNCTION_DEFINITION(SectorZoneType)
 	//CONVERT_FUNCTION_DEFINITION(SectorGroupType)
-
 
 
 

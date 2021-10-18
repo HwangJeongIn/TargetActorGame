@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <Root>
-	<CharacterGameData Key="1" Description="플레이어 lv1" Name="박스맨" ActorType="Player" Strength="1" Agility="10" MaxHp="300" RenderingGameDataKey="1"/>
-	<CharacterGameData Key="2" Description="플레이어 lv2" Name="박스맨" ActorType="Player" Strength="20" Agility="20" MaxHp="500" RenderingGameDataKey="1"/>
-	<CharacterGameData Key="3" Description="플레이어 lv3" Name="박스맨" ActorType="Player" Strength="100" Agility="100" MaxHp="9999" RenderingGameDataKey="1"/>
-	<CharacterGameData Key="100" Description="사막고블린 몬스터 lv1" Name="사막고블린" ActorType="Npc" Strength="1" Agility="1" MaxHp="50" RenderingGameDataKey="1"/>
-	<CharacterGameData Key="101" Description="사막고블린 몬스터 lv2" Name="사막고블린" ActorType="Npc" Strength="3" Agility="3" MaxHp="100" RenderingGameDataKey="1"/>
-	<CharacterGameData Key="102" Description="사막고블린 몬스터 lv3" Name="사막고블린" ActorType="Npc" Strength="5" Agility="5" MaxHp="200" RenderingGameDataKey="1"/>
-	<CharacterGameData Key="103" Description="사막고블린 왕" Name="사막고블린왕" ActorType="Npc" Strength="10" Agility="10" MaxHp="500" RenderingGameDataKey="1"/>
-	<CharacterGameData Key="104" Description="사막트롤" ActorType="Npc" Strength="100" Agility="100" MaxHp="9999" RenderingGameDataKey="1"/>
-	<CharacterGameData Key="105" Description="사막전갈" ActorType="Npc" Strength="3" Agility="3" MaxHp="300" RenderingGameDataKey="1"/>
-	<CharacterGameData Key="1000" Description="사막 마을 경비병" Name="경비병" ActorType="Npc" InteractionType="Talk,Greet" OpenDialog="떠돌이가 많아지는군.. 경계를 강화해야겠어." Strength="1" Agility="1" MaxHp="9999" RenderingGameDataKey="2"/>
-	<CharacterGameData Key="1001" Description="사막 마을 순찰 경비병" Name="경비병" ActorType="Npc" InteractionType="Talk,Greet" OpenDialog="떠돌이가 많아지는군.. 경계를 강화해야겠어." Strength="1" Agility="1" MaxHp="9999" RenderingGameDataKey="2"/>
-	<CharacterGameData Key="1002" Description="사막 마을 방어구상인" Name="제프리" ActorType="Npc" InteractionType="Talk,Greet" OpenDialog="이런거 저런거 잔뜩 있어요. 뭘 보러 오셨나요?" Strength="1" Agility="1" MaxHp="9999" RenderingGameDataKey="3"/>
-	<CharacterGameData Key="1003" Description="사막 마을 무기상인" Name="스콧" ActorType="Npc" InteractionType="Talk,Greet" OpenDialog="손에 딱 맞는걸 골라보게!" Strength="1" Agility="1" MaxHp="9999" RenderingGameDataKey="4"/>
-	<CharacterGameData Key="1004" Description="사막 마을 기사" Name="기사" ActorType="Npc" Strength="1" Agility="1" MaxHp="9999" RenderingGameDataKey="5"/>
+	<CharacterGameData Key="1" Description="플레이어 lv1" Name="박스맨" ActorType="Player" Strength="1" Agility="10" Defense="10" MaxMp="1000" MaxHp="300" RenderingGameDataKey="1"/>
+	<CharacterGameData Key="2" Description="플레이어 lv2" Name="박스맨" ActorType="Player" Strength="20" Agility="20" Defense="10" MaxMp="1000" MaxHp="500" RenderingGameDataKey="1"/>
+	<CharacterGameData Key="3" Description="플레이어 lv3" Name="박스맨" ActorType="Player" Strength="100" Agility="100" Defense="10" MaxMp="1000" MaxHp="9999" RenderingGameDataKey="1"/>
+	<CharacterGameData Key="100" Description="사막고블린 몬스터 lv1" Name="사막고블린" ActorType="Npc" Strength="1" Agility="1" Defense="10" MaxMp="1000" MaxHp="50" RenderingGameDataKey="1"/>
+	<CharacterGameData Key="101" Description="사막고블린 몬스터 lv2" Name="사막고블린" ActorType="Npc" Strength="3" Agility="3" Defense="10" MaxMp="1000" MaxHp="100" RenderingGameDataKey="1"/>
+	<CharacterGameData Key="102" Description="사막고블린 몬스터 lv3" Name="사막고블린" ActorType="Npc" Strength="5" Agility="5" Defense="10" MaxMp="1000" MaxHp="200" RenderingGameDataKey="1"/>
+	<CharacterGameData Key="103" Description="사막고블린 왕" Name="사막고블린왕" ActorType="Npc" Strength="10" Agility="10" Defense="10" MaxMp="1000" MaxHp="500" RenderingGameDataKey="1"/>
+	<CharacterGameData Key="104" Description="사막트롤" ActorType="Npc" Strength="100" Agility="100" Defense="10" MaxMp="1000" MaxHp="9999" RenderingGameDataKey="1"/>
+	<CharacterGameData Key="105" Description="사막전갈" ActorType="Npc" Strength="3" Agility="3" Defense="10" MaxMp="1000" MaxHp="300" RenderingGameDataKey="1"/>
+	<CharacterGameData Key="1000" Description="사막 마을 경비병" Name="경비병" ActorType="Npc" InteractionType="Talk,Greet" OpenDialog="떠돌이가 많아지는군.. 경계를 강화해야겠어." Strength="1" Agility="1" Defense="10" MaxMp="1000" MaxHp="9999" RenderingGameDataKey="2"/>
+	<CharacterGameData Key="1001" Description="사막 마을 순찰 경비병" Name="경비병" ActorType="Npc" InteractionType="Talk,Greet" OpenDialog="떠돌이가 많아지는군.. 경계를 강화해야겠어." Strength="1" Agility="1" Defense="10" MaxMp="1000" MaxHp="9999" RenderingGameDataKey="2"/>
+	<CharacterGameData Key="1002" Description="사막 마을 방어구상인" Name="제프리" ActorType="Npc" InteractionType="Talk,Greet" OpenDialog="이런거 저런거 잔뜩 있어요. 뭘 보러 오셨나요?" Strength="1" Agility="1" Defense="10" MaxMp="1000" MaxHp="9999" RenderingGameDataKey="3"/>
+	<CharacterGameData Key="1003" Description="사막 마을 무기상인" Name="스콧" ActorType="Npc" InteractionType="Talk,Greet" OpenDialog="손에 딱 맞는걸 골라보게!" Strength="1" Agility="1" Defense="10" MaxMp="1000" MaxHp="9999" RenderingGameDataKey="4"/>
+	<CharacterGameData Key="1004" Description="사막 마을 기사" Name="기사" ActorType="Npc" Strength="1" Agility="1" Defense="10" MaxMp="1000" MaxHp="9999" RenderingGameDataKey="5"/>
 </Root>

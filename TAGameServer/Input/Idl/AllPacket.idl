@@ -27,4 +27,6 @@
 	SetTargetActor(const ActorKey& myActorKey, const ActorKey& targetActorKey);
 	DropItem(const ItemSlotNo& slotNo, const int32& stackCount);
 	UseItem(const ItemSlotNo& slotNo, const int32& stackCount);
+	DoBuff(const ActorKey& myActorKey, const BuffGameDataKey& buffGameDataKey, const ContentParameter& parameter);
+	UndoBuff(const ActorKey& myActorKey, const BuffGameDataKey& buffGameDataKey, const ContentParameter& parameter);
 }

@@ -92,7 +92,12 @@ namespace ta
 	void CommonCharacterComponentData::clear(void) noexcept
 	{
 		_characterGameDataKey.clear();
-		_currentHp =0;
+
+		const uint8 count = static_cast<uint8>(CharacterStatType::Count);
+		for (uint8 index = 0; index < count; ++index)
+		{
+			_currentStats[index] = 0.0f;
+		}
 	}
 }
 

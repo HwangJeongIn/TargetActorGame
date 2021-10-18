@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <Root>
-	<BuffGameData Key="1" Description="1단계 체력회복" BuffString="Hp(500)"/>
+	<BuffGameData Key="1" Description="1단계 체력회복" BuffString="Stat(Hp(500))"/>
+	<BuffGameData Key="2" Description="2단계 체력회복" BuffString="Stat(Hp(750))"/>
+	<BuffGameData Key="3" Description="3단계 체력회복" BuffString="Stat(Hp(1200))"/>
 </Root>

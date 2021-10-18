@@ -17,11 +17,13 @@ namespace ta
 	{
 		_wakeupTime = {};
 		_contentEventType = ContentEventType::Count;
-		_aiCommandType = AiCommandType::Count;
 		_deltaTime = 0.0f;
 
-		_sectorEventIndex = 0;
-		_isBasicSectorEvent = true;
+		clearDetail();
+	}
+
+	void ContentEventObject::clearDetail(void) noexcept
+	{
 	}
 
 	constexpr bool ContentEventObject::operator<(const ContentEventObject& _left) const noexcept
@@ -35,6 +37,58 @@ namespace ta
 		std::chrono::milliseconds delayTime(delayMilliSec);
 		_wakeupTime += delayTime;
 		_deltaTime = ((float)delayMilliSec / 1000.0f);
+	}
+}
+
+namespace ta
+{
+	ContentEventAiObject::ContentEventAiObject(void) noexcept
+	{
+	}
+
+	ContentEventAiObject::~ContentEventAiObject(void) noexcept
+	{
+
+	}
+
+	void ContentEventAiObject::clearDetail(void) noexcept
+	{
+		_aiCommandType = AiCommandType::Count;
+	}
+}
+
+
+namespace ta
+{
+	ContentEventBuffObject::ContentEventBuffObject(void) noexcept
+	{
+	}
+
+	ContentEventBuffObject::~ContentEventBuffObject(void) noexcept
+	{
+	}
+
+	void ContentEventBuffObject::clearDetail(void) noexcept
+	{
+		_buffGameDataKey.clear();
+	}
+}
+
+
+namespace ta
+{
+	ContentEventSectorObject::ContentEventSectorObject(void) noexcept
+	{
+	}
+
+	ContentEventSectorObject::~ContentEventSectorObject(void) noexcept
+	{
+	}
+
+	void ContentEventSectorObject::clearDetail(void) noexcept
+	{
+		_sectorEventIndex = 0;
+		_isBasicSectorEvent = true;
 	}
 }
 

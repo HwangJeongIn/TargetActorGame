@@ -29,6 +29,8 @@
     <ClCompile Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\ActorDataGroups.cpp" />
     <ClCompile Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\ActorDataPool.cpp" />
     <ClCompile Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\ActorDataPoolValue.cpp" />
+    <ClCompile Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\BuffGameDataObject.cpp" />
+    <ClCompile Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\BuffObject.cpp" />
     <ClCompile Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\ContentEvent.cpp" />
     <ClCompile Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\ContentEventTimer.cpp" />
     <ClCompile Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\ActorNetwork.cpp" />
@@ -154,6 +156,8 @@
     <ClInclude Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\ActorDataGroups.h" />
     <ClInclude Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\ActorDataPool.h" />
     <ClInclude Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\ActorDataPoolValue.h" />
+    <ClInclude Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\BuffGameDataObject.h" />
+    <ClInclude Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\BuffObject.h" />
     <ClInclude Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\ContentEvent.h" />
     <ClInclude Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\ActorNetwork.h" />
     <ClInclude Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\ActorSystem.h" />

@@ -19,6 +19,8 @@ enum class MessageType : uint32
  SetTargetActorSTC,
  DropItemSTC,
  UseItemSTC,
+ DoBuffSTC,
+ UndoBuffSTC,
  LoginCTS,
  MoveActorCTS,
  AttackTargetCTS,

@@ -94,7 +94,7 @@ namespace ta
 		void clear(void) noexcept;
 	public:
 		CharacterGameDataKey _characterGameDataKey;
-		float _currentHp;
+		float _currentStats[static_cast<uint8>(CharacterStatType::Count)];
 	};
 }
 

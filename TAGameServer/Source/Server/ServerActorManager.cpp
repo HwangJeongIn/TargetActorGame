@@ -329,7 +329,7 @@ namespace ta
                     const CharacterGameData* characterGameData = groupGameData->_characterGameData;
 
                     CommonCharacterComponentData data;
-                    data._currentHp = characterGameData->_maxHp;
+                    data._currentStats[static_cast<uint8>(CharacterStatType::Hp)] = characterGameData->getStat(CharacterStatType::MaxHp);
                     data._characterGameDataKey = characterGameData->_key;
 
                     if (false == initializeActorComponent(targetActorKey, &data, false))

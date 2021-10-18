@@ -406,3 +406,61 @@ namespace ta
 }
 
 
+namespace ta
+{
+	static void SendDoBuffSTC
+( const ActorKey& networkActorKey,
+ const ActorKey& myActorKey,
+ const BuffGameDataKey& buffGameDataKey,
+ const ContentParameter& parameter)
+	{
+		DoBuffSTC message
+( myActorKey,
+ buffGameDataKey,
+ parameter);
+		message._length = sizeof(DoBuffSTC);
+		message._networkActorKey = networkActorKey;
+		CommonActor* target = GetActorManager()->getActor(networkActorKey);
+		if(nullptr == target)			
+		{
+			return;
+		}
+		Socket* network = target->getNetwork_();
+		if(nullptr == network)			
+		{
+			return;
+		}
+		network->sendOverlapped(&message);
+	}
+}
+
+
+namespace ta
+{
+	static void SendUndoBuffSTC
+( const ActorKey& networkActorKey,
+ const ActorKey& myActorKey,
+ const BuffGameDataKey& buffGameDataKey,
+ const ContentParameter& parameter)
+	{
+		UndoBuffSTC message
+( myActorKey,
+ buffGameDataKey,
+ parameter);
+		message._length = sizeof(UndoBuffSTC);
+		message._networkActorKey = networkActorKey;
+		CommonActor* target = GetActorManager()->getActor(networkActorKey);
+		if(nullptr == target)			
+		{
+			return;
+		}
+		Socket* network = target->getNetwork_();
+		if(nullptr == network)			
+		{
+			return;
+		}
+		network->sendOverlapped(&message);
+	}
+}
+
+

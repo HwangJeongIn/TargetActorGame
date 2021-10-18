@@ -1,9 +1,10 @@
-#pragma once
+﻿#pragma once
 
 #include "Common/CommonBase.h"
 #include "Common/KeyDefinition.h"
 #include "Common/MessageTypeDefinition.h"					  
 #include "Common/ComponentData.h"
+#include "Common/ContentParameter.h"
 
 
 namespace ta

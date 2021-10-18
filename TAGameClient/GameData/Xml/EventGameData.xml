@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <Root>
-	<EventGameData Key="1" Interval="3000" ConditionGameDataKeySet="1" EventString="SpawnActor(100)"/>
-	<EventGameData Key="2" Interval="3000" ConditionGameDataKeySet="2" EventString="SpawnActor(101)"/>
-	<EventGameData Key="3" Interval="3000" ConditionGameDataKeySet="3" EventString="SpawnActor(102)"/>
-	<EventGameData Key="4" Interval="3000" ConditionGameDataKeySet="3" EventString="SpawnActor(103)"/>
+	<EventGameData Key="1" Interval="100000" ConditionGameDataKeySet="1" EventString="SpawnActor(100)"/>
+	<EventGameData Key="2" Interval="100000" ConditionGameDataKeySet="2" EventString="SpawnActor(101)"/>
+	<EventGameData Key="3" Interval="100000" ConditionGameDataKeySet="3" EventString="SpawnActor(102)"/>
+	<EventGameData Key="4" Interval="100000" ConditionGameDataKeySet="3" EventString="SpawnActor(103)"/>
 </Root>

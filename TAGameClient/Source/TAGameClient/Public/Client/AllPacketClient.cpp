@@ -4,6 +4,7 @@
 #include "Client/ClientMoveActorSystem.h"
 #include "Client/ClientActionActorSystem.h"
 #include "Client/ClientAiActorSystem.h"
+#include "Client/ClientCharacterActorSystem.h"
 #include "Client/ClientInventoryActorSystem.h"
 #include "Client/ClientAiActorComponent.h"
 #include "Common/AllPacketCommon.h"
@@ -11,6 +12,7 @@
 #include "Common/GetComponentAndSystem.h"
 #include "Common/CommonMoveActorComponent.h"
 #include "Common/CommonInventoryActorComponent.h"
+#include "Common/CommonCharacterActorComponent.h"
 
 
 
@@ -258,6 +260,44 @@ namespace ta
 		{
 			TA_ASSERT_DEV(false, "비정상입니다.");
 			return;
+		}
+	}
+
+	void DoBuffSTC::processDoBuffSTC(const ActorKey& networkActorKey
+									 , const ActorKey& myActorKey
+									 , const BuffGameDataKey& buffGameDataKey
+									 , const ContentParameter& parameter) noexcept
+	{
+		CommonCharacterActorComponent* myCharacterComponent = GetActorComponent<CommonCharacterActorComponent>(myActorKey);
+		if (nullptr == myCharacterComponent)
+		{
+			TA_ASSERT_DEV(false, "비정상입니다.");
+			return;
+		}
+
+		ClientCharacterActorSystem* clientCharacterSystem = GetActorSystem<ClientCharacterActorSystem>();
+		if (false == clientCharacterSystem->doBuff(myCharacterComponent, buffGameDataKey, parameter))
+		{
+			TA_ASSERT_DEV(false, "비정상입니다.");
+		}
+	}
+
+	void UndoBuffSTC::processUndoBuffSTC(const ActorKey& networkActorKey
+										 , const ActorKey& myActorKey
+										 , const BuffGameDataKey& buffGameDataKey
+										 , const ContentParameter& parameter) noexcept
+	{
+		CommonCharacterActorComponent* myCharacterComponent = GetActorComponent<CommonCharacterActorComponent>(myActorKey);
+		if (nullptr == myCharacterComponent)
+		{
+			TA_ASSERT_DEV(false, "비정상입니다.");
+			return;
+		}
+
+		ClientCharacterActorSystem* clientCharacterSystem = GetActorSystem<ClientCharacterActorSystem>();
+		if (false == clientCharacterSystem->undoBuff(myCharacterComponent, buffGameDataKey, parameter))
+		{
+			TA_ASSERT_DEV(false, "비정상입니다.");
 		}
 	}
 }

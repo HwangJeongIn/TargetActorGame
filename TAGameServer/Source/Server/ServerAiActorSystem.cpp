@@ -58,7 +58,7 @@ namespace ta
 		}
 
 
-		ContentEventObject* aiEvent = new ContentEventObject;
+		ContentEventAiObject* aiEvent = new ContentEventAiObject;
 		aiEvent->_contentEventType = ContentEventType::AiEvent;
 		aiEvent->_aiCommandType = AiCommandType::TickAi;
 		aiEvent->_myActorKey = targetActorKey;
@@ -167,7 +167,7 @@ namespace ta
 			targetAi->setCurrentAiState_(AiState::None);
 		}
 
-		ContentEventObject* aiEvent = new ContentEventObject;
+		ContentEventAiObject* aiEvent = new ContentEventAiObject;
 		aiEvent->_contentEventType = ContentEventType::AiEvent;
 		aiEvent->_aiCommandType = AiCommandType::TickAi;
 		aiEvent->_myActorKey = targetAi->getOwnerActorKey();

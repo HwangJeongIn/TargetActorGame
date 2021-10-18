@@ -267,4 +267,20 @@ namespace ta
 	{
 		__noop;
 	}
+
+	void DoBuffSTC::processDoBuffSTC(const ActorKey& networkActorKey
+									 , const ActorKey& myActorKey
+									 , const BuffGameDataKey& buffGameDataKey
+									 , const ContentParameter& parameter) noexcept
+	{
+		__noop;
+	}
+
+	void UndoBuffSTC::processUndoBuffSTC(const ActorKey& networkActorKey
+										 , const ActorKey& myActorKey
+										 , const BuffGameDataKey& buffGameDataKey
+										 , const ContentParameter& parameter) noexcept
+	{
+		__noop;
+	}
 }

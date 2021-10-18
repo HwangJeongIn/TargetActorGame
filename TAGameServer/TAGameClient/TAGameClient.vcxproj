@@ -184,6 +184,8 @@
     <ClCompile Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\AiBTCondition.cpp" />
     <ClCompile Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\AiBTNode.cpp" />
     <ClCompile Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\AiPathPointPath.cpp" />
+    <ClCompile Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\BuffGameDataObject.cpp" />
+    <ClCompile Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\BuffObject.cpp" />
     <ClCompile Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\CommonActionActorComponent.cpp" />
     <ClCompile Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\CommonActionActorSystem.cpp" />
     <ClCompile Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\CommonActor.cpp" />
@@ -308,6 +310,8 @@
     <ClInclude Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\AiBTNode.h" />
     <ClInclude Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\AiPathPointPath.h" />
     <ClInclude Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\AllPacketCommon.h" />
+    <ClInclude Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\BuffGameDataObject.h" />
+    <ClInclude Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\BuffObject.h" />
     <ClInclude Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\CanNotCreate.h" />
     <ClInclude Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\ClassProperty.h" />
     <ClInclude Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\CommonActionActorComponent.h" />
