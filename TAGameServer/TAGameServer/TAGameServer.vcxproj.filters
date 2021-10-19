@@ -783,5 +783,8 @@
     <ClInclude Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\BuffObject.h">
       <Filter>Common</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\PhysX.h">
+      <Filter>Common</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

@@ -10,6 +10,9 @@
 
 //#pragma comment(lib, "CommonLibrary.lib")
 
+// test
+#include "Common/PhysX.h"
+
 using namespace std;
 
 #define TESTA

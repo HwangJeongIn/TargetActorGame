@@ -88,7 +88,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>TA_SERVER;TA_CLIENT_IN_SERVER;WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)\..\TAGameClient\Source\TAGameClient\Public;$(SolutionDir)\..\TAGameClient\Source\TAGameClient\Public\Common\NavigationSystem;$(SolutionDir)\Source</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)\..\TAGameClient\Source\TAGameClient\Public;$(SolutionDir)\..\TAGameClient\Source\TAGameClient\Public\Common\NavigationSystem;$(SolutionDir)\..\TAGameClient\Source\TAGameClient\Public\Common\PhysX-4.1\physx\include;$(SolutionDir)\..\TAGameClient\Source\TAGameClient\Public\Common\PhysX-4.1\pxshared\include;$(SolutionDir)\Source</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <DisableSpecificWarnings>4267;4819;</DisableSpecificWarnings>
     </ClCompile>
@@ -105,7 +105,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>TA_SERVER;TA_CLIENT_IN_SERVER;WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)\..\TAGameClient\Source\TAGameClient\Public;$(SolutionDir)\..\TAGameClient\Source\TAGameClient\Public\Common\NavigationSystem;$(SolutionDir)\Source</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)\..\TAGameClient\Source\TAGameClient\Public;$(SolutionDir)\..\TAGameClient\Source\TAGameClient\Public\Common\NavigationSystem;$(SolutionDir)\..\TAGameClient\Source\TAGameClient\Public\Common\PhysX-4.1\physx\include;$(SolutionDir)\..\TAGameClient\Source\TAGameClient\Public\Common\PhysX-4.1\pxshared\include;$(SolutionDir)\Source</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <DisableSpecificWarnings>4267;4819;</DisableSpecificWarnings>
     </ClCompile>
@@ -122,13 +122,14 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>TA_SERVER;TA_CLIENT_IN_SERVER;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)\..\TAGameClient\Source\TAGameClient\Public;$(SolutionDir)\..\TAGameClient\Source\TAGameClient\Public\Common\NavigationSystem;$(SolutionDir)\Source</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)\..\TAGameClient\Source\TAGameClient\Public;$(SolutionDir)\..\TAGameClient\Source\TAGameClient\Public\Common\NavigationSystem;$(SolutionDir)\..\TAGameClient\Source\TAGameClient\Public\Common\PhysX-4.1\physx\include;$(SolutionDir)\..\TAGameClient\Source\TAGameClient\Public\Common\PhysX-4.1\pxshared\include;$(SolutionDir)\Source</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <DisableSpecificWarnings>4267;4819;</DisableSpecificWarnings>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalLibraryDirectories>;$(SolutionDir)\..\TAGameClient\Source\TAGameClient\Public\Common\PhysX-4.1\physx\bin\win.x86_64.vc142.mt\checked;$(SolutionDir)\..\TAGameClient\Source\TAGameClient\Public\Common\PhysX-4.1\physx\bin\win.x86_64.vc142.mt\checked</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -139,7 +140,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>TA_SERVER;TA_CLIENT_IN_SERVER;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)\..\TAGameClient\Source\TAGameClient\Public;$(SolutionDir)\..\TAGameClient\Source\TAGameClient\Public\Common\NavigationSystem;$(SolutionDir)\Source</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)\..\TAGameClient\Source\TAGameClient\Public;$(SolutionDir)\..\TAGameClient\Source\TAGameClient\Public\Common\NavigationSystem;$(SolutionDir)\..\TAGameClient\Source\TAGameClient\Public\Common\PhysX-4.1\physx\include;$(SolutionDir)\..\TAGameClient\Source\TAGameClient\Public\Common\PhysX-4.1\pxshared\include;$(SolutionDir)\Source</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <DisableSpecificWarnings>4267;4819;</DisableSpecificWarnings>
     </ClCompile>
@@ -148,6 +149,7 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalLibraryDirectories>;$(SolutionDir)\..\TAGameClient\Source\TAGameClient\Public\Common\PhysX-4.1\physx\bin\win.x86_64.vc142.mt\checked;$(SolutionDir)\..\TAGameClient\Source\TAGameClient\Public\Common\PhysX-4.1\physx\bin\win.x86_64.vc142.mt\checked</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -386,6 +388,7 @@
     <ClInclude Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\NavigationSystem\RecastNavigation\Recast\RecastAssert.h" />
     <ClInclude Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\PathPoint.h" />
     <ClInclude Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\PathPointPath.h" />
+    <ClInclude Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\PhysX.h" />
     <ClInclude Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\ScopedLock.h" />
     <ClInclude Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\Sector.h" />
     <ClInclude Include="..\..\TAGameClient\Source\TAGameClient\Public\Common\SectorEventSet.h" />
